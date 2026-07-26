@@ -22,7 +22,7 @@ proof that the proposal is already accepted.
 Run:
 
 ```bash
-PYTHONPATH=src ./scripts/run-mncds-corpus
+PYTHONPATH=src python scripts/run-mncds-corpus
 ```
 
 The corpus starts from one valid cumulative D4 record and applies declared JSON Pointer
