@@ -28,7 +28,7 @@ Run all examples with:
 Run the deterministic process corpus with:
 
 ```bash
-PYTHONPATH=src ./scripts/run-mncds-corpus
+PYTHONPATH=src python scripts/run-mncds-corpus
 ```
 
 The example evidence files are illustrative records, not proof that the toy
