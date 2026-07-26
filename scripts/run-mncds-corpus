@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+"""Run the deterministic MNCDS development-record corpus."""
+
+# SPDX-License-Identifier: Apache-2.0
+
+from __future__ import annotations
+
+import copy
+import json
+from pathlib import Path
+from typing import Any
+
+from mncs_validator.mncds import validate_development_value
+
+ROOT = Path(__file__).resolve().parents[1]
+CORPUS = ROOT / "mncds-conformance-corpus" / "corpus.json"
+
+
+def _decode(token: str) -> str:
+    return token.replace("~1", "/").replace("~0", "~")
+
+
+def _replace(document: Any, pointer: str, value: Any) -> None:
+    if not pointer.startswith("/"):
+        raise ValueError(f"mutation path must be a JSON Pointer: {pointer}")
+    parts = [_decode(part) for part in pointer[1:].split("/")]
+    target = document
+    for part in parts[:-1]:
+        target = target[int(part)] if isinstance(target, list) else target[part]
+    final = parts[-1]
+    if isinstance(target, list):
+        target[int(final)] = value
+    else:
+        target[final] = value
+
+
+def main() -> int:
+    corpus = json.loads(CORPUS.read_text(encoding="utf-8"))
+    base_path = ROOT / corpus["base_record"]
+    base = json.loads(base_path.read_text(encoding="utf-8"))
+    results: list[dict[str, Any]] = []
+    mismatches = 0
+
+    for case in corpus["cases"]:
+        record = copy.deepcopy(base)
+        for mutation in case["mutations"]:
+            _replace(record, mutation["path"], mutation["value"])
+        report = validate_development_value(record, target=case["id"])
+        observed_codes = sorted(issue.code for issue in report.issues)
+        expected = case["expected"]
+        expected_codes = sorted(expected["issue_codes"])
+        matches = (
+            report.valid is expected["valid"]
+            and report.computed_status == expected["computed_status"]
+            and all(code in observed_codes for code in expected_codes)
+        )
+        mismatches += int(not matches)
+        results.append(
+            {
+                "id": case["id"],
+                "valid": report.valid,
+                "computed_status": report.computed_status,
+                "issue_codes": observed_codes,
+                "matches": matches,
+            }
+        )
+
+    output = {
+        "schema_version": corpus["schema_version"],
+        "mncds_version": corpus["mncds_version"],
+        "case_count": len(results),
+        "mismatch_count": mismatches,
+        "results": results,
+    }
+    print(json.dumps(output, indent=2, sort_keys=True))
+    return 1 if mismatches else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

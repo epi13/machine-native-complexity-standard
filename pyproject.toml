@@ -5,12 +5,12 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "mncs-validator"
 version = "0.2.0"
-description = "Offline validator for the Machine-Native Complexity Standard"
+description = "Offline validators for MNCS evidence and experimental MNCDS development records"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
 authors = [{name = "MNCS Contributors"}]
-keywords = ["generated-code", "software-standards", "static-analysis"]
+keywords = ["generated-code", "software-standards", "static-analysis", "machine-native-development"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Programming Language :: Python :: 3",
@@ -37,6 +37,7 @@ dev = [
 
 [project.scripts]
 mncs = "mncs_validator.cli:main"
+mncds = "mncs_validator.mncds_cli:main"
 
 [project.urls]
 Homepage = "https://github.com/epi13/machine-native-complexity-standard"

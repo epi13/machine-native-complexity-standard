@@ -38,6 +38,7 @@ SCHEMA_NAMES = {
     "provider-capabilities": "mncs-provider-capabilities.schema.json",
     "provider-descriptor": "mncs-provider-descriptor.schema.json",
     "provider-error": "mncs-provider-error.schema.json",
+    "mncds-development-record": "mncds-development-record.schema.json",
     "manifest-0.1.1": "mncs-manifest.schema.json",
     "gate-result-0.1.1": "mncs-gate-result.schema.json",
     "identity-0.1.1": "mncs-identity.schema.json",
