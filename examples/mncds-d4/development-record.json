@@ -1,0 +1,209 @@
+{
+  "schema_version": "0.1",
+  "mncds_version": "0.1-draft",
+  "record_id": "mncds-example-d4-record",
+  "profile": "MNCDS-D4",
+  "epoch_id": "epoch-2",
+  "supersedes_record_id": "mncds-example-epoch-1",
+  "created_at": "2026-07-26T22:30:00Z",
+  "charter": {
+    "problem_statement": "Produce a faster contract-equivalent request parser without weakening correctness or safety gates.",
+    "intended_use": "Demonstrate cumulative MNCDS-D4 controls with a small machine-native optimization search.",
+    "contract_id": "contract-request-parser-v1",
+    "baseline_id": "baseline-request-parser-v1",
+    "environment_id": "environment-linux-x86_64-v1",
+    "threat_model_id": "threat-model-parser-v1",
+    "objective": {
+      "objective_id": "objective-throughput-v1",
+      "metric": "valid requests processed per second",
+      "unit": "requests_per_second",
+      "direction": "maximize",
+      "minimum_useful_benefit": 0.1
+    },
+    "selection_policy_id": "selection-policy-v1",
+    "planned_mncs_level": "MNCS-L4",
+    "hard_rejection_gates": [
+      "behavioral",
+      "safety",
+      "resource_bounds"
+    ]
+  },
+  "roles": [
+    {
+      "role": "contract_authority",
+      "authority_id": "authority-contract-team",
+      "executable_id": null
+    },
+    {
+      "role": "generator_authority",
+      "authority_id": "authority-generation-team",
+      "executable_id": "generator-runner-v2"
+    },
+    {
+      "role": "evaluator_authority",
+      "authority_id": "authority-evaluation-team",
+      "executable_id": "development-evaluator-v2"
+    },
+    {
+      "role": "selection_authority",
+      "authority_id": "authority-selection-team",
+      "executable_id": "selection-engine-v1"
+    },
+    {
+      "role": "release_authority",
+      "authority_id": "authority-release-team",
+      "executable_id": null
+    },
+    {
+      "role": "independent_reviewer",
+      "authority_id": "authority-independent-review",
+      "executable_id": "independent-evaluator-v1"
+    }
+  ],
+  "generator": {
+    "generator_id": "generator-search-v2",
+    "configuration_id": "generator-config-epoch-2",
+    "authority_id": "authority-generation-team",
+    "executable_id": "generator-runner-v2",
+    "permissions": {
+      "modify_contract": false,
+      "modify_baseline": false,
+      "modify_evaluators": false,
+      "modify_selection_policy": false,
+      "modify_thresholds": false,
+      "access_protected_holdout": false,
+      "network_access": false
+    },
+    "resource_limits": {
+      "max_candidates": 100,
+      "max_wall_seconds": 3600
+    }
+  },
+  "partitions": {
+    "development_id": "partition-development-v2",
+    "selection_id": "partition-selection-v2",
+    "holdout_id": "partition-holdout-v2",
+    "holdout_contaminated": false
+  },
+  "evaluators": [
+    {
+      "evaluator_id": "evaluator-development-v2",
+      "purpose": "development",
+      "authority_id": "authority-evaluation-team",
+      "executable_id": "development-evaluator-v2",
+      "configuration_id": "development-evaluator-config-v2",
+      "independent": false,
+      "regression_corpus_id": "evaluator-corpus-v2"
+    },
+    {
+      "evaluator_id": "evaluator-independent-v1",
+      "purpose": "independent",
+      "authority_id": "authority-independent-review",
+      "executable_id": "independent-evaluator-v1",
+      "configuration_id": "independent-evaluator-config-v1",
+      "independent": true,
+      "regression_corpus_id": "independent-corpus-v1"
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "candidate-a",
+      "parent_ids": [],
+      "generator_id": "generator-search-v2",
+      "build_status": "PASS",
+      "disposition": "rejected",
+      "objective_value": 1040.0,
+      "evaluator_results": [
+        {
+          "evaluator_id": "evaluator-development-v2",
+          "gate_id": "behavioral",
+          "required": true,
+          "status": "PASS",
+          "evidence_id": "evidence-a-behavioral"
+        }
+      ]
+    },
+    {
+      "candidate_id": "candidate-b",
+      "parent_ids": [
+        "candidate-a"
+      ],
+      "generator_id": "generator-search-v2",
+      "build_status": "PASS",
+      "disposition": "selected",
+      "objective_value": 1180.0,
+      "evaluator_results": [
+        {
+          "evaluator_id": "evaluator-development-v2",
+          "gate_id": "behavioral",
+          "required": true,
+          "status": "PASS",
+          "evidence_id": "evidence-b-behavioral"
+        },
+        {
+          "evaluator_id": "evaluator-development-v2",
+          "gate_id": "safety",
+          "required": true,
+          "status": "PASS",
+          "evidence_id": "evidence-b-safety"
+        },
+        {
+          "evaluator_id": "evaluator-development-v2",
+          "gate_id": "resource_bounds",
+          "required": true,
+          "status": "PASS",
+          "evidence_id": "evidence-b-resources"
+        },
+        {
+          "evaluator_id": "evaluator-independent-v1",
+          "gate_id": "holdout",
+          "required": true,
+          "status": "PASS",
+          "evidence_id": "evidence-b-independent-holdout"
+        }
+      ]
+    }
+  ],
+  "selection": {
+    "policy_id": "selection-policy-v1",
+    "selected_candidate_id": "candidate-b",
+    "rule_recorded_before_holdout": true,
+    "unknown_policy": "reject",
+    "minimum_useful_benefit_met": true,
+    "rationale": "Candidate B passed all hard gates, exceeded the declared benefit threshold, and passed independent holdout evaluation.",
+    "human_review": null
+  },
+  "reproducibility": {
+    "class": "SEEDED",
+    "seeds_preserved": true,
+    "protocol": "Rebuild the pinned toolchain, replay the recorded seed set, and repeat each measurement five times.",
+    "measurement_repetitions": 5
+  },
+  "mncs_binding": {
+    "manifest_or_package_id": "mncs-package-request-parser-v1",
+    "candidate_id": "candidate-b",
+    "contract_id": "contract-request-parser-v1",
+    "environment_id": "environment-linux-x86_64-v1"
+  },
+  "release_controls": {
+    "release_artifact_id": "release-request-parser-v1",
+    "rollback_artifact_id": "baseline-request-parser-v1",
+    "rollback_test_status": "PASS",
+    "monitoring_thresholds": [
+      "rollback after any contract regression",
+      "investigate after three consecutive resource-limit UNKNOWN outcomes"
+    ],
+    "regeneration_drill": {
+      "performed_at": "2026-07-26T22:20:00Z",
+      "status": "PASS",
+      "evidence_id": "evidence-regeneration-drill-v1"
+    },
+    "retirement_triggers": [
+      "contract changes materially",
+      "supported environment changes materially",
+      "critical dependency becomes unsupported",
+      "artifact cannot be regenerated"
+    ]
+  },
+  "extensions": {}
+}
