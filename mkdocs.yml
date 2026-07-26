@@ -14,6 +14,10 @@ nav:
   - Philosophy: philosophy.md
   - Quickstart: quickstart.md
   - Conformance: conformance.md
+  - Evidence-derived conformance: evidence-derived-conformance.md
+  - Certification vs validation: certification-vs-validation.md
+  - Migration 0.1 to 0.1.1: migration-0.1-to-0.1.1.md
+  - Conformance corpus: conformance-corpus.md
   - Validator: validator.md
   - Evidence bundles: evidence-bundles.md
   - Tool-neutral verification: tool-neutral-verification.md

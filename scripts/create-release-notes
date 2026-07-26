@@ -2,10 +2,10 @@
 # SPDX-License-Identifier: Apache-2.0
 set -euo pipefail
 
-version="${1:-v0.1.0}"
-if [[ "$version" != "v0.1.0" ]]; then
+version="${1:-v0.1.1}"
+if [[ "$version" != "v0.1.1" ]]; then
   echo "unsupported release version: $version" >&2
   exit 2
 fi
 
-sed -n '/^## 0.1.0/,/^## /p' CHANGELOG.md
+sed -n '/^## 0.1.1/,/^## /p' CHANGELOG.md | sed '$d'

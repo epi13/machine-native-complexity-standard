@@ -1,0 +1,47 @@
+{
+  "assumptions": [
+    "The declared contract and environment delimit the result."
+  ],
+  "candidate_source_hash": "sha256:98b865ef438d01761d874dbbba36fde23f0b52e6caf37d8c0ac6f7194d75d24f",
+  "completed_at": "2026-07-25T12:00:01Z",
+  "component_identity": {
+    "identity_hash": "sha256:98b865ef438d01761d874dbbba36fde23f0b52e6caf37d8c0ac6f7194d75d24f",
+    "name": "rejected-clamp",
+    "version": "1.0.0"
+  },
+  "contract_id": "example.clamp.v1",
+  "environment": {
+    "fingerprint": "sha256:bec2072576f16c4fc1cb89d286b8a29b8035f5e83b6b946c4180b7928dbc1679",
+    "identity_evidence_id": "identity-environment"
+  },
+  "evaluator": {
+    "identity_evidence_id": "identity-evaluator",
+    "identity_hash": "sha256:8c6dcf0b337eba166957055f8e0fceab18b864868f1a7274f65f5247afbb57f8",
+    "name": "mncs-example-evaluator",
+    "version": "1.0"
+  },
+  "evidence_references": [
+    "contract",
+    "reference",
+    "machine",
+    "identity-evaluator",
+    "identity-environment"
+  ],
+  "extensions": {},
+  "gate_kind": "safety",
+  "limitations": [
+    "Illustrative local evidence; no accredited assurance claim."
+  ],
+  "mncs_version": "0.1",
+  "observation_counts": {
+    "failed": 0,
+    "passed": 4,
+    "total": 4,
+    "unknown": 0
+  },
+  "reference_source_hash": "sha256:91c9f754e4d0c34df6cf5a4fe66e568d17b56a01cab087a997a5777935402f0f",
+  "result_id": "gate-safety",
+  "schema_version": "0.1.1",
+  "started_at": "2026-07-25T12:00:00Z",
+  "status": "PASS"
+}

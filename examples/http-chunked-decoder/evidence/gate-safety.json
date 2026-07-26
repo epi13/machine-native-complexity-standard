@@ -1,0 +1,47 @@
+{
+  "assumptions": [
+    "The declared contract and environment delimit the result."
+  ],
+  "candidate_source_hash": "sha256:17ee4289a9f61b9a2a617a1b70b16d3fdce443fb9b0d4552755fe1eab7369a1d",
+  "completed_at": "2026-07-25T12:00:01Z",
+  "component_identity": {
+    "identity_hash": "sha256:17ee4289a9f61b9a2a617a1b70b16d3fdce443fb9b0d4552755fe1eab7369a1d",
+    "name": "bounded-http-chunk-decoder",
+    "version": "1.0.0"
+  },
+  "contract_id": "example.chunked.bounded.v1",
+  "environment": {
+    "fingerprint": "sha256:bec2072576f16c4fc1cb89d286b8a29b8035f5e83b6b946c4180b7928dbc1679",
+    "identity_evidence_id": "identity-environment"
+  },
+  "evaluator": {
+    "identity_evidence_id": "identity-evaluator",
+    "identity_hash": "sha256:8c6dcf0b337eba166957055f8e0fceab18b864868f1a7274f65f5247afbb57f8",
+    "name": "mncs-example-evaluator",
+    "version": "1.0"
+  },
+  "evidence_references": [
+    "contract",
+    "reference",
+    "machine",
+    "identity-evaluator",
+    "identity-environment"
+  ],
+  "extensions": {},
+  "gate_kind": "safety",
+  "limitations": [
+    "Illustrative local evidence; no accredited assurance claim."
+  ],
+  "mncs_version": "0.1",
+  "observation_counts": {
+    "failed": 0,
+    "passed": 4,
+    "total": 4,
+    "unknown": 0
+  },
+  "reference_source_hash": "sha256:ecb35fb5ebd64b868a54bdd9de684435b25ea07ffb54f829258eeb7db5331dcd",
+  "result_id": "gate-safety",
+  "schema_version": "0.1.1",
+  "started_at": "2026-07-25T12:00:00Z",
+  "status": "PASS"
+}

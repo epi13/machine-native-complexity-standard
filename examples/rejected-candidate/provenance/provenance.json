@@ -1,10 +1,39 @@
 {
-  "schema_version":"0.1","mncs_version":"0.1","generator":"branch-specializer","generator_version":"0.2",
-  "generator_hash":"sha256:5555555555555555555555555555555555555555555555555555555555555555",
-  "inputs":[{"path":"specification/contract.md","sha256":"sha256:f9a78e65054f8073a75d6dce913e3343e827f0dffd7bbffe9578cd31e9ac268f"}],
-  "command":"make example-rejected","generated_at":"2026-07-25T00:00:00Z",
-  "source_hash":"sha256:98b865ef438d01761d874dbbba36fde23f0b52e6caf37d8c0ac6f7194d75d24f","artifact_hash":"sha256:98b865ef438d01761d874dbbba36fde23f0b52e6caf37d8c0ac6f7194d75d24f",
-  "evaluator":"mncs-example-evaluator","evaluator_version":"1.0",
-  "evaluator_hash":"sha256:6666666666666666666666666666666666666666666666666666666666666666",
-  "no_handwritten_changes":true,"extensions":{}
+  "candidate_source_hash": "sha256:98b865ef438d01761d874dbbba36fde23f0b52e6caf37d8c0ac6f7194d75d24f",
+  "contract_id": "example.clamp.v1",
+  "environment_fingerprint": "sha256:bec2072576f16c4fc1cb89d286b8a29b8035f5e83b6b946c4180b7928dbc1679",
+  "environment_identity_id": "identity-environment",
+  "evaluation_command": "python tools/evaluate.py --offline",
+  "evaluation_completed_at": "2026-07-25T12:01:01Z",
+  "evaluation_started_at": "2026-07-25T12:01:00Z",
+  "evaluator_identity_hash": "sha256:8c6dcf0b337eba166957055f8e0fceab18b864868f1a7274f65f5247afbb57f8",
+  "evaluator_identity_id": "identity-evaluator",
+  "evaluator_inputs": [
+    "machine",
+    "gate-behavioral",
+    "gate-compiler_matrix",
+    "gate-safety",
+    "gate-resource_bounds",
+    "gate-mutation",
+    "gate-structural",
+    "performance-primary"
+  ],
+  "extensions": {},
+  "generation_command": "python tools/generate.py --locked",
+  "generation_completed_at": "2026-07-25T12:00:01Z",
+  "generation_started_at": "2026-07-25T12:00:00Z",
+  "generator_identity_hash": "sha256:119ffdc06e0cc9e2e07e9daa393063ae1545274847e63b2a5f50719dc6d91be7",
+  "generator_identity_id": "identity-generator",
+  "generator_inputs": [
+    "contract",
+    "reference",
+    "identity-generator"
+  ],
+  "handwritten_change_status": "none",
+  "mncs_version": "0.1",
+  "provenance_id": "provenance-primary",
+  "regeneration_lock_state": "locked",
+  "schema_version": "0.1.1",
+  "toolchain_identity_hash": "sha256:af20ea500a0e354d5bb8bed2242e583c35f65e682398a4e931c73ec85466a4fc",
+  "toolchain_identity_id": "identity-toolchain"
 }

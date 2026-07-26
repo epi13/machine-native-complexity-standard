@@ -1,4 +1,4 @@
-.PHONY: format lint type test build examples docs check
+.PHONY: format lint type test build examples corpus docs check
 
 format:
 	ruff format .
@@ -11,15 +11,18 @@ type:
 	mypy src
 
 test:
-	pytest
+	PYTHONPATH=src pytest
 
 build:
 	python -m build
 
 examples:
-	./scripts/verify-examples
+	PYTHONPATH=src ./scripts/verify-examples
+
+corpus:
+	PYTHONPATH=src ./scripts/run-conformance-corpus
 
 docs:
 	./scripts/build-docs
 
-check: lint type test build examples docs
+check: lint type test build examples corpus docs

@@ -1,27 +1,35 @@
 {
-  "schema_version": "0.1",
-  "mncs_version": "0.1",
-  "invariant_id": "INV-EMIT-AFTER-FRAME",
-  "requirement": "Payload return occurs only after complete suffix validation.",
-  "source_hash": "sha256:17ee4289a9f61b9a2a617a1b70b16d3fdce443fb9b0d4552755fe1eab7369a1d",
-  "status": "PASS",
-  "provider": "example-ast-provider",
-  "provider_version": "1.0",
-  "analysis_method": "bounded language AST control-flow analysis",
-  "assumptions": ["Python bytes.partition follows the language specification"],
+  "analysis_method": "bounded control-flow enumeration",
+  "assumptions": [
+    "Inputs satisfy the indexed contract grammar."
+  ],
   "boundedness": {
     "bounded": true,
-    "description": "One function, direct returns, maximum 128 AST nodes."
+    "description": "32 enumerated states."
   },
+  "candidate_source_hash": "sha256:17ee4289a9f61b9a2a617a1b70b16d3fdce443fb9b0d4552755fe1eab7369a1d",
+  "completed_at": "2026-07-25T12:00:01Z",
+  "contract_id": "example.chunked.bounded.v1",
+  "environment_fingerprint": "sha256:bec2072576f16c4fc1cb89d286b8a29b8035f5e83b6b946c4180b7928dbc1679",
+  "evaluator_identity_hash": "sha256:8c6dcf0b337eba166957055f8e0fceab18b864868f1a7274f65f5247afbb57f8",
+  "evaluator_identity_id": "identity-evaluator",
+  "extensions": {},
+  "invariant_id": "bounded-control",
+  "limitations": [
+    "Illustrative provider output."
+  ],
   "locations": [
     {
-      "path": "machine/generated.py",
-      "line": 22,
-      "message": "Return follows suffix equality rejection."
+      "line": 1,
+      "path": "machine/generated.py"
     }
   ],
-  "elapsed_seconds": 0.004,
-  "output_bytes": 412,
-  "limitations": ["Does not prove interpreter implementation correctness."],
-  "extensions": {}
+  "mncs_version": "0.1",
+  "provider": "mncs-example-structural-provider",
+  "provider_version": "1.0",
+  "requirement": "Every declared operation terminates within the contract bound.",
+  "result_id": "invariant-bounded-control",
+  "schema_version": "0.1.1",
+  "started_at": "2026-07-25T12:00:00Z",
+  "status": "PASS"
 }

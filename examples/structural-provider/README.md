@@ -1,5 +1,3 @@
-# Tool-neutral structural provider
+# checked-division
 
-This L3 example registers a fictional compiler-CFG provider and records an invariant
-in provider-neutral MNCS form. The same invariant could be supplied by another
-provider without changing acceptance semantics.
+Evidence-derived MNCS-L3 example with computed PASS.

@@ -1,4 +1,3 @@
-# Minimal MNCS-L1 bundle
+# identity-transform
 
-An accepted identity transform with a readable contract, reference, generated marker,
-deterministic behavioral record, and explicit limitations.
+Evidence-derived MNCS-L1 example with computed PASS.

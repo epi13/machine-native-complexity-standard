@@ -1,9 +1,0 @@
-{
-  "schema_version": "0.1",
-  "primary_cases": 240,
-  "holdout_cases": 80,
-  "malformed_cases": 120,
-  "checksums_match": true,
-  "strict_compilers": ["python -m compileall", "mypy"],
-  "status": "PASS"
-}
