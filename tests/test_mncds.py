@@ -24,9 +24,7 @@ def _d1_record() -> dict[str, Any]:
     value["charter"]["planned_mncs_level"] = None
     value["partitions"]["holdout_id"] = None
     value["evaluators"] = [value["evaluators"][0]]
-    value["candidates"][1]["evaluator_results"] = value["candidates"][1][
-        "evaluator_results"
-    ][:3]
+    value["candidates"][1]["evaluator_results"] = value["candidates"][1]["evaluator_results"][:3]
     value["reproducibility"] = {
         "class": "NONE",
         "seeds_preserved": False,
@@ -74,9 +72,7 @@ def test_generator_cannot_modify_evaluator_or_threshold() -> None:
     record["generator"]["permissions"]["modify_thresholds"] = True
     report = validate_development_value(record)
     assert not report.valid
-    assert {issue.code for issue in report.issues} >= {
-        "generator-authority-violation"
-    }
+    assert {issue.code for issue in report.issues} >= {"generator-authority-violation"}
 
 
 def test_candidate_lineage_cycle_is_rejected() -> None:

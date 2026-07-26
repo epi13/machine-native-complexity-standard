@@ -66,10 +66,7 @@ def run(args: argparse.Namespace) -> int:
         if args.json:
             print(json.dumps(result, indent=2, sort_keys=True))
         else:
-            print(
-                f"mncds {MNCDS_VERSION} "
-                f"(schema {MNCDS_SCHEMA_VERSION}; experimental)"
-            )
+            print(f"mncds {MNCDS_VERSION} (schema {MNCDS_SCHEMA_VERSION}; experimental)")
         return 0
 
     raise AssertionError(f"unhandled command: {args.command}")

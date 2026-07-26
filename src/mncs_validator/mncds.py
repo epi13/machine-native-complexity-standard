@@ -83,10 +83,7 @@ def _objects(value: object) -> list[dict[str, Any]]:
 
 
 def _profile_at_least(profile: object, required: str) -> bool:
-    return (
-        isinstance(profile, str)
-        and PROFILE_ORDER.get(profile, 0) >= PROFILE_ORDER[required]
-    )
+    return isinstance(profile, str) and PROFILE_ORDER.get(profile, 0) >= PROFILE_ORDER[required]
 
 
 def _check_unique_ids(
@@ -120,9 +117,7 @@ def _check_lineage(
         candidate_id = candidate.get("candidate_id")
         if not isinstance(candidate_id, str):
             continue
-        parent_ids = [
-            item for item in candidate.get("parent_ids", []) if isinstance(item, str)
-        ]
+        parent_ids = [item for item in candidate.get("parent_ids", []) if isinstance(item, str)]
         parents[candidate_id] = parent_ids
         for parent_id in parent_ids:
             if parent_id not in candidate_ids:
@@ -158,13 +153,9 @@ def _check_lineage(
         visit(candidate_id)
 
 
-def _check_roles(
-    value: dict[str, Any], report: MncdsValidationReport
-) -> dict[str, dict[str, Any]]:
+def _check_roles(value: dict[str, Any], report: MncdsValidationReport) -> dict[str, dict[str, Any]]:
     roles = _objects(value.get("roles"))
-    role_names = [
-        item.get("role") for item in roles if isinstance(item.get("role"), str)
-    ]
+    role_names = [item.get("role") for item in roles if isinstance(item.get("role"), str)]
     role_name_set = {cast(str, name) for name in role_names}
     for missing in sorted(REQUIRED_ROLES.difference(role_name_set)):
         report.add("missing-role", f"required logical role is missing: {missing}", "$/roles")
@@ -174,11 +165,7 @@ def _check_roles(
             "each logical role must appear exactly once",
             "$/roles",
         )
-    return {
-        cast(str, item["role"]): item
-        for item in roles
-        if isinstance(item.get("role"), str)
-    }
+    return {cast(str, item["role"]): item for item in roles if isinstance(item.get("role"), str)}
 
 
 def _check_generator(value: dict[str, Any], report: MncdsValidationReport) -> None:
@@ -365,18 +352,13 @@ def _check_d3(
     partitions = value.get("partitions")
     selection = value.get("selection")
     generator = value.get("generator")
-    if isinstance(partitions, dict) and not isinstance(
-        partitions.get("holdout_id"), str
-    ):
+    if isinstance(partitions, dict) and not isinstance(partitions.get("holdout_id"), str):
         report.add(
             "holdout-missing",
             "D3 and above require a protected holdout",
             "$/partitions",
         )
-    if (
-        isinstance(selection, dict)
-        and selection.get("rule_recorded_before_holdout") is not True
-    ):
+    if isinstance(selection, dict) and selection.get("rule_recorded_before_holdout") is not True:
         report.add(
             "selection-rule-post-hoc",
             "D3 and above require the selection rule before holdout evaluation",
@@ -386,8 +368,7 @@ def _check_d3(
     independent = [
         item
         for item in _objects(value.get("evaluators"))
-        if item.get("independent") is True
-        and item.get("purpose") in {"holdout", "independent"}
+        if item.get("independent") is True and item.get("purpose") in {"holdout", "independent"}
     ]
     if not independent:
         report.add(
@@ -396,12 +377,8 @@ def _check_d3(
             "$/evaluators",
         )
         return
-    generator_authority = (
-        generator.get("authority_id") if isinstance(generator, dict) else None
-    )
-    generator_executable = (
-        generator.get("executable_id") if isinstance(generator, dict) else None
-    )
+    generator_authority = generator.get("authority_id") if isinstance(generator, dict) else None
+    generator_executable = generator.get("executable_id") if isinstance(generator, dict) else None
     reviewer = roles.get("independent_reviewer", {})
     for evaluator in independent:
         if evaluator.get("authority_id") == generator_authority:
@@ -475,9 +452,7 @@ def _check_mncs_binding(value: dict[str, Any], report: MncdsValidationReport) ->
         return
     expected = {
         "candidate_id": (
-            selection.get("selected_candidate_id")
-            if isinstance(selection, dict)
-            else None
+            selection.get("selected_candidate_id") if isinstance(selection, dict) else None
         ),
         "contract_id": charter.get("contract_id"),
         "environment_id": charter.get("environment_id"),
@@ -499,12 +474,8 @@ def validate_development_value(
     """Validate one decoded MNCDS development record."""
 
     report = MncdsValidationReport(target=target)
-    report.profile = (
-        value.get("profile") if isinstance(value.get("profile"), str) else None
-    )
-    report.record_id = (
-        value.get("record_id") if isinstance(value.get("record_id"), str) else None
-    )
+    report.profile = value.get("profile") if isinstance(value.get("profile"), str) else None
+    report.record_id = value.get("record_id") if isinstance(value.get("record_id"), str) else None
 
     for error in schema_errors(value, "mncds-development-record"):
         report.add("schema", error)
@@ -516,13 +487,9 @@ def validate_development_value(
     _check_partitions(value, report)
 
     evaluators = _objects(value.get("evaluators"))
-    evaluator_ids = _check_unique_ids(
-        evaluators, "evaluator_id", report, "$/evaluators"
-    )
+    evaluator_ids = _check_unique_ids(evaluators, "evaluator_id", report, "$/evaluators")
     candidates = _objects(value.get("candidates"))
-    candidate_ids = _check_unique_ids(
-        candidates, "candidate_id", report, "$/candidates"
-    )
+    candidate_ids = _check_unique_ids(candidates, "candidate_id", report, "$/candidates")
     _check_lineage(candidates, candidate_ids, report)
     selected = _selected_candidate(value, candidate_ids, report)
     _check_selection(value, selected, evaluator_ids, report)
