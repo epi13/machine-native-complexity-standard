@@ -10,6 +10,10 @@ resolved security and compatibility concerns, and names the target release. Reje
 RFCs remain as institutional memory. Implementation can precede acceptance for
 experimentation but cannot claim core status.
 
+Draft RFCs:
+
+- [RFC 0004: Machine-Native Complexity Development Specification](0004-machine-native-development-specification.md)
+
 Accepted RFCs:
 
 - [RFC 0001: Initial standard](0001-initial-standard.md)
