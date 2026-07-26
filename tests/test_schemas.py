@@ -18,10 +18,10 @@ def test_all_packaged_schemas_are_draft_2020_12_and_self_valid() -> None:
 def test_current_gate_result_requires_positive_pass_evidence() -> None:
     path = ROOT / "examples/minimal/evidence/gate-behavioral.json"
     result = json.loads(path.read_text())
-    assert schema_errors(result, "gate-result") == []
+    assert schema_errors(result, "gate-result-0.1.1") == []
     result["evidence_references"] = []
     result["observation_counts"] = {"total": 0, "passed": 0, "failed": 0, "unknown": 0}
-    errors = schema_errors(result, "gate-result")
+    errors = schema_errors(result, "gate-result-0.1.1")
     assert errors
     assert any("non-empty" in error or "greater than" in error for error in errors)
 
@@ -29,10 +29,10 @@ def test_current_gate_result_requires_positive_pass_evidence() -> None:
 def test_level_conditional_manifest_requirements_are_cumulative() -> None:
     path = ROOT / "examples/minimal/manifest.json"
     manifest = json.loads(path.read_text())
-    assert schema_errors(manifest, "manifest") == []
+    assert schema_errors(manifest, "manifest-0.1.1") == []
     manifest["claimed_level"] = "MNCS-L3"
     manifest["acceptance_policy"]["conformance_level"] = "MNCS-L3"
-    errors = schema_errors(manifest, "manifest")
+    errors = schema_errors(manifest, "manifest-0.1.1")
     assert errors
     assert any("fuzz_evidence" in error or "invariants" in error for error in errors)
 
@@ -46,7 +46,7 @@ def test_legacy_schemas_remain_available() -> None:
 def test_extension_namespace_and_shadowing_schema_boundary() -> None:
     gate = json.loads((ROOT / "examples/minimal/evidence/gate-behavioral.json").read_text())
     gate["extensions"] = {"vendor.example:mode": {"bounded": True}}
-    assert schema_errors(gate, "gate-result") == []
+    assert schema_errors(gate, "gate-result-0.1.1") == []
     gate["extensions"] = {"mode": True}
     assert schema_errors(gate, "gate-result")
 
@@ -55,11 +55,11 @@ def test_custom_namespaced_gate_is_schema_valid() -> None:
     gate = json.loads((ROOT / "examples/minimal/evidence/gate-behavioral.json").read_text())
     gate["result_id"] = "vendor-quality-result"
     gate["gate_kind"] = "vendor.example:quality"
-    assert schema_errors(gate, "gate-result") == []
+    assert schema_errors(gate, "gate-result-0.1.1") == []
     manifest = json.loads((ROOT / "examples/minimal/manifest.json").read_text())
     manifest["acceptance_policy"]["required_gates"].append("vendor.example:quality")
     manifest["gate_results"]["vendor.example:quality"] = ["vendor-quality-result"]
-    assert schema_errors(manifest, "manifest") == []
+    assert schema_errors(manifest, "manifest-0.1.1") == []
 
 
 def test_nonfinite_numbers_are_rejected() -> None:

@@ -41,7 +41,7 @@ def manifest_summary(manifest: dict[str, Any]) -> dict[str, Any]:
     """Select the stable public summary fields."""
 
     component = manifest["component"]
-    new_schema = manifest.get("schema_version") == "0.1.1"
+    new_schema = manifest.get("schema_version") in {"0.1.1", "0.2"}
     objective = manifest["acceptance_policy"]["objective"] if new_schema else manifest["objective"]
     return {
         "component": component["name"],

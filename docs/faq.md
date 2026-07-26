@@ -29,7 +29,7 @@ evidence of rejection.
 
 ## Is a validator PASS accredited certification?
 
-No. MNCS 0.1 remains experimental. PASS is limited to the indexed contract,
+No. MNCS 0.2 remains experimental. PASS is limited to the indexed contract,
 candidate, evidence, and environment.
 
 ## Can I still validate a schema 0.1 bundle?

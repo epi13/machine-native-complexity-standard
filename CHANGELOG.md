@@ -3,6 +3,19 @@
 All notable changes are recorded here. MNCS uses semantic versioning for the
 validator and explicit version identifiers for the standard.
 
+## 0.2.0 — 2026-07-25
+
+- Publish normative MNCS 0.2 Attested Interoperability and RFC 0003.
+- Add RFC 8785 canonical JSON, SHA-256 golden identities, Ed25519 DSSE-compatible
+  multi-signature attestations, and separate cryptographic/trust outcomes.
+- Add deterministic trust domains, roles, scopes, thresholds, validity, expiration,
+  revocation, independent evaluators, and generator/evaluator separation.
+- Add reproducible, bounded `.mncs` packages and secure extraction.
+- Add Provider Protocol 0.1, a typed Python SDK, explicit bounded provider execution,
+  and five honestly labeled examples.
+- Add a 31-vector versioned corpus and independent Rust validator agreement while
+  preserving schemas 0.1 and 0.1.1.
+
 ## 0.1.1 — 2026-07-25
 
 - Add schema 0.1.1 evidence-derived acceptance and general gate-result records.

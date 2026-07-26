@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://mncs.dev/schema/0.1.1/mncs-identity.schema.json",
+  "$id": "https://mncs.dev/schema/0.2/mncs-identity.schema.json",
   "title": "MNCS content-addressed identity record",
   "type": "object",
   "additionalProperties": false,
@@ -16,8 +16,8 @@
     "extensions"
   ],
   "properties": {
-    "schema_version": {"const": "0.1.1"},
-    "mncs_version": {"const": "0.1"},
+    "schema_version": {"const": "0.2"},
+    "mncs_version": {"const": "0.2"},
     "identity_id": {"$ref": "#/$defs/id"},
     "identity_kind": {
       "enum": [

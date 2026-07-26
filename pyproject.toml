@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mncs-validator"
-version = "0.1.1"
+version = "0.2.0"
 description = "Offline validator for the Machine-Native Complexity Standard"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -19,7 +19,11 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
   "Topic :: Software Development :: Quality Assurance",
 ]
-dependencies = ["jsonschema>=4.23,<5"]
+dependencies = [
+  "cryptography>=43,<47",
+  "jsonschema>=4.23,<5",
+  "rfc8785>=0.1.4,<1",
+]
 
 [project.optional-dependencies]
 dev = [
@@ -60,7 +64,7 @@ select = ["E", "F", "I", "B", "UP", "SIM", "RUF"]
 [tool.mypy]
 python_version = "3.11"
 strict = true
-packages = ["mncs_validator"]
+packages = ["mncs_validator", "mncs_provider_sdk"]
 
 [tool.pytest.ini_options]
 addopts = "-q"

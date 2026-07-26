@@ -1,0 +1,237 @@
+#!/usr/bin/env python3
+"""Regenerate deterministic MNCS 0.2 golden fixtures."""
+
+# SPDX-License-Identifier: Apache-2.0
+
+from __future__ import annotations
+
+import base64
+import hashlib
+import json
+import shutil
+import stat
+import sys
+import zipfile
+from copy import deepcopy
+from pathlib import Path
+
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
+from mncs_validator.attestation import ALGORITHM, PAYLOAD_TYPE
+from mncs_validator.canonical import canonicalize
+from mncs_validator.package import MAX_MEMBER_BYTES, pack
+
+ROOT = Path(__file__).resolve().parents[1]
+FIXTURES = ROOT / "interoperability/fixtures"
+ATTESTATIONS = FIXTURES / "attestations"
+PACKAGES = FIXTURES / "packages"
+PROVIDERS = FIXTURES / "providers"
+CURRENT_BUNDLE = FIXTURES / "current-0.2"
+PREDICATE = "https://mncs.dev/predicate/conformance-result/v0.2"
+NOW = "2026-01-01T00:00:00Z"
+
+
+def write_json(path: Path, value: object) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(canonicalize(value) + b"\n")
+
+
+def key(seed_byte: int) -> tuple[Ed25519PrivateKey, dict[str, object]]:
+    # This public, deterministic fixture seed is not a production secret.
+    private = Ed25519PrivateKey.from_private_bytes(bytes([seed_byte]) * 32)
+    raw = private.public_key().public_bytes(
+        serialization.Encoding.Raw,
+        serialization.PublicFormat.Raw,
+    )
+    record: dict[str, object] = {
+        "schema_version": "0.2",
+        "algorithm": ALGORITHM,
+        "keyid": f"sha256:{hashlib.sha256(raw).hexdigest()}",
+        "public_key": base64.b64encode(raw).decode("ascii"),
+        "roles": ["evaluator"],
+        "predicate_types": [PREDICATE],
+        "components": ["fixture-component"],
+        "contracts": ["fixture.contract"],
+        "environments": [f"sha256:{'b' * 64}"],
+        "extensions": {},
+    }
+    return private, record
+
+
+def pae(payload: bytes) -> bytes:
+    type_bytes = PAYLOAD_TYPE.encode()
+    return (
+        b"DSSEv1 "
+        + str(len(type_bytes)).encode()
+        + b" "
+        + type_bytes
+        + b" "
+        + str(len(payload)).encode()
+        + b" "
+        + payload
+    )
+
+
+def envelope(
+    statement: dict[str, object], signers: list[tuple[Ed25519PrivateKey, dict[str, object]]]
+) -> dict[str, object]:
+    payload = canonicalize(statement)
+    signatures = [
+        {
+            "keyid": record["keyid"],
+            "algorithm": ALGORITHM,
+            "sig": base64.b64encode(private.sign(pae(payload))).decode("ascii"),
+        }
+        for private, record in signers
+    ]
+    return {
+        "payloadType": PAYLOAD_TYPE,
+        "payload": base64.b64encode(payload).decode("ascii"),
+        "signatures": signatures,
+    }
+
+
+def policy(records: list[dict[str, object]], threshold: int = 1) -> dict[str, object]:
+    return {
+        "schema_version": "0.2",
+        "trust_domain": "fixture",
+        "keys": records,
+        "allowed_predicate_types": [PREDICATE],
+        "minimum_signatures": threshold,
+        "distinct_signers": threshold,
+        "required_roles": ["evaluator"],
+        "minimum_independent_evaluators": threshold,
+        "require_generator_evaluator_separation": False,
+        "unknown_handling": "reject",
+        "offline": True,
+        "revocations": [],
+        "extensions": {},
+    }
+
+
+def make_attestations() -> None:
+    first = key(1)
+    second = key(2)
+    statement: dict[str, object] = {
+        "_type": "https://mncs.dev/attestation/v0.2/statement",
+        "mncs_version": "0.2",
+        "schema_version": "0.2",
+        "subject": [{"name": "fixture", "digest": {"sha256": "a" * 64}}],
+        "contract_id": "fixture.contract",
+        "component": {
+            "name": "fixture-component",
+            "version": "1.0.0",
+            "identity": f"sha256:{'a' * 64}",
+        },
+        "environment": f"sha256:{'b' * 64}",
+        "predicate_type": PREDICATE,
+        "predicate": {"status": "PASS"},
+        "created_at": NOW,
+        "expires_at": "2030-01-01T00:00:00Z",
+        "extensions": {},
+    }
+    valid = envelope(statement, [first])
+    write_json(ATTESTATIONS / "public-key.json", first[1])
+    write_json(ATTESTATIONS / "second-public-key.json", second[1])
+    write_json(ATTESTATIONS / "valid.envelope.json", valid)
+    invalid = deepcopy(valid)
+    invalid["signatures"][0]["sig"] = base64.b64encode(b"\x00" * 64).decode("ascii")  # type: ignore[index]
+    write_json(ATTESTATIONS / "invalid-signature.envelope.json", invalid)
+    expired_statement = {**statement, "expires_at": "2025-01-01T00:00:00Z"}
+    write_json(ATTESTATIONS / "expired.envelope.json", envelope(expired_statement, [first]))
+    multi = envelope(statement, [first, second])
+    write_json(ATTESTATIONS / "multiple.envelope.json", multi)
+    duplicate = deepcopy(valid)
+    duplicate["signatures"].append(deepcopy(duplicate["signatures"][0]))  # type: ignore[union-attr,index]
+    write_json(ATTESTATIONS / "duplicate.envelope.json", duplicate)
+    write_json(ATTESTATIONS / "malformed.envelope.json", {"payloadType": PAYLOAD_TYPE})
+    base_policy = policy([first[1]])
+    write_json(ATTESTATIONS / "policy.json", base_policy)
+    untrusted = deepcopy(base_policy)
+    untrusted["keys"][0]["trusted"] = False
+    write_json(ATTESTATIONS / "untrusted-policy.json", untrusted)
+    revoked = deepcopy(base_policy)
+    revoked["revocations"] = [
+        {
+            "keyid": first[1]["keyid"],
+            "revoked_at": "2025-01-01T00:00:00Z",
+            "reason": "fixture revocation",
+            "extensions": {},
+        }
+    ]
+    write_json(ATTESTATIONS / "revoked-policy.json", revoked)
+    write_json(ATTESTATIONS / "threshold-policy.json", policy([first[1], second[1]], 2))
+
+
+def make_packages() -> None:
+    valid = PACKAGES / "valid.mncs"
+    valid.unlink(missing_ok=True)
+    pack(CURRENT_BUNDLE, valid)
+    shutil.copyfile(valid, PACKAGES / "reproducible-copy.mncs")
+    with zipfile.ZipFile(PACKAGES / "traversal.mncs", "w") as archive:
+        archive.writestr("../escape", b"bad")
+    link = zipfile.ZipInfo("link")
+    link.create_system = 3
+    link.external_attr = (stat.S_IFLNK | 0o777) << 16
+    with zipfile.ZipFile(PACKAGES / "symlink.mncs", "w") as archive:
+        archive.writestr(link, b"target")
+    with zipfile.ZipFile(
+        PACKAGES / "oversized.mncs",
+        "w",
+        compression=zipfile.ZIP_DEFLATED,
+        compresslevel=9,
+    ) as archive:
+        archive.writestr("oversized", b"\x00" * (MAX_MEMBER_BYTES + 1))
+
+
+def make_provider_results() -> None:
+    provider = {"name": "fixture", "version": "0.1", "identity": "fixture:provider"}
+    for status in ("PASS", "FAIL", "UNKNOWN"):
+        write_json(
+            PROVIDERS / f"{status.lower()}.json",
+            {
+                "protocol_version": "0.1",
+                "type": "analysis_response",
+                "request_id": status.lower(),
+                "provider": provider,
+                "status": status,
+                "summary": f"fixture {status}",
+                "witnesses": [],
+                "limitations": [],
+                "extensions": {},
+            },
+        )
+    write_json(PROVIDERS / "malformed.json", {"protocol_version": "9", "type": "noise"})
+
+
+def make_current_bundle() -> None:
+    if CURRENT_BUNDLE.exists():
+        shutil.rmtree(CURRENT_BUNDLE)
+    shutil.copytree(ROOT / "examples/minimal", CURRENT_BUNDLE)
+    index_path = CURRENT_BUNDLE / "evidence/index.json"
+    index = json.loads(index_path.read_text(encoding="utf-8"))
+    index["schema_version"] = "0.2"
+    index["mncs_version"] = "0.2"
+    write_json(index_path, index)
+    manifest_path = CURRENT_BUNDLE / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["schema_version"] = "0.2"
+    manifest["mncs_version"] = "0.2"
+    manifest["evidence_index"]["sha256"] = (
+        f"sha256:{hashlib.sha256(index_path.read_bytes()).hexdigest()}"
+    )
+    write_json(manifest_path, manifest)
+
+
+def main() -> int:
+    FIXTURES.mkdir(parents=True, exist_ok=True)
+    make_attestations()
+    make_current_bundle()
+    make_packages()
+    make_provider_results()
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

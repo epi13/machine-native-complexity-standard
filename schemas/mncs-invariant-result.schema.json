@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://mncs.dev/schema/0.1.1/mncs-invariant-result.schema.json",
+  "$id": "https://mncs.dev/schema/0.2/mncs-invariant-result.schema.json",
   "title": "MNCS structural invariant result",
   "type": "object",
   "additionalProperties": false,
@@ -28,8 +28,8 @@
     "extensions"
   ],
   "properties": {
-    "schema_version": {"const": "0.1.1"},
-    "mncs_version": {"const": "0.1"},
+    "schema_version": {"const": "0.2"},
+    "mncs_version": {"const": "0.2"},
     "result_id": {"$ref": "#/$defs/id"},
     "invariant_id": {"$ref": "#/$defs/id"},
     "requirement": {"type": "string", "minLength": 1},

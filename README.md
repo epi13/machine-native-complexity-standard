@@ -2,8 +2,8 @@
 
 [![CI](https://github.com/epi13/machine-native-complexity-standard/actions/workflows/ci.yml/badge.svg)](https://github.com/epi13/machine-native-complexity-standard/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![Standard](https://img.shields.io/badge/MNCS-0.1-experimental-orange.svg)](spec/MNCS-v0.1.md)
-[![Schema](https://img.shields.io/badge/schema-0.1.1-blue.svg)](schemas/mncs-manifest.schema.json)
+[![Standard](https://img.shields.io/badge/MNCS-0.2-experimental-orange.svg)](spec/MNCS-v0.2.md)
+[![Schema](https://img.shields.io/badge/schema-0.2-blue.svg)](schemas/mncs-manifest.schema.json)
 
 The Machine-Native Complexity Standard (MNCS) is an open, experimental,
 community-developed, tool-neutral engineering standard for accepting generated or
@@ -18,22 +18,22 @@ Machines may own internal execution complexity only when it purchases a declared
 measurable benefit inside an auditable correctness, safety, resource, provenance,
 and regeneration envelope. Complexity is never a benefit by itself.
 
-MNCS is not an accredited ISO, ANSI, IEEE, IETF, or similar standard. Version 0.1 is
+MNCS is not an accredited ISO, ANSI, IEEE, IETF, or similar standard. Version 0.2 is
 intended for experimentation and public review, not as a blanket assurance claim.
-Validator and schema release 0.1.1 hardens the evidence mechanics while the
-normative standard family remains MNCS 0.1.
+Validator release 0.2.0 adds portable canonical identities, offline attestations,
+explicit trust, reproducible packages, and independent implementation agreement.
 
-## Evidence-derived acceptance in 0.1.1
+## Attested interoperability in 0.2
 
-New manifests declare required gates, thresholds, UNKNOWN handling, regression
-policy, and conformance level. They do not author authoritative observed PASS
-values. Evaluators write content-addressed gate, invariant, performance, and
-provenance records; the evidence index gives each record a stable ID. The validator
-binds those records to the contract, candidate, reference, evaluator, toolchain,
-and environment before deriving every gate and the final status.
+Evidence-derived results now have RFC 8785 canonical bytes, Ed25519
+DSSE-compatible envelopes, deterministic local trust policies, reproducible `.mncs`
+archives, and a versioned corpus shared with an independent Rust validator. Provider
+Protocol 0.1 makes analyzers interoperable without letting normal validation launch
+them.
 
 `FAIL` dominates `UNKNOWN`, which dominates `PASS`. Missing required evidence never
-passes. A declared final status must equal the computed status.
+passes. Signature validity and trust are reported separately: a signature proves only
+that a key signed bytes, not correctness, safety, performance, or truth.
 
 ## Install
 
@@ -60,6 +60,9 @@ mncs summarize examples/minimal/manifest.json
 mncs hash examples/minimal/machine/generated.py
 mncs compare examples/minimal/manifest.json \
   examples/rejected-candidate/manifest.json
+mncs pack examples/minimal --output minimal.mncs
+mncs verify-package minimal.mncs
+mncs key generate ./release-key.pem
 ```
 
 Start a bundle with `mncs init my-component`. The resulting template is intentionally
@@ -87,6 +90,20 @@ mncs validate MANIFEST
 mncs validate-bundle DIRECTORY
 mncs certify MANIFEST
 mncs certify-bundle DIRECTORY
+mncs key generate PRIVATE_PATH
+mncs key inspect KEY
+mncs attest STATEMENT --key PRIVATE --output ENVELOPE
+mncs verify-attestation ENVELOPE --key PUBLIC_KEY
+mncs trust validate-policy POLICY
+mncs trust evaluate ENVELOPE POLICY
+mncs pack BUNDLE --output FILE.mncs
+mncs inspect-package FILE.mncs
+mncs verify-package FILE.mncs
+mncs unpack FILE.mncs --output DIRECTORY
+mncs certify-package FILE.mncs
+mncs provider inspect COMMAND
+mncs provider run DESCRIPTOR REQUEST
+mncs provider verify-result RESULT
 mncs summarize MANIFEST
 mncs compare MANIFEST_A MANIFEST_B
 mncs hash PATH
@@ -116,13 +133,14 @@ provider and is not a normative dependency.
 
 ## Repository map
 
-- [`spec/`](spec/MNCS-v0.1.md) — normative MNCS 0.1 text
+- [`spec/`](spec/MNCS-v0.2.md) — normative MNCS 0.2 text
 - [`schemas/`](schemas/mncs-manifest.schema.json) — machine-readable contracts
 - [`src/mncs_validator/`](src/mncs_validator/validation.py) — offline validator
 - [`examples/`](examples/minimal/README.md) — accepted, rejected, and repair bundles
 - [`docs/`](docs/index.md) — documentation site
 - [`rfcs/`](rfcs/README.md) — change process
 - [`conformance-corpus/`](conformance-corpus/expected.json) — deterministic validator corpus
+- [`interoperability/`](interoperability/corpus.json) — cross-language golden vectors
 - [`research/`](research/graphflow-machine-native-study.md) — preliminary motivation
 
 ## Participate
@@ -138,5 +156,5 @@ Code, schemas, and documentation are licensed under the
 [`CITATION.cff`](CITATION.cff); a conformance claim should also identify its manifest
 hash.
 
-A validator PASS is scoped to the declared contract and environment. MNCS 0.1 is
+A validator PASS is scoped to the declared contract and environment. MNCS 0.2 is
 experimental and does not constitute accredited certification.

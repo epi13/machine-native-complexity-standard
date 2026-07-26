@@ -97,6 +97,15 @@ def _reject_json_constant(value: str) -> None:
     raise ValueError(f"nonfinite JSON number {value}")
 
 
+def _reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    value: dict[str, Any] = {}
+    for key, child in pairs:
+        if key in value:
+            raise ValueError(f"duplicate JSON object key: {key}")
+        value[key] = child
+    return value
+
+
 def load_json_object(path: Path, *, expected_sha256: str | None = None) -> dict[str, Any]:
     """Load a bounded JSON object and convert parser errors to a stable exception."""
 
@@ -106,6 +115,7 @@ def load_json_object(path: Path, *, expected_sha256: str | None = None) -> dict[
             raise ManifestError(f"JSON object changed after index verification: {path}")
         value: Any = json.loads(
             content.decode("utf-8"),
+            object_pairs_hook=_reject_duplicate_keys,
             parse_constant=_reject_json_constant,
         )
     except ManifestError:
@@ -241,7 +251,11 @@ def _validate_extensions(value: Any, report: ValidationReport, path: str = "$") 
 
 
 def _schema_name(base: str, schema_version: str) -> str:
-    return f"{base}-0.1" if schema_version == "0.1" else base
+    if schema_version == "0.1":
+        return f"{base}-0.1"
+    if schema_version == "0.1.1":
+        return f"{base}-0.1.1"
+    return base
 
 
 def _load_indexed_json(
@@ -263,7 +277,11 @@ def _load_indexed_json(
     except ManifestError as exc:
         report.add("invalid-json", str(exc), cast(str, record.get("path", "")))
         return None
-    for error in schema_errors(value, schema_name):
+    version = value.get("schema_version")
+    resolved_schema = (
+        _schema_name(schema_name, version) if isinstance(version, str) else schema_name
+    )
+    for error in schema_errors(value, resolved_schema):
         report.add("schema", error, cast(str, record.get("path", "")))
     _validate_extensions(value, report, cast(str, record.get("path", "")))
     if isinstance(identifier, str):
@@ -327,7 +345,8 @@ def _validate_evidence_index(
     except ManifestError as exc:
         report.add("invalid-json", str(exc), cast(str, reference["path"]))
         return {}, {}
-    for error in schema_errors(index, "evidence-index"):
+    schema_version = cast(str, manifest.get("schema_version", "0.2"))
+    for error in schema_errors(index, _schema_name("evidence-index", schema_version)):
         report.add("schema", error, cast(str, reference["path"]))
     _validate_extensions(index, report, cast(str, reference["path"]))
     records_value = index.get("records", [])
@@ -1031,7 +1050,8 @@ def _validate_new_manifest(
     *,
     verify_hashes: bool,
 ) -> ValidationReport:
-    for error in schema_errors(manifest, "manifest"):
+    schema_version = cast(str, manifest.get("schema_version", "0.2"))
+    for error in schema_errors(manifest, _schema_name("manifest", schema_version)):
         report.add("schema", error, str(path))
     _validate_extensions(manifest, report, str(path))
     if not report.valid:
@@ -1279,11 +1299,11 @@ def validate_manifest(
             report.legacy_override_used = True
             report.certification_eligible = True
         return report
-    if schema_version == "0.1.1":
+    if schema_version in {"0.1.1", "0.2"}:
         return _validate_new_manifest(path, manifest, report, verify_hashes=verify_hashes)
     report.add(
         "unsupported-schema-version",
-        f"supported schema versions are 0.1 and 0.1.1, found {schema_version!r}",
+        f"supported schema versions are 0.1, 0.1.1, and 0.2, found {schema_version!r}",
         str(path),
     )
     return report
@@ -1342,7 +1362,7 @@ def validate_bundle(directory: Path, *, allow_legacy: bool = False) -> Validatio
 
 
 def _objective(manifest: dict[str, Any]) -> dict[str, Any]:
-    if manifest.get("schema_version") == "0.1.1":
+    if manifest.get("schema_version") in {"0.1.1", "0.2"}:
         return cast(dict[str, Any], manifest["acceptance_policy"]["objective"])
     return cast(dict[str, Any], manifest.get("objective", {}))
 
@@ -1470,12 +1490,12 @@ def compare_manifests(
     evidence_strength = {
         "A": (
             f"evidence-derived {first['claimed_level']}"
-            if first.get("schema_version") == "0.1.1"
+            if first.get("schema_version") in {"0.1.1", "0.2"}
             else "legacy self-asserted"
         ),
         "B": (
             f"evidence-derived {second['claimed_level']}"
-            if second.get("schema_version") == "0.1.1"
+            if second.get("schema_version") in {"0.1.1", "0.2"}
             else "legacy self-asserted"
         ),
     }

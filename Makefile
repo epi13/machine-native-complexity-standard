@@ -1,4 +1,4 @@
-.PHONY: format lint type test build examples corpus docs check
+.PHONY: format lint type test build examples corpus interoperability docs check
 
 format:
 	ruff format .
@@ -22,7 +22,10 @@ examples:
 corpus:
 	PYTHONPATH=src ./scripts/run-conformance-corpus
 
+interoperability:
+	PYTHONPATH=src ./scripts/run-interoperability
+
 docs:
 	./scripts/build-docs
 
-check: lint type test build examples corpus docs
+check: lint type test build examples corpus interoperability docs

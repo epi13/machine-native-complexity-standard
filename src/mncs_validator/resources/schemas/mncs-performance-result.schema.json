@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://mncs.dev/schema/0.1.1/mncs-performance-result.schema.json",
+  "$id": "https://mncs.dev/schema/0.2/mncs-performance-result.schema.json",
   "title": "MNCS bound performance observation",
   "type": "object",
   "additionalProperties": false,
@@ -46,8 +46,8 @@
     "extensions"
   ],
   "properties": {
-    "schema_version": {"const": "0.1.1"},
-    "mncs_version": {"const": "0.1"},
+    "schema_version": {"const": "0.2"},
+    "mncs_version": {"const": "0.2"},
     "result_id": {"$ref": "#/$defs/id"},
     "contract_id": {"type": "string", "minLength": 1},
     "candidate_source_hash": {"$ref": "#/$defs/hash"},

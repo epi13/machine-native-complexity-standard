@@ -12,11 +12,11 @@ def test_version_reports_all_version_concepts(capsys: object) -> None:
     assert main(["version", "--json"]) == 0
     value = json.loads(capsys.readouterr().out)  # type: ignore[attr-defined]
     assert value == {
-        "current_schema_version": "0.1.1",
-        "normative_standard_family": "MNCS 0.1",
+        "current_schema_version": "0.2",
+        "normative_standard_family": "MNCS 0.2",
         "package": "mncs-validator",
-        "package_version": "0.1.1",
-        "supported_schema_versions": ["0.1", "0.1.1"],
+        "package_version": "0.2.0",
+        "supported_schema_versions": ["0.1", "0.1.1", "0.2"],
     }
 
 
@@ -59,7 +59,7 @@ def test_hash_summarize_and_init(capsys: object, tmp_path: Path) -> None:
     target = tmp_path / "bundle"
     assert main(["init", str(target), "--json"]) == 0
     template = json.loads((target / "manifest.template.json").read_text())
-    assert template["schema_version"] == "0.1.1"
+    assert template["schema_version"] == "0.2"
 
 
 def test_init_refuses_nonempty_directory(tmp_path: Path) -> None:
