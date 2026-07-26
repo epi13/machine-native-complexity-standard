@@ -23,7 +23,7 @@ jobs:
           cache: pip
       - run: python -m pip install -e '.[dev]'
       - run: mkdocs build --strict
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         if: github.event_name == 'push'
         with:
           path: site
