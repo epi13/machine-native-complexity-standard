@@ -1,0 +1,184 @@
+{
+  "schema_version": "0.1",
+  "mncds_version": "0.1-draft",
+  "base_record": "examples/mncds-d4/development-record.json",
+  "cases": [
+    {
+      "id": "valid/d4-pass",
+      "mutations": [],
+      "expected": {
+        "valid": true,
+        "computed_status": "PASS",
+        "issue_codes": []
+      }
+    },
+    {
+      "id": "invalid/generator-modifies-evaluator",
+      "mutations": [
+        {
+          "path": "/generator/permissions/modify_evaluators",
+          "value": true
+        }
+      ],
+      "expected": {
+        "valid": false,
+        "computed_status": "FAIL",
+        "issue_codes": [
+          "generator-authority-violation"
+        ]
+      }
+    },
+    {
+      "id": "invalid/generator-modifies-threshold",
+      "mutations": [
+        {
+          "path": "/generator/permissions/modify_thresholds",
+          "value": true
+        }
+      ],
+      "expected": {
+        "valid": false,
+        "computed_status": "FAIL",
+        "issue_codes": [
+          "generator-authority-violation"
+        ]
+      }
+    },
+    {
+      "id": "invalid/candidate-lineage-cycle",
+      "mutations": [
+        {
+          "path": "/candidates/0/parent_ids",
+          "value": [
+            "candidate-b"
+          ]
+        }
+      ],
+      "expected": {
+        "valid": false,
+        "computed_status": "FAIL",
+        "issue_codes": [
+          "lineage-cycle"
+        ]
+      }
+    },
+    {
+      "id": "invalid/unknown-promoted",
+      "mutations": [
+        {
+          "path": "/candidates/1/evaluator_results/0/status",
+          "value": "UNKNOWN"
+        }
+      ],
+      "expected": {
+        "valid": false,
+        "computed_status": "FAIL",
+        "issue_codes": [
+          "unknown-promoted"
+        ]
+      }
+    },
+    {
+      "id": "invalid/holdout-contaminated",
+      "mutations": [
+        {
+          "path": "/partitions/holdout_contaminated",
+          "value": true
+        }
+      ],
+      "expected": {
+        "valid": false,
+        "computed_status": "FAIL",
+        "issue_codes": [
+          "holdout-contaminated"
+        ]
+      }
+    },
+    {
+      "id": "invalid/selection-rule-post-hoc",
+      "mutations": [
+        {
+          "path": "/selection/rule_recorded_before_holdout",
+          "value": false
+        }
+      ],
+      "expected": {
+        "valid": false,
+        "computed_status": "FAIL",
+        "issue_codes": [
+          "selection-rule-post-hoc"
+        ]
+      }
+    },
+    {
+      "id": "invalid/independence-conflict",
+      "mutations": [
+        {
+          "path": "/evaluators/1/authority_id",
+          "value": "authority-generation-team"
+        },
+        {
+          "path": "/evaluators/1/executable_id",
+          "value": "generator-runner-v2"
+        }
+      ],
+      "expected": {
+        "valid": false,
+        "computed_status": "FAIL",
+        "issue_codes": [
+          "independence-authority-conflict",
+          "independence-executable-conflict",
+          "independent-role-mismatch"
+        ]
+      }
+    },
+    {
+      "id": "invalid/mncs-binding-mismatch",
+      "mutations": [
+        {
+          "path": "/mncs_binding/candidate_id",
+          "value": "candidate-a"
+        }
+      ],
+      "expected": {
+        "valid": false,
+        "computed_status": "FAIL",
+        "issue_codes": [
+          "mncs-binding-mismatch"
+        ]
+      }
+    },
+    {
+      "id": "invalid/rollback-not-tested",
+      "mutations": [
+        {
+          "path": "/release_controls/rollback_test_status",
+          "value": "UNKNOWN"
+        }
+      ],
+      "expected": {
+        "valid": false,
+        "computed_status": "FAIL",
+        "issue_codes": [
+          "rollback-not-tested"
+        ]
+      }
+    },
+    {
+      "id": "invalid/regeneration-drill-failed",
+      "mutations": [
+        {
+          "path": "/release_controls/regeneration_drill/status",
+          "value": "FAIL"
+        }
+      ],
+      "expected": {
+        "valid": false,
+        "computed_status": "FAIL",
+        "issue_codes": [
+          "regeneration-drill-failed"
+        ]
+      }
+    }
+  ]
+}
