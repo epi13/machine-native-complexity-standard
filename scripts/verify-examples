@@ -16,3 +16,6 @@ done
 
 python -m mncs_validator validate-bundle examples/rejected-candidate
 python -m mncs_validator validate-bundle examples/legacy-0.1
+python -m mncs_validator.mncds_cli validate \
+  examples/mncds-d4/development-record.json \
+  --require-pass
