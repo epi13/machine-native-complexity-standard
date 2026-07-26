@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://mncs.dev/schema/0.1.1/mncs-evidence-index.schema.json",
+  "$id": "https://mncs.dev/schema/0.2/mncs-evidence-index.schema.json",
   "title": "MNCS authoritative evidence graph index",
   "type": "object",
   "additionalProperties": false,
@@ -13,8 +13,8 @@
     "extensions"
   ],
   "properties": {
-    "schema_version": {"const": "0.1.1"},
-    "mncs_version": {"const": "0.1"},
+    "schema_version": {"const": "0.2"},
+    "mncs_version": {"const": "0.2"},
     "immutable": {"type": "boolean"},
     "unreferenced_evidence_policy": {"enum": ["warn", "reject"]},
     "records": {

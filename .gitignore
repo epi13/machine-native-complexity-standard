@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: Apache-2.0
 .venv/
 .joern-analysis/
+.joern/
+.joern-rust-mirror/
 __pycache__/
 *.py[cod]
 .pytest_cache/

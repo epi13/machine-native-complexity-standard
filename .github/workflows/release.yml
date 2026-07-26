@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --upgrade build
+      - run: python -m build
+      - name: Build schema and corpus archives
+        run: |
+          tar --sort=name --mtime='UTC 1980-01-01' --owner=0 --group=0 \
+            --numeric-owner -czf dist/mncs-0.2.0-schemas.tar.gz schemas
+          tar --sort=name --mtime='UTC 1980-01-01' --owner=0 --group=0 \
+            --numeric-owner -czf dist/mncs-0.2.0-interoperability-corpus.tar.gz \
+            interoperability
+          cd dist
+          sha256sum * > SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: primary-release
+          path: dist/*
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: primary-release
+          path: dist
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ./scripts/create-release-notes "${GITHUB_REF_NAME}" > release-notes.md
+          gh release create "${GITHUB_REF_NAME}" dist/* \
+            --title "MNCS v0.2.0 — Attested Interoperability" \
+            --notes-file release-notes.md

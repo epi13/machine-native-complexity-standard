@@ -9,4 +9,6 @@ mypy src
 pytest
 python -m build
 ./scripts/verify-examples
+./scripts/run-conformance-corpus
+./scripts/run-interoperability
 mkdocs build --strict

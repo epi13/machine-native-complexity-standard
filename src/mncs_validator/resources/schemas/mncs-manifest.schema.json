@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://mncs.dev/schema/0.1.1/mncs-manifest.schema.json",
+  "$id": "https://mncs.dev/schema/0.2/mncs-manifest.schema.json",
   "title": "MNCS evidence-derived conformance manifest",
   "type": "object",
   "additionalProperties": false,
@@ -24,8 +24,8 @@
   ],
   "properties": {
     "$schema": {"type": "string", "minLength": 1},
-    "schema_version": {"const": "0.1.1"},
-    "mncs_version": {"const": "0.1"},
+    "schema_version": {"const": "0.2"},
+    "mncs_version": {"const": "0.2"},
     "claimed_level": {"enum": ["MNCS-L1", "MNCS-L2", "MNCS-L3", "MNCS-L4", "MNCS-L5"]},
     "component": {
       "type": "object",

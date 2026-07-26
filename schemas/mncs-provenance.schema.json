@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://mncs.dev/schema/0.1.1/mncs-provenance.schema.json",
+  "$id": "https://mncs.dev/schema/0.2/mncs-provenance.schema.json",
   "title": "MNCS bound provenance record",
   "type": "object",
   "additionalProperties": false,
@@ -31,8 +31,8 @@
     "extensions"
   ],
   "properties": {
-    "schema_version": {"const": "0.1.1"},
-    "mncs_version": {"const": "0.1"},
+    "schema_version": {"const": "0.2"},
+    "mncs_version": {"const": "0.2"},
     "provenance_id": {"$ref": "#/$defs/id"},
     "contract_id": {"type": "string", "minLength": 1},
     "generator_identity_id": {"$ref": "#/$defs/id"},

@@ -6,9 +6,10 @@ from __future__ import annotations
 
 import json
 import math
+from copy import deepcopy
 from importlib.resources import files
 from importlib.resources.abc import Traversable
-from typing import Any
+from typing import Any, cast
 
 from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import SchemaError
@@ -24,6 +25,27 @@ SCHEMA_NAMES = {
     "performance-result": "mncs-performance-result.schema.json",
     "provenance": "mncs-provenance.schema.json",
     "tool-provider": "mncs-tool-provider.schema.json",
+    "canonical-document": "mncs-canonical-document.schema.json",
+    "attestation-envelope": "mncs-attestation-envelope.schema.json",
+    "attestation-statement": "mncs-attestation-statement.schema.json",
+    "subject-identity": "mncs-subject-identity.schema.json",
+    "trust-policy": "mncs-trust-policy.schema.json",
+    "key-record": "mncs-key-record.schema.json",
+    "revocation-record": "mncs-revocation-record.schema.json",
+    "package-index": "mncs-package-index.schema.json",
+    "provider-request": "mncs-provider-request.schema.json",
+    "provider-response": "mncs-provider-response.schema.json",
+    "provider-capabilities": "mncs-provider-capabilities.schema.json",
+    "provider-descriptor": "mncs-provider-descriptor.schema.json",
+    "provider-error": "mncs-provider-error.schema.json",
+    "manifest-0.1.1": "mncs-manifest.schema.json",
+    "gate-result-0.1.1": "mncs-gate-result.schema.json",
+    "identity-0.1.1": "mncs-identity.schema.json",
+    "invariant-result-0.1.1": "mncs-invariant-result.schema.json",
+    "evidence-index-0.1.1": "mncs-evidence-index.schema.json",
+    "performance-result-0.1.1": "mncs-performance-result.schema.json",
+    "provenance-0.1.1": "mncs-provenance.schema.json",
+    "tool-provider-0.1.1": "mncs-tool-provider.schema.json",
     "manifest-0.1": "mncs-manifest-0.1.schema.json",
     "invariant-result-0.1": "mncs-invariant-result-0.1.schema.json",
     "evidence-index-0.1": "mncs-evidence-index-0.1.schema.json",
@@ -51,7 +73,23 @@ def load_schema(name: str) -> dict[str, Any]:
     value: Any = json.loads(schema_path(name).read_text(encoding="utf-8"))
     if not isinstance(value, dict):
         raise SchemaError(f"schema {name} is not an object")
+    if name.endswith("-0.1.1"):
+        value = _legacy_0_1_1_schema(value)
     Draft202012Validator.check_schema(value)
+    return cast(dict[str, Any], value)
+
+
+def _legacy_0_1_1_schema(schema: dict[str, Any]) -> dict[str, Any]:
+    """Derive the frozen 0.1.1 shape from the structurally identical 0.2 schema."""
+
+    value = deepcopy(schema)
+    identifier = value.get("$id")
+    if isinstance(identifier, str):
+        value["$id"] = identifier.replace("/0.2/", "/0.1.1/")
+    properties = value.get("properties")
+    if isinstance(properties, dict):
+        properties["schema_version"] = {"const": "0.1.1"}
+        properties["mncs_version"] = {"const": "0.1"}
     return value
 
 

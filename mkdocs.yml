@@ -17,6 +17,13 @@ nav:
   - Evidence-derived conformance: evidence-derived-conformance.md
   - Certification vs validation: certification-vs-validation.md
   - Migration 0.1 to 0.1.1: migration-0.1-to-0.1.1.md
+  - Migration 0.1.1 to 0.2: migration-0.1.1-to-0.2.md
+  - Canonicalization: canonicalization.md
+  - Attestations: attestations.md
+  - Trust policies: trust-policies.md
+  - Reproducible packages: reproducible-packages.md
+  - Provider Protocol: provider-protocol.md
+  - Rust interoperability: rust-interoperability.md
   - Conformance corpus: conformance-corpus.md
   - Validator: validator.md
   - Evidence bundles: evidence-bundles.md
@@ -28,5 +35,5 @@ nav:
   - Research background: research-background.md
   - Contributing: contributing-to-the-standard.md
   - Specification:
-      - MNCS 0.1: specification.md
+      - MNCS 0.2: specification.md
       - Normative language: normative-language.md

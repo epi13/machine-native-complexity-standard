@@ -13,7 +13,7 @@ its identity and prevents PASS. A valid manifest with final status FAIL is usefu
 it is a trustworthy rejection record, not a conforming accepted implementation.
 
 See the [normative specification](specification.md).
-For schema 0.1.1, conformance is computed from indexed observations. Policy declares
+For schemas 0.1.1 and 0.2, conformance is computed from indexed observations. Policy declares
 required gates; it does not declare observed PASS. Every cumulative gate must have
 suitable evidence bound to the candidate and contract. The validator emits PASS,
 FAIL, or UNKNOWN per gate and for the claimed level, then checks that the manifest's

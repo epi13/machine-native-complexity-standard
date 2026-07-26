@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.11", "3.12", "3.13"]
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -30,6 +30,7 @@ jobs:
       - name: Validate JSON Schemas
         run: python -c "from mncs_validator.schemas import SCHEMA_NAMES, load_schema; [load_schema(n) for n in SCHEMA_NAMES]"
       - run: ./scripts/run-conformance-corpus
+      - run: ./scripts/run-interoperability --python-only
       - run: ./scripts/verify-examples
       - run: python -m build
       - run: git diff --check
@@ -44,3 +45,29 @@ jobs:
           cache: pip
       - run: python -m pip install --upgrade pip build
       - run: ./scripts/clean-wheel-smoke-test
+
+  cross-implementation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - uses: dtolnay/rust-toolchain@stable
+      - run: python -m pip install -e '.[dev]'
+      - name: Checkout pinned Rust validator
+        env:
+          RUST_COMMIT: ${{ vars.MNCS_RS_COMMIT }}
+        run: |
+          commit="${RUST_COMMIT:-$(cat interoperability/RUST_VALIDATOR_COMMIT)}"
+          git clone https://github.com/epi13/mncs-validator-rs "$RUNNER_TEMP/mncs-validator-rs"
+          git -C "$RUNNER_TEMP/mncs-validator-rs" checkout "$commit"
+      - run: >-
+          ./scripts/run-interoperability
+          --rust-repository "$RUNNER_TEMP/mncs-validator-rs"
+          --output interoperability-agreement.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: interoperability-agreement
+          path: interoperability-agreement.json

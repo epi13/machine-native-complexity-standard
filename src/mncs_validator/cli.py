@@ -11,8 +11,20 @@ from pathlib import Path
 from typing import Any
 
 from . import __version__
+from .attestation import (
+    attest,
+    generate_key,
+    inspect_key,
+    load_json,
+    load_public_record,
+    verify_attestation,
+    write_json,
+)
+from .canonical import canonical_sha256_file, canonicalize_file
 from .errors import MncsError
 from .hashing import hash_path, sha256_bytes
+from .package import inspect_package, pack, unpack, verify_package
+from .provider import inspect_provider, run_descriptor, verify_result
 from .reporting import (
     manifest_summary,
     render_comparison,
@@ -20,11 +32,12 @@ from .reporting import (
     render_validation,
 )
 from .schemas import SCHEMA_NAMES, load_schema
+from .trust import evaluate, validate_policy
 from .validation import compare_manifests, load_json_object, validate_bundle, validate_manifest
 
-CURRENT_SCHEMA_VERSION = "0.1.1"
-SUPPORTED_SCHEMA_VERSIONS = ("0.1", "0.1.1")
-NORMATIVE_STANDARD_FAMILY = "MNCS 0.1"
+CURRENT_SCHEMA_VERSION = "0.2"
+SUPPORTED_SCHEMA_VERSIONS = ("0.1", "0.1.1", "0.2")
+NORMATIVE_STANDARD_FAMILY = "MNCS 0.2"
 
 
 def _json_option(parser: argparse.ArgumentParser) -> None:
@@ -64,6 +77,8 @@ def build_parser() -> argparse.ArgumentParser:
     certify = subparsers.add_parser("certify", help="require a certifiable manifest PASS")
     certify.add_argument("manifest", type=Path)
     certify.add_argument("--allow-legacy", action="store_true", help="allow legacy PASS override")
+    certify.add_argument("--trust-policy", type=Path)
+    certify.add_argument("--attestation", type=Path)
     _json_option(certify)
 
     certify_bundle = subparsers.add_parser(
@@ -76,6 +91,8 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="allow legacy PASS override",
     )
+    certify_bundle.add_argument("--trust-policy", type=Path)
+    certify_bundle.add_argument("--attestation", type=Path)
     _json_option(certify_bundle)
 
     summarize = subparsers.add_parser("summarize", help="summarize a manifest")
@@ -95,6 +112,101 @@ def build_parser() -> argparse.ArgumentParser:
     hash_command = subparsers.add_parser("hash", help="hash a file or directory")
     hash_command.add_argument("path", type=Path)
     _json_option(hash_command)
+
+    canonicalize = subparsers.add_parser("canonicalize", help="emit RFC 8785 JSON")
+    canonicalize.add_argument("file", type=Path)
+
+    key = subparsers.add_parser("key", help="manage offline Ed25519 keys")
+    key_commands = key.add_subparsers(dest="key_command", required=True)
+    key_generate = key_commands.add_parser("generate", help="create a private key")
+    key_generate.add_argument("private_path", type=Path)
+    key_generate.add_argument("--public", type=Path)
+    _json_option(key_generate)
+    key_inspect = key_commands.add_parser("inspect", help="inspect a key")
+    key_inspect.add_argument("key", type=Path)
+    _json_option(key_inspect)
+
+    attest_command = subparsers.add_parser("attest", help="sign a canonical statement")
+    attest_command.add_argument("statement", type=Path)
+    attest_command.add_argument("--key", required=True, type=Path)
+    attest_command.add_argument("--output", required=True, type=Path)
+    attest_command.add_argument("--append", action="store_true")
+    _json_option(attest_command)
+
+    verify_attestation_command = subparsers.add_parser(
+        "verify-attestation",
+        help="verify signatures separately from trust",
+    )
+    verify_attestation_command.add_argument("envelope", type=Path)
+    verify_attestation_command.add_argument("--key", action="append", required=True, type=Path)
+    verify_attestation_command.add_argument("--subject")
+    verify_attestation_command.add_argument("--contract")
+    verify_attestation_command.add_argument("--environment")
+    _json_option(verify_attestation_command)
+
+    trust = subparsers.add_parser("trust", help="validate or evaluate trust policy")
+    trust_commands = trust.add_subparsers(dest="trust_command", required=True)
+    validate_policy_command = trust_commands.add_parser(
+        "validate-policy",
+        help="validate a deterministic trust policy",
+    )
+    validate_policy_command.add_argument("policy", type=Path)
+    _json_option(validate_policy_command)
+    evaluate_command = trust_commands.add_parser("evaluate", help="evaluate trust")
+    evaluate_command.add_argument("envelope", type=Path)
+    evaluate_command.add_argument("policy", type=Path)
+    evaluate_command.add_argument("--subject")
+    evaluate_command.add_argument("--contract")
+    evaluate_command.add_argument("--environment")
+    _json_option(evaluate_command)
+
+    pack_command = subparsers.add_parser("pack", help="create a deterministic .mncs package")
+    pack_command.add_argument("bundle", type=Path)
+    pack_command.add_argument("--output", required=True, type=Path)
+    pack_command.add_argument("--attestation", type=Path)
+    _json_option(pack_command)
+    inspect_package_command = subparsers.add_parser(
+        "inspect-package",
+        help="inspect package structure and limits",
+    )
+    inspect_package_command.add_argument("package", type=Path)
+    _json_option(inspect_package_command)
+    verify_package_command = subparsers.add_parser(
+        "verify-package",
+        help="verify package integrity",
+    )
+    verify_package_command.add_argument("package", type=Path)
+    _json_option(verify_package_command)
+    unpack_command = subparsers.add_parser("unpack", help="securely unpack a verified package")
+    unpack_command.add_argument("package", type=Path)
+    unpack_command.add_argument("--output", required=True, type=Path)
+    _json_option(unpack_command)
+    certify_package = subparsers.add_parser(
+        "certify-package",
+        help="verify package integrity and optional trust",
+    )
+    certify_package.add_argument("package", type=Path)
+    certify_package.add_argument("--trust-policy", type=Path)
+    certify_package.add_argument("--attestation", type=Path)
+    _json_option(certify_package)
+
+    provider = subparsers.add_parser("provider", help="explicitly run provider protocol")
+    provider_commands = provider.add_subparsers(dest="provider_command", required=True)
+    provider_inspect = provider_commands.add_parser("inspect", help="request capabilities")
+    provider_inspect.add_argument("provider_argv", nargs="+")
+    provider_inspect.add_argument("--timeout", type=float, default=30.0)
+    _json_option(provider_inspect)
+    provider_run = provider_commands.add_parser("run", help="run a descriptor request")
+    provider_run.add_argument("descriptor", type=Path)
+    provider_run.add_argument("request", type=Path)
+    provider_run.add_argument("--timeout", type=float)
+    _json_option(provider_run)
+    provider_verify = provider_commands.add_parser(
+        "verify-result",
+        help="validate a provider result without execution",
+    )
+    provider_verify.add_argument("result", type=Path)
+    _json_option(provider_verify)
 
     schema = subparsers.add_parser("schema", help="print a bundled JSON Schema")
     schema.add_argument("name", choices=sorted(SCHEMA_NAMES))
@@ -147,11 +259,11 @@ def _initialize(path: Path) -> dict[str, Any]:
     )
     template = {
         "note": (
-            "Schema 0.1.1 requires indexed gate results and content-addressed identity records. "
+            "Schema 0.2 requires indexed gate results and content-addressed identity records. "
             "Run `mncs hash PATH`, then replace this file with manifest.json."
         ),
         "schema_version": CURRENT_SCHEMA_VERSION,
-        "mncs_version": "0.1",
+        "mncs_version": "0.2",
         "machine_sha256": hash_path(path / "machine" / "generated.py"),
         "reference_sha256": hash_path(path / "reference" / "reference.py"),
         "example_generator_identity_hash": sha256_bytes(b"replace-me generator identity record"),
@@ -163,10 +275,44 @@ def _initialize(path: Path) -> dict[str, Any]:
     return {"initialized": str(path), "template": str(path / "manifest.template.json")}
 
 
+def _trust_result(
+    target: Path,
+    policy_path: Path,
+    attestation_path: Path | None,
+    manifest: dict[str, Any] | None,
+) -> dict[str, Any]:
+    envelope_path = attestation_path or (
+        target.parent / "attestation.json" if target.is_file() else target / "attestation.json"
+    )
+    policy = load_json(policy_path)
+    envelope = load_json(envelope_path)
+    subject = hash_path(target)
+    contract = None
+    environment = None
+    if manifest is not None:
+        component = manifest.get("component", {})
+        env = manifest.get("environment", {})
+        if isinstance(component, dict):
+            contract_value = component.get("contract_id")
+            contract = contract_value if isinstance(contract_value, str) else None
+        if isinstance(env, dict):
+            environment_value = env.get("fingerprint")
+            environment = environment_value if isinstance(environment_value, str) else None
+    return evaluate(
+        envelope,
+        policy,
+        expected_subject=subject,
+        expected_contract=contract,
+        expected_environment=environment,
+    ).as_dict()
+
+
 def run(args: argparse.Namespace) -> int:
     """Dispatch a parsed command."""
 
     command = args.command
+    result: Any
+    report: Any
     if command == "init":
         init_result = _initialize(args.path)
         _write_json(init_result) if args.json else print(f"Initialized {args.path}")
@@ -188,14 +334,32 @@ def run(args: argparse.Namespace) -> int:
     if command == "certify":
         _require_file(args.manifest)
         report = validate_manifest(args.manifest, allow_legacy=args.allow_legacy)
-        _write_json(report.as_dict()) if args.json else print(render_validation(report))
+        output = report.as_dict()
+        if args.trust_policy is not None and report.certification_eligible:
+            output["trust"] = _trust_result(
+                args.manifest,
+                args.trust_policy,
+                args.attestation,
+                load_json_object(args.manifest),
+            )
+            report.certification_eligible = bool(output["trust"]["certified"])
+        _write_json(output) if args.json else print(render_validation(report))
         if not report.valid:
             return 1
         return 0 if report.certification_eligible else 3
     if command == "certify-bundle":
         _require_directory(args.directory)
         report = validate_bundle(args.directory, allow_legacy=args.allow_legacy)
-        _write_json(report.as_dict()) if args.json else print(render_validation(report))
+        output = report.as_dict()
+        if args.trust_policy is not None and report.certification_eligible:
+            output["trust"] = _trust_result(
+                args.directory,
+                args.trust_policy,
+                args.attestation,
+                load_json_object(args.directory / "manifest.json"),
+            )
+            report.certification_eligible = bool(output["trust"]["certified"])
+        _write_json(output) if args.json else print(render_validation(report))
         if not report.valid:
             return 1
         return 0 if report.certification_eligible else 3
@@ -221,6 +385,112 @@ def run(args: argparse.Namespace) -> int:
     if command == "hash":
         result = {"path": str(args.path), "sha256": hash_path(args.path)}
         _write_json(result) if args.json else print(result["sha256"])
+        return 0
+    if command == "canonicalize":
+        sys.stdout.buffer.write(canonicalize_file(args.file) + b"\n")
+        return 0
+    if command == "key":
+        if args.key_command == "generate":
+            result = generate_key(args.private_path, args.public)
+        else:
+            result = inspect_key(args.key)
+        _write_json(result) if args.json else print(json.dumps(result, sort_keys=True))
+        return 0
+    if command == "attest":
+        statement = load_json(args.statement)
+        existing = load_json(args.output) if args.append else None
+        if args.output.exists() and not args.append:
+            raise MncsError(f"refusing to overwrite attestation: {args.output}")
+        envelope = attest(statement, args.key, existing)
+        write_json(args.output, envelope)
+        result = {
+            "output": str(args.output),
+            "signatures": len(envelope["signatures"]),
+            "payload_sha256": canonical_sha256_file(args.statement),
+        }
+        _write_json(result) if args.json else print(str(args.output))
+        return 0
+    if command == "verify-attestation":
+        result = verify_attestation(
+            load_json(args.envelope),
+            [load_public_record(path) for path in args.key],
+            expected_subject=args.subject,
+            expected_contract=args.contract,
+            expected_environment=args.environment,
+        )
+        _write_json(result.as_dict()) if args.json else print(
+            "VALID" if result.cryptographically_valid and not result.expired else "INVALID"
+        )
+        return 0 if result.cryptographically_valid and not result.expired else 1
+    if command == "trust":
+        policy = load_json(args.policy)
+        if args.trust_command == "validate-policy":
+            errors = validate_policy(policy)
+            result = {"valid": not errors, "errors": errors}
+            _write_json(result) if args.json else print(
+                "VALID" if not errors else "\n".join(errors)
+            )
+            return 0 if not errors else 1
+        result = evaluate(
+            load_json(args.envelope),
+            policy,
+            expected_subject=args.subject,
+            expected_contract=args.contract,
+            expected_environment=args.environment,
+        )
+        _write_json(result.as_dict()) if args.json else print(
+            "TRUSTED" if result.trusted else "UNTRUSTED"
+        )
+        return 0 if result.trusted else 3
+    if command == "pack":
+        result = pack(args.bundle, args.output, detached_attestation=args.attestation)
+        _write_json(result) if args.json else print(result["package_sha256"])
+        return 0
+    if command in {"inspect-package", "verify-package"}:
+        result = (
+            inspect_package(args.package)
+            if command == "inspect-package"
+            else verify_package(args.package)
+        )
+        _write_json(result.as_dict()) if args.json else print(
+            "VALID" if result.valid else "INVALID"
+        )
+        return 0 if result.valid else 1
+    if command == "unpack":
+        result = unpack(args.package, args.output)
+        _write_json(result.as_dict()) if args.json else print(
+            f"Unpacked {args.package} to {args.output}" if result.valid else "INVALID"
+        )
+        return 0 if result.valid else 1
+    if command == "certify-package":
+        report = verify_package(args.package)
+        output = report.as_dict()
+        certified = report.valid
+        if args.trust_policy is not None and certified:
+            output["trust"] = _trust_result(
+                args.package,
+                args.trust_policy,
+                args.attestation,
+                None,
+            )
+            certified = bool(output["trust"]["certified"])
+        output["certified"] = certified
+        _write_json(output) if args.json else print("CERTIFIED" if certified else "NOT CERTIFIED")
+        return 0 if certified else (1 if not report.valid else 3)
+    if command == "provider":
+        if args.provider_command == "inspect":
+            result = inspect_provider(args.provider_argv, timeout=args.timeout)
+        elif args.provider_command == "run":
+            result = run_descriptor(args.descriptor, load_json(args.request), timeout=args.timeout)
+        else:
+            result_value = load_json(args.result)
+            errors = verify_result(result_value)
+            result = {"valid": not errors, "errors": errors, "result": result_value}
+            _write_json(result) if args.json else print(
+                "VALID" if not errors else "\n".join(errors)
+            )
+            return 0 if not errors else 1
+        _write_json(result) if args.json else print(json.dumps(result, sort_keys=True))
         return 0
     if command == "schema":
         schema = load_schema(args.name)

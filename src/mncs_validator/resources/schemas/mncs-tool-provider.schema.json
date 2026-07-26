@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://mncs.dev/schema/0.1.1/mncs-tool-provider.schema.json",
+  "$id": "https://mncs.dev/schema/0.2/mncs-tool-provider.schema.json",
   "title": "MNCS structural evidence provider",
   "type": "object",
   "additionalProperties": false,
@@ -18,8 +18,8 @@
     "extensions"
   ],
   "properties": {
-    "schema_version": {"const": "0.1.1"},
-    "mncs_version": {"const": "0.1"},
+    "schema_version": {"const": "0.2"},
+    "mncs_version": {"const": "0.2"},
     "provider_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]+$"},
     "name": {"type": "string", "minLength": 1},
     "version": {"type": "string", "minLength": 1},

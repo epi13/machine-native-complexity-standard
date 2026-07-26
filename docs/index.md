@@ -11,11 +11,16 @@ and rollback. Complexity is acceptable only for a predeclared measurable benefit
 [Read the introduction](introduction.md) or [validate an example](quickstart.md).
 MNCS is not an accredited ISO, ANSI, IEEE, IETF, or similar standard.
 
-Validator and schema 0.1.1 derive acceptance from content-addressed observations.
-The normative family remains experimental MNCS 0.1. A PASS applies only to the
-declared contract and environment.
+MNCS 0.2 derives acceptance from content-addressed observations and adds portable
+canonical identities, signed attestations, explicit trust policy, reproducible
+packages, provider interoperability, and independent Rust agreement. A PASS applies
+only to the declared contract and environment.
 
 - [Evidence-derived conformance](evidence-derived-conformance.md)
 - [Certification versus validation](certification-vs-validation.md)
 - [Migration from schema 0.1](migration-0.1-to-0.1.1.md)
+- [Migration from schema 0.1.1](migration-0.1.1-to-0.2.md)
+- [Attestations and trust](attestations.md)
+- [Reproducible packages](reproducible-packages.md)
+- [Provider Protocol 0.1](provider-protocol.md)
 - [Conformance corpus](conformance-corpus.md)

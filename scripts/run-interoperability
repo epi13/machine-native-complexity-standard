@@ -1,0 +1,207 @@
+#!/usr/bin/env python3
+"""Run the Python implementation over the versioned interoperability corpus."""
+
+# SPDX-License-Identifier: Apache-2.0
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import subprocess
+import sys
+import tempfile
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+from mncs_validator.attestation import load_json, load_public_record, verify_attestation
+from mncs_validator.canonical import canonicalize_file
+from mncs_validator.errors import MncsError
+from mncs_validator.package import verify_package
+from mncs_validator.provider import verify_result
+from mncs_validator.schemas import load_schema
+from mncs_validator.trust import evaluate
+from mncs_validator.validation import validate_manifest
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_CORPUS = ROOT / "interoperability/corpus.json"
+
+
+def parse_time(value: object) -> datetime | None:
+    if not isinstance(value, str):
+        return None
+    return datetime.fromisoformat(value.replace("Z", "+00:00"))
+
+
+def run_vector(base: Path, vector: dict[str, Any]) -> dict[str, Any]:
+    paths = [(base / value).resolve() for value in vector["input_paths"]]
+    kind = vector["kind"]
+    if kind == "canonical":
+        try:
+            content = canonicalize_file(paths[0])
+        except MncsError:
+            return {"category": "INVALID"}
+        digest = hashlib.sha256(content).hexdigest()
+        expected = vector.get("expected_canonical_hash")
+        return {"category": "PASS" if digest == expected else "INVALID"}
+    if kind == "signature":
+        envelope = load_json(paths[0])
+        keys = [load_public_record(path) for path in paths[1:]]
+        bindings = vector.get("bindings", {})
+        result = verify_attestation(
+            envelope,
+            keys,
+            expected_subject=bindings.get("subject"),
+            expected_contract=bindings.get("contract"),
+            expected_environment=bindings.get("environment"),
+            now=parse_time(bindings.get("now")),
+        )
+        if result.expired and any(item.cryptographically_valid for item in result.signatures):
+            return {"category": "EXPIRED"}
+        return {"category": "PASS" if result.cryptographically_valid else "INVALID"}
+    if kind == "trust":
+        bindings = vector.get("bindings", {})
+        result = evaluate(
+            load_json(paths[0]),
+            load_json(paths[1]),
+            now=parse_time(bindings.get("now")),
+        )
+        return {"category": "PASS" if result.trusted else "UNTRUSTED"}
+    if kind == "package":
+        return {"category": "PASS" if verify_package(paths[0]).valid else "INVALID"}
+    if kind == "package-reproducible":
+        first = paths[0].read_bytes()
+        second = paths[1].read_bytes()
+        digest = hashlib.sha256(first).hexdigest()
+        return {
+            "category": (
+                "PASS"
+                if first == second and digest == vector.get("expected_canonical_hash")
+                else "INVALID"
+            )
+        }
+    if kind == "manifest":
+        report = validate_manifest(paths[0])
+        return {"category": report.computed_status if report.valid else "INVALID"}
+    if kind == "schema":
+        load_schema("manifest")
+        return {"category": "PASS"}
+    if kind == "provider":
+        result = load_json(paths[0])
+        errors = verify_result(result)
+        return {"category": "INVALID" if errors else result.get("status", "PASS")}
+    return {"category": "UNSUPPORTED"}
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("corpus", nargs="?", type=Path, default=DEFAULT_CORPUS)
+    parser.add_argument("--output", type=Path)
+    parser.add_argument(
+        "--rust-repository",
+        type=Path,
+        default=ROOT.parent / "mncs-validator-rs",
+    )
+    parser.add_argument("--python-only", action="store_true")
+    parser.add_argument("--skip-build", action="store_true")
+    args = parser.parse_args(argv)
+    corpus = load_json(args.corpus)
+    base = args.corpus.resolve().parent
+    results: list[dict[str, Any]] = []
+    mismatches = 0
+    for vector in corpus["vectors"]:
+        actual = run_vector(base, vector)
+        expected = vector["expected_python"]
+        matches = actual == expected
+        mismatches += not matches
+        results.append(
+            {
+                "id": vector["id"],
+                "actual": actual,
+                "expected": expected,
+                "matches": matches,
+            }
+        )
+    report = {
+        "corpus_version": corpus["corpus_version"],
+        "implementation": "python",
+        "implementation_version": "0.2.0",
+        "vector_count": len(results),
+        "mismatch_count": mismatches,
+        "unsupported_count": sum(item["actual"]["category"] == "UNSUPPORTED" for item in results),
+        "results": results,
+    }
+    final_report: dict[str, Any] = report
+    if not args.python_only:
+        rust_repository = args.rust_repository.resolve()
+        rust_binary = rust_repository / "target/release/mncs-rs"
+        if not args.skip_build:
+            with tempfile.TemporaryDirectory(prefix="mncs-wheel-") as temporary:
+                subprocess.run(
+                    [
+                        sys.executable,
+                        "-m",
+                        "build",
+                        "--wheel",
+                        "--outdir",
+                        temporary,
+                    ],
+                    cwd=ROOT,
+                    check=True,
+                )
+            subprocess.run(
+                ["cargo", "build", "--release", "--locked"],
+                cwd=rust_repository,
+                check=True,
+            )
+        rust = subprocess.run(
+            [
+                str(rust_binary),
+                "corpus",
+                str(rust_repository / "fixtures/interoperability/corpus.json"),
+            ],
+            cwd=rust_repository,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        rust_report = json.loads(rust.stdout)
+        python_results = {item["id"]: item["actual"] for item in report["results"]}
+        rust_results = {item["id"]: item["actual"] for item in rust_report["results"]}
+        identifiers = sorted(set(python_results) | set(rust_results))
+        disagreements = [
+            {
+                "id": identifier,
+                "python": python_results.get(identifier),
+                "rust": rust_results.get(identifier),
+            }
+            for identifier in identifiers
+            if python_results.get(identifier) != rust_results.get(identifier)
+        ]
+        final_report = {
+            "corpus_version": corpus["corpus_version"],
+            "python": report,
+            "rust": rust_report,
+            "agreement": {
+                "vector_count": len(identifiers),
+                "disagreement_count": len(disagreements),
+                "unsupported_count": (
+                    report["unsupported_count"] + rust_report["unsupported_count"]
+                ),
+                "agrees": not disagreements
+                and report["unsupported_count"] == 0
+                and rust_report["unsupported_count"] == 0,
+                "disagreements": disagreements,
+            },
+        }
+        mismatches += len(disagreements) + rust_report["mismatch_count"]
+    rendered = json.dumps(final_report, indent=2, sort_keys=True) + "\n"
+    if args.output:
+        args.output.write_text(rendered, encoding="utf-8")
+    print(rendered, end="")
+    return 1 if mismatches else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
