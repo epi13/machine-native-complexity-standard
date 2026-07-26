@@ -1,0 +1,47 @@
+{
+  "assumptions": [
+    "The declared contract and environment delimit the result."
+  ],
+  "candidate_source_hash": "sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234",
+  "completed_at": "2026-07-25T12:00:01Z",
+  "component_identity": {
+    "identity_hash": "sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234",
+    "name": "checked-division",
+    "version": "1.0.0"
+  },
+  "contract_id": "example.divide.v1",
+  "environment": {
+    "fingerprint": "sha256:bec2072576f16c4fc1cb89d286b8a29b8035f5e83b6b946c4180b7928dbc1679",
+    "identity_evidence_id": "identity-environment"
+  },
+  "evaluator": {
+    "identity_evidence_id": "identity-evaluator",
+    "identity_hash": "sha256:8c6dcf0b337eba166957055f8e0fceab18b864868f1a7274f65f5247afbb57f8",
+    "name": "mncs-example-evaluator",
+    "version": "1.0"
+  },
+  "evidence_references": [
+    "contract",
+    "reference",
+    "machine",
+    "identity-evaluator",
+    "identity-environment"
+  ],
+  "extensions": {},
+  "gate_kind": "mutation",
+  "limitations": [
+    "Illustrative local evidence; no accredited assurance claim."
+  ],
+  "mncs_version": "0.1",
+  "observation_counts": {
+    "failed": 0,
+    "passed": 4,
+    "total": 4,
+    "unknown": 0
+  },
+  "reference_source_hash": "sha256:bc1b716484acb3434d51a39fb9e0b7816cdce46cadda7904ae6b9dc6b267874d",
+  "result_id": "gate-mutation",
+  "schema_version": "0.1.1",
+  "started_at": "2026-07-25T12:00:00Z",
+  "status": "PASS"
+}

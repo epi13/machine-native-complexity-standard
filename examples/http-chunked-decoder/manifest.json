@@ -1,36 +1,138 @@
 {
   "$schema": "../../schemas/mncs-manifest.schema.json",
-  "schema_version": "0.1",
-  "mncs_version": "0.1",
-  "claimed_level": "MNCS-L4",
-  "component": {"name":"bounded-http-chunk-decoder","version":"1.0.0","contract_id":"example.chunked.bounded.v1","criticality":"high"},
-  "reference": {"path":"reference/reference.py","sha256":"sha256:ecb35fb5ebd64b868a54bdd9de684435b25ea07ffb54f829258eeb7db5331dcd"},
-  "machine": {"path":"machine/generated.py","sha256":"sha256:17ee4289a9f61b9a2a617a1b70b16d3fdce443fb9b0d4552755fe1eab7369a1d","generated_marker":"MNCS-GENERATED"},
-  "generator": {"name":"example-table-generator","version":"1.0","identity_hash":"sha256:3333333333333333333333333333333333333333333333333333333333333333"},
-  "objective": {"metric":"throughput","direction":"higher_is_better","threshold":1.05,"declared_before_generation":true},
   "acceptance_policy": {
-    "behavioral_pass":"PASS","holdout_pass":"UNKNOWN","safety_pass":"PASS",
-    "resource_bounds_pass":"PASS","compiler_matrix_pass":"PASS","required_invariants_pass":"PASS",
-    "measurement_valid":"PASS","useful_benefit_threshold_met":"PASS",
-    "worst_case_regression_within_policy":"PASS","provenance_complete":"UNKNOWN","on_unknown":"reject"
+    "conflicting_evidence": "reject",
+    "conformance_level": "MNCS-L4",
+    "mutation_required": true,
+    "objective": {
+      "declared_before_generation": true,
+      "direction": "higher_is_better",
+      "metric": "throughput",
+      "minimum_sample_count": 3,
+      "noise_policy": "No outlier deletion; arithmetic mean of all samples.",
+      "threshold": 1.05,
+      "unit": "operations/second"
+    },
+    "on_unknown": "reject",
+    "regression_policy": {
+      "maximum_worst_case_ratio": 1.1
+    },
+    "required_gates": [
+      "behavioral",
+      "compiler_matrix",
+      "safety",
+      "resource_bounds",
+      "mutation",
+      "structural",
+      "measurement_valid",
+      "benefit_threshold",
+      "worst_regression"
+    ]
   },
-  "environment": {"language":"Python 3.11+","maximum_input_bytes":4096,"offline":true},
-  "evidence_index": {"path":"evidence/index.json","sha256":"sha256:6d142705cd134605e7962c15bff1dd54bebcd065e23c2f303e588557867f6d4b"},
-  "invariants": [{"path":"evidence/invariant.json","sha256":"sha256:536cf44069c7455be7db9b497056c8e629873a631f1bef93bfdb824ff353a406"}],
-  "complexity_profile": {
-    "throughput":1133,"latency":0.00088,"worst_case_performance":0.0012,"memory_bytes":8192,
-    "binary_size_bytes":2048,"source_size_bytes":799,"changed_lines":19,"cfg_nodes":28,
-    "cyclomatic_complexity":7,"state_count":4,"branch_count":8,"portability":0.8,
-    "generation_cost_seconds":4,"validation_cost_seconds":12,"conformance_level":"MNCS-L4",
-    "unresolved_unknown_results":2,"operational_criticality":"high"
+  "claimed_level": "MNCS-L4",
+  "comparison_profile": {
+    "benefit": {
+      "throughput_ratio": 1.1
+    },
+    "complexity": {
+      "source_bytes": 736.0
+    }
   },
-  "performance_results": [{"path":"evidence/performance.json","sha256":"sha256:5b532a2b5dc6e07d0584683f8215044442b8e1ca79f8f39b83387becfb6f0abb"}],
-  "resource_bounds": {"maximum_input_bytes":4096,"maximum_size":"uint64"},
-  "provenance": {"path":"provenance/provenance.json","sha256":"sha256:7cef086093e6b7691ec40c42d09cbcb6cc51f7d9a2367647ac30550ebbb494c8"},
-  "limitations": ["Illustrative bounded grammar; not a production HTTP decoder."],
-  "unsupported_environments": ["Inputs larger than 4096 bytes","Streaming fragments"],
-  "regeneration": {"command":"make example-http","locked":true,"inputs_complete":true},
-  "rollback": {"reference_available":true,"command":"use reference/reference.py"},
-  "final_status":"PASS",
-  "extensions":{"mncs.dev:research-derived":true}
+  "component": {
+    "contract_id": "example.chunked.bounded.v1",
+    "criticality": "high",
+    "identity_hash": "sha256:17ee4289a9f61b9a2a617a1b70b16d3fdce443fb9b0d4552755fe1eab7369a1d",
+    "name": "bounded-http-chunk-decoder",
+    "version": "1.0.0"
+  },
+  "contract": {
+    "path": "specification/contract.md",
+    "sha256": "sha256:40c7722a9e30de8330eaeb9a3542bae71e405e55030a9daed734125bcfa1bb4f"
+  },
+  "environment": {
+    "description": "Offline Python example profile.",
+    "fingerprint": "sha256:bec2072576f16c4fc1cb89d286b8a29b8035f5e83b6b946c4180b7928dbc1679",
+    "identity_evidence_id": "identity-environment"
+  },
+  "evidence_index": {
+    "path": "evidence/index.json",
+    "sha256": "sha256:b0af56a7128d95b87ecc4a2425ac0767dc0651be26272746a5cdc13953a197c8"
+  },
+  "extensions": {
+    "example.org:fixture": "http-chunked-decoder"
+  },
+  "final_status": "PASS",
+  "fuzz_evidence": [
+    "fuzz-primary",
+    "mutation-primary"
+  ],
+  "gate_results": {
+    "behavioral": [
+      "gate-behavioral"
+    ],
+    "benefit_threshold": [
+      "performance-primary"
+    ],
+    "compiler_matrix": [
+      "gate-compiler_matrix"
+    ],
+    "measurement_valid": [
+      "performance-primary"
+    ],
+    "mutation": [
+      "gate-mutation"
+    ],
+    "resource_bounds": [
+      "gate-resource_bounds"
+    ],
+    "safety": [
+      "gate-safety"
+    ],
+    "structural": [
+      "gate-structural"
+    ],
+    "worst_regression": [
+      "performance-primary"
+    ]
+  },
+  "generator": {
+    "identity_evidence_id": "identity-generator",
+    "identity_hash": "sha256:119ffdc06e0cc9e2e07e9daa393063ae1545274847e63b2a5f50719dc6d91be7",
+    "name": "mncs-example-generator",
+    "version": "1.0"
+  },
+  "invariants": [
+    "invariant-bounded-control"
+  ],
+  "limitations": [
+    "Experimental MNCS example scoped to the indexed contract and environment."
+  ],
+  "machine": {
+    "generated_marker": "MNCS-GENERATED",
+    "path": "machine/generated.py",
+    "sha256": "sha256:17ee4289a9f61b9a2a617a1b70b16d3fdce443fb9b0d4552755fe1eab7369a1d"
+  },
+  "mncs_version": "0.1",
+  "performance_results": [
+    "performance-primary"
+  ],
+  "provenance": "provenance-primary",
+  "reference": {
+    "path": "reference/reference.py",
+    "sha256": "sha256:ecb35fb5ebd64b868a54bdd9de684435b25ea07ffb54f829258eeb7db5331dcd"
+  },
+  "resource_bounds": {
+    "maximum_input_units": 4096,
+    "memory": "bounded"
+  },
+  "schema_version": "0.1.1",
+  "structural_aggregate": {
+    "bounded": true,
+    "provider_assumptions": [
+      "The indexed contract bounds all inputs."
+    ],
+    "required_invariants": [
+      "invariant-bounded-control"
+    ]
+  }
 }

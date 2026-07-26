@@ -4,6 +4,11 @@
 **Version:** MNCS 0.1
 **License:** Apache-2.0
 
+Schema and validator patch 0.1.1 is the current evidence-mechanics profile for this
+unchanged MNCS 0.1 family. New claims SHOULD use schema 0.1.1. Frozen schema 0.1
+remains a legacy compatibility form and is self-asserted rather than
+evidence-derived.
+
 ## 1. Principle
 
 Human readability is relocated, not eliminated. Humans MUST retain readable control
@@ -69,3 +74,14 @@ manifest sha256:<digest>, final status <PASS|FAIL|UNKNOWN>.
 
 The claim MUST NOT imply accreditation, general security certification, or behavior
 outside the contract and environment.
+
+## 5. Evidence-mechanics patch 0.1.1
+
+For schema 0.1.1, policy MUST declare requirements rather than observations.
+Observed statuses MUST come from content-addressed indexed records, and validators
+MUST independently derive every required gate and the final result. Missing
+evidence derives UNKNOWN and cannot certify. Candidate, contract, reference,
+evaluator, and environment bindings MUST be checked before an observation is used.
+
+A validator PASS remains experimental and scoped to the declared contract and
+environment. It does not establish accreditation.

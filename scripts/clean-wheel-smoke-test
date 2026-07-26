@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: Apache-2.0
+set -euo pipefail
+
+repository_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+temporary_root="$(mktemp -d)"
+cleanup() {
+  rm -rf "${temporary_root:?}"
+}
+trap cleanup EXIT
+
+python -m build --wheel --outdir "$temporary_root/dist" "$repository_root"
+mapfile -t wheels < <(find "$temporary_root/dist" -maxdepth 1 -type f -name '*.whl' -print)
+if [[ "${#wheels[@]}" -ne 1 ]]; then
+  echo "expected exactly one wheel, found ${#wheels[@]}" >&2
+  exit 1
+fi
+
+python -m venv "$temporary_root/venv"
+"$temporary_root/venv/bin/python" -m pip install "${wheels[0]}"
+mkdir -p "$temporary_root/fixtures" "$temporary_root/unrelated"
+cp -a "$repository_root/examples/minimal" "$temporary_root/fixtures/minimal"
+
+cd "$temporary_root/unrelated"
+unset PYTHONPATH
+"$temporary_root/venv/bin/mncs" version
+"$temporary_root/venv/bin/mncs" schema manifest >/dev/null
+"$temporary_root/venv/bin/mncs" validate "$temporary_root/fixtures/minimal/manifest.json"
+"$temporary_root/venv/bin/mncs" certify "$temporary_root/fixtures/minimal/manifest.json"

@@ -1,0 +1,1062 @@
+#!/usr/bin/env python3
+"""Regenerate content-addressed MNCS 0.1.1 examples and conformance fixtures."""
+
+# SPDX-License-Identifier: Apache-2.0
+
+from __future__ import annotations
+
+import copy
+import hashlib
+import json
+import shutil
+from dataclasses import dataclass
+from pathlib import Path
+from statistics import fmean
+from typing import Any
+
+ROOT = Path(__file__).resolve().parents[1]
+TIMES = ("2026-07-25T12:00:00Z", "2026-07-25T12:00:01Z")
+LEVEL_GATES = {
+    1: ["behavioral", "compiler_matrix"],
+    2: ["behavioral", "compiler_matrix", "safety", "resource_bounds", "mutation"],
+    3: [
+        "behavioral",
+        "compiler_matrix",
+        "safety",
+        "resource_bounds",
+        "mutation",
+        "structural",
+    ],
+    4: [
+        "behavioral",
+        "compiler_matrix",
+        "safety",
+        "resource_bounds",
+        "mutation",
+        "structural",
+        "measurement_valid",
+        "benefit_threshold",
+        "worst_regression",
+    ],
+    5: [
+        "behavioral",
+        "compiler_matrix",
+        "safety",
+        "resource_bounds",
+        "mutation",
+        "structural",
+        "measurement_valid",
+        "benefit_threshold",
+        "worst_regression",
+        "holdout",
+        "regeneration",
+        "provenance",
+        "reproducibility",
+        "post_certification_identity",
+    ],
+}
+
+
+@dataclass(frozen=True)
+class BundleSpec:
+    name: str
+    level: int
+    final_status: str = "PASS"
+    contract_id: str = "example.contract.v1"
+    component_name: str = "example-component"
+    component_version: str = "1.0.0"
+    criticality: str = "moderate"
+    performance_pass: bool = True
+    unknown_gate: str | None = None
+    repair: bool = False
+
+
+def sha(path: Path) -> str:
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()
+    return f"sha256:{digest}"
+
+
+def write_json(path: Path, value: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def identity(identity_id: str, kind: str, name: str) -> dict[str, Any]:
+    return {
+        "schema_version": "0.1.1",
+        "mncs_version": "0.1",
+        "identity_id": identity_id,
+        "identity_kind": kind,
+        "name": name,
+        "version": "1.0",
+        "description": f"Reproducible local identity for {name}.",
+        "attributes": {"offline": True, "profile": "mncs-example-v1"},
+        "extensions": {},
+    }
+
+
+def record(
+    identifier: str,
+    kind: str,
+    path: str,
+    bundle: Path,
+    contract_id: str,
+    machine_hash: str | None = None,
+) -> dict[str, Any]:
+    value: dict[str, Any] = {
+        "id": identifier,
+        "kind": kind,
+        "path": path,
+        "sha256": sha(bundle / path),
+        "media_type": (
+            "application/json"
+            if path.endswith(".json")
+            else "text/x-python"
+            if path.endswith(".py")
+            else "text/markdown"
+        ),
+        "contract_id": contract_id,
+    }
+    if machine_hash is not None:
+        value["candidate_source_hash"] = machine_hash
+    return value
+
+
+def gate_result(
+    spec: BundleSpec,
+    gate: str,
+    machine_hash: str,
+    reference_hash: str,
+    evaluator_hash: str,
+    environment_hash: str,
+    *,
+    status: str = "PASS",
+    evidence_references: list[str] | None = None,
+) -> dict[str, Any]:
+    total = 4 if status == "PASS" else 1
+    result: dict[str, Any] = {
+        "schema_version": "0.1.1",
+        "mncs_version": "0.1",
+        "result_id": f"gate-{gate}",
+        "gate_kind": gate,
+        "contract_id": spec.contract_id,
+        "component_identity": {
+            "name": spec.component_name,
+            "version": spec.component_version,
+            "identity_hash": machine_hash,
+        },
+        "candidate_source_hash": machine_hash,
+        "reference_source_hash": reference_hash,
+        "evaluator": {
+            "name": "mncs-example-evaluator",
+            "version": "1.0",
+            "identity_hash": evaluator_hash,
+            "identity_evidence_id": "identity-evaluator",
+        },
+        "environment": {
+            "fingerprint": environment_hash,
+            "identity_evidence_id": "identity-environment",
+        },
+        "status": status,
+        "started_at": TIMES[0],
+        "completed_at": TIMES[1],
+        "observation_counts": {
+            "total": total,
+            "passed": total if status == "PASS" else 0,
+            "failed": total if status == "FAIL" else 0,
+            "unknown": total if status == "UNKNOWN" else 0,
+        },
+        "evidence_references": evidence_references
+        or ["contract", "reference", "machine", "identity-evaluator", "identity-environment"],
+        "assumptions": ["The declared contract and environment delimit the result."],
+        "limitations": ["Illustrative local evidence; no accredited assurance claim."],
+        "extensions": {},
+    }
+    if status == "FAIL":
+        result["failure_witness_reference"] = "failure-witness"
+    if status == "UNKNOWN":
+        result["unknown_reason"] = "The evaluator could not decide within its bounded analysis."
+    return result
+
+
+def performance_result(
+    spec: BundleSpec,
+    machine_hash: str,
+    reference_hash: str,
+    identity_hashes: dict[str, str],
+) -> dict[str, Any]:
+    baseline = [100.0, 101.0, 99.0]
+    candidate = [110.0, 111.0, 109.0] if spec.performance_pass else [101.0, 100.0, 102.0]
+    benefit = "PASS" if spec.performance_pass else "FAIL"
+    observed_worst = min(baseline) / min(candidate)
+    return {
+        "schema_version": "0.1.1",
+        "mncs_version": "0.1",
+        "result_id": "performance-primary",
+        "contract_id": spec.contract_id,
+        "candidate_source_hash": machine_hash,
+        "reference_source_hash": reference_hash,
+        "evaluator_identity_hash": identity_hashes["identity-evaluator"],
+        "evaluator_identity_id": "identity-evaluator",
+        "benchmark_harness_hash": identity_hashes["identity-harness"],
+        "benchmark_harness_identity_id": "identity-harness",
+        "environment_fingerprint": identity_hashes["identity-environment"],
+        "environment_identity_id": "identity-environment",
+        "compiler_identity_hash": identity_hashes["identity-compiler"],
+        "compiler_identity_id": "identity-compiler",
+        "build_identity_hash": identity_hashes["identity-build"],
+        "build_identity_id": "identity-build",
+        "corpus_identity_hash": identity_hashes["identity-corpus"],
+        "corpus_identity_id": "identity-corpus",
+        "objective_metric": "throughput",
+        "unit": "operations/second",
+        "direction": "higher_is_better",
+        "declared_threshold": 1.05,
+        "declared_noise_policy": "No outlier deletion; arithmetic mean of all samples.",
+        "minimum_sample_count": 3,
+        "sample_order": [
+            "baseline",
+            "candidate",
+            "baseline",
+            "candidate",
+            "baseline",
+            "candidate",
+        ],
+        "baseline_samples": baseline,
+        "candidate_samples": candidate,
+        "baseline_sample_count": len(baseline),
+        "candidate_sample_count": len(candidate),
+        "baseline_summary": {
+            "mean": fmean(baseline),
+            "minimum": min(baseline),
+            "maximum": max(baseline),
+        },
+        "candidate_summary": {
+            "mean": fmean(candidate),
+            "minimum": min(candidate),
+            "maximum": max(candidate),
+        },
+        "checksums_or_semantic_identity": {
+            "required": True,
+            "passed": True,
+            "method": "Exact output equality against the indexed reference corpus.",
+        },
+        "measurement_validity": {
+            "claimed_status": "PASS",
+            "reasons": ["Sample count and checksum policy are satisfied."],
+        },
+        "benefit_threshold": {
+            "claimed_status": benefit,
+            "reasons": ["Derived candidate/reference mean ratio is compared to 1.05."],
+        },
+        "worst_regression": {
+            "claimed_status": "PASS",
+            "observed_ratio": observed_worst,
+            "maximum_allowed_ratio": 1.1,
+            "reasons": ["Worst observed candidate sample stays within policy."],
+        },
+        "started_at": TIMES[0],
+        "completed_at": TIMES[1],
+        "limitations": ["Synthetic measurements demonstrate binding and derivation mechanics."],
+        "extensions": {},
+    }
+
+
+def provenance(
+    spec: BundleSpec,
+    machine_hash: str,
+    identity_hashes: dict[str, str],
+    gate_ids: list[str],
+) -> dict[str, Any]:
+    return {
+        "schema_version": "0.1.1",
+        "mncs_version": "0.1",
+        "provenance_id": "provenance-primary",
+        "contract_id": spec.contract_id,
+        "generator_identity_id": "identity-generator",
+        "generator_identity_hash": identity_hashes["identity-generator"],
+        "evaluator_identity_id": "identity-evaluator",
+        "evaluator_identity_hash": identity_hashes["identity-evaluator"],
+        "generator_inputs": ["contract", "reference", "identity-generator"],
+        "evaluator_inputs": ["machine", *gate_ids],
+        "candidate_source_hash": machine_hash,
+        "toolchain_identity_id": "identity-toolchain",
+        "toolchain_identity_hash": identity_hashes["identity-toolchain"],
+        "environment_identity_id": "identity-environment",
+        "environment_fingerprint": identity_hashes["identity-environment"],
+        "generation_command": "python tools/generate.py --locked",
+        "evaluation_command": "python tools/evaluate.py --offline",
+        "generation_started_at": TIMES[0],
+        "generation_completed_at": TIMES[1],
+        "evaluation_started_at": "2026-07-25T12:01:00Z",
+        "evaluation_completed_at": "2026-07-25T12:01:01Z",
+        "handwritten_change_status": "none",
+        "regeneration_lock_state": "locked",
+        "extensions": {},
+    }
+
+
+def ensure_validator_rule_sources(bundle: Path) -> None:
+    (bundle / "specification").mkdir(parents=True, exist_ok=True)
+    (bundle / "reference").mkdir(parents=True, exist_ok=True)
+    (bundle / "machine").mkdir(parents=True, exist_ok=True)
+    (bundle / "specification/contract.md").write_text(
+        "# Gate aggregation contract\n\nFAIL dominates UNKNOWN; UNKNOWN dominates PASS.\n",
+        encoding="utf-8",
+    )
+    (bundle / "reference/reference.py").write_text(
+        '"""Readable reference gate aggregator."""\n\n'
+        "def aggregate(statuses: list[str]) -> str:\n"
+        '    if "FAIL" in statuses:\n'
+        '        return "FAIL"\n'
+        '    if "UNKNOWN" in statuses:\n'
+        '        return "UNKNOWN"\n'
+        '    return "PASS"\n',
+        encoding="utf-8",
+    )
+    (bundle / "machine/generated.py").write_text(
+        "# MNCS-GENERATED: DO NOT EDIT\n"
+        "# Table-driven example; this does not claim the validator is machine-native.\n\n"
+        '_RANK = {"PASS": 0, "UNKNOWN": 1, "FAIL": 2}\n\n'
+        "def aggregate(statuses: list[str]) -> str:\n"
+        '    return max(statuses, key=_RANK.__getitem__) if statuses else "UNKNOWN"\n',
+        encoding="utf-8",
+    )
+
+
+def build_bundle(bundle: Path, spec: BundleSpec, *, create_sources: bool = False) -> None:
+    if create_sources:
+        ensure_validator_rule_sources(bundle)
+    for directory in ("evidence", "provenance"):
+        target = bundle / directory
+        if target.exists():
+            shutil.rmtree(target)
+        target.mkdir(parents=True)
+    for directory in ("specification", "reference", "machine"):
+        (bundle / directory).mkdir(parents=True, exist_ok=True)
+    if not (bundle / "specification/contract.md").exists():
+        (bundle / "specification/contract.md").write_text(
+            f"# {spec.component_name} contract\n\nDeterministic example contract.\n",
+            encoding="utf-8",
+        )
+    if not (bundle / "reference/reference.py").exists():
+        (bundle / "reference/reference.py").write_text(
+            "def transform(value: int) -> int:\n    return value\n",
+            encoding="utf-8",
+        )
+    if not (bundle / "machine/generated.py").exists():
+        (bundle / "machine/generated.py").write_text(
+            "# MNCS-GENERATED: DO NOT EDIT\n\n"
+            "def transform(value: int) -> int:\n    return value\n",
+            encoding="utf-8",
+        )
+    machine_hash = sha(bundle / "machine/generated.py")
+    reference_hash = sha(bundle / "reference/reference.py")
+    contract_hash = sha(bundle / "specification/contract.md")
+
+    identity_specs = {
+        "identity-generator": ("generator", "mncs-example-generator"),
+        "identity-evaluator": ("evaluator", "mncs-example-evaluator"),
+        "identity-environment": ("environment", "python-offline-example"),
+        "identity-toolchain": ("toolchain", "python-toolchain"),
+    }
+    if spec.level >= 4:
+        identity_specs.update(
+            {
+                "identity-harness": ("benchmark_harness", "mncs-example-harness"),
+                "identity-corpus": ("corpus", "mncs-example-corpus"),
+                "identity-compiler": ("compiler", "python-compiler"),
+                "identity-build": ("build", "python-source-build"),
+            }
+        )
+    identity_hashes: dict[str, str] = {}
+    for identifier, (kind, name) in identity_specs.items():
+        relative = f"evidence/identities/{identifier}.json"
+        write_json(bundle / relative, identity(identifier, kind, name))
+        identity_hashes[identifier] = sha(bundle / relative)
+
+    if spec.level >= 2:
+        write_json(
+            bundle / "evidence/fuzz.json",
+            {
+                "evidence_references": ["contract", "reference", "machine"],
+                "kind": "malformed-input-property-fuzz",
+                "cases": 32,
+                "status": "PASS",
+            },
+        )
+        write_json(
+            bundle / "evidence/mutation.json",
+            {
+                "evidence_references": ["contract", "machine"],
+                "kind": "mutation-analysis",
+                "mutants": 8,
+                "killed": 8,
+                "status": "PASS",
+            },
+        )
+
+    gate_ids: list[str] = []
+    gate_map: dict[str, list[str]] = {}
+    for gate in LEVEL_GATES[spec.level]:
+        if gate in {"measurement_valid", "benefit_threshold", "worst_regression"}:
+            gate_map[gate] = ["performance-primary"]
+            continue
+        status = "UNKNOWN" if gate == spec.unknown_gate else "PASS"
+        identifier = f"gate-{gate}"
+        references = None
+        if gate == "provenance":
+            references = ["provenance-primary", "identity-evaluator", "identity-environment"]
+        write_json(
+            bundle / f"evidence/{identifier}.json",
+            gate_result(
+                spec,
+                gate,
+                machine_hash,
+                reference_hash,
+                identity_hashes["identity-evaluator"],
+                identity_hashes["identity-environment"],
+                status=status,
+                evidence_references=references,
+            ),
+        )
+        gate_ids.append(identifier)
+        gate_map[gate] = [identifier]
+
+    invariant_id = "invariant-bounded-control"
+    if spec.level >= 3:
+        write_json(
+            bundle / "evidence/invariant.json",
+            {
+                "schema_version": "0.1.1",
+                "mncs_version": "0.1",
+                "result_id": invariant_id,
+                "invariant_id": "bounded-control",
+                "requirement": "Every declared operation terminates within the contract bound.",
+                "contract_id": spec.contract_id,
+                "candidate_source_hash": machine_hash,
+                "evaluator_identity_hash": identity_hashes["identity-evaluator"],
+                "evaluator_identity_id": "identity-evaluator",
+                "environment_fingerprint": identity_hashes["identity-environment"],
+                "status": "PASS",
+                "provider": "mncs-example-structural-provider",
+                "provider_version": "1.0",
+                "analysis_method": "bounded control-flow enumeration",
+                "assumptions": ["Inputs satisfy the indexed contract grammar."],
+                "boundedness": {"bounded": True, "description": "32 enumerated states."},
+                "locations": [{"path": "machine/generated.py", "line": 1}],
+                "started_at": TIMES[0],
+                "completed_at": TIMES[1],
+                "limitations": ["Illustrative provider output."],
+                "extensions": {},
+            },
+        )
+
+    if spec.level >= 4:
+        write_json(
+            bundle / "evidence/performance.json",
+            performance_result(spec, machine_hash, reference_hash, identity_hashes),
+        )
+        gate_ids.append("performance-primary")
+
+    write_json(
+        bundle / "provenance/provenance.json",
+        provenance(spec, machine_hash, identity_hashes, gate_ids),
+    )
+
+    extra_records: list[dict[str, Any]] = []
+    fuzz_ids = ["fuzz-primary", "mutation-primary"]
+    if spec.repair:
+        failed_source = bundle / "machine/failed-candidate.py"
+        failed_source.write_text(
+            "# MNCS-GENERATED: IMMUTABLE FAILED CANDIDATE\n\n"
+            "def select(items: list[int], index: int) -> int:\n    return items[index + 1]\n",
+            encoding="utf-8",
+        )
+        failed_hash = sha(failed_source)
+        write_json(
+            bundle / "evidence/failed-witness.json",
+            {"kind": "structural-witness", "edge": "index + 1", "status": "FAIL"},
+        )
+        failed = gate_result(
+            spec,
+            "behavioral",
+            failed_hash,
+            reference_hash,
+            identity_hashes["identity-evaluator"],
+            identity_hashes["identity-environment"],
+            status="FAIL",
+            evidence_references=["failed-candidate", "failed-witness"],
+        )
+        failed["result_id"] = "failed-behavioral-result"
+        failed["failure_witness_reference"] = "failed-witness"
+        write_json(bundle / "evidence/failed-result.json", failed)
+        write_json(
+            bundle / "evidence/repair.json",
+            {
+                "kind": "bounded-repair-history",
+                "repair_count": 1,
+                "maximum_repairs": 1,
+                "failed_candidate_hash": failed_hash,
+                "repaired_candidate_hash": machine_hash,
+                "result_reuse_across_source_hashes": False,
+                "full_reevaluation": True,
+                "evidence_references": [
+                    "failed-candidate",
+                    "failed-witness",
+                    "failed-behavioral-result",
+                ],
+            },
+        )
+        fuzz_ids.append("repair-history")
+        extra_records.extend(
+            [
+                record(
+                    "failed-candidate",
+                    "witness",
+                    "machine/failed-candidate.py",
+                    bundle,
+                    spec.contract_id,
+                ),
+                record(
+                    "failed-witness",
+                    "witness",
+                    "evidence/failed-witness.json",
+                    bundle,
+                    spec.contract_id,
+                ),
+                record(
+                    "failed-behavioral-result",
+                    "witness",
+                    "evidence/failed-result.json",
+                    bundle,
+                    spec.contract_id,
+                ),
+                record(
+                    "repair-history",
+                    "other",
+                    "evidence/repair.json",
+                    bundle,
+                    spec.contract_id,
+                    machine_hash,
+                ),
+            ]
+        )
+
+    records = [
+        record("contract", "contract", "specification/contract.md", bundle, spec.contract_id),
+        record("reference", "reference", "reference/reference.py", bundle, spec.contract_id),
+        record(
+            "machine", "machine", "machine/generated.py", bundle, spec.contract_id, machine_hash
+        ),
+    ]
+    for identifier in identity_specs:
+        records.append(
+            record(
+                identifier,
+                "identity",
+                f"evidence/identities/{identifier}.json",
+                bundle,
+                spec.contract_id,
+                machine_hash,
+            )
+        )
+    if spec.level >= 2:
+        records.extend(
+            [
+                record(
+                    "fuzz-primary",
+                    "fuzz",
+                    "evidence/fuzz.json",
+                    bundle,
+                    spec.contract_id,
+                    machine_hash,
+                ),
+                record(
+                    "mutation-primary",
+                    "mutation",
+                    "evidence/mutation.json",
+                    bundle,
+                    spec.contract_id,
+                    machine_hash,
+                ),
+            ]
+        )
+    for identifier in gate_ids:
+        if identifier == "performance-primary":
+            continue
+        records.append(
+            record(
+                identifier,
+                "gate_result",
+                f"evidence/{identifier}.json",
+                bundle,
+                spec.contract_id,
+                machine_hash,
+            )
+        )
+    if spec.level >= 3:
+        records.append(
+            record(
+                invariant_id,
+                "invariant",
+                "evidence/invariant.json",
+                bundle,
+                spec.contract_id,
+                machine_hash,
+            )
+        )
+    if spec.level >= 4:
+        records.append(
+            record(
+                "performance-primary",
+                "performance",
+                "evidence/performance.json",
+                bundle,
+                spec.contract_id,
+                machine_hash,
+            )
+        )
+    records.append(
+        record(
+            "provenance-primary",
+            "provenance",
+            "provenance/provenance.json",
+            bundle,
+            spec.contract_id,
+            machine_hash,
+        )
+    )
+    records.extend(extra_records)
+    write_json(
+        bundle / "evidence/index.json",
+        {
+            "schema_version": "0.1.1",
+            "mncs_version": "0.1",
+            "immutable": spec.level == 5,
+            "unreferenced_evidence_policy": "warn",
+            "records": records,
+            "extensions": {},
+        },
+    )
+
+    objective = {
+        "metric": "throughput",
+        "unit": "operations/second",
+        "direction": "higher_is_better",
+        "threshold": 1.05,
+        "minimum_sample_count": 3,
+        "noise_policy": "No outlier deletion; arithmetic mean of all samples.",
+        "declared_before_generation": True,
+    }
+    manifest: dict[str, Any] = {
+        "$schema": "../../schemas/mncs-manifest.schema.json",
+        "schema_version": "0.1.1",
+        "mncs_version": "0.1",
+        "claimed_level": f"MNCS-L{spec.level}",
+        "component": {
+            "name": spec.component_name,
+            "version": spec.component_version,
+            "contract_id": spec.contract_id,
+            "criticality": spec.criticality,
+            "identity_hash": machine_hash,
+        },
+        "contract": {"path": "specification/contract.md", "sha256": contract_hash},
+        "reference": {"path": "reference/reference.py", "sha256": reference_hash},
+        "machine": {
+            "path": "machine/generated.py",
+            "sha256": machine_hash,
+            "generated_marker": "MNCS-GENERATED",
+        },
+        "generator": {
+            "name": "mncs-example-generator",
+            "version": "1.0",
+            "identity_evidence_id": "identity-generator",
+            "identity_hash": identity_hashes["identity-generator"],
+        },
+        "environment": {
+            "fingerprint": identity_hashes["identity-environment"],
+            "identity_evidence_id": "identity-environment",
+            "description": "Offline Python example profile.",
+        },
+        "acceptance_policy": {
+            "conformance_level": f"MNCS-L{spec.level}",
+            "required_gates": LEVEL_GATES[spec.level],
+            "on_unknown": "reject",
+            "conflicting_evidence": "reject",
+            "objective": objective,
+            "regression_policy": {"maximum_worst_case_ratio": 1.1},
+        },
+        "gate_results": gate_map,
+        "evidence_index": {
+            "path": "evidence/index.json",
+            "sha256": sha(bundle / "evidence/index.json"),
+        },
+        "provenance": "provenance-primary",
+        "limitations": [
+            "Experimental MNCS example scoped to the indexed contract and environment."
+        ],
+        "comparison_profile": {
+            "benefit": {"throughput_ratio": 1.1 if spec.performance_pass else 1.01},
+            "complexity": {"source_bytes": float((bundle / "machine/generated.py").stat().st_size)},
+        },
+        "final_status": spec.final_status,
+        "extensions": {"example.org:fixture": spec.name},
+    }
+    if spec.level >= 2:
+        manifest["acceptance_policy"]["mutation_required"] = True
+        manifest["fuzz_evidence"] = fuzz_ids
+        manifest["resource_bounds"] = {"maximum_input_units": 4096, "memory": "bounded"}
+    if spec.level >= 3:
+        manifest["invariants"] = [invariant_id]
+        manifest["structural_aggregate"] = {
+            "required_invariants": [invariant_id],
+            "provider_assumptions": ["The indexed contract bounds all inputs."],
+            "bounded": True,
+        }
+    if spec.level >= 4:
+        manifest["performance_results"] = ["performance-primary"]
+    if spec.level == 5:
+        manifest["regeneration"] = {
+            "command": "python tools/generate.py --locked",
+            "locked": True,
+            "inputs_complete": True,
+            "evidence_id": "gate-regeneration",
+        }
+        manifest["rollback"] = {
+            "reference_available": True,
+            "command": "activate indexed reference implementation",
+            "evidence_id": "reference",
+        }
+        manifest["immutable_evidence_index"] = True
+        manifest["post_certification_identity_check"] = "gate-post_certification_identity"
+    write_json(bundle / "manifest.json", manifest)
+    (bundle / "README.md").write_text(
+        f"# {spec.component_name}\n\n"
+        f"Evidence-derived MNCS-L{spec.level} example with computed {spec.final_status}.\n",
+        encoding="utf-8",
+    )
+
+
+def rehash_index_and_manifest(bundle: Path) -> None:
+    index_path = bundle / "evidence/index.json"
+    index = json.loads(index_path.read_text(encoding="utf-8"))
+    for item in index["records"]:
+        target = bundle / item["path"]
+        if target.exists():
+            item["sha256"] = sha(target)
+    write_json(index_path, index)
+    manifest_path = bundle / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["evidence_index"]["sha256"] = sha(index_path)
+    write_json(manifest_path, manifest)
+
+
+def mutate_json(bundle: Path, relative: str, mutate: Any) -> None:
+    path = bundle / relative
+    value = json.loads(path.read_text(encoding="utf-8"))
+    mutate(value)
+    write_json(path, value)
+    rehash_index_and_manifest(bundle)
+
+
+def create_corpus() -> None:
+    corpus = ROOT / "conformance-corpus"
+    if corpus.exists():
+        shutil.rmtree(corpus)
+    valid = corpus / "valid"
+    invalid = corpus / "invalid"
+    for level in range(1, 6):
+        build_bundle(
+            valid / f"l{level}-pass",
+            BundleSpec(
+                f"l{level}-pass",
+                level,
+                contract_id=f"corpus.l{level}.v1",
+                component_name=f"corpus-l{level}",
+            ),
+            create_sources=True,
+        )
+    build_bundle(
+        valid / "final-fail",
+        BundleSpec(
+            "final-fail",
+            4,
+            final_status="FAIL",
+            contract_id="corpus.fail.v1",
+            component_name="corpus-fail",
+            performance_pass=False,
+        ),
+        create_sources=True,
+    )
+    build_bundle(
+        valid / "final-unknown",
+        BundleSpec(
+            "final-unknown",
+            1,
+            final_status="UNKNOWN",
+            contract_id="corpus.unknown.v1",
+            component_name="corpus-unknown",
+            unknown_gate="behavioral",
+        ),
+        create_sources=True,
+    )
+    shutil.copytree(ROOT / "examples/legacy-0.1", valid / "legacy-0.1")
+
+    base = valid / "l4-pass"
+    cases: dict[str, tuple[str, Any]] = {
+        "copied-pass-without-evidence": (
+            "manifest.json",
+            lambda value: value["gate_results"].__setitem__("behavioral", []),
+        ),
+        "missing-gate-evidence": (
+            "manifest.json",
+            lambda value: value["gate_results"].__setitem__("behavioral", ["absent-result"]),
+        ),
+        "stale-candidate-hash": (
+            "evidence/gate-behavioral.json",
+            lambda value: value.__setitem__("candidate_source_hash", "sha256:" + "1" * 64),
+        ),
+        "stale-reference-hash": (
+            "evidence/gate-behavioral.json",
+            lambda value: value.__setitem__("reference_source_hash", "sha256:" + "2" * 64),
+        ),
+        "stale-evaluator-hash": (
+            "evidence/gate-behavioral.json",
+            lambda value: value["evaluator"].__setitem__("identity_hash", "sha256:" + "3" * 64),
+        ),
+        "performance-other-candidate": (
+            "evidence/performance.json",
+            lambda value: value.__setitem__("candidate_source_hash", "sha256:" + "4" * 64),
+        ),
+        "objective-mismatch": (
+            "evidence/performance.json",
+            lambda value: value.__setitem__("objective_metric", "latency"),
+        ),
+        "unit-mismatch": (
+            "evidence/performance.json",
+            lambda value: value.__setitem__("unit", "seconds"),
+        ),
+        "malformed-timestamps": (
+            "evidence/gate-behavioral.json",
+            lambda value: value.__setitem__("started_at", "not-a-time"),
+        ),
+        "unknown-treated-as-pass": (
+            "evidence/gate-behavioral.json",
+            lambda value: (
+                value.__setitem__("status", "UNKNOWN"),
+                value.__setitem__("unknown_reason", "bounded evaluator timeout"),
+                value["observation_counts"].update(
+                    {"total": 1, "passed": 0, "failed": 0, "unknown": 1}
+                ),
+            ),
+        ),
+        "extension-redefines-core": (
+            "manifest.json",
+            lambda value: value.__setitem__(
+                "extensions", {"vendor.example:behavioral": {"status": "PASS"}}
+            ),
+        ),
+    }
+    for name, (relative, mutation) in cases.items():
+        target = invalid / name
+        shutil.copytree(base, target)
+        mutate_json(target, relative, mutation)
+
+    target = invalid / "nonfinite-samples"
+    shutil.copytree(base, target)
+    performance_path = target / "evidence/performance.json"
+    performance = json.loads(performance_path.read_text(encoding="utf-8"))
+    performance["candidate_samples"][0] = float("nan")
+    performance_path.write_text(
+        json.dumps(performance, indent=2, sort_keys=True, allow_nan=True) + "\n",
+        encoding="utf-8",
+    )
+    rehash_index_and_manifest(target)
+
+    target = invalid / "final-status-mismatch"
+    shutil.copytree(base, target)
+    mutate_json(target, "manifest.json", lambda value: value.__setitem__("final_status", "FAIL"))
+
+    target = invalid / "level-missing-lower-evidence"
+    shutil.copytree(valid / "l1-pass", target)
+    mutate_json(
+        target,
+        "manifest.json",
+        lambda value: (
+            value.__setitem__("claimed_level", "MNCS-L3"),
+            value["acceptance_policy"].__setitem__("conformance_level", "MNCS-L3"),
+        ),
+    )
+
+    target = invalid / "conflicting-evidence-ids"
+    shutil.copytree(base, target)
+    mutate_json(
+        target,
+        "evidence/index.json",
+        lambda value: value["records"].append(copy.deepcopy(value["records"][0])),
+    )
+
+    target = invalid / "duplicate-path-conflicting-hashes"
+    shutil.copytree(base, target)
+
+    def conflicting_path(value: dict[str, Any]) -> None:
+        duplicate = copy.deepcopy(value["records"][0])
+        duplicate["id"] = "conflicting-contract"
+        duplicate["sha256"] = "sha256:" + "5" * 64
+        value["records"].append(duplicate)
+
+    mutate_json(target, "evidence/index.json", conflicting_path)
+    index_path = target / "evidence/index.json"
+    index = json.loads(index_path.read_text(encoding="utf-8"))
+    next(item for item in index["records"] if item["id"] == "conflicting-contract")["sha256"] = (
+        "sha256:" + "5" * 64
+    )
+    write_json(index_path, index)
+    manifest_path = target / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["evidence_index"]["sha256"] = sha(index_path)
+    write_json(manifest_path, manifest)
+
+    target = invalid / "path-escape"
+    shutil.copytree(base, target)
+
+    def path_escape(value: dict[str, Any]) -> None:
+        value["records"][0]["path"] = "../outside.md"
+
+    mutate_json(target, "evidence/index.json", path_escape)
+
+    target = invalid / "symlink-escape"
+    shutil.copytree(base, target)
+    link = target / "evidence/escape.json"
+    link.symlink_to("../../../../README.md")
+    index = json.loads((target / "evidence/index.json").read_text(encoding="utf-8"))
+    index["records"].append(
+        {
+            "id": "escape",
+            "kind": "other",
+            "path": "evidence/escape.json",
+            "sha256": sha(ROOT / "README.md"),
+            "media_type": "application/json",
+            "contract_id": "corpus.l4.v1",
+            "candidate_source_hash": json.loads(
+                (target / "manifest.json").read_text(encoding="utf-8")
+            )["machine"]["sha256"],
+        }
+    )
+    write_json(target / "evidence/index.json", index)
+    manifest = json.loads((target / "manifest.json").read_text(encoding="utf-8"))
+    manifest["fuzz_evidence"].append("escape")
+    manifest["evidence_index"]["sha256"] = sha(target / "evidence/index.json")
+    write_json(target / "manifest.json", manifest)
+
+    target = invalid / "unindexed-required-evidence"
+    shutil.copytree(base, target)
+
+    def remove_required(value: dict[str, Any]) -> None:
+        value["records"] = [item for item in value["records"] if item["id"] != "gate-behavioral"]
+
+    mutate_json(target, "evidence/index.json", remove_required)
+
+    missing_schema = invalid / "missing-wheel-schema"
+    missing_schema.mkdir(parents=True)
+    write_json(
+        missing_schema / "case.json",
+        {
+            "operation": "schema-resource-lookup",
+            "schema": "intentionally-missing.schema.json",
+            "expected": "operational-error",
+        },
+    )
+
+    expected_cases = []
+    for path in sorted(valid.iterdir()):
+        expected_cases.append(
+            {
+                "id": f"valid/{path.name}",
+                "path": f"valid/{path.name}",
+                "valid": True,
+                "computed_status": (
+                    "FAIL"
+                    if path.name == "final-fail"
+                    else "UNKNOWN"
+                    if path.name == "final-unknown"
+                    else "PASS"
+                ),
+                "legacy": path.name == "legacy-0.1",
+            }
+        )
+    for path in sorted(invalid.iterdir()):
+        if path.name == "missing-wheel-schema":
+            continue
+        expected_cases.append(
+            {
+                "id": f"invalid/{path.name}",
+                "path": f"invalid/{path.name}",
+                "valid": False,
+            }
+        )
+    write_json(
+        corpus / "expected.json",
+        {
+            "schema_version": "0.1.1",
+            "cases": expected_cases,
+            "operational_cases": ["invalid/missing-wheel-schema/case.json"],
+        },
+    )
+
+
+def main() -> None:
+    examples = {
+        "minimal": BundleSpec(
+            "minimal",
+            1,
+            contract_id="example.identity.v1",
+            component_name="identity-transform",
+        ),
+        "http-chunked-decoder": BundleSpec(
+            "http-chunked-decoder",
+            4,
+            contract_id="example.chunked.bounded.v1",
+            component_name="bounded-http-chunk-decoder",
+            criticality="high",
+        ),
+        "rejected-candidate": BundleSpec(
+            "rejected-candidate",
+            4,
+            final_status="FAIL",
+            contract_id="example.clamp.v1",
+            component_name="rejected-clamp",
+            performance_pass=False,
+        ),
+        "repair-workflow": BundleSpec(
+            "repair-workflow",
+            3,
+            contract_id="example.select.v1",
+            component_name="repaired-bounded-index",
+            repair=True,
+        ),
+        "structural-provider": BundleSpec(
+            "structural-provider",
+            3,
+            contract_id="example.divide.v1",
+            component_name="checked-division",
+        ),
+    }
+    for name, spec in examples.items():
+        build_bundle(ROOT / "examples" / name, spec)
+    build_bundle(
+        ROOT / "examples/validator-rule-engine",
+        BundleSpec(
+            "validator-rule-engine",
+            3,
+            contract_id="example.gate-aggregation.v1",
+            component_name="table-driven-gate-aggregator",
+        ),
+        create_sources=True,
+    )
+    create_corpus()
+
+
+if __name__ == "__main__":
+    main()

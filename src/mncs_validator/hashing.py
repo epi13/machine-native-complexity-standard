@@ -5,9 +5,12 @@
 from __future__ import annotations
 
 import hashlib
+import os
+import stat
 from pathlib import Path
 
 CHUNK_SIZE = 1024 * 1024
+DEFAULT_MAX_FILE_BYTES = 10 * 1024 * 1024
 
 
 def sha256_file(path: Path) -> str:
@@ -24,6 +27,45 @@ def sha256_bytes(content: bytes) -> str:
     """Hash bytes in MNCS identity form."""
 
     return f"sha256:{hashlib.sha256(content).hexdigest()}"
+
+
+def read_regular_file(path: Path, *, max_bytes: int = DEFAULT_MAX_FILE_BYTES) -> bytes:
+    """Read one regular file through a no-follow descriptor with stability checks."""
+
+    flags = os.O_RDONLY
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    descriptor = os.open(path, flags)
+    try:
+        before = os.fstat(descriptor)
+        if not stat.S_ISREG(before.st_mode):
+            raise ValueError(f"not a regular file: {path}")
+        if before.st_size > max_bytes:
+            raise ValueError(f"file exceeds {max_bytes} byte policy: {path}")
+        content = bytearray()
+        total = 0
+        while chunk := os.read(descriptor, CHUNK_SIZE):
+            total += len(chunk)
+            if total > max_bytes:
+                raise ValueError(f"file exceeds {max_bytes} byte policy: {path}")
+            content.extend(chunk)
+        after = os.fstat(descriptor)
+        if (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns) != (
+            after.st_dev,
+            after.st_ino,
+            after.st_size,
+            after.st_mtime_ns,
+        ):
+            raise ValueError(f"file changed while hashing: {path}")
+        return bytes(content)
+    finally:
+        os.close(descriptor)
+
+
+def sha256_regular_file(path: Path, *, max_bytes: int = DEFAULT_MAX_FILE_BYTES) -> str:
+    """Hash exactly the stable bytes returned by :func:`read_regular_file`."""
+
+    return sha256_bytes(read_regular_file(path, max_bytes=max_bytes))
 
 
 def tree_hash(path: Path) -> str:

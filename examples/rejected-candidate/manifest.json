@@ -1,32 +1,138 @@
 {
-  "$schema":"../../schemas/mncs-manifest.schema.json","schema_version":"0.1","mncs_version":"0.1","claimed_level":"MNCS-L4",
-  "component":{"name":"rejected-clamp","version":"0.1.0","contract_id":"example.clamp.v1","criticality":"low"},
-  "reference":{"path":"reference/reference.py","sha256":"sha256:91c9f754e4d0c34df6cf5a4fe66e568d17b56a01cab087a997a5777935402f0f"},
-  "machine":{"path":"machine/generated.py","sha256":"sha256:98b865ef438d01761d874dbbba36fde23f0b52e6caf37d8c0ac6f7194d75d24f","generated_marker":"MNCS-GENERATED"},
-  "generator":{"name":"branch-specializer","version":"0.2","identity_hash":"sha256:5555555555555555555555555555555555555555555555555555555555555555"},
-  "objective":{"metric":"throughput","direction":"higher_is_better","threshold":1.05,"declared_before_generation":true},
-  "acceptance_policy":{
-    "behavioral_pass":"PASS","holdout_pass":"UNKNOWN","safety_pass":"PASS","resource_bounds_pass":"PASS",
-    "compiler_matrix_pass":"PASS","required_invariants_pass":"PASS","measurement_valid":"PASS",
-    "useful_benefit_threshold_met":"FAIL","worst_case_regression_within_policy":"PASS",
-    "provenance_complete":"UNKNOWN","on_unknown":"reject"
+  "$schema": "../../schemas/mncs-manifest.schema.json",
+  "acceptance_policy": {
+    "conflicting_evidence": "reject",
+    "conformance_level": "MNCS-L4",
+    "mutation_required": true,
+    "objective": {
+      "declared_before_generation": true,
+      "direction": "higher_is_better",
+      "metric": "throughput",
+      "minimum_sample_count": 3,
+      "noise_policy": "No outlier deletion; arithmetic mean of all samples.",
+      "threshold": 1.05,
+      "unit": "operations/second"
+    },
+    "on_unknown": "reject",
+    "regression_policy": {
+      "maximum_worst_case_ratio": 1.1
+    },
+    "required_gates": [
+      "behavioral",
+      "compiler_matrix",
+      "safety",
+      "resource_bounds",
+      "mutation",
+      "structural",
+      "measurement_valid",
+      "benefit_threshold",
+      "worst_regression"
+    ]
   },
-  "environment":{"language":"Python 3.11+","offline":true},
-  "evidence_index":{"path":"evidence/index.json","sha256":"sha256:298fbe2b7fbb1a8e33a1ab38adbb6679906ca99ca7b3b197bb5e6244a2683281"},
-  "invariants":[{"path":"evidence/invariant.json","sha256":"sha256:c89dd3d5ef76d795436bbe72489749c1cf10246a241ca6f591ae8a2da8c84e1b"}],
-  "complexity_profile":{
-    "throughput":1005,"latency":0.000995,"worst_case_performance":0.0011,"memory_bytes":8192,
-    "binary_size_bytes":2300,"source_size_bytes":422,"changed_lines":10,"cfg_nodes":12,
-    "cyclomatic_complexity":4,"state_count":3,"branch_count":3,"portability":1,
-    "generation_cost_seconds":8,"validation_cost_seconds":20,"conformance_level":"MNCS-L4",
-    "unresolved_unknown_results":2,"operational_criticality":"low"
+  "claimed_level": "MNCS-L4",
+  "comparison_profile": {
+    "benefit": {
+      "throughput_ratio": 1.01
+    },
+    "complexity": {
+      "source_bytes": 401.0
+    }
   },
-  "performance_results":[{"path":"evidence/performance.json","sha256":"sha256:d89eee440bbd94c392fd354a68b3b7a6caec9e9fb166b0d5c93b874d7a96ebc4"}],
-  "resource_bounds":{"memory":"constant","inputs":"three Python integers"},
-  "provenance":{"path":"provenance/provenance.json","sha256":"sha256:642ee5fab7dc44e319e840141ed71f18692b6d8baa5c556d115ab577afeda3cf"},
-  "limitations":["Negligible measured gain does not justify added complexity."],
-  "unsupported_environments":["Python older than 3.11"],
-  "regeneration":{"command":"make example-rejected","locked":true,"inputs_complete":true},
-  "rollback":{"reference_available":true,"command":"use reference/reference.py"},
-  "final_status":"FAIL","extensions":{"mncs.dev:rejection-reason":"threshold-not-met"}
+  "component": {
+    "contract_id": "example.clamp.v1",
+    "criticality": "moderate",
+    "identity_hash": "sha256:98b865ef438d01761d874dbbba36fde23f0b52e6caf37d8c0ac6f7194d75d24f",
+    "name": "rejected-clamp",
+    "version": "1.0.0"
+  },
+  "contract": {
+    "path": "specification/contract.md",
+    "sha256": "sha256:f9a78e65054f8073a75d6dce913e3343e827f0dffd7bbffe9578cd31e9ac268f"
+  },
+  "environment": {
+    "description": "Offline Python example profile.",
+    "fingerprint": "sha256:bec2072576f16c4fc1cb89d286b8a29b8035f5e83b6b946c4180b7928dbc1679",
+    "identity_evidence_id": "identity-environment"
+  },
+  "evidence_index": {
+    "path": "evidence/index.json",
+    "sha256": "sha256:23a2d5f3a8877e774f3dc0e18186b277038a7167cf1001419fdd8de815e231d0"
+  },
+  "extensions": {
+    "example.org:fixture": "rejected-candidate"
+  },
+  "final_status": "FAIL",
+  "fuzz_evidence": [
+    "fuzz-primary",
+    "mutation-primary"
+  ],
+  "gate_results": {
+    "behavioral": [
+      "gate-behavioral"
+    ],
+    "benefit_threshold": [
+      "performance-primary"
+    ],
+    "compiler_matrix": [
+      "gate-compiler_matrix"
+    ],
+    "measurement_valid": [
+      "performance-primary"
+    ],
+    "mutation": [
+      "gate-mutation"
+    ],
+    "resource_bounds": [
+      "gate-resource_bounds"
+    ],
+    "safety": [
+      "gate-safety"
+    ],
+    "structural": [
+      "gate-structural"
+    ],
+    "worst_regression": [
+      "performance-primary"
+    ]
+  },
+  "generator": {
+    "identity_evidence_id": "identity-generator",
+    "identity_hash": "sha256:119ffdc06e0cc9e2e07e9daa393063ae1545274847e63b2a5f50719dc6d91be7",
+    "name": "mncs-example-generator",
+    "version": "1.0"
+  },
+  "invariants": [
+    "invariant-bounded-control"
+  ],
+  "limitations": [
+    "Experimental MNCS example scoped to the indexed contract and environment."
+  ],
+  "machine": {
+    "generated_marker": "MNCS-GENERATED",
+    "path": "machine/generated.py",
+    "sha256": "sha256:98b865ef438d01761d874dbbba36fde23f0b52e6caf37d8c0ac6f7194d75d24f"
+  },
+  "mncs_version": "0.1",
+  "performance_results": [
+    "performance-primary"
+  ],
+  "provenance": "provenance-primary",
+  "reference": {
+    "path": "reference/reference.py",
+    "sha256": "sha256:91c9f754e4d0c34df6cf5a4fe66e568d17b56a01cab087a997a5777935402f0f"
+  },
+  "resource_bounds": {
+    "maximum_input_units": 4096,
+    "memory": "bounded"
+  },
+  "schema_version": "0.1.1",
+  "structural_aggregate": {
+    "bounded": true,
+    "provider_assumptions": [
+      "The indexed contract bounds all inputs."
+    ],
+    "required_invariants": [
+      "invariant-bounded-control"
+    ]
+  }
 }

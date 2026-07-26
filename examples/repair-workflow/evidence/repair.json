@@ -1,11 +1,14 @@
 {
-  "schema_version":"0.1",
-  "attempt_limit":1,
-  "attempts_used":1,
-  "witness":"Return at old line 9 was reachable without nonnegative-index validation.",
-  "old_source_hash":"sha256:7777777777777777777777777777777777777777777777777777777777777777",
-  "repair_elapsed_seconds":42,
-  "runtime_missed_defect":true,
-  "full_reevaluation":true,
-  "status":"PASS"
+  "evidence_references": [
+    "failed-candidate",
+    "failed-witness",
+    "failed-behavioral-result"
+  ],
+  "failed_candidate_hash": "sha256:901d87916326faf6362726d6152f9090f88fb5427966a45762a05e586e0f287f",
+  "full_reevaluation": true,
+  "kind": "bounded-repair-history",
+  "maximum_repairs": 1,
+  "repair_count": 1,
+  "repaired_candidate_hash": "sha256:94c0b8475a1798fe8c8610c4533df729ec2c71d406a76073bc43e145852d9ce2",
+  "result_reuse_across_source_hashes": false
 }

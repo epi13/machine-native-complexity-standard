@@ -1,9 +1,35 @@
 {
-  "schema_version":"0.1","mncs_version":"0.1","invariant_id":"INV-NONZERO-BEFORE-DIVIDE",
-  "requirement":"A zero-denominator rejection dominates every division.",
-  "source_hash":"sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234","status":"PASS","provider":"example.compiler-cfg",
-  "provider_version":"2.4","analysis_method":"function-local dominance and forbidden-path search",
-  "assumptions":["Direct integer division only"],"boundedness":{"bounded":true,"description":"All CFG nodes in one function."},
-  "locations":[{"path":"machine/generated.py","line":12,"message":"Division node."}],
-  "elapsed_seconds":0.006,"output_bytes":231,"limitations":[],"extensions":{}
+  "analysis_method": "bounded control-flow enumeration",
+  "assumptions": [
+    "Inputs satisfy the indexed contract grammar."
+  ],
+  "boundedness": {
+    "bounded": true,
+    "description": "32 enumerated states."
+  },
+  "candidate_source_hash": "sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234",
+  "completed_at": "2026-07-25T12:00:01Z",
+  "contract_id": "example.divide.v1",
+  "environment_fingerprint": "sha256:bec2072576f16c4fc1cb89d286b8a29b8035f5e83b6b946c4180b7928dbc1679",
+  "evaluator_identity_hash": "sha256:8c6dcf0b337eba166957055f8e0fceab18b864868f1a7274f65f5247afbb57f8",
+  "evaluator_identity_id": "identity-evaluator",
+  "extensions": {},
+  "invariant_id": "bounded-control",
+  "limitations": [
+    "Illustrative provider output."
+  ],
+  "locations": [
+    {
+      "line": 1,
+      "path": "machine/generated.py"
+    }
+  ],
+  "mncs_version": "0.1",
+  "provider": "mncs-example-structural-provider",
+  "provider_version": "1.0",
+  "requirement": "Every declared operation terminates within the contract bound.",
+  "result_id": "invariant-bounded-control",
+  "schema_version": "0.1.1",
+  "started_at": "2026-07-25T12:00:00Z",
+  "status": "PASS"
 }

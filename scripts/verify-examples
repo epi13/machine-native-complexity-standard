@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: Apache-2.0
 set -euo pipefail
+repository_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export PYTHONPATH="$repository_root/src${PYTHONPATH:+:$PYTHONPATH}"
 
 for bundle in \
   examples/minimal \
   examples/http-chunked-decoder \
-  examples/rejected-candidate \
   examples/repair-workflow \
-  examples/structural-provider
+  examples/structural-provider \
+  examples/validator-rule-engine
 do
-  mncs validate-bundle "$bundle"
+  python -m mncs_validator certify-bundle "$bundle"
 done
+
+python -m mncs_validator validate-bundle examples/rejected-candidate
+python -m mncs_validator validate-bundle examples/legacy-0.1

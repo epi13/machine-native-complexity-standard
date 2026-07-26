@@ -1,8 +1,160 @@
 {
-  "schema_version":"0.1","mncs_version":"0.1",
-  "records":[
-    {"id":"behavioral","kind":"behavioral","path":"evidence/behavioral.json","sha256":"sha256:e5ed34a366d03d463afcc09fe1be53e7e7da71ef357512551361a23e11e6a029","media_type":"application/json"},
-    {"id":"provider","kind":"structural","path":"evidence/provider.json","sha256":"sha256:0b99f8b28bb1abf2693d8e4bcde54aae057d8e1c38026895a7a23b01d783be19","media_type":"application/json"},
-    {"id":"invariant","kind":"structural","path":"evidence/invariant.json","sha256":"sha256:0335f8d5030486747b4e4281778f32dbaeec66b3541a8fb46d89c9a65b94b456","media_type":"application/json"}
-  ],"extensions":{}
+  "extensions": {},
+  "immutable": false,
+  "mncs_version": "0.1",
+  "records": [
+    {
+      "contract_id": "example.divide.v1",
+      "id": "contract",
+      "kind": "contract",
+      "media_type": "text/markdown",
+      "path": "specification/contract.md",
+      "sha256": "sha256:938a7fa590ccf7351448be00e20d7c1a3250aa328345c6a5c31d3d697fc0654d"
+    },
+    {
+      "contract_id": "example.divide.v1",
+      "id": "reference",
+      "kind": "reference",
+      "media_type": "text/x-python",
+      "path": "reference/reference.py",
+      "sha256": "sha256:bc1b716484acb3434d51a39fb9e0b7816cdce46cadda7904ae6b9dc6b267874d"
+    },
+    {
+      "candidate_source_hash": "sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234",
+      "contract_id": "example.divide.v1",
+      "id": "machine",
+      "kind": "machine",
+      "media_type": "text/x-python",
+      "path": "machine/generated.py",
+      "sha256": "sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234"
+    },
+    {
+      "candidate_source_hash": "sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234",
+      "contract_id": "example.divide.v1",
+      "id": "identity-generator",
+      "kind": "identity",
+      "media_type": "application/json",
+      "path": "evidence/identities/identity-generator.json",
+      "sha256": "sha256:119ffdc06e0cc9e2e07e9daa393063ae1545274847e63b2a5f50719dc6d91be7"
+    },
+    {
+      "candidate_source_hash": "sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234",
+      "contract_id": "example.divide.v1",
+      "id": "identity-evaluator",
+      "kind": "identity",
+      "media_type": "application/json",
+      "path": "evidence/identities/identity-evaluator.json",
+      "sha256": "sha256:8c6dcf0b337eba166957055f8e0fceab18b864868f1a7274f65f5247afbb57f8"
+    },
+    {
+      "candidate_source_hash": "sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234",
+      "contract_id": "example.divide.v1",
+      "id": "identity-environment",
+      "kind": "identity",
+      "media_type": "application/json",
+      "path": "evidence/identities/identity-environment.json",
+      "sha256": "sha256:bec2072576f16c4fc1cb89d286b8a29b8035f5e83b6b946c4180b7928dbc1679"
+    },
+    {
+      "candidate_source_hash": "sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234",
+      "contract_id": "example.divide.v1",
+      "id": "identity-toolchain",
+      "kind": "identity",
+      "media_type": "application/json",
+      "path": "evidence/identities/identity-toolchain.json",
+      "sha256": "sha256:af20ea500a0e354d5bb8bed2242e583c35f65e682398a4e931c73ec85466a4fc"
+    },
+    {
+      "candidate_source_hash": "sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234",
+      "contract_id": "example.divide.v1",
+      "id": "fuzz-primary",
+      "kind": "fuzz",
+      "media_type": "application/json",
+      "path": "evidence/fuzz.json",
+      "sha256": "sha256:17b2e0c83b2b97de611594e0ab48ad86461be4296ee58db267ded5c6a1862b77"
+    },
+    {
+      "candidate_source_hash": "sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234",
+      "contract_id": "example.divide.v1",
+      "id": "mutation-primary",
+      "kind": "mutation",
+      "media_type": "application/json",
+      "path": "evidence/mutation.json",
+      "sha256": "sha256:42ce9dae574b7beb9381da5dded77eb5c795e679e30bbd9437ab5b20fb7124bf"
+    },
+    {
+      "candidate_source_hash": "sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234",
+      "contract_id": "example.divide.v1",
+      "id": "gate-behavioral",
+      "kind": "gate_result",
+      "media_type": "application/json",
+      "path": "evidence/gate-behavioral.json",
+      "sha256": "sha256:072b4eef6b9931f2dacc1125e2df62af13723cc522dbdcb2bcfdb799dafe0ec8"
+    },
+    {
+      "candidate_source_hash": "sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234",
+      "contract_id": "example.divide.v1",
+      "id": "gate-compiler_matrix",
+      "kind": "gate_result",
+      "media_type": "application/json",
+      "path": "evidence/gate-compiler_matrix.json",
+      "sha256": "sha256:67069831dd2ac447dc97fd5ff6d48feaaa53c431665b9d3e1e969533209afa99"
+    },
+    {
+      "candidate_source_hash": "sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234",
+      "contract_id": "example.divide.v1",
+      "id": "gate-safety",
+      "kind": "gate_result",
+      "media_type": "application/json",
+      "path": "evidence/gate-safety.json",
+      "sha256": "sha256:5d010e45f1000cce4a12a4cd79756d2875e4199b5cf33e67a341ef6e88ab69b9"
+    },
+    {
+      "candidate_source_hash": "sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234",
+      "contract_id": "example.divide.v1",
+      "id": "gate-resource_bounds",
+      "kind": "gate_result",
+      "media_type": "application/json",
+      "path": "evidence/gate-resource_bounds.json",
+      "sha256": "sha256:7a968761a13f29f8cc49c1c04ac3a81a895afa923079d688a7311871e939585b"
+    },
+    {
+      "candidate_source_hash": "sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234",
+      "contract_id": "example.divide.v1",
+      "id": "gate-mutation",
+      "kind": "gate_result",
+      "media_type": "application/json",
+      "path": "evidence/gate-mutation.json",
+      "sha256": "sha256:bca878ddd3741b4709eb17b515a7da5d790e3493d9e2773c3ca354e38bb6cd40"
+    },
+    {
+      "candidate_source_hash": "sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234",
+      "contract_id": "example.divide.v1",
+      "id": "gate-structural",
+      "kind": "gate_result",
+      "media_type": "application/json",
+      "path": "evidence/gate-structural.json",
+      "sha256": "sha256:d9c1b5d75122e7c00cae0b5889b53a33a83d483c13e307442eec4df960fdfcf7"
+    },
+    {
+      "candidate_source_hash": "sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234",
+      "contract_id": "example.divide.v1",
+      "id": "invariant-bounded-control",
+      "kind": "invariant",
+      "media_type": "application/json",
+      "path": "evidence/invariant.json",
+      "sha256": "sha256:db97c3e7cdaad47ac6444257c9b9a22fcde2f8581a55c9da98d32d344f76ee51"
+    },
+    {
+      "candidate_source_hash": "sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234",
+      "contract_id": "example.divide.v1",
+      "id": "provenance-primary",
+      "kind": "provenance",
+      "media_type": "application/json",
+      "path": "provenance/provenance.json",
+      "sha256": "sha256:162760b358645ea5567e54b95d2d57defe7ffb6a0dba97d637eff0bfd91cedbe"
+    }
+  ],
+  "schema_version": "0.1.1",
+  "unreferenced_evidence_policy": "warn"
 }
