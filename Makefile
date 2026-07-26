@@ -23,7 +23,7 @@ corpus:
 	PYTHONPATH=src ./scripts/run-conformance-corpus
 
 mncds-corpus:
-	PYTHONPATH=src ./scripts/run-mncds-corpus
+	PYTHONPATH=src python scripts/run-mncds-corpus
 
 interoperability:
 	PYTHONPATH=src ./scripts/run-interoperability
