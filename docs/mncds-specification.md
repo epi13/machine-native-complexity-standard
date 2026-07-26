@@ -1,7 +1,9 @@
 # MNCDS 0.1 draft specification
 
-The draft normative specification is maintained in
-[`spec/MNCDS-v0.1-draft.md`](https://github.com/epi13/machine-native-complexity-standard/blob/main/spec/MNCDS-v0.1-draft.md).
+The proposed normative text is maintained in two linked modules:
+
+- [`spec/MNCDS-v0.1-draft.md`](https://github.com/epi13/machine-native-complexity-standard/blob/main/spec/MNCDS-v0.1-draft.md) — lifecycle and cumulative profile requirements;
+- [`spec/MNCDS-v0.1-records-and-decisions.md`](https://github.com/epi13/machine-native-complexity-standard/blob/main/spec/MNCDS-v0.1-records-and-decisions.md) — aggregate record, stochastic reproducibility, evaluator independence, candidate-retention, privacy-extension, and result-separation semantics.
 
 MNCDS defines cumulative development-process profiles for controlled generation,
 reproducible experimentation, independent selection, and operational regeneration. It
