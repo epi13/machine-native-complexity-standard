@@ -1,0 +1,11 @@
+{
+  "schema_version":"0.1",
+  "attempt_limit":1,
+  "attempts_used":1,
+  "witness":"Return at old line 9 was reachable without nonnegative-index validation.",
+  "old_source_hash":"sha256:7777777777777777777777777777777777777777777777777777777777777777",
+  "repair_elapsed_seconds":42,
+  "runtime_missed_defect":true,
+  "full_reevaluation":true,
+  "status":"PASS"
+}

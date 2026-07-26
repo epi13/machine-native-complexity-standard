@@ -1,0 +1,32 @@
+{
+  "$schema":"../../schemas/mncs-manifest.schema.json","schema_version":"0.1","mncs_version":"0.1","claimed_level":"MNCS-L3",
+  "component":{"name":"checked-division","version":"1.0.0","contract_id":"example.divide.v1","criticality":"moderate"},
+  "reference":{"path":"reference/reference.py","sha256":"sha256:bc1b716484acb3434d51a39fb9e0b7816cdce46cadda7904ae6b9dc6b267874d"},
+  "machine":{"path":"machine/generated.py","sha256":"sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234","generated_marker":"MNCS-GENERATED"},
+  "generator":{"name":"arithmetic-generator","version":"1.0","identity_hash":"sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+  "objective":{"metric":"reliability","direction":"higher_is_better","threshold":1,"declared_before_generation":true},
+  "acceptance_policy":{
+    "behavioral_pass":"PASS","holdout_pass":"UNKNOWN","safety_pass":"PASS","resource_bounds_pass":"PASS",
+    "compiler_matrix_pass":"PASS","required_invariants_pass":"PASS","measurement_valid":"UNKNOWN",
+    "useful_benefit_threshold_met":"UNKNOWN","worst_case_regression_within_policy":"UNKNOWN",
+    "provenance_complete":"UNKNOWN","on_unknown":"reject"
+  },
+  "environment":{"language":"Python 3.11+","offline":true},
+  "evidence_index":{"path":"evidence/index.json","sha256":"sha256:acab52b44c298c4e7426a0b0b7b030c0f6fd998e77446081f93482286a646e08"},
+  "invariants":[{"path":"evidence/invariant.json","sha256":"sha256:0335f8d5030486747b4e4281778f32dbaeec66b3541a8fb46d89c9a65b94b456"}],
+  "complexity_profile":{
+    "throughput":400000,"latency":0.0000025,"worst_case_performance":0.000003,"memory_bytes":0,
+    "binary_size_bytes":430,"source_size_bytes":398,"changed_lines":4,"cfg_nodes":7,
+    "cyclomatic_complexity":2,"state_count":2,"branch_count":1,"portability":1,
+    "generation_cost_seconds":1,"validation_cost_seconds":0.1,"conformance_level":"MNCS-L3",
+    "unresolved_unknown_results":4,"operational_criticality":"moderate"
+  },
+  "performance_results":[],
+  "resource_bounds":{"division_operations":1,"additional_memory":"constant"},
+  "provenance":{"path":"provenance/provenance.json","sha256":"sha256:8f0179ef857330709cf03ab30e7a008c29babe9ba330db4d063ceba1fedf9243"},
+  "limitations":["Provider model is illustrative and not a production assurance tool."],
+  "unsupported_environments":["Non-Python integer semantics"],
+  "regeneration":{"command":"make example-provider","locked":true,"inputs_complete":true},
+  "rollback":{"reference_available":true,"command":"use reference/reference.py"},
+  "final_status":"PASS","extensions":{"example.org:provider-registration":"evidence/provider.json"}
+}

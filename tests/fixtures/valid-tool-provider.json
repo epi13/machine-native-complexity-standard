@@ -1,0 +1,12 @@
+{
+  "schema_version": "0.1",
+  "mncs_version": "0.1",
+  "provider_id": "tests.compiler-cfg",
+  "name": "Test CFG",
+  "version": "1.0",
+  "methods": ["dominance"],
+  "statuses": ["PASS", "FAIL", "UNKNOWN"],
+  "limitations": [],
+  "offline_capable": true,
+  "extensions": {}
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "0.1",
+  "mncs_version": "0.1",
+  "generator": "example-table-generator",
+  "generator_version": "1.0",
+  "generator_hash": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+  "inputs": [{"path": "specification/contract.md", "sha256": "sha256:40c7722a9e30de8330eaeb9a3542bae71e405e55030a9daed734125bcfa1bb4f"}],
+  "command": "make example-http",
+  "generated_at": "2026-07-25T00:00:00Z",
+  "source_hash": "sha256:17ee4289a9f61b9a2a617a1b70b16d3fdce443fb9b0d4552755fe1eab7369a1d",
+  "artifact_hash": "sha256:17ee4289a9f61b9a2a617a1b70b16d3fdce443fb9b0d4552755fe1eab7369a1d",
+  "evaluator": "mncs-example-evaluator",
+  "evaluator_version": "1.0",
+  "evaluator_hash": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+  "no_handwritten_changes": true,
+  "extensions": {}
+}

@@ -1,0 +1,7 @@
+{
+  "$schema": "../../schemas/mncs-manifest.schema.json",
+  "schema_version": "0.1",
+  "mncs_version": "0.1",
+  "claimed_level": "MNCS-L99",
+  "final_status": "PASS"
+}

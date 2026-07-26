@@ -1,0 +1,9 @@
+{
+  "schema_version":"0.1","mncs_version":"0.1","invariant_id":"INV-NONZERO-BEFORE-DIVIDE",
+  "requirement":"A zero-denominator rejection dominates every division.",
+  "source_hash":"sha256:cb00f842f095bd60cca3c6ac37b927cdfd0e92c0b6295ce0cd8a5be02cfdb234","status":"PASS","provider":"example.compiler-cfg",
+  "provider_version":"2.4","analysis_method":"function-local dominance and forbidden-path search",
+  "assumptions":["Direct integer division only"],"boundedness":{"bounded":true,"description":"All CFG nodes in one function."},
+  "locations":[{"path":"machine/generated.py","line":12,"message":"Division node."}],
+  "elapsed_seconds":0.006,"output_bytes":231,"limitations":[],"extensions":{}
+}

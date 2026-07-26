@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: Apache-2.0
+set -euo pipefail
+
+for bundle in \
+  examples/minimal \
+  examples/http-chunked-decoder \
+  examples/rejected-candidate \
+  examples/repair-workflow \
+  examples/structural-provider
+do
+  mncs validate-bundle "$bundle"
+done

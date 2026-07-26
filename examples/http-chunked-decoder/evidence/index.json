@@ -1,0 +1,28 @@
+{
+  "schema_version": "0.1",
+  "mncs_version": "0.1",
+  "records": [
+    {
+      "id": "behavioral",
+      "kind": "behavioral",
+      "path": "evidence/behavioral.json",
+      "sha256": "sha256:eaa18b537468964b75ba614c7597ff26ea588d92816ea2f79168cf8b18f94d29",
+      "media_type": "application/json"
+    },
+    {
+      "id": "invariant",
+      "kind": "structural",
+      "path": "evidence/invariant.json",
+      "sha256": "sha256:536cf44069c7455be7db9b497056c8e629873a631f1bef93bfdb824ff353a406",
+      "media_type": "application/json"
+    },
+    {
+      "id": "performance",
+      "kind": "performance",
+      "path": "evidence/performance.json",
+      "sha256": "sha256:5b532a2b5dc6e07d0584683f8215044442b8e1ca79f8f39b83387becfb6f0abb",
+      "media_type": "application/json"
+    }
+  ],
+  "extensions": {}
+}

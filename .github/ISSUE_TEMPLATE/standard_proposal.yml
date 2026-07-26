@@ -1,0 +1,30 @@
+name: Standard proposal
+description: Propose a normative or evidence-model change
+title: "[Standard]: "
+labels: ["standard"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and users affected
+    validations:
+      required: true
+  - type: textarea
+    id: semantics
+    attributes:
+      label: Proposed normative semantics
+    validations:
+      required: true
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Compatibility, security, and vendor-neutrality
+    validations:
+      required: true
+  - type: checkboxes
+    id: rfc
+    attributes:
+      label: RFC readiness
+      options:
+        - label: I understand normative changes require an RFC.
+          required: true

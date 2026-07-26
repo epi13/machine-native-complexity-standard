@@ -1,0 +1,27 @@
+name: Validator bug
+description: Report reproducible validator behavior
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include secrets or embargoed vulnerabilities; use a security advisory.
+  - type: input
+    id: version
+    attributes:
+      label: Validator version
+      placeholder: mncs-validator 0.1.0
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal offline reproduction
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true

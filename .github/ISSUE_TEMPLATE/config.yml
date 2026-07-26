@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security report
+    url: https://github.com/epi13/machine-native-complexity-standard/security/advisories/new
+    about: Privately report a vulnerability

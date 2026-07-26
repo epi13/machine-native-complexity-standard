@@ -1,0 +1,10 @@
+{
+  "schema_version":"0.1","mncs_version":"0.1","invariant_id":"INV-VALIDATE-BEFORE-INDEX",
+  "requirement":"Both lower and upper index checks dominate the sensitive index operation.",
+  "source_hash":"sha256:94c0b8475a1798fe8c8610c4533df729ec2c71d406a76073bc43e145852d9ce2","status":"PASS","provider":"example-cfg-provider",
+  "provider_version":"1.0","analysis_method":"bounded CFG dominance",
+  "assumptions":["Python comparison and list indexing semantics"],"boundedness":{"bounded":true,"description":"One function; direct CFG."},
+  "witness":{"path":"evidence/repair.json","sha256":"sha256:875f0bb59824f309972bf5f740afb492a4938c9f5ad91bb9df353e2fb00d2020"},
+  "locations":[{"path":"machine/generated.py","line":12,"message":"Sensitive indexing is control-dependent on rejection checks."}],
+  "elapsed_seconds":0.003,"output_bytes":296,"limitations":["Exceptional interpreter edges are modeled by language rules."],"extensions":{}
+}

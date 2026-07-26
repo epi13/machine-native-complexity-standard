@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: Apache-2.0
+set -euo pipefail
+
+git diff --check
+ruff format --check .
+ruff check .
+mypy src
+pytest
+python -m build
+./scripts/verify-examples
+mkdocs build --strict

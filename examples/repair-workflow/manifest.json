@@ -1,0 +1,32 @@
+{
+  "$schema":"../../schemas/mncs-manifest.schema.json","schema_version":"0.1","mncs_version":"0.1","claimed_level":"MNCS-L3",
+  "component":{"name":"repaired-bounded-index","version":"1.1.0","contract_id":"example.select.v1","criticality":"moderate"},
+  "reference":{"path":"reference/reference.py","sha256":"sha256:83d7dba632999122e544fb77f81118ef4fafd32ace2026f2eabd36c5e02a0e0a"},
+  "machine":{"path":"machine/generated.py","sha256":"sha256:94c0b8475a1798fe8c8610c4533df729ec2c71d406a76073bc43e145852d9ce2","generated_marker":"MNCS-GENERATED"},
+  "generator":{"name":"bounded-repair-generator","version":"1.1","identity_hash":"sha256:8888888888888888888888888888888888888888888888888888888888888888"},
+  "objective":{"metric":"reliability","direction":"higher_is_better","threshold":1,"declared_before_generation":true},
+  "acceptance_policy":{
+    "behavioral_pass":"PASS","holdout_pass":"UNKNOWN","safety_pass":"PASS","resource_bounds_pass":"PASS",
+    "compiler_matrix_pass":"PASS","required_invariants_pass":"PASS","measurement_valid":"UNKNOWN",
+    "useful_benefit_threshold_met":"UNKNOWN","worst_case_regression_within_policy":"UNKNOWN",
+    "provenance_complete":"UNKNOWN","on_unknown":"reject"
+  },
+  "environment":{"language":"Python 3.11+","offline":true},
+  "evidence_index":{"path":"evidence/index.json","sha256":"sha256:6947c010383210050deb7897e3ccdfef82afd0d8039239800bf3bf63887efc6b"},
+  "invariants":[{"path":"evidence/invariant.json","sha256":"sha256:7999d7800d64c25c52004cf855ca1f6170e1ec210e4354dc65b6825decda1627"}],
+  "complexity_profile":{
+    "throughput":500000,"latency":0.000002,"worst_case_performance":0.000004,"memory_bytes":0,
+    "binary_size_bytes":512,"source_size_bytes":385,"changed_lines":5,"cfg_nodes":9,
+    "cyclomatic_complexity":3,"state_count":2,"branch_count":2,"portability":1,
+    "generation_cost_seconds":42,"validation_cost_seconds":3,"conformance_level":"MNCS-L3",
+    "unresolved_unknown_results":4,"operational_criticality":"moderate"
+  },
+  "performance_results":[],
+  "resource_bounds":{"list_accesses":1,"additional_memory":"constant"},
+  "provenance":{"path":"provenance/provenance.json","sha256":"sha256:0da3fcc56c11a4e9fb167f4852e656b55ebff752f0625ad51f1bef60ad44bb83"},
+  "limitations":["Example models a single bounded repair attempt."],
+  "unsupported_environments":["Non-Python sequence semantics"],
+  "regeneration":{"command":"make example-repair","locked":true,"inputs_complete":true},
+  "rollback":{"reference_available":true,"command":"use reference/reference.py"},
+  "final_status":"PASS","extensions":{"mncs.dev:repair-attempts":1}
+}

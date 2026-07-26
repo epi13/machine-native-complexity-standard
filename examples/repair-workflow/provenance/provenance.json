@@ -1,0 +1,10 @@
+{
+  "schema_version":"0.1","mncs_version":"0.1","generator":"bounded-repair-generator","generator_version":"1.1",
+  "generator_hash":"sha256:8888888888888888888888888888888888888888888888888888888888888888",
+  "inputs":[{"path":"specification/contract.md","sha256":"sha256:d5ca8cc8d5b4ab15923648bc6d413ed5806c60ed222356d4218d6cfced40076a"}],
+  "command":"make example-repair","generated_at":"2026-07-25T00:00:00Z",
+  "source_hash":"sha256:94c0b8475a1798fe8c8610c4533df729ec2c71d406a76073bc43e145852d9ce2","artifact_hash":"sha256:94c0b8475a1798fe8c8610c4533df729ec2c71d406a76073bc43e145852d9ce2",
+  "evaluator":"mncs-example-evaluator","evaluator_version":"1.0",
+  "evaluator_hash":"sha256:9999999999999999999999999999999999999999999999999999999999999999",
+  "no_handwritten_changes":true,"extensions":{}
+}

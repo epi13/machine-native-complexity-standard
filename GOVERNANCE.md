@@ -1,0 +1,54 @@
+# Governance
+
+MNCS is a lightweight, open, community-developed standard.
+
+## Roles
+
+- **Maintainers** administer the repository and releases.
+- **Editors** integrate approved normative text and schemas.
+- **Contributors** submit code, evidence, issues, and documentation.
+- **RFC authors** own a proposed change through review.
+- **Reviewers** provide technical, security, compatibility, and user feedback.
+
+The initial repository owner acts as bootstrap maintainer. The active maintainer and
+editor list is recorded in release notes until a dedicated roster RFC is adopted.
+Roles are earned through sustained public contribution and may be removed for
+inactivity, misconduct, or unmanaged conflict by the same consensus process.
+
+## Decisions
+
+Work is public and consensus-seeking. Maintainers summarize objections and try to
+resolve them with evidence. Normative changes require an RFC, at least two weeks of
+public review, and approval from two non-conflicted reviewers when the project has
+that many active reviewers. If consensus is impossible, maintainers may record a
+reasoned decision and minority view; a single maintainer cannot both author and
+finally approve a contested normative change.
+
+## Releases and versions
+
+Editors assemble releases after approved RFCs and passing CI. Standard versions
+identify normative semantics; validator packages use semantic versioning. Patch
+validator releases preserve schema meaning. Compatible additive standard changes
+increment the minor version. Breaking meaning increments the major version.
+Experimental extensions do not become core without an RFC and multiple
+implementations.
+
+Deprecations require rationale, replacement, transition period, and a stated removal
+version. Archived schemas remain addressable. Release tags are annotated and release
+notes list accepted RFCs, compatibility, known limitations, and artifact hashes.
+
+## Appeals and conflicts
+
+An appeal identifies the decision, process defect, and requested remedy. An
+uninvolved maintainer convenes public reconsideration; conduct or security-sensitive
+facts may remain private. Participants disclose employment, funding, tool ownership,
+or other interests material to a decision and recuse when impartiality is reasonably
+in doubt.
+
+## Security and independence
+
+Security reports follow [SECURITY.md](SECURITY.md). Vendor-specific tools may
+implement MNCS but receive no privileged normative position. No company may hold a
+permanent seat, unilateral veto, trademark veto over technical text, or majority of
+required approvals. If participation is too small to meet independent-review rules,
+the limitation is disclosed and contested normative changes wait.

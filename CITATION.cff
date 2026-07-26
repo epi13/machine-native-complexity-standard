@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use MNCS, cite the standard and the exact version."
+title: "Machine-Native Complexity Standard"
+type: software
+version: "0.1"
+date-released: 2026-07-25
+license: Apache-2.0
+repository-code: "https://github.com/epi13/machine-native-complexity-standard"
+url: "https://epi13.github.io/machine-native-complexity-standard/"
+authors:
+  - name: "MNCS Contributors"
+preferred-citation:
+  type: report
+  title: "Machine-Native Complexity Standard, Version 0.1"
+  year: 2026
+  authors:
+    - name: "MNCS Contributors"

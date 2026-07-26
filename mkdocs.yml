@@ -1,0 +1,28 @@
+site_name: Machine-Native Complexity Standard
+site_description: Open experimental standard for auditable machine-native software complexity
+site_url: https://epi13.github.io/machine-native-complexity-standard/
+repo_url: https://github.com/epi13/machine-native-complexity-standard
+repo_name: epi13/machine-native-complexity-standard
+copyright: Copyright 2026 MNCS Contributors · Apache-2.0
+docs_dir: docs
+strict: true
+theme:
+  name: mkdocs
+nav:
+  - Home: index.md
+  - Introduction: introduction.md
+  - Philosophy: philosophy.md
+  - Quickstart: quickstart.md
+  - Conformance: conformance.md
+  - Validator: validator.md
+  - Evidence bundles: evidence-bundles.md
+  - Tool-neutral verification: tool-neutral-verification.md
+  - Threat model: threat-model.md
+  - Examples: examples.md
+  - Glossary: glossary.md
+  - FAQ: faq.md
+  - Research background: research-background.md
+  - Contributing: contributing-to-the-standard.md
+  - Specification:
+      - MNCS 0.1: specification.md
+      - Normative language: normative-language.md

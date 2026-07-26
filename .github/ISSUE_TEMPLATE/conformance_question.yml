@@ -1,0 +1,24 @@
+name: Conformance question
+description: Ask how MNCS applies to a bounded claim
+title: "[Conformance]: "
+labels: ["question"]
+body:
+  - type: input
+    id: level
+    attributes:
+      label: Claimed or considered level
+      placeholder: MNCS-L3
+    validations:
+      required: true
+  - type: textarea
+    id: boundary
+    attributes:
+      label: Component, environment, and contract boundary
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: Question and relevant evidence
+    validations:
+      required: true

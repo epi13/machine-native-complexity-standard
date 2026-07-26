@@ -1,0 +1,18 @@
+{
+  "schema_version": "0.1",
+  "mncs_version": "0.1",
+  "invariant_id": "INV-BOUNDS-ORDER",
+  "requirement": "No value is returned before invalid bounds are rejected.",
+  "source_hash": "sha256:98b865ef438d01761d874dbbba36fde23f0b52e6caf37d8c0ac6f7194d75d24f",
+  "status": "PASS",
+  "provider": "example-cfg-provider",
+  "provider_version": "1.0",
+  "analysis_method": "function-local dominance",
+  "assumptions": [],
+  "boundedness": {"bounded": true, "description": "One direct function CFG."},
+  "locations": [{"path": "machine/generated.py", "line": 11}],
+  "elapsed_seconds": 0.002,
+  "output_bytes": 144,
+  "limitations": [],
+  "extensions": {}
+}

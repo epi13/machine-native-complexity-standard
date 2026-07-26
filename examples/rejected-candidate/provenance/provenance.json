@@ -1,0 +1,10 @@
+{
+  "schema_version":"0.1","mncs_version":"0.1","generator":"branch-specializer","generator_version":"0.2",
+  "generator_hash":"sha256:5555555555555555555555555555555555555555555555555555555555555555",
+  "inputs":[{"path":"specification/contract.md","sha256":"sha256:f9a78e65054f8073a75d6dce913e3343e827f0dffd7bbffe9578cd31e9ac268f"}],
+  "command":"make example-rejected","generated_at":"2026-07-25T00:00:00Z",
+  "source_hash":"sha256:98b865ef438d01761d874dbbba36fde23f0b52e6caf37d8c0ac6f7194d75d24f","artifact_hash":"sha256:98b865ef438d01761d874dbbba36fde23f0b52e6caf37d8c0ac6f7194d75d24f",
+  "evaluator":"mncs-example-evaluator","evaluator_version":"1.0",
+  "evaluator_hash":"sha256:6666666666666666666666666666666666666666666666666666666666666666",
+  "no_handwritten_changes":true,"extensions":{}
+}
