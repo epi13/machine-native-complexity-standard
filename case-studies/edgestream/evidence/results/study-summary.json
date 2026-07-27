@@ -1,26 +1,45 @@
 {
   "benchmark": {
-    "mean_throughput_ratio": 1.8469567055005875,
-    "median_paired_throughput_ratio": 1.8289594794003339,
-    "worst_workload_p99_batch_latency_ratio": 0.5551129092953496
+    "mean_throughput_ratio": 1.66420825488073,
+    "median_paired_throughput_ratio": 1.6639667099064126,
+    "paired_mean_ratio_bootstrap_ci95": {
+      "lower": 1.6441845343083252,
+      "upper": 1.6825519827950857
+    },
+    "worst_workload_p99_batch_latency_ratio": 0.6332974148739291
   },
-  "gates": {
+  "evidence": {
+    "benchmark-summary.json": "sha256:bdcd356c1f92801c866b9a40c7517c4c6976483de406eb5228ebb2b5821de69f",
+    "benchmark.json": "sha256:cb45a026de7e2375eb8ac5629b3e5e935d565ea88b9fba9ab7408800142b47f5",
+    "checkpoint-recovery.json": "sha256:7f75be3009f39b549c512648a0748d7adb6866075b7ec84b8a7a8381f0285c86",
+    "compiler-matrix.json": "sha256:3d5aac35a443adb0fbd024b81d63f293452051a728cfb33c1e8262ca349945e4",
+    "differential.json": "sha256:e15574bae6ea7c709983112f2e2be360549b326887d110dd551b56e2780c1ad8",
+    "environment.json": "sha256:b207efc0a5208c65511553af8f336ac66c22bc8330d66a2dac99f0ba5d823ff6",
+    "generation.json": "sha256:eba09593c1c38c7339f3c338890930598e26bb039aab839c037711ffb69d9f47",
+    "harness-regression.json": "sha256:eb7975f0964dbfcbd0f087201a25c9473cf19342641c010b8229fceaa5288bc5",
+    "mutation.json": "sha256:45d57937b0a42adfa24fd7d49b621cac40a892fcc4305e1894a5079aa91ba8c7",
+    "sanitizers.json": "sha256:27d1b24f560f5c0dcac97d6fdccdadd3f1478d72d09ca8560e025432affdbf55",
+    "structural.json": "sha256:27975e97f405ffe38e5dfe34f6d03af93fe50cc5c1dbbe683588efcc8986a6cc",
+    "test-summary.json": "sha256:28470f56423aa4437007b56327e5106b2ae6a3aaabd4a421e9b3ecad6256425b"
+  },
+  "limitations": [
+    "The performance result is scoped to the captured development host.",
+    "Repository-visible separated workloads are not blind third-party holdout evidence.",
+    "Joern is optional for this study and was unavailable in the captured environment.",
+    "This development run is not an accredited certification claim."
+  ],
+  "status": "PASS",
+  "statuses": {
+    "benchmark": "PASS",
     "checkpoint_recovery": "PASS",
     "compiler_matrix": "PASS",
     "differential": "PASS",
+    "environment": "PASS",
     "generation": "PASS",
+    "harness_regression": "PASS",
     "mutation": "PASS",
     "sanitizers": "PASS",
     "structural": "PASS"
   },
-  "limitations": [
-    "The captured performance result is scoped to one development host.",
-    "Repository-visible separated workloads are not blind third-party holdout evidence.",
-    "This is an experimental development result, not accredited certification."
-  ],
-  "status": "PASS",
-  "target": "MNCDS-D2 / MNCS-L4 development study",
-  "unknown_evidence": [
-    "Joern-specific structural analysis was unavailable."
-  ]
+  "target": "MNCDS-D2 / MNCS-L4 development study"
 }

@@ -166,10 +166,7 @@ def derive_performance() -> tuple[str, dict[str, str]]:
         regression["observed_ratio"] = observed
         regression["claimed_status"] = worst
         regression["reasons"] = [
-            (
-                "Core MNCS worst-case throughput ratio was "
-                f"{observed:.6f}; limit is {maximum:.6f}."
-            ),
+            (f"Core MNCS worst-case throughput ratio was {observed:.6f}; limit is {maximum:.6f}."),
             (
                 "The separately predeclared worst per-workload p99 aggregate-latency "
                 f"ratio was {p99_latency_ratio:.6f}."
@@ -203,11 +200,9 @@ def derive_performance() -> tuple[str, dict[str, str]]:
         extensions["mncs.dev:p99-latency-policy"] = {
             "observed_ratio": benchmark.get("worst_workload_p99_batch_latency_ratio"),
             "maximum_allowed_ratio": benchmark.get("maximum_latency_ratio"),
-            "status": (
+            "policy_result": (
                 "PASS"
-                if float(
-                    benchmark.get("worst_workload_p99_batch_latency_ratio", float("inf"))
-                )
+                if float(benchmark.get("worst_workload_p99_batch_latency_ratio", float("inf")))
                 <= float(benchmark.get("maximum_latency_ratio", 1.1))
                 else "FAIL"
             ),
@@ -284,9 +279,7 @@ def refresh_identities() -> dict[str, str]:
         "machine": environment.get("machine"),
         "cpu_model": environment.get("cpu_model"),
         "logical_cpu_count": environment.get("logical_cpu_count"),
-        "process_affinity_json": json.dumps(
-            environment.get("process_affinity"), sort_keys=True
-        ),
+        "process_affinity_json": json.dumps(environment.get("process_affinity"), sort_keys=True),
         "python": environment.get("python"),
         "gcc": environment.get("gcc"),
         "clang": environment.get("clang"),

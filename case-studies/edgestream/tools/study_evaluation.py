@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import binascii
-import hashlib
 import json
 import math
 import os
@@ -16,9 +15,10 @@ import statistics
 import struct
 import subprocess
 import time
-from contextlib import contextmanager
+from collections.abc import Iterator
+from contextlib import contextmanager, suppress
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any
 
 from study_support import (
     BUILD,
@@ -424,10 +424,7 @@ def _bootstrap_ci(values: list[float], *, samples: int = 4000) -> tuple[float, f
     if not values:
         raise ValueError("bootstrap requires observations")
     rng = random.Random(0xED63)
-    estimates = [
-        statistics.fmean(rng.choice(values) for _ in values)
-        for _ in range(samples)
-    ]
+    estimates = [statistics.fmean(rng.choice(values) for _ in values) for _ in range(samples)]
     return percentile(estimates, 0.025), percentile(estimates, 0.975)
 
 
@@ -460,10 +457,8 @@ def _pinned_cpu() -> Iterator[dict[str, Any]]:
         yield control
     finally:
         if original:
-            try:
+            with suppress(OSError):
                 os.sched_setaffinity(0, original)
-            except OSError:
-                pass
 
 
 def _run_metric(binary: Path, workload: Path) -> dict[str, Any]:
@@ -476,8 +471,7 @@ def _run_metric(binary: Path, workload: Path) -> dict[str, Any]:
 def _batch_metric(binary: Path, workload: Path, iterations: int) -> dict[str, Any]:
     observations = [_run_metric(binary, workload) for _ in range(iterations)]
     signatures = {
-        (int(item["bytes"]), int(item["accepted"]), int(item["rejected"]))
-        for item in observations
+        (int(item["bytes"]), int(item["accepted"]), int(item["rejected"])) for item in observations
     }
     if len(signatures) != 1:
         raise RuntimeError("benchmark semantics varied between repeated executions")
@@ -563,30 +557,27 @@ def benchmark(
                     "maximum_ns": max(values),
                 }
             latency_summary["p99_ratio"] = (
-                latency_summary["candidate"]["p99_ns"]
-                / latency_summary["reference"]["p99_ns"]
+                latency_summary["candidate"]["p99_ns"] / latency_summary["reference"]["p99_ns"]
             )
             latency_by_workload[workload.name] = latency_summary
 
     baseline_throughputs = [
-        float(sample["reference"]["bytes"]) * 1_000_000_000.0
+        float(sample["reference"]["bytes"])
+        * 1_000_000_000.0
         / float(sample["reference"]["elapsed_ns"])
         for sample in samples
     ]
     candidate_throughputs = [
-        float(sample["candidate"]["bytes"]) * 1_000_000_000.0
+        float(sample["candidate"]["bytes"])
+        * 1_000_000_000.0
         / float(sample["candidate"]["elapsed_ns"])
         for sample in samples
     ]
-    mean_ratio = statistics.fmean(candidate_throughputs) / statistics.fmean(
-        baseline_throughputs
-    )
+    mean_ratio = statistics.fmean(candidate_throughputs) / statistics.fmean(baseline_throughputs)
     median_ratio = statistics.median(ratios)
     paired_mean = statistics.fmean(ratios)
     ci_low, ci_high = _bootstrap_ci(ratios)
-    worst_latency_ratio = max(
-        float(value["p99_ratio"]) for value in latency_by_workload.values()
-    )
+    worst_latency_ratio = max(float(value["p99_ratio"]) for value in latency_by_workload.values())
     minimum_aggregate_elapsed = min(
         int(sample[label]["elapsed_ns"])
         for sample in samples

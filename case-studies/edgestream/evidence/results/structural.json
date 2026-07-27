@@ -1,101 +1,188 @@
 {
+  "ast_observations": {
+    "call_names": [
+      "accept_frame",
+      "crc32_slow",
+      "emit",
+      "emit_reject",
+      "emit_silence",
+      "fclose",
+      "fflush",
+      "find_device",
+      "fopen",
+      "fputc",
+      "fputs",
+      "fread",
+      "fwrite",
+      "memcmp",
+      "memcpy",
+      "memmove",
+      "memset",
+      "read_u16",
+      "read_u32",
+      "read_u64",
+      "remove",
+      "rename",
+      "snprintf"
+    ],
+    "crc32_table_type": "const uint32_t[256]",
+    "es_processor_field_types": {
+      "buffer": "uint8_t[4096]",
+      "devices": "es_device_state[64]"
+    }
+  },
+  "candidate_sha256": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+  "check_statuses": {
+    "bounded_storage_ast": "PASS",
+    "candidate_identity_bound": "PASS",
+    "checkpoint_integrity": "PASS",
+    "checksum_precedes_accept": "PASS",
+    "crc_table_shape_ast": "PASS",
+    "frame_length_checked": "PASS",
+    "generated_marker": "PASS",
+    "no_benchmark_workload_branch": "PASS",
+    "no_dynamic_allocation_in_processor_ast": "PASS"
+  },
   "checks": {
-    "bounded_storage": true,
+    "bounded_storage_ast": true,
+    "candidate_identity_bound": true,
     "checkpoint_integrity": true,
     "checksum_precedes_accept": true,
+    "crc_table_shape_ast": true,
     "frame_length_checked": true,
     "generated_marker": true,
-    "no_benchmark_seed_branch": true,
-    "no_dynamic_allocation_in_processor": true
+    "no_benchmark_workload_branch": true,
+    "no_dynamic_allocation_in_processor_ast": true
   },
   "ledger": [
     {
+      "analysis_scope": "Clang AST plus candidate-bound source-order checks for the declared invariant set",
       "candidate": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
       "caused_repair": false,
-      "checker": "edgestream-structural-checker",
-      "duration_ms": 0,
-      "finding": "pattern satisfied",
+      "checker": "edgestream-clang-structural-checker",
+      "false_negative_assessment": "none specifically suspected within the declared invariant set",
+      "false_positive_assessment": "none specifically suspected",
+      "finding": "declared structural observation satisfied",
       "invariant": "generated_marker",
       "status": "PASS",
-      "suspected_false_negative": true,
-      "suspected_false_positive": false,
-      "version": "1.0"
+      "version": "2.0"
     },
     {
+      "analysis_scope": "Clang AST plus candidate-bound source-order checks for the declared invariant set",
       "candidate": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
       "caused_repair": false,
-      "checker": "edgestream-structural-checker",
-      "duration_ms": 0,
-      "finding": "pattern satisfied",
-      "invariant": "bounded_storage",
+      "checker": "edgestream-clang-structural-checker",
+      "false_negative_assessment": "none specifically suspected within the declared invariant set",
+      "false_positive_assessment": "none specifically suspected",
+      "finding": "declared structural observation satisfied",
+      "invariant": "bounded_storage_ast",
       "status": "PASS",
-      "suspected_false_negative": true,
-      "suspected_false_positive": false,
-      "version": "1.0"
+      "version": "2.0"
     },
     {
+      "analysis_scope": "Clang AST plus candidate-bound source-order checks for the declared invariant set",
       "candidate": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
       "caused_repair": false,
-      "checker": "edgestream-structural-checker",
-      "duration_ms": 0,
-      "finding": "pattern satisfied",
-      "invariant": "no_dynamic_allocation_in_processor",
+      "checker": "edgestream-clang-structural-checker",
+      "false_negative_assessment": "none specifically suspected within the declared invariant set",
+      "false_positive_assessment": "none specifically suspected",
+      "finding": "declared structural observation satisfied",
+      "invariant": "no_dynamic_allocation_in_processor_ast",
       "status": "PASS",
-      "suspected_false_negative": true,
-      "suspected_false_positive": false,
-      "version": "1.0"
+      "version": "2.0"
     },
     {
+      "analysis_scope": "Clang AST plus candidate-bound source-order checks for the declared invariant set",
       "candidate": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
       "caused_repair": false,
-      "checker": "edgestream-structural-checker",
-      "duration_ms": 0,
-      "finding": "pattern satisfied",
+      "checker": "edgestream-clang-structural-checker",
+      "false_negative_assessment": "none specifically suspected within the declared invariant set",
+      "false_positive_assessment": "none specifically suspected",
+      "finding": "declared structural observation satisfied",
+      "invariant": "crc_table_shape_ast",
+      "status": "PASS",
+      "version": "2.0"
+    },
+    {
+      "analysis_scope": "Clang AST plus candidate-bound source-order checks for the declared invariant set",
+      "candidate": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "caused_repair": false,
+      "checker": "edgestream-clang-structural-checker",
+      "false_negative_assessment": "none specifically suspected within the declared invariant set",
+      "false_positive_assessment": "none specifically suspected",
+      "finding": "declared structural observation satisfied",
       "invariant": "frame_length_checked",
       "status": "PASS",
-      "suspected_false_negative": true,
-      "suspected_false_positive": false,
-      "version": "1.0"
+      "version": "2.0"
     },
     {
+      "analysis_scope": "Clang AST plus candidate-bound source-order checks for the declared invariant set",
       "candidate": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
       "caused_repair": false,
-      "checker": "edgestream-structural-checker",
-      "duration_ms": 0,
-      "finding": "pattern satisfied",
+      "checker": "edgestream-clang-structural-checker",
+      "false_negative_assessment": "none specifically suspected within the declared invariant set",
+      "false_positive_assessment": "none specifically suspected",
+      "finding": "declared structural observation satisfied",
       "invariant": "checksum_precedes_accept",
       "status": "PASS",
-      "suspected_false_negative": true,
-      "suspected_false_positive": false,
-      "version": "1.0"
+      "version": "2.0"
     },
     {
+      "analysis_scope": "Clang AST plus candidate-bound source-order checks for the declared invariant set",
       "candidate": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
       "caused_repair": false,
-      "checker": "edgestream-structural-checker",
-      "duration_ms": 0,
-      "finding": "pattern satisfied",
-      "invariant": "no_benchmark_seed_branch",
+      "checker": "edgestream-clang-structural-checker",
+      "false_negative_assessment": "none specifically suspected within the declared invariant set",
+      "false_positive_assessment": "none specifically suspected",
+      "finding": "declared structural observation satisfied",
+      "invariant": "no_benchmark_workload_branch",
       "status": "PASS",
-      "suspected_false_negative": true,
-      "suspected_false_positive": false,
-      "version": "1.0"
+      "version": "2.0"
     },
     {
+      "analysis_scope": "Clang AST plus candidate-bound source-order checks for the declared invariant set",
       "candidate": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
       "caused_repair": false,
-      "checker": "edgestream-structural-checker",
-      "duration_ms": 0,
-      "finding": "pattern satisfied",
+      "checker": "edgestream-clang-structural-checker",
+      "false_negative_assessment": "none specifically suspected within the declared invariant set",
+      "false_positive_assessment": "none specifically suspected",
+      "finding": "declared structural observation satisfied",
       "invariant": "checkpoint_integrity",
       "status": "PASS",
-      "suspected_false_negative": true,
-      "suspected_false_positive": false,
-      "version": "1.0"
+      "version": "2.0"
+    },
+    {
+      "analysis_scope": "Clang AST plus candidate-bound source-order checks for the declared invariant set",
+      "candidate": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "caused_repair": false,
+      "checker": "edgestream-clang-structural-checker",
+      "false_negative_assessment": "none specifically suspected within the declared invariant set",
+      "false_positive_assessment": "none specifically suspected",
+      "finding": "declared structural observation satisfied",
+      "invariant": "candidate_identity_bound",
+      "status": "PASS",
+      "version": "2.0"
     }
   ],
   "limitations": [
-    "Source-pattern checks do not prove C semantics; Joern was unavailable and is recorded separately as UNKNOWN."
+    "This bounded provider does not prove arbitrary C semantics outside the declared invariant set.",
+    "Joern is optional for this study and is recorded separately when unavailable."
   ],
+  "provider": {
+    "ast_sha256": "sha256:d2372a4c5ef2c6eac06f72d201432e8dd3d9100d54d2fedca49c9e86e68c4065",
+    "clang_version": "Ubuntu clang version 18.1.3 (1ubuntu1)",
+    "command": [
+      "clang",
+      "-std=c11",
+      "-D_POSIX_C_SOURCE=200809L",
+      "-Iinclude",
+      "-Xclang",
+      "-ast-dump=json",
+      "-fsyntax-only",
+      "/home/runner/work/machine-native-complexity-standard/machine-native-complexity-standard/case-studies/edgestream/machine/edgestream_generated.c"
+    ],
+    "status": "PASS"
+  },
+  "semantic_scope": "Bounded proof obligations for fixed storage, allocation calls, validation order, checkpoint integrity, generated identity, and benchmark independence.",
   "status": "PASS"
 }

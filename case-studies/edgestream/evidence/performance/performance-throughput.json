@@ -1,65 +1,97 @@
 {
-  "baseline_sample_count": 14,
+  "baseline_sample_count": 30,
   "baseline_samples": [
-    71602299.2083572,
-    74818723.96969238,
-    71609113.00134252,
-    73508642.81323075,
-    73028438.03560519,
-    74384296.50861748,
-    69308127.97123788,
-    73501079.55787109,
-    73479857.24785681,
-    69514975.05271457,
-    74868274.5357695,
-    62228478.866452016,
-    74646261.19786619,
-    74805773.44248413
+    58263923.760947965,
+    58274227.60834007,
+    58198115.98546475,
+    58322801.32193958,
+    58061088.07661793,
+    58255938.9347264,
+    58260261.429382555,
+    58206956.75902252,
+    58292776.91796695,
+    58235078.73018381,
+    58172087.55604722,
+    58152069.437138684,
+    58234890.51277395,
+    58093293.40462618,
+    58113543.42525254,
+    57788347.63237631,
+    57764622.43390345,
+    57502437.37030998,
+    57756557.88106763,
+    57773567.13147176,
+    57833804.34632516,
+    57696546.90344763,
+    57696114.20215028,
+    57849853.54343729,
+    52742308.57459975,
+    56052280.69931194,
+    57960359.71935461,
+    57997477.41184997,
+    57832726.38206583,
+    57866834.014261104
   ],
   "baseline_summary": {
-    "maximum": 74868274.5357695,
-    "mean": 72236024.38636412,
-    "minimum": 62228478.866452016
+    "maximum": 58322801.32193958,
+    "mean": 57775029.73687879,
+    "minimum": 52742308.57459975
   },
-  "benchmark_harness_hash": "sha256:10d16cecd9161904bc73c15613885c467e35da1a0e4113a2fe114a61616a1994",
+  "benchmark_harness_hash": "sha256:e56a35fb3b6afe267eabf5166b8ae4442a3b5f697046b3dc32e6a4abc78e8704",
   "benchmark_harness_identity_id": "identity-benchmark",
   "benefit_threshold": {
     "claimed_status": "PASS",
     "reasons": [
-      "Candidate mean throughput exceeds the 1.15 predeclared ratio."
+      "Observed arithmetic-mean throughput ratio was 1.664208; threshold is 1.150000."
     ]
   },
-  "build_identity_hash": "sha256:d26305bb801c68cddd5e3d5c295ff373fca88475488036246aae7d5986a00561",
+  "build_identity_hash": "sha256:a55a4af8746f2492b8de386b66f7836fbc3658d9ef0d0ea5a374d68c859f6832",
   "build_identity_id": "identity-build",
-  "candidate_sample_count": 14,
+  "candidate_sample_count": 30,
   "candidate_samples": [
-    129590697.89122152,
-    134191255.5619451,
-    131361255.42513843,
-    132363397.43261766,
-    135883921.35215136,
-    124854109.51659614,
-    138256507.97322565,
-    137999835.4433887,
-    131937715.2237925,
-    136491675.7583042,
-    132708401.19295803,
-    128700564.56351925,
-    136117310.4052255,
-    137378686.92730445
+    97751502.7251539,
+    96662062.25420615,
+    97768060.56172638,
+    97929477.45472774,
+    97889163.73827325,
+    97778673.28092036,
+    97588436.3636843,
+    97742330.27841887,
+    96396482.21307255,
+    97341330.3765618,
+    96684088.0750852,
+    97798833.83339591,
+    97589269.50060071,
+    96461815.74701431,
+    97624516.85643037,
+    95787287.00601019,
+    95425806.91424598,
+    83282052.53308856,
+    95706056.59674168,
+    95540744.70025276,
+    94178146.98399669,
+    96198083.5538042,
+    96115823.29285115,
+    94871518.17748119,
+    96077912.73675568,
+    96267302.12115982,
+    96011813.98296958,
+    95962957.43265052,
+    95902758.8856022,
+    96156134.2459179
   ],
   "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
   "candidate_summary": {
-    "maximum": 138256507.97322565,
-    "mean": 133416809.61909917,
-    "minimum": 124854109.51659614
+    "maximum": 97929477.45472774,
+    "mean": 96149681.41409333,
+    "minimum": 83282052.53308856
   },
   "checksums_or_semantic_identity": {
-    "method": "Byte-identical canonical JSONL differential comparison across all declared chunkings.",
+    "method": "Byte-identical canonical JSONL differential comparison across every declared workload and chunk size.",
     "passed": true,
     "required": true
   },
-  "compiler_identity_hash": "sha256:1ad3e8e49e693425f2f6ed750da2e50a2bcfc7590eff6c352ff628700aacd242",
+  "compiler_identity_hash": "sha256:34c7ea7c151331542f4bb6075f78e3a4210ce250c5f0ff5dfe75ff47458062e9",
   "compiler_identity_id": "identity-compiler",
   "completed_at": "2026-07-26T23:00:00Z",
   "contract_id": "mncs.edgestream.telemetry.v1",
@@ -68,21 +100,173 @@
   "declared_noise_policy": "No outlier deletion; paired measurements retained in execution order.",
   "declared_threshold": 1.15,
   "direction": "higher_is_better",
-  "environment_fingerprint": "sha256:9c45cd69124d86279472a3d69c76379fddef099d5f5948af4b59ddbdd523f500",
+  "environment_fingerprint": "sha256:0ad8c7b3d934ccdb902eefe8bcf50034b92d02780303873d3db54645a648ce1b",
   "environment_identity_id": "identity-environment",
-  "evaluator_identity_hash": "sha256:ab7d1e5d9560d27fdd89593b7022e06eb477d485087319ef4c106365bdd1fbca",
+  "evaluator_identity_hash": "sha256:8252ea6061a1d88b9738f5d8ddc2e6d47a97e9f78e1c0b3989e904ebdf468346",
   "evaluator_identity_id": "identity-evaluator",
-  "extensions": {},
+  "extensions": {
+    "mncs.dev:benchmark-protocol": {
+      "cpu_affinity": {
+        "cpu": 0,
+        "governor": null,
+        "pinned": true,
+        "supported": true
+      },
+      "maximum_batch_iterations": 64,
+      "minimum_observed_sample_elapsed_ns": 125481319,
+      "order_policy": "deterministically counterbalanced by paired repetition",
+      "outlier_policy": "retain every measured sample in execution order",
+      "repetitions_per_workload": 15,
+      "target_minimum_sample_elapsed_ns": 100000000,
+      "timer": "CLOCK_MONOTONIC inside each process; batch values sum raw runs",
+      "warmup_runs_per_implementation": 3
+    },
+    "mncs.dev:latency-by-workload": {
+      "high-cardinality.bin": {
+        "candidate": {
+          "maximum_ns": 157407840.0,
+          "minimum_ns": 136175500.0,
+          "p50_ns": 136693127.0,
+          "p95_ns": 157407840.0,
+          "p99_ns": 157407840.0
+        },
+        "p99_ratio": 0.6332974148739291,
+        "raw_batch_elapsed_ns": {
+          "candidate": [
+            136857911.0,
+            137376339.0,
+            157407840.0,
+            136974069.0,
+            137211072.0,
+            139196283.0,
+            136273484.0,
+            136390113.0,
+            138178963.0,
+            136443930.0,
+            136175500.0,
+            136537864.0,
+            136607378.0,
+            136693127.0,
+            136332935.0
+          ],
+          "reference": [
+            226849331.0,
+            226942503.0,
+            227977258.0,
+            226974191.0,
+            226907367.0,
+            226671030.0,
+            227210270.0,
+            227211974.0,
+            226608145.0,
+            248552791.0,
+            233875372.0,
+            226176098.0,
+            226031348.0,
+            226675255.0,
+            226541649.0
+          ]
+        },
+        "reference": {
+          "maximum_ns": 248552791.0,
+          "minimum_ns": 226031348.0,
+          "p50_ns": 226907367.0,
+          "p95_ns": 248552791.0,
+          "p99_ns": 248552791.0
+        }
+      },
+      "steady.bin": {
+        "candidate": {
+          "maximum_ns": 127476851.0,
+          "minimum_ns": 125481319.0,
+          "p50_ns": 125873299.0,
+          "p95_ns": 127476851.0,
+          "p99_ns": 127476851.0
+        },
+        "p99_ratio": 0.6023154242110312,
+        "raw_batch_elapsed_ns": {
+          "candidate": [
+            125709781.0,
+            127126607.0,
+            125688491.0,
+            125481319.0,
+            125532996.0,
+            125674849.0,
+            125919837.0,
+            125721578.0,
+            127476851.0,
+            126239491.0,
+            127097646.0,
+            125648942.0,
+            125918762.0,
+            127390511.0,
+            125873299.0
+          ],
+          "reference": [
+            210907869.0,
+            210870577.0,
+            211146354.0,
+            210694955.0,
+            211644673.0,
+            210936777.0,
+            210921127.0,
+            211114284.0,
+            210803476.0,
+            211012336.0,
+            211240829.0,
+            211313546.0,
+            211013018.0,
+            211527343.0,
+            211453635.0
+          ]
+        },
+        "reference": {
+          "maximum_ns": 211644673.0,
+          "minimum_ns": 210694955.0,
+          "p50_ns": 211013018.0,
+          "p95_ns": 211644673.0,
+          "p99_ns": 211644673.0
+        }
+      }
+    },
+    "mncs.dev:measurement-checks": {
+      "counterbalanced_order_recorded": true,
+      "harness_regression": true,
+      "minimum_sample_count": true,
+      "minimum_sample_duration": true,
+      "paired_sample_cardinality": true,
+      "raw_latency_observations_recorded": true,
+      "semantic_identity": true,
+      "warmup_policy": true
+    },
+    "mncs.dev:observed-mean-throughput-ratio": 1.66420825488073,
+    "mncs.dev:p99-latency-policy": {
+      "maximum_allowed_ratio": 1.1,
+      "observed_ratio": 0.6332974148739291,
+      "policy_result": "PASS"
+    },
+    "mncs.dev:paired-mean-ratio-ci95": {
+      "lower": 1.6441845343083252,
+      "upper": 1.6825519827950857
+    }
+  },
   "limitations": [
     "Development host measurements are not a cross-host performance claim."
   ],
   "measurement_validity": {
     "claimed_status": "PASS",
     "reasons": [
-      "Fourteen samples per implementation; complete sample order; semantic identity passed."
+      "semantic_identity: satisfied",
+      "harness_regression: satisfied",
+      "minimum_sample_count: satisfied",
+      "warmup_policy: satisfied",
+      "minimum_sample_duration: satisfied",
+      "counterbalanced_order_recorded: satisfied",
+      "raw_latency_observations_recorded: satisfied",
+      "paired_sample_cardinality: satisfied"
     ]
   },
-  "minimum_sample_count": 7,
+  "minimum_sample_count": 30,
   "mncs_version": "0.2",
   "objective_metric": "telemetry throughput",
   "reference_source_hash": "sha256:7268208dae41cad6a42f9a33ee8cfc31140f3f0cb9da9b45492699efefba3c64",
@@ -102,6 +286,38 @@
     "baseline",
     "baseline",
     "candidate",
+    "candidate",
+    "baseline",
+    "baseline",
+    "candidate",
+    "candidate",
+    "baseline",
+    "baseline",
+    "candidate",
+    "candidate",
+    "baseline",
+    "baseline",
+    "candidate",
+    "candidate",
+    "baseline",
+    "baseline",
+    "candidate",
+    "baseline",
+    "candidate",
+    "candidate",
+    "baseline",
+    "baseline",
+    "candidate",
+    "candidate",
+    "baseline",
+    "baseline",
+    "candidate",
+    "candidate",
+    "baseline",
+    "baseline",
+    "candidate",
+    "candidate",
+    "baseline",
     "baseline",
     "candidate",
     "candidate",
@@ -123,9 +339,10 @@
   "worst_regression": {
     "claimed_status": "PASS",
     "maximum_allowed_ratio": 1.1,
-    "observed_ratio": 0.4984095365974345,
+    "observed_ratio": 0.6332974148739291,
     "reasons": [
-      "Worst observed throughput ratio remains within the regression policy."
+      "Core MNCS worst-case throughput ratio was 0.633297; limit is 1.100000.",
+      "The separately predeclared worst per-workload p99 aggregate-latency ratio was 0.633297."
     ]
   }
 }

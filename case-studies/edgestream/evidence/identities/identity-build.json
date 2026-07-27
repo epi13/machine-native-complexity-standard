@@ -1,7 +1,9 @@
 {
   "attributes": {
+    "compiler_matrix_sha256": "sha256:3d5aac35a443adb0fbd024b81d63f293452051a728cfb33c1e8262ca349945e4",
     "language": "C11",
-    "optimization": "O3"
+    "optimization": "O3",
+    "strict_flags": "-std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wformat=2 -Wstrict-prototypes -Wcast-align -Wnull-dereference -Werror -fno-common -Iinclude -O3"
   },
   "description": "Optimized local binaries built from the indexed reference and candidate sources.",
   "extensions": {},
@@ -10,5 +12,5 @@
   "mncs_version": "0.2",
   "name": "EdgeStream strict C11 build",
   "schema_version": "0.2",
-  "version": "1.0"
+  "version": "2.0"
 }

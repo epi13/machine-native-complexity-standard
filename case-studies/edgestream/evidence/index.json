@@ -44,7 +44,7 @@
       "kind": "identity",
       "media_type": "application/json",
       "path": "evidence/identities/identity-evaluator.json",
-      "sha256": "sha256:ab7d1e5d9560d27fdd89593b7022e06eb477d485087319ef4c106365bdd1fbca"
+      "sha256": "sha256:8252ea6061a1d88b9738f5d8ddc2e6d47a97e9f78e1c0b3989e904ebdf468346"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -53,7 +53,7 @@
       "kind": "identity",
       "media_type": "application/json",
       "path": "evidence/identities/identity-environment.json",
-      "sha256": "sha256:9c45cd69124d86279472a3d69c76379fddef099d5f5948af4b59ddbdd523f500"
+      "sha256": "sha256:0ad8c7b3d934ccdb902eefe8bcf50034b92d02780303873d3db54645a648ce1b"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -62,7 +62,7 @@
       "kind": "identity",
       "media_type": "application/json",
       "path": "evidence/identities/identity-compiler.json",
-      "sha256": "sha256:1ad3e8e49e693425f2f6ed750da2e50a2bcfc7590eff6c352ff628700aacd242"
+      "sha256": "sha256:34c7ea7c151331542f4bb6075f78e3a4210ce250c5f0ff5dfe75ff47458062e9"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -71,7 +71,7 @@
       "kind": "identity",
       "media_type": "application/json",
       "path": "evidence/identities/identity-benchmark.json",
-      "sha256": "sha256:10d16cecd9161904bc73c15613885c467e35da1a0e4113a2fe114a61616a1994"
+      "sha256": "sha256:e56a35fb3b6afe267eabf5166b8ae4442a3b5f697046b3dc32e6a4abc78e8704"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -89,7 +89,7 @@
       "kind": "identity",
       "media_type": "application/json",
       "path": "evidence/identities/identity-build.json",
-      "sha256": "sha256:d26305bb801c68cddd5e3d5c295ff373fca88475488036246aae7d5986a00561"
+      "sha256": "sha256:a55a4af8746f2492b8de386b66f7836fbc3658d9ef0d0ea5a374d68c859f6832"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -98,7 +98,7 @@
       "kind": "gate_result",
       "media_type": "application/json",
       "path": "evidence/gates/gate-behavioral.json",
-      "sha256": "sha256:75f79d7e0bedb6fd1011aa0aa754aca59c02404caf2847cfc956dc33e1bcefde"
+      "sha256": "sha256:aab82e2eaa09bf0b4a623eddaf0a886288c224ddd2e776b553d5923b2cda8479"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -107,7 +107,7 @@
       "kind": "gate_result",
       "media_type": "application/json",
       "path": "evidence/gates/gate-compiler-matrix.json",
-      "sha256": "sha256:412ca7ec33fc8cd24dd3587f53a3e618d235e20d27b46f44473f39b5a23c8029"
+      "sha256": "sha256:03f90460f01267b6eba53c16e2cf7b3dd0beb4512193c336444ab0f190c8fa91"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -116,7 +116,7 @@
       "kind": "gate_result",
       "media_type": "application/json",
       "path": "evidence/gates/gate-safety.json",
-      "sha256": "sha256:4be7f93573c570fb6af9e434533d7d3fa8e8971f7824b1f0d2dba5322088d90c"
+      "sha256": "sha256:d1761ef9dfa642488b4bdea8ef0d3e157f3f52f04a1ce0f5892d389f1bc7a75f"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -125,7 +125,7 @@
       "kind": "gate_result",
       "media_type": "application/json",
       "path": "evidence/gates/gate-resource-bounds.json",
-      "sha256": "sha256:b6f4f7e1aa33bcf1f8d728914a10b5bb01ed5ce878bf59f991be2354e5a71852"
+      "sha256": "sha256:161d30dece3ee08e5c8522ddf9895b9646873dc4849fbea89fca243664cf0721"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -134,7 +134,7 @@
       "kind": "gate_result",
       "media_type": "application/json",
       "path": "evidence/gates/gate-mutation.json",
-      "sha256": "sha256:04fc8e2b2185872c58c1f4ee47c075d8353271070f2931b197e017513085b92b"
+      "sha256": "sha256:2539e131a824b02994240f060079627963242279e5a0957932f16fa828a477fe"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -143,7 +143,7 @@
       "kind": "gate_result",
       "media_type": "application/json",
       "path": "evidence/gates/gate-structural.json",
-      "sha256": "sha256:6cbde6d7e83d813d3c197165c51e2d4bcab638d175aef7a07840217e3f32f3e2"
+      "sha256": "sha256:583e115c82f67cbec047eea1a2f2b51d52c76e227060b104113637b845591ff4"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -152,7 +152,7 @@
       "kind": "invariant",
       "media_type": "application/json",
       "path": "evidence/invariants/invariant-bounded-storage.json",
-      "sha256": "sha256:359b5e7bac77ddbcb4f049df0f7c6b0c2002ce53ab955de186c22ac88962e1ae"
+      "sha256": "sha256:9c19a2b1e38ed07df8b7c61123780158815b4d0c1b1cd02cd8fd5b05b6f2abe6"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -161,7 +161,7 @@
       "kind": "performance",
       "media_type": "application/json",
       "path": "evidence/performance/performance-throughput.json",
-      "sha256": "sha256:34cdaeeb14826b89a79ed60228e909fe195ae7ac3450ae1c36cfe0376059a726"
+      "sha256": "sha256:81b2dc62cf00a6b061c8ecb6b6cd9ec4f775be0a6fdfd1483c9663d053d325b8"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -170,7 +170,7 @@
       "kind": "fuzz",
       "media_type": "application/json",
       "path": "evidence/results/differential.json",
-      "sha256": "sha256:5b110aac32158c814819c88392c86221e281d06e5925213b6bdd73544d66fcec"
+      "sha256": "sha256:e15574bae6ea7c709983112f2e2be360549b326887d110dd551b56e2780c1ad8"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -179,7 +179,7 @@
       "kind": "other",
       "media_type": "application/json",
       "path": "evidence/results/compiler-matrix.json",
-      "sha256": "sha256:89d48dae1ab240a200dc259f5918583cc1818f6f126f4136d7aa75ef94e4af10"
+      "sha256": "sha256:3d5aac35a443adb0fbd024b81d63f293452051a728cfb33c1e8262ca349945e4"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -188,7 +188,7 @@
       "kind": "other",
       "media_type": "application/json",
       "path": "evidence/results/sanitizers.json",
-      "sha256": "sha256:93f607f3b92f7b3f62f3fccdb8c55f58e627b4211c585ca7a151f130a590aa06"
+      "sha256": "sha256:27d1b24f560f5c0dcac97d6fdccdadd3f1478d72d09ca8560e025432affdbf55"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -197,7 +197,7 @@
       "kind": "other",
       "media_type": "application/json",
       "path": "evidence/results/checkpoint-recovery.json",
-      "sha256": "sha256:6fa388bbef521d954000ee146a8c179f1e389192902eeebde82d8b266fcfd2f6"
+      "sha256": "sha256:7f75be3009f39b549c512648a0748d7adb6866075b7ec84b8a7a8381f0285c86"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -206,7 +206,7 @@
       "kind": "mutation",
       "media_type": "application/json",
       "path": "evidence/results/mutation.json",
-      "sha256": "sha256:54da57b494a01ae3d4fa5eabff99646d77193d8f913e33d2dfe79bc59e430a67"
+      "sha256": "sha256:45d57937b0a42adfa24fd7d49b621cac40a892fcc4305e1894a5079aa91ba8c7"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -215,7 +215,7 @@
       "kind": "other",
       "media_type": "application/json",
       "path": "evidence/results/structural.json",
-      "sha256": "sha256:52b340569ee6f35b8429d132b35873d5471c37ba69c75a91234ffb2359a5c04e"
+      "sha256": "sha256:27975e97f405ffe38e5dfe34f6d03af93fe50cc5c1dbbe683588efcc8986a6cc"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -224,7 +224,7 @@
       "kind": "other",
       "media_type": "application/json",
       "path": "evidence/results/generation.json",
-      "sha256": "sha256:0d634b1fc6fcf64b5f6ccd08b0a3ad96f859a4e5e9d3db71f210c90472949ac2"
+      "sha256": "sha256:eba09593c1c38c7339f3c338890930598e26bb039aab839c037711ffb69d9f47"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -233,7 +233,16 @@
       "kind": "other",
       "media_type": "application/json",
       "path": "evidence/results/benchmark.json",
-      "sha256": "sha256:84690100f9aa93f8968d99afaf5996dec39bda0b52cb2956ec864908fb3ac740"
+      "sha256": "sha256:cb45a026de7e2375eb8ac5629b3e5e935d565ea88b9fba9ab7408800142b47f5"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "raw-harness-regression",
+      "kind": "other",
+      "media_type": "application/json",
+      "path": "evidence/results/harness-regression.json",
+      "sha256": "sha256:eb7975f0964dbfcbd0f087201a25c9473cf19342641c010b8229fceaa5288bc5"
     }
   ],
   "schema_version": "0.2",

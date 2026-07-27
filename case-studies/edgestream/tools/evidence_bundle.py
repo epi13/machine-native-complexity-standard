@@ -266,17 +266,14 @@ def create_manifest(
         "performance_results": ["performance-throughput"],
         "comparison_profile": {
             "benefit": {
-                "mean_throughput_ratio": (
-                    fmean(candidate_samples) / fmean(baseline_samples)
-                )
+                "mean_throughput_ratio": (fmean(candidate_samples) / fmean(baseline_samples))
             },
             "complexity": {
                 "candidate_source_bytes": float(machine.stat().st_size),
                 "reference_source_bytes": float(reference.stat().st_size),
             },
             "normalization": (
-                "Identical contract, workload corpus, output semantics, compiler mode, "
-                "and host."
+                "Identical contract, workload corpus, output semantics, compiler mode, and host."
             ),
         },
         "limitations": [
@@ -285,10 +282,7 @@ def create_manifest(
                 "Joern-specific analysis was unavailable and is not a required provider "
                 "for this claim."
             ),
-            (
-                "Repository-visible separated workloads are not blind third-party "
-                "holdout evidence."
-            ),
+            ("Repository-visible separated workloads are not blind third-party holdout evidence."),
         ],
         "final_status": "PASS",
         "extensions": {
