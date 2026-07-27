@@ -115,8 +115,7 @@ def main() -> int:
     behavior_checks = {
         "sequence_monotonic": [item["sequence"] for item in intents] == [1, 2, 3],
         "stale_envelope_degraded": intents[1]["mode"] in {"DEGRADED", "HOLD"},
-        "high_high_disables_pumps": not intents[2]["duty_on"]
-        and not intents[2]["standby_on"],
+        "high_high_disables_pumps": not intents[2]["duty_on"] and not intents[2]["standby_on"],
         "journal_valid": controller.journal.verify(),
     }
 

@@ -151,7 +151,9 @@ def scenario_comparisons(
                 "terminal_reserve_deficit_pct": round(terminal_deficit, 6),
                 "limits": {
                     "normalized_energy_ratio_max": PER_SCENARIO_NORMALIZED_ENERGY_RATIO_MAX,
-                    "terminal_reserve_deficit_pct_max": PER_SCENARIO_TERMINAL_RESERVE_DEFICIT_PCT_MAX,
+                    "terminal_reserve_deficit_pct_max": (
+                        PER_SCENARIO_TERMINAL_RESERVE_DEFICIT_PCT_MAX
+                    ),
                     "unmet_demand_regression_l_max": 0.0,
                     "overflow_regression_l_max": 0.0,
                 },
@@ -208,7 +210,11 @@ def run(mode: str) -> dict[str, Any]:
         "formal_mncds_status": "UNKNOWN",
         "protected_evaluation_status": "UNKNOWN",
         "disposition": "REVIEW_REQUIRED",
-        "claim_note": "This development run does not claim MNCS-L5 or MNCDS-D3. Independent protected holdout evaluation, release binding, and operational evidence remain outstanding.",
+        "claim_note": (
+            "This development run does not claim MNCS-L5 or MNCDS-D3. "
+            "Independent protected holdout evaluation, release binding, "
+            "and operational evidence remain outstanding."
+        ),
         "hard_gates": {
             "scenario_safety": "PASS" if scenario_gates_pass else "FAIL",
             "deterministic_replay": "PASS" if deterministic_replay else "FAIL",
@@ -224,7 +230,10 @@ def run(mode: str) -> dict[str, Any]:
             "candidate_to_baseline_energy_ratio": round(energy_ratio, 6),
             "required_pump_start_ratio_max": 0.75,
             "required_energy_ratio_max": 1.10,
-            "terminal_normalization": "Both planners are charged equivalent duty-pump energy to the higher terminal storage level before each per-scenario comparison.",
+            "terminal_normalization": (
+                "Both planners are charged equivalent duty-pump energy to the "
+                "higher terminal storage level before each per-scenario comparison."
+            ),
         },
         "scenario_comparisons": comparisons,
         "aggregates": {"baseline": baseline, "candidate": candidate},
