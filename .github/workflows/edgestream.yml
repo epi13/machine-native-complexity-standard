@@ -51,9 +51,16 @@ jobs:
         with:
           python-version: "3.13"
       - run: python -m pip install -e '.[dev]'
+      - name: Canonicalize study tools for captured repair
+        run: |
+          ruff format case-studies/edgestream/tools
+          ruff check --fix case-studies/edgestream/tools
       - name: Run full controlled study
-        run: make -C case-studies/edgestream thorough
-      - name: Upload regenerated evidence
+        shell: bash
+        run: |
+          set -o pipefail
+          make -C case-studies/edgestream thorough 2>&1 | tee edgestream-study.log
+      - name: Upload regenerated evidence and repair capture
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -61,6 +68,8 @@ jobs:
           if-no-files-found: error
           retention-days: 14
           path: |
+            edgestream-study.log
+            case-studies/edgestream/tools/*.py
             case-studies/edgestream/evidence/
             case-studies/edgestream/manifest.json
             case-studies/edgestream/mncds/development-record.json
