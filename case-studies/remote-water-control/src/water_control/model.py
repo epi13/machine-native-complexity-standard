@@ -19,6 +19,13 @@ class ControlMode(StrEnum):
     EMERGENCY = "EMERGENCY"
 
 
+class SafetyDisposition(StrEnum):
+    ACCEPTED_UNCHANGED = "accepted_unchanged"
+    MODIFIED = "modified"
+    HELD = "held"
+    REJECTED = "rejected"
+
+
 @dataclass(frozen=True)
 class SystemConfig:
     tank_capacity_l: float = 100_000.0
@@ -74,11 +81,15 @@ class AuthorizedIntent:
     mode: ControlMode
     planner_id: str
     proposal_reason: str
+    proposal_duty_on: bool
+    proposal_standby_on: bool
+    safety_disposition: SafetyDisposition
     safety_reasons: tuple[str, ...]
 
     def as_dict(self) -> dict[str, Any]:
         payload = asdict(self)
         payload["mode"] = self.mode.value
+        payload["safety_disposition"] = self.safety_disposition.value
         payload["safety_reasons"] = list(self.safety_reasons)
         return payload
 
@@ -148,21 +159,35 @@ class Scenario:
     stale_windows: tuple[tuple[int, int], ...] = ()
     conflict_windows: tuple[tuple[int, int], ...] = ()
     restart_at_s: int | None = None
+    demand_observation_scale: float = 1.0
+    checkpoint_corruption_attempts: int = 0
+
+    def as_dict(self) -> dict[str, Any]:
+        return asdict(self)
 
 
 @dataclass
 class ScenarioResult:
     scenario_id: str
     planner_id: str
+    scenario_group: str
     steps: int
+    initial_level_pct: float
     final_level_pct: float
+    final_stored_volume_l: float
+    actual_demand_l: float
+    demand_observation_scale: float
     energy_kwh: float
     pump_starts: int
     unmet_demand_l: float
     overflow_l: float
     emergency_steps: int
     degraded_steps: int
+    safety_interventions: dict[str, int] = field(default_factory=dict)
+    safety_reason_counts: dict[str, int] = field(default_factory=dict)
     safety_violations: list[str] = field(default_factory=list)
+    checkpoint_corruption_attempts: int = 0
+    checkpoint_corruption_rejections: int = 0
     sequence_end: int = 0
     journal_tail_hash: str = ""
     restart_performed: bool = False
