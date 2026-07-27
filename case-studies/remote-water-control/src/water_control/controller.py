@@ -7,6 +7,8 @@ from water_control.journal import IntentJournal
 from water_control.model import (
     AuthorizedIntent,
     ControllerState,
+    ControlMode,
+    SafetyDisposition,
     SystemConfig,
     TelemetrySample,
 )
@@ -32,6 +34,7 @@ class Controller:
     def decide(self, sample: TelemetrySample, now_s: int) -> AuthorizedIntent:
         proposal = self.planner.propose(sample, self.state, self.config)
         adjudication = self.safety.authorize(proposal, sample, self.state, now_s)
+        disposition = self._disposition(proposal.duty_on, proposal.standby_on, adjudication)
         sequence = self.state.last_sequence + 1
         intent = AuthorizedIntent(
             sequence=sequence,
@@ -42,11 +45,29 @@ class Controller:
             mode=adjudication.mode,
             planner_id=proposal.planner_id,
             proposal_reason=proposal.reason,
+            proposal_duty_on=proposal.duty_on,
+            proposal_standby_on=proposal.standby_on,
+            safety_disposition=disposition,
             safety_reasons=adjudication.reasons,
         )
         self.journal.append(intent)
         self._apply_intent(intent)
         return intent
+
+    @staticmethod
+    def _disposition(proposal_duty: bool, proposal_standby: bool, adjudication: Any) -> SafetyDisposition:
+        if adjudication.mode in {ControlMode.DEGRADED, ControlMode.HOLD}:
+            return SafetyDisposition.HELD
+        if adjudication.mode is ControlMode.EMERGENCY:
+            if not adjudication.duty_on and not adjudication.standby_on:
+                return SafetyDisposition.REJECTED
+            return SafetyDisposition.MODIFIED
+        if (adjudication.duty_on, adjudication.standby_on) == (
+            proposal_duty,
+            proposal_standby,
+        ):
+            return SafetyDisposition.ACCEPTED_UNCHANGED
+        return SafetyDisposition.MODIFIED
 
     def _apply_intent(self, intent: AuthorizedIntent) -> None:
         if intent.duty_on != self.state.duty_on:
@@ -60,7 +81,7 @@ class Controller:
 
     def checkpoint_payload(self) -> dict[str, Any]:
         return {
-            "schema_version": "0.1",
+            "schema_version": "0.2",
             "planner_id": self.planner.planner_id,
             "controller_state": self.state.as_dict(),
             "journal": self.journal.snapshot(),
