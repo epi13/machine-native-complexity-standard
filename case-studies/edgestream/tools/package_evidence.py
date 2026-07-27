@@ -11,8 +11,12 @@ def main() -> int:
     result = build_bundle()
     if result != 0:
         return result
-    derive()
-    return 0
+    status = derive()
+    if status == "PASS":
+        return 0
+    if status == "UNKNOWN":
+        return 3
+    return 1
 
 
 if __name__ == "__main__":
