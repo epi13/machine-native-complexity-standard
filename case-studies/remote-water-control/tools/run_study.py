@@ -18,7 +18,7 @@ sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "machine"))
 
 from water_control.checkpoint import CheckpointError, decode_checkpoint, encode_checkpoint  # noqa: E402
-from water_control.model import ScenarioResult, SystemConfig  # noqa: E402
+from water_control.model import SystemConfig  # noqa: E402
 from water_control.planner import GeneratedTablePlanner, ReadableBaselinePlanner  # noqa: E402
 from water_control.scenarios import (  # noqa: E402
     combined_fault_suite,
@@ -43,6 +43,7 @@ def sha256(path: Path) -> str:
 def canonical_sha256(payload: Any) -> str:
     encoded = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
     return f"sha256:{hashlib.sha256(encoded).hexdigest()}"
+
 
 
 def write_deterministic_gzip(path: Path, payload: Any) -> None:
@@ -180,212 +181,4 @@ def validate_experimental_records() -> dict[str, Any]:
         errors = sorted(
             Draft202012Validator(schema).iter_errors(record), key=lambda item: item.path
         )
-        failures.extend(f"{record_path.name}: {error.message}" for error in errors)
-    return {"status": "FAIL" if failures else "PASS", "failures": failures}
-
-
-def _scenario_group(scenario_id: str) -> str:
-    selection_ids = {item.scenario_id for item in selection_suite()}
-    combined_ids = {item.scenario_id for item in combined_fault_suite()}
-    if scenario_id in selection_ids:
-        return "selection"
-    if scenario_id in combined_ids:
-        return "combined_fault"
-    return "randomized"
-
-
-def evaluate_scenarios(scenarios: tuple[Any, ...]) -> dict[str, Any]:
-    planners = (ReadableBaselinePlanner(), GeneratedTablePlanner())
-    observations: list[dict[str, Any]] = []
-    grouped: dict[str, list[dict[str, Any]]] = {}
-    for planner in planners:
-        planner_results = [
-            run_scenario(
-                planner,
-                scenario,
-                scenario_group=_scenario_group(scenario.scenario_id),
-            ).as_dict()
-            for scenario in scenarios
-        ]
-        grouped[planner.planner_id] = planner_results
-        observations.extend(planner_results)
-    baseline_id = ReadableBaselinePlanner.planner_id
-    candidate_id = GeneratedTablePlanner.planner_id
-    baseline_by_id = {item["scenario_id"]: item for item in grouped[baseline_id]}
-    candidate_by_id = {item["scenario_id"]: item for item in grouped[candidate_id]}
-    comparisons = [
-        compare_scenario(
-            baseline_by_id[scenario.scenario_id], candidate_by_id[scenario.scenario_id]
-        )
-        for scenario in scenarios
-    ]
-    return {
-        "observations": observations,
-        "grouped": grouped,
-        "comparisons": comparisons,
-    }
-
-
-def run(mode: str) -> dict[str, Any]:
-    scenarios = smoke_suite() if mode == "smoke" else scenario_suite()
-    evaluated = evaluate_scenarios(scenarios)
-    grouped = evaluated["grouped"]
-    candidate_id = GeneratedTablePlanner.planner_id
-    baseline_id = ReadableBaselinePlanner.planner_id
-    candidate_replay = [
-        run_scenario(
-            GeneratedTablePlanner(),
-            scenario,
-            scenario_group=_scenario_group(scenario.scenario_id),
-        ).as_dict()
-        for scenario in scenarios
-    ]
-    deterministic_replay = candidate_replay == grouped[candidate_id]
-    checkpoint_probe = checkpoint_corruption_probe()
-    schema_validation = validate_experimental_records()
-    comparisons = evaluated["comparisons"]
-    per_scenario_pass = all(item["status"] == "PASS" for item in comparisons)
-
-    scenario_by_id = {item.scenario_id: item for item in scenarios}
-    scenario_gates_pass = all(
-        not result["safety_violations"]
-        and result["sequence_end"] == result["steps"]
-        and (
-            scenario_by_id[result["scenario_id"]].restart_at_s is None
-            or result["restart_performed"]
-        )
-        and result["checkpoint_corruption_attempts"]
-        == result["checkpoint_corruption_rejections"]
-        for result in grouped[candidate_id]
-    )
-
-    selection_ids = {item.scenario_id for item in selection_suite()}
-    baseline_selection = [
-        item for item in grouped[baseline_id] if item["scenario_id"] in selection_ids
-    ]
-    candidate_selection = [
-        item for item in grouped[candidate_id] if item["scenario_id"] in selection_ids
-    ]
-    selection_comparisons = [
-        item for item in comparisons if item["scenario_id"] in selection_ids
-    ]
-    baseline_aggregate = aggregate(baseline_selection)
-    candidate_aggregate = aggregate(candidate_selection)
-    starts_ratio = candidate_aggregate["pump_starts"] / max(
-        1, baseline_aggregate["pump_starts"]
-    )
-    raw_energy_ratio = candidate_aggregate["energy_kwh"] / max(
-        0.000001, baseline_aggregate["energy_kwh"]
-    )
-    normalized_energy_ratio = sum(
-        float(item["candidate_inventory_adjusted_energy_kwh"])
-        for item in selection_comparisons
-    ) / max(0.000001, baseline_aggregate["energy_kwh"])
-    objective_pass = mode == "smoke" or (
-        starts_ratio <= SELECTION_MAX_PUMP_START_RATIO
-        and raw_energy_ratio <= SELECTION_MAX_RAW_ENERGY_RATIO
-        and normalized_energy_ratio <= MAX_INVENTORY_ADJUSTED_ENERGY_RATIO
-        and candidate_aggregate["unmet_demand_l"] <= baseline_aggregate["unmet_demand_l"]
-        and candidate_aggregate["overflow_l"] <= baseline_aggregate["overflow_l"]
-    )
-    hard_gates_pass = (
-        scenario_gates_pass
-        and deterministic_replay
-        and checkpoint_probe["status"] == "PASS"
-        and schema_validation["status"] == "PASS"
-        and per_scenario_pass
-    )
-    development_pass = hard_gates_pass and objective_pass
-    all_aggregates = {
-        "baseline": aggregate(grouped[baseline_id]),
-        "candidate": aggregate(grouped[candidate_id]),
-    }
-    summary = {
-        "schema_version": "0.2",
-        "study_id": "mncs.remote-water-control.development-epoch-2",
-        "mode": mode,
-        "development_result": "PASS" if development_pass else "FAIL",
-        "formal_mncs_status": "UNKNOWN",
-        "formal_mncds_status": "UNKNOWN",
-        "disposition": "REVIEW_REQUIRED",
-        "claim_note": (
-            "This development run does not claim MNCS-L5 or MNCDS-D3. The evaluator-locked "
-            "cross-host workflow is protected at execution time but is not an independent "
-            "third-party evaluation, release binding, or operational evidence."
-        ),
-        "scenario_counts": {
-            "selection": len(selection_suite()),
-            "combined_fault": len(combined_fault_suite()),
-            "randomized": len(randomized_suite()),
-            "evaluated": len(scenarios),
-        },
-        "hard_gates": {
-            "scenario_safety": "PASS" if scenario_gates_pass else "FAIL",
-            "per_scenario_regression": "PASS" if per_scenario_pass else "FAIL",
-            "deterministic_replay": "PASS" if deterministic_replay else "FAIL",
-            "checkpoint_corruption_rejection": checkpoint_probe["status"],
-            "experimental_schema_validation": schema_validation["status"],
-        },
-        "checkpoint_probe": checkpoint_probe,
-        "schema_validation": schema_validation,
-        "objective": {
-            "status": "PASS" if objective_pass else "FAIL",
-            "scope": "frozen selection scenarios only",
-            "candidate_to_baseline_pump_start_ratio": round(starts_ratio, 6),
-            "candidate_to_baseline_raw_energy_ratio": round(raw_energy_ratio, 6),
-            "candidate_to_baseline_inventory_adjusted_energy_ratio": round(
-                normalized_energy_ratio, 6
-            ),
-            "required_pump_start_ratio_max": SELECTION_MAX_PUMP_START_RATIO,
-            "required_raw_energy_ratio_max": SELECTION_MAX_RAW_ENERGY_RATIO,
-            "required_inventory_adjusted_energy_ratio_max": MAX_INVENTORY_ADJUSTED_ENERGY_RATIO,
-        },
-        "selection_aggregates": {
-            "baseline": baseline_aggregate,
-            "candidate": candidate_aggregate,
-        },
-        "all_scenario_aggregates": all_aggregates,
-        "per_scenario_comparisons": comparisons,
-        "evidence_digests": {
-            "scenario_definitions": canonical_sha256([item.as_dict() for item in scenarios]),
-            "comparisons": canonical_sha256(comparisons),
-        },
-        "identities": {
-            "planner_spec": sha256(ROOT / "generator" / "planner-spec.json"),
-            "generated_planner": sha256(ROOT / "machine" / "generated_planner.py"),
-            "safety_kernel": sha256(ROOT / "src" / "water_control" / "safety.py"),
-            "simulator": sha256(ROOT / "src" / "water_control" / "simulator.py"),
-            "scenarios": sha256(ROOT / "src" / "water_control" / "scenarios.py"),
-            "preregistration": sha256(ROOT / "preregistration.json"),
-        },
-        "limitations": [
-            "Development scenarios and deterministic randomized seeds are repository visible.",
-            "Inventory normalization uses the declared duty-pump marginal energy per stored liter; it is not a pump-curve model.",
-            "The plant model is a bounded digital twin and is not a hydraulic design model.",
-            "No live PLC, SCADA, pump, valve, or field network is connected.",
-            "The generated planner is a development candidate, not an accepted release artifact.",
-            "Independent domain review, release authority, and operational lifecycle evidence remain open.",
-        ],
-    }
-    if mode == "all":
-        output = ROOT / "evidence" / "results"
-        output.mkdir(parents=True, exist_ok=True)
-        write_deterministic_gzip(
-            output / "scenario-results.json.gz",
-            {"schema_version": "0.2", "results": evaluated["observations"]},
-        )
-        write_deterministic_gzip(output / "study-summary.json.gz", summary)
-    return summary
-
-
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("mode", choices=("smoke", "all"), nargs="?", default="smoke")
-    args = parser.parse_args()
-    summary = run(args.mode)
-    print(json.dumps(summary, indent=2))
-    return 0 if summary["development_result"] == "PASS" else 1
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+     ²È="25åtè(€€€Í•¹…É¥½Ì€ôÍµ½­•}ÍÕ¥Ñ” ¤¥˜µ½‘”€ôô€‰Íµ½­”ˆ•±Í”Í•¹…É¥½}ÍÕ¥Ñ” ¤(€€€•Ù…±Õ…Ñ•€ô•Ù…±Õ…Ñ•}Í•¹…É¥½Ì¡Í•¹…É¥½Ì¤(€€€É½ÕÁ•€ô•Ù…±Õ…Ñ•‘l‰É½ÕÁ•‰t(€€€…¹‘¥‘…Ñ•}¥€ô•¹•É…Ñ•‘Q…‰±•A±…¹¹•È¹Á±…¹¹•É}¥(€€€‰…Í•±¥¹•}¥€ôI•…‘…‰±•	…Í•±¥¹•A±…¹¹•È¹Á±…¹¹•É}¥(€€€…¹‘¥‘…Ñ•}É•Á±…ä€ôl(€€€€€€€ÉÕ¹}Í•¹…É¥¼ (€€€€€€€€€€€•¹•É…Ñ•‘Q…‰±•A±…¹¹•È ¤°(€€€€€€€€€€€Í•¹…É¥¼°(€€€€€€€€€€€Í•¹…É¥½}É½ÕÀõ}Í•¹…É¥½}É½ÕÀ¡Í•¹…É¥¼¹Í•¹…É¥½}¥¤°(€€€€€€€€¤¹…Í}‘¥Ğ ¤(€€€€€€€™½ÈÍ•¹…É¥¼¥¸Í•¹…É¥½Ì(€€€t(€€€‘•Ñ•Éµ¥¹¥ÍÑ¥}É•Á±…ä€ô…¹‘¥‘…Ñ•}É•Á±…ä€ôôÉ½ÕÁ•‘m…¹‘¥‘…Ñ•}¥‘t(€€€¡•­Á½¥¹Ñ}ÁÉ½‰”€ô¡•­Á½¥¹Ñ}½ÉÉÕÁÑ¥½¹}ÁÉ½‰” ¤(€€€Í¡•µ…}Ù…±¥‘…Ñ¥½¸€ôÙ…±¥‘…Ñ•}•áÁ•É¥µ•¹Ñ…±}É•½É‘Ì ¤(€€€½µÁ…É¥Í½¹Ì€ô•Ù…±Õ…Ñ•‘l‰½µÁ…É¥Í½¹Ì‰t(€€€Á•É}Í•¹…É¥½}Á…ÍÌ€ô…±°¡¥Ñ•µl‰ÍÑ…ÑÕÌ‰t€ôô€‰AMLˆ™½È¥Ñ•´¥¸½µÁ…É¥Í½¹Ì¤((€€€Í•¹…É¥½}‰å}¥€ôí¥Ñ•´¹Í•¹…É¥½}¥è¥Ñ•´™½È¥Ñ•´¥¸Í•¹…É¥½Íô(€€€Í•¹…É¥½}…Ñ•Í}Á…ÍÌ€ô…±° (€€€€€€€¹½ĞÉ•ÍÕ±Ñl‰Í…™•Ñå}Ù¥½±…Ñ¥½¹Ì‰t(€€€€€€€…¹É•ÍÕ±Ñl‰Í•ÅÕ•¹•}•¹‰t€ôôÉ•ÍÕ±Ñl‰ÍÑ•ÁÌ‰t(€€€€€€€…¹€ (€€€€€€€€€€€Í•¹…É¥½}‰å}¥‘mÉ•ÍÕ±Ñl‰Í•¹…É¥½}¥‰ut¹É•ÍÑ…ÉÑ}…Ñ}Ì¥Ì9½¹”(€€€€€€€€€€€½ÈÉ•ÍÕ±Ñl‰É•ÍÑ…ÉÑ}Á•É™½Éµ•‰t(€€€€€€€€¤(€€€€€€€…¹É•ÍÕ±Ñl‰¡•­Á½¥¹Ñ}½ÉÉÕÁÑ¥½¹}…ÑÑ•µÁÑÌ‰t(€€€€€€€€ôôÉ•ÍÕ±Ñl‰¡•­Á½¥¹Ñ}½ÉÉÕÁÑ¥½¹}É•©•Ñ¥½¹Ì‰t(€€€€€€€™½ÈÉ•ÍÕ±Ğ¥¸É½ÕÁ•‘m…¹‘¥‘…Ñ•}¥‘t(€€€€¤((€€€Í•±•Ñ¥½¹}¥‘Ì€ôí¥Ñ•´¹Í•¹…É¥½}¥™½È¥Ñ•´¥¸Í•±•Ñ¥½¹}ÍÕ¥Ñ” ¥ô(€€€‰…Í•±¥¹•}Í•±•Ñ¥½¸€ôl(€€€€€€€¥Ñ•´™½È¥Ñ•´¥¸É½ÕÁ•‘m‰…Í•±¥¹•}¥‘t¥˜¥Ñ•µl‰Í•¹…É¥½}¥‰t¥¸Í•±•Ñ¥½¹}¥‘Ì(€€€t(€€€…¹‘¥‘…Ñ•}Í•±•Ñ¥½¸€ôl(€€€€€€€¥Ñ•´™½È¥Ñ•´¥¸É½ÕÁ•‘m…¹‘¥‘…Ñ•}¥‘t¥˜¥Ñ•µl‰Í•¹…É¥½}¥‰t¥¸Í•±•Ñ¥½¹}¥‘Ì(€€€t(€€€Í•±•Ñ¥½¹}½µÁ…É¥Í½¹Ì€ôl(€€€€€€€¥Ñ•´™½È¥Ñ•´¥¸½µÁ…É¥Í½¹Ì¥˜¥Ñ•µl‰Í•¹…É¥½}¥‰t¥¸Í•±•Ñ¥½¹}¥‘Ì(€€€t(€€€‰…Í•±¥¹•}…É•…Ñ”€ô…É•…Ñ”¡‰…Í•±¥¹•}Í•±•Ñ¥½¸¤(€€€…¹‘¥‘…Ñ•}…É•…Ñ”€ô…É•…Ñ”¡…¹‘¥‘…Ñ•}Í•±•Ñ¥½¸¤(€€€ÍÑ…ÉÑÍ}É…Ñ¥¼€ô…¹‘¥‘…Ñ•}…É•…Ñ•l‰ÁÕµÁ}ÍÑ…ÉÑÌ‰t€¼µ…à (€€€€€€€€Ä°‰…Í•±¥¹•}…É•…Ñ•l‰ÁÕµÁ}ÍÑ…ÉÑÌ‰t(€€€€¤(€€€É…İ}•¹•Éå}É…Ñ¥¼€ô…¹‘¥‘…Ñ•}…É•…Ñ•l‰•¹•Éå}­İ ‰t€¼µ…à (€€€€€€€€À¸ÀÀÀÀÀÄ°‰…Í•±¥¹•}…É•…Ñ•l‰•¹•Éå}­İ ‰t(€€€€¤(€€€¹½Éµ…±¥é•‘}•¹•Éå}É…Ñ¥¼€ôÍÕ´ (€€€€€€€™±½…Ğ¡¥Ñ•µl‰…¹‘¥‘…Ñ•}¥¹Ù•¹Ñ½Éå}…‘©ÕÍÑ•‘}•¹•Éå}­İ ‰t¤(€€€€€€€™½È¥Ñ•´¥¸Í•±•Ñ¥½¹}½µÁ…É¥Í½¹Ì(€€€€¤€¼µ…à À¸ÀÀÀÀÀÄ°‰…Í•±¥¹•}…É•…Ñ•l‰•¹•Éå}­İ ‰t¤(€€€½‰©•Ñ¥Ù•}Á…ÍÌ€ôµ½‘”€ôô€‰Íµ½­”ˆ½È€ (€€€€€€€ÍÑ…ÉÑÍ}É…Ñ¥¼€ğôM1Q%=9}5a}AU5A}MQIQ}IQ%<(€€€€€€€…¹É…İ}•¹•Éå}É…Ñ¥¼€ğôM1Q%=9}5a}I]}9Ie}IQ%<(€€€€€€€…¹¹½Éµ…±¥é•‘}•¹•Éå}É…Ñ¥¼€ğô5a}%9Y9Q=Ie})UMQ}9Ie}IQ%<(€€€€€€€…¹…¹‘¥‘…Ñ•}…É•…Ñ•l‰Õ¹µ•Ñ}‘•µ…¹‘}°‰t€ğô‰…Í•±¥¹•}…É•…Ñ•l‰Õ¹µ•Ñ}‘•µ…¹‘}°‰t(€€€€€€€…¹…¹‘¥‘…Ñ•}…É•…Ñ•l‰½Ù•É™±½İ}°‰t€ğô‰…Í•±¥¹•}…É•…Ñ•l‰½Ù•É™±½İ}°‰t(€€€€¤(€€€¡…É‘}…Ñ•Í}Á…ÍÌ€ô€ (€€€€€€€Í•¹…É¥½}…Ñ•Í}Á…ÍÌ(€€€€€€€…¹‘•Ñ•Éµ¥¹¥ÍÑ¥}É•Á±…ä(€€€€€€€…¹¡•­Á½¥¹Ñ}ÁÉ½‰•l‰ÍÑ…ÑÕÌ‰t€ôô€‰AMLˆ(€€€€€€€…¹Í¡•µ…}Ù…±¥‘…Ñ¥½¹l‰ÍÑ…ÑÕÌ‰t€ôô€‰AMLˆ(€€€€€€€…¹Á•É}Í•¹…É¥½}Á…ÍÌ(€€€€¤(€€€‘•Ù•±½Áµ•¹Ñ}Á…ÍÌ€ô¡…É‘}…Ñ•Í}Á…ÍÌ…¹½‰©•Ñ¥Ù•}Á…ÍÌ(€€€…±±}…É•…Ñ•Ì€ôì(€€€€€€€€‰‰…Í•±¥¹”ˆè…É•…Ñ”¡É½ÕÁ•‘m‰…Í•±¥¹•}¥‘t¤°(€€€€€€€€‰…¹‘¥‘…Ñ”ˆè…É•…Ñ”¡É½ÕÁ•‘m…¹‘¥‘…Ñ•}¥‘t¤°(€€€ô(€€€ÍÕµµ…Éä€ôì(€€€€€€€€‰Í¡•µ…}Ù•ÉÍ¥½¸ˆè€ˆÀ¸Èˆ°(€€€€€€€€‰ÍÑÕ‘å}¥ˆè€‰µ¹Ì¹É•µ½Ñ”µİ…Ñ•Èµ½¹ÑÉ½°¹‘•Ù•±½Áµ•¹Ğµ•Á½ ´Èˆ°(€€€€€€€€‰µ½‘”ˆèµ½‘”°(€€€€€€€€‰‘•Ù•±½Áµ•¹Ñ}É•ÍÕ±Ğˆè€‰AMLˆ¥˜‘•Ù•±½Áµ•¹Ñ}Á…ÍÌ•±Í”€‰%0ˆ°(€€€€€€€€‰™½Éµ…±}µ¹Í}ÍÑ…ÑÕÌˆè€‰U9-9=]8ˆ°(€€€€€€€€‰™½Éµ…±}µ¹‘Í}ÍÑ…ÑÕÌˆè€‰U9-9=]8ˆ°(€€€€€€€€‰‘¥ÍÁ½Í¥Ñ¥½¸ˆè€‰IY%]}IEU%Iˆ°(€€€€€€€€‰±…¥µ}¹½Ñ”ˆè€ (€€€€€€€€€€€€‰Q¡¥Ì‘•Ù•±½Áµ•¹ĞÉÕ¸‘½•Ì¹½Ğ±…¥´59Lµ0Ô½È59LµÌ¸Q¡”•Ù…±Õ…Ñ½Èµ±½­•€ˆ(€€€€€€€€€€€€‰É½ÍÌµ¡½ÍĞİ½É­™±½Ü¥ÌÁÉ½Ñ•Ñ•…Ğ•á•ÕÑ¥½¸Ñ¥µ”‰ÕĞ¥Ì¹½Ğ…¸¥¹‘•Á•¹‘•¹Ğ€ˆ(€€€€€€€€€€€€‰Ñ¡¥ÉµÁ…ÉÑä•Ù…±Õ…Ñ¥½¸°É•±•…Í”‰¥¹‘¥¹œ°½È½Á•É…Ñ¥½¹…°•Ù¥‘•¹”¸ˆ(€€€€€€€€¤°(€€€€€€€€‰Í•¹…É¥½}½Õ¹ÑÌˆèì(€€€€€€€€€€€€‰Í•±•Ñ¥½¸ˆè±•¸¡Í•±•Ñ¥½¹}ÍÕ¥Ñ” ¤¤°(€€€€€€€€€€€€‰½µ‰¥¹•‘}™…Õ±Ğˆè±•¸¡½µ‰¥¹•‘}™…Õ±Ñ}ÍÕ¥Ñ” ¤¤°(€€€€€€€€€€€€‰É…¹‘½µ¥é•ˆè±•¸¡É…¹‘½µ¥é•‘}ÍÕ¥Ñ” ¤¤°(€€€€€€€€€€€€‰•Ù…±Õ…Ñ•ˆè±•¸¡Í•¹…É¥½Ì¤°(€€€€€€€ô°(€€€€€€€€‰¡…É‘}…Ñ•Ìˆèì(€€€€€€€€€€€€‰Í•¹…É¥½}Í…™•Ñäˆè€‰AMLˆ¥˜Í•¹…É¥½}…Ñ•Í}Á…ÍÌ•±Í”€‰%0ˆ°(€€€€€€€€€€€€‰Á•É}Í•¹…É¥½}É•É•ÍÍ¥½¸ˆè€‰AMLˆ¥˜Á•É}Í•¹…É¥½}Á…ÍÌ•±Í”€‰%0ˆ°(€€€€€€€€€€€€‰‘•Ñ•Éµ¥¹¥ÍÑ¥}É•Á±…äˆè€‰AMLˆ¥˜‘•Ñ•Éµ¥¹¥ÍÑ¥}É•Á±…ä•±Í”€‰%0ˆ°(€€€€€€€€€€€€‰¡•­Á½¥¹Ñ}½ÉÉÕÁÑ¥½¹}É•©•Ñ¥½¸ˆè¡•­Á½¥¹Ñ}ÁÉ½‰•l‰ÍÑ…ÑÕÌ‰t°(€€€€€€€€€€€€‰•áÁ•É¥µ•¹Ñ…±}Í¡•µ…}Ù…±¥‘…Ñ¥½¸ˆèÍ¡•µ…}Ù…±¥‘…Ñ¥½¹l‰ÍÑ…ÑÕÌ‰t°(€€€€€€€ô°(€€€€€€€€‰¡•­Á½¥¹Ñ}ÁÉ½‰”ˆè¡•­Á½¥¹Ñ}ÁÉ½‰”°(€€€€€€€€‰Í¡•µ…}Ù…±¥‘…Ñ¥½¸ˆèÍ¡•µ…}Ù…±¥‘…Ñ¥½¸°(€€€€€€€€‰½‰©•Ñ¥Ù”ˆèì(€€€€€€€€€€€€‰ÍÑ…ÑÕÌˆè€‰AMLˆ¥˜½‰©•Ñ¥Ù•}Á…ÍÌ•±Í”€‰%0ˆ°(€€€€€€€€€€€€‰Í½Á”ˆè€‰™É½é•¸Í•±•Ñ¥½¸Í•¹…É¥½Ì½¹±äˆ°(€€€€€€€€€€€€‰…¹‘¥‘…Ñ•}Ñ½}‰…Í•±¥¹•}ÁÕµÁ}ÍÑ…ÉÑ}É…Ñ¥¼ˆèÉ½Õ¹¡ÍÑ…ÉÑÍ}É…Ñ¥¼°€Ø¤°(€€€€€€€€€€€€‰…¹‘¥‘…Ñ•}Ñ½}‰…Í•±¥¹•}É…İ}•¹•Éå}É…Ñ¥¼ˆèÉ½Õ¹¡É…İ}•¹•Éå}É…Ñ¥¼°€Ø¤°(€€€€€€€€€€€€‰…¹‘¥‘…Ñ•}Ñ½}‰…Í•±¥¹•}¥¹Ù•¹Ñ½Éå}…‘©ÕÍÑ•‘}•¹•Éå}É…Ñ¥¼ˆèÉ½Õ¹ (€€€€€€€€€€€€€€€¹½Éµ…±¥é•‘}•¹•Éå}É…Ñ¥¼°€Ø(€€€€€€€€€€€€¤°(€€€€€€€€€€€€‰É•ÅÕ¥É•‘}ÁÕµÁ}ÍÑ…ÉÑ}É…Ñ¥½}µ…àˆèM1Q%=9}5a}AU5A}MQIQ}IQ%<°(€€€€€€€€€€€€‰É•ÅÕ¥É•‘}É…İ}•¹•Éå}É…Ñ¥½}µ…àˆèM1Q%=9}5a}I]}9Ie}IQ%<°(€€€€€€€€€€€€‰É•ÅÕ¥É•‘}¥¹Ù•¹Ñ½Éå}…‘©ÕÍÑ•‘}•¹•Éå}É…Ñ¥½}µ…àˆè5a}%9Y9Q=Ie})UMQ}9Ie}IQ%<°(€€€€€€€ô°(€€€€€€€€‰Í•±•Ñ¥½¹}…É•…Ñ•Ìˆèì(€€€€€€€€€€€€‰‰…Í•±¥¹”ˆè‰…Í•±¥¹•}…É•…Ñ”°(€€€€€€€€€€€€‰…¹‘¥‘…Ñ”ˆè…¹‘¥‘…Ñ•}…É•…Ñ”°(€€€€€€€ô°(€€€€€€€€‰…±±}Í•¹…É¥½}…É•…Ñ•Ìˆè…±±}…É•…Ñ•Ì°(€€€€€€€€‰Á•É}Í•¹…É¥½}½µÁ…É¥Í½¹Ìˆè½µÁ…É¥Í½¹Ì°(€€€€€€€€‰•Ù¥‘•¹•}‘¥•ÍÑÌˆèì(€€€€€€€€€€€€‰Í•¹…É¥½}‘•™¥¹¥Ñ¥½¹Ìˆè…¹½¹¥…±}Í¡„ÈÔØ¡m¥Ñ•´¹…Í}‘¥Ğ ¤™½È¥Ñ•´¥¸Í•¹…É¥½Ít¤°(€€€€€€€€€€€€‰½µÁ…É¥Í½¹Ìˆè…¹½¹¥…±}Í¡„ÈÔØ¡½µÁ…É¥Í½¹Ì¤°(€€€€€€€ô°(€€€€€€€€‰¥‘•¹Ñ¥Ñ¥•Ìˆèì(€€€€€€€€€€€€‰Á±…¹¹•É}ÍÁ•ŒˆèÍ¡„ÈÔØ¡I==P€¼€‰•¹•É…Ñ½Èˆ€¼€‰Á±…¹¹•ÈµÍÁ•Œ¹©Í½¸ˆ¤°(€€€€€€€€€€€€‰•¹•É…Ñ•‘}Á±…¹¹•ÈˆèÍ¡„ÈÔØ¡I==P€¼€‰µ…¡¥¹”ˆ€¼€‰•¹•É…Ñ•‘}Á±…¹¹•È¹Áäˆ¤°(€€€€€€€€€€€€‰Í…™•Ñå}­•É¹•°ˆèÍ¡„ÈÔØ¡I==P€¼€‰ÍÉŒˆ€¼€‰İ…Ñ•É}½¹ÑÉ½°ˆ€¼€‰Í…™•Ñä¹Áäˆ¤°(€€€€€€€€€€€€‰Í¥µÕ±…Ñ½ÈˆèÍ¡„ÈÔØ¡I==P€¼€‰ÍÉŒˆ€¼€‰İ…Ñ•É}½¹ÑÉ½°ˆ€¼€‰Í¥µÕ±…Ñ½È¹Áäˆ¤°(€€€€€€€€€€€€‰Í•¹…É¥½ÌˆèÍ¡„ÈÔØ¡I==P€¼€‰ÍÉŒˆ€¼€‰İ…Ñ•É}½¹ÑÉ½°ˆ€¼€‰Í•¹…É¥½Ì¹Áäˆ¤°(€€€€€€€€€€€€‰ÁÉ•É•¥ÍÑÉ…Ñ¥½¸ˆèÍ¡„ÈÔØ¡I==P€¼€‰ÁÉ•É•¥ÍÑÉ…Ñ¥½¸¹©Í½¸ˆ¤°(€€€€€€€ô°(€€€€€€€€‰±¥µ¥Ñ…Ñ¥½¹Ìˆèl(€€€€€€€€€€€€‰•Ù•±½Áµ•¹ĞÍ•¹…É¥½Ì…¹‘•Ñ•Éµ¥¹¥ÍÑ¥ŒÉ…¹‘½µ¥é•Í••‘Ì…É”É•Á½Í¥Ñ½ÉäÙ¥Í¥‰±”¸ˆ°(€€€€€€€€€€€€‰%¹Ù•¹Ñ½Éä¹½Éµ…±¥é…Ñ¥½¸ÕÍ•ÌÑ¡”‘•±…É•‘ÕÑäµÁÕµÀµ…É¥¹…°•¹•ÉäÁ•ÈÍÑ½É•±¥Ñ•Èì¥Ğ¥Ì¹½Ğ„ÁÕµÀµÕÉÙ”µ½‘•°¸ˆ°(€€€€€€€€€€€€‰Q¡”Á±…¹Ğµ½‘•°¥Ì„‰½Õ¹‘•‘¥¥Ñ…°Ñİ¥¸…¹¥Ì¹½Ğ„¡å‘É…Õ±¥Œ‘•Í¥¸µ½‘•°¸ˆ°(€€€€€€€€€€€€‰9¼±¥Ù”A1°M°ÁÕµÀ°Ù…±Ù”°½È™¥•±¹•Ñİ½É¬¥Ì½¹¹•Ñ•¸ˆ°(€€€€€€€€€€€€‰Q¡”•¹•É…Ñ•Á±…¹¹•È¥Ì„‘•Ù•±½Áµ•¹Ğ…¹‘¥‘…Ñ”°¹½Ğ…¸…•ÁÑ•É•±•…Í”…ÉÑ¥™…Ğ¸ˆ°(€€€€€€€€€€€€‰%¹‘•Á•¹‘•¹Ğ‘½µ…¥¸É•Ù¥•Ü°É•±•…Í”…ÕÑ¡½É¥Ñä°…¹½Á•É…Ñ¥½¹…°±¥™•å±”•Ù¥‘•¹”É•µ…¥¸½Á•¸¸ˆ°(€€€€€€€t°(€€€ô(€€€¥˜µ½‘”€ôô€‰…±°ˆè(€€€€€€€½ÕÑÁÕĞ€ôI==P€¼€‰•Ù¥‘•¹”ˆ€¼€‰É•ÍÕ±ÑÌˆ(€€€€€€€½ÕÑÁÕĞ¹µ­‘¥È¡Á…É•¹ÑÌõQÉÕ”°•á¥ÍÑ}½¬õQÉÕ”¤(€€€€€€€İÉ¥Ñ•}‘•Ñ•Éµ¥¹¥ÍÑ¥}é¥À (€€€€€€€€€€€½ÕÑÁÕĞ€¼€‰Í•¹…É¥¼µÉ•ÍÕ±ÑÌ¹©Í½¸¹èˆ°(€€€€€€€€€€€ì‰Í¡•µ…}Ù•ÉÍ¥½¸ˆè€ˆÀ¸Èˆ°€‰É•ÍÕ±ÑÌˆè•Ù…±Õ…Ñ•‘l‰½‰Í•ÉÙ…Ñ¥½¹Ì‰uô°(€€€€€€€€¤(€€€€€€€İÉ¥Ñ•}‘•Ñ•Éµ¥¹¥ÍÑ¥}é¥À¡½ÕÑÁÕĞ€¼€‰ÍÑÕ‘äµÍÕµµ…Éä¹©Í½¸¹èˆ°ÍÕµµ…Éä¤(€€€É•ÑÕÉ¸ÍÕµµ…Éä(()‘•˜µ…¥¸ ¤€´ø¥¹Ğè(€€€Á…ÉÍ•È€ô…ÉÁ…ÉÍ”¹ÉÕµ•¹ÑA…ÉÍ•È ¤(€€€Á…ÉÍ•È¹…‘‘}…ÉÕµ•¹Ğ ‰µ½‘”ˆ°¡½¥•Ìô ‰Íµ½­”ˆ°€‰…±°ˆ¤°¹…ÉÌôˆüˆ°‘•™…Õ±Ğô‰Íµ½­”ˆ¤(€€€…ÉÌ€ôÁ…ÉÍ•È¹Á…ÉÍ•}…ÉÌ ¤(€€€ÍÕµµ…Éä€ôÉÕ¸¡…ÉÌ¹µ½‘”¤(€€€ÁÉ¥¹Ğ¡©Í½¸¹‘ÕµÁÌ¡ÍÕµµ…Éä°¥¹‘•¹ĞôÈ¤¤(€€€É•ÑÕÉ¸€À¥˜ÍÕµµ…Éål‰‘•Ù•±½Áµ•¹Ñ}É•ÍÕ±Ğ‰t€ôô€‰AMLˆ•±Í”€Ä(()¥˜}}¹…µ•}|€ôô€‰}}µ…¥¹}|ˆè(€€€É…¥Í”MåÍÑ•µá¥Ğ¡µ…¥¸ ¤¤
