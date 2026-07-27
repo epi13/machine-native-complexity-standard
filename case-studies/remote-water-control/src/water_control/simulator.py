@@ -48,7 +48,6 @@ class Plant:
             self.state.standby_starts += 1
         self.state.duty_running = duty_running
         self.state.standby_running = standby_running
-
         inflow_l = duration_s * (
             self.config.duty_flow_lps * int(duty_running)
             + self.config.standby_flow_lps * int(standby_running)
@@ -85,16 +84,14 @@ def _demand_at(now_s: int, scenario: Scenario) -> float:
 
 def _checkpoint_payload(plant: Plant, controller: Controller) -> dict[str, Any]:
     return {
-        "schema_version": "0.1",
+        "schema_version": "0.2",
         "plant_state": plant.state.as_dict(),
         "controller": controller.checkpoint_payload(),
     }
 
 
 def run_scenario(
-    planner: Planner,
-    scenario: Scenario,
-    config: SystemConfig | None = None,
+    planner: Planner, scenario: Scenario, config: SystemConfig | None = None
 ) -> ScenarioResult:
     active_config = config or SystemConfig()
     plant = Plant.at_level(active_config, scenario.initial_level_pct)
@@ -129,7 +126,7 @@ def run_scenario(
             observed_at_s=observed_at_s,
             received_at_s=now_s,
             tank_level_pct=observed_level,
-            demand_lps=demand_lps,
+            demand_lps=demand_lps * scenario.observed_demand_scale,
             power_available=power_available,
             quality=quality,
         )
@@ -174,6 +171,7 @@ def run_scenario(
         scenario_id=scenario.scenario_id,
         planner_id=planner.planner_id,
         steps=scenario.duration_s // scenario.step_s,
+        initial_level_pct=scenario.initial_level_pct,
         final_level_pct=round(plant.level_pct, 6),
         energy_kwh=round(plant.state.energy_kwh, 6),
         pump_starts=plant.state.duty_starts + plant.state.standby_starts,
@@ -181,8 +179,11 @@ def run_scenario(
         overflow_l=round(plant.state.overflow_l, 6),
         emergency_steps=emergency_steps,
         degraded_steps=degraded_steps,
+        safety_interventions=dict(controller.intervention_counts),
         safety_violations=safety_violations,
         sequence_end=controller.state.last_sequence,
         journal_tail_hash=controller.journal.tail_hash,
         restart_performed=restart_performed,
+        randomized=scenario.randomized,
+        seed=scenario.seed,
     )

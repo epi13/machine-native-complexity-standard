@@ -147,8 +147,8 @@
   "release_controls": null,
   "reproducibility": {
     "class": "EXACT",
-    "measurement_repetitions": 7,
-    "protocol": "Regenerate the candidate twice, generate deterministic workloads, rebuild with the declared compiler matrix, and repeat every paired measurement seven times.",
+    "measurement_repetitions": 15,
+    "protocol": "Regenerate the candidate twice, generate deterministic workloads, rebuild with the declared compiler matrix, and repeat every paired measurement fifteen times per workload.",
     "seeds_preserved": true
   },
   "roles": [

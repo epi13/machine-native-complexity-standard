@@ -1,11 +1,49 @@
 # SPDX-License-Identifier: Apache-2.0
 from __future__ import annotations
 
+import random
+
 from water_control.model import Scenario
 
 
+def _randomized_scenarios() -> tuple[Scenario, ...]:
+    scenarios: list[Scenario] = []
+    for seed in range(8):
+        rng = random.Random(10_000 + seed)
+        duration_s = 28_800
+        split_a = 7_200
+        split_b = 21_600
+        demand_profile = (
+            (0, split_a, round(rng.uniform(2.4, 3.8), 3)),
+            (split_a, split_b, round(rng.uniform(3.5, 6.2), 3)),
+            (split_b, duration_s, round(rng.uniform(2.2, 4.2), 3)),
+        )
+        outage_start = rng.choice((0, 7_200, 14_400, 21_600))
+        outage = ((outage_start, min(duration_s, outage_start + rng.choice((0, 1_800, 3_600)))),)
+        outage = tuple(window for window in outage if window[0] < window[1])
+        stale_start = rng.choice((5_400, 10_800, 16_200))
+        stale = ((stale_start, stale_start + rng.choice((0, 900, 1_800))),)
+        stale = tuple(window for window in stale if window[0] < window[1])
+        scenarios.append(
+            Scenario(
+                scenario_id=f"randomized-{seed:02d}",
+                duration_s=duration_s,
+                step_s=60,
+                initial_level_pct=round(rng.uniform(22.0, 78.0), 3),
+                demand_profile=demand_profile,
+                power_outages=outage,
+                stale_windows=stale,
+                restart_at_s=14_400 if seed % 3 == 0 else None,
+                observed_demand_scale=round(rng.uniform(0.78, 1.22), 3),
+                randomized=True,
+                seed=10_000 + seed,
+            )
+        )
+    return tuple(scenarios)
+
+
 def scenario_suite() -> tuple[Scenario, ...]:
-    return (
+    declared = (
         Scenario(
             scenario_id="normal-day",
             duration_s=43_200,
@@ -57,9 +95,51 @@ def scenario_suite() -> tuple[Scenario, ...]:
             demand_profile=((0, 14_400, 3.0), (14_400, 28_800, 4.6)),
             restart_at_s=14_400,
         ),
+        Scenario(
+            scenario_id="outage-plus-stale-telemetry",
+            duration_s=28_800,
+            step_s=60,
+            initial_level_pct=64.0,
+            demand_profile=((0, 28_800, 3.8),),
+            power_outages=((8_400, 12_000),),
+            stale_windows=((7_800, 12_600),),
+        ),
+        Scenario(
+            scenario_id="restart-during-degraded-telemetry",
+            duration_s=28_800,
+            step_s=60,
+            initial_level_pct=58.0,
+            demand_profile=((0, 28_800, 3.6),),
+            stale_windows=((12_600, 16_200),),
+            restart_at_s=14_400,
+        ),
+        Scenario(
+            scenario_id="near-empty-initial-storage",
+            duration_s=21_600,
+            step_s=60,
+            initial_level_pct=16.5,
+            demand_profile=((0, 7_200, 2.8), (7_200, 21_600, 4.4)),
+        ),
+        Scenario(
+            scenario_id="demand-model-underestimate",
+            duration_s=28_800,
+            step_s=60,
+            initial_level_pct=52.0,
+            demand_profile=((0, 28_800, 4.4),),
+            observed_demand_scale=0.72,
+        ),
+        Scenario(
+            scenario_id="demand-model-overestimate",
+            duration_s=28_800,
+            step_s=60,
+            initial_level_pct=52.0,
+            demand_profile=((0, 28_800, 3.2),),
+            observed_demand_scale=1.30,
+        ),
     )
+    return declared + _randomized_scenarios()
 
 
 def smoke_suite() -> tuple[Scenario, ...]:
     scenarios = scenario_suite()
-    return scenarios[0], scenarios[3], scenarios[5]
+    return scenarios[0], scenarios[3], scenarios[5], scenarios[6], scenarios[8]
