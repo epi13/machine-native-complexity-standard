@@ -1,0 +1,28 @@
+{
+  "schema_version": "0.1-experimental",
+  "result_id": "analyzer-result-no-recursion-v1",
+  "invariant_id": "no-recursion",
+  "status": "PASS",
+  "mode": "evaluator",
+  "evidence_partition": "holdout-http-decoder-v1",
+  "subject_id": "candidate-http-decoder-v1",
+  "contract_id": "contract-http-decoder-v1",
+  "analyzer_id": "mnea-clang-experimental-v1",
+  "analyzer_version": "0.1.0",
+  "configuration_id": "mnea-clang-config-v1",
+  "environment_id": "environment-clang-v1",
+  "method": "bounded single-translation-unit Clang AST direct-call analysis",
+  "bounded": true,
+  "required_semantics_complete": true,
+  "facts_examined": [
+    {"kind": "direct-call-graph", "identity": "facts-direct-calls-v1", "location": "candidate.c", "support": "bounded"}
+  ],
+  "assumptions": ["All calls relevant to the invariant resolve as direct FunctionDecl references."],
+  "unsupported_constructs": [],
+  "witnesses": [],
+  "counterexamples": [],
+  "resource_usage": {"wall_seconds": 0.02, "peak_memory_bytes": null, "input_bytes": 1200},
+  "limitations": ["This result does not resolve separate translation units or dynamic linkage."],
+  "evidence_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "extensions": {}
+}
