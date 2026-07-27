@@ -37,10 +37,11 @@ def generate_epoch2_scenario(seed: int, capacity_blocks: int) -> Scenario:
 
     for index in range(REQUESTS_PER_SCENARIO):
         tenant = rng.choice(tenants)
-        if rng.random() < 0.70:
-            system = rng.choice(hot_systems)
-        else:
-            system = f"cold-{seed}-{index // 4}"
+        system = (
+            rng.choice(hot_systems)
+            if rng.random() < 0.70
+            else f"cold-{seed}-{index // 4}"
+        )
 
         generated_blocks = rng.randint(1, 6)
         cancel_after = 1 if generated_blocks > 1 and rng.random() < 0.12 else None
