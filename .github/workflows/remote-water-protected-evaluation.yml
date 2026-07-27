@@ -1,0 +1,99 @@
+name: Remote Water Protected Evaluation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "case-studies/remote-water-control/**"
+      - ".github/workflows/remote-water-protected-evaluation.yml"
+  pull_request:
+    paths:
+      - "case-studies/remote-water-control/**"
+      - ".github/workflows/remote-water-protected-evaluation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: remote-water-protected-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  PYTHONHASHSEED: "0"
+  LC_ALL: C.UTF-8
+
+jobs:
+  freeze-runtime-seed:
+    runs-on: ubuntu-24.04
+    outputs:
+      seed: ${{ steps.seed.outputs.seed }}
+    steps:
+      - id: seed
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import secrets
+          print(f"seed={secrets.randbits(63)}")
+          PY
+
+  protected-host-evaluation:
+    needs: freeze-runtime-seed
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: x64
+            runner: ubuntu-24.04
+            python-version: "3.13"
+          - id: arm64
+            runner: ubuntu-24.04-arm
+            python-version: "3.13"
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: python -m pip install -e '.[dev]'
+      - name: Verify frozen evaluator and run undisclosed scenarios
+        env:
+          PROTECTED_SEED: ${{ needs.freeze-runtime-seed.outputs.seed }}
+        run: |
+          PYTHONPATH=case-studies/remote-water-control/src:case-studies/remote-water-control/machine \
+            python case-studies/remote-water-control/tools/run_protected_evaluation.py \
+              --seed "$PROTECTED_SEED" \
+              --output "case-studies/remote-water-control/evidence/protected/${{ matrix.id }}.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: remote-water-protected-${{ matrix.id }}
+          if-no-files-found: error
+          retention-days: 30
+          path: case-studies/remote-water-control/evidence/protected/${{ matrix.id }}.json
+
+  compare-hosts:
+    needs: protected-host-evaluation
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: remote-water-protected-*
+          path: case-studies/remote-water-control/evidence/protected/hosts
+          merge-multiple: true
+      - name: Require matching x64 and ARM64 evidence
+        run: |
+          python case-studies/remote-water-control/tools/compare_protected_results.py \
+            --input case-studies/remote-water-control/evidence/protected/hosts \
+            --output case-studies/remote-water-control/evidence/protected/cross-host-summary.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: remote-water-protected-cross-host
+          if-no-files-found: error
+          retention-days: 30
+          path: case-studies/remote-water-control/evidence/protected/cross-host-summary.json
