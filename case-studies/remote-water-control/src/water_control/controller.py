@@ -68,12 +68,12 @@ class Controller:
             return "accepted"
         if adjudication.mode in {ControlMode.DEGRADED, ControlMode.HOLD}:
             return "held"
-        if authorized_pair == current_pair:
-            return "held"
         if (proposal.duty_on or proposal.standby_on) and not (
             adjudication.duty_on or adjudication.standby_on
         ):
             return "rejected"
+        if authorized_pair == current_pair:
+            return "held"
         return "modified"
 
     def _apply_intent(self, intent: AuthorizedIntent) -> None:
