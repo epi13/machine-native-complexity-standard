@@ -1,24 +1,32 @@
 #!/usr/bin/env python3
-"""Fast deterministic EdgeStream smoke test for normal CI."""
+"""Fast deterministic EdgeStream smoke and evaluator-regression test."""
 
 from __future__ import annotations
 
 import hashlib
-import subprocess
 import sys
 import tempfile
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-
-
-def run(command: list[str]) -> subprocess.CompletedProcess[bytes]:
-    return subprocess.run(command, cwd=ROOT, check=True, capture_output=True)
+from harness_regression import run_harness_regression
+from study_support import (
+    ROOT,
+    build_all,
+    execute,
+    generate_candidate,
+    generate_workloads,
+    program,
+    run,
+)
 
 
 def main() -> int:
-    run([sys.executable, "tools/run_study.py", "generate"])
-    run([sys.executable, "tools/run_study.py", "build"])
+    generate_workloads()
+    generation = generate_candidate()
+    build = build_all()
+    if generation["status"] != "PASS" or build["status"] != "PASS":
+        raise SystemExit("generation or strict build failed")
+
     source = ROOT / "machine" / "edgestream_generated.c"
     first = hashlib.sha256(source.read_bytes()).digest()
     with tempfile.TemporaryDirectory() as directory:
@@ -37,16 +45,19 @@ def main() -> int:
     if first != second:
         raise SystemExit("candidate regeneration is not byte-identical")
 
-    workload = ROOT / "workloads" / "edge-cases.bin"
-    reference = ROOT / "build" / "reference-gcc"
-    candidate = ROOT / "build" / "candidate-gcc"
-    if not reference.exists():
-        reference = ROOT / "build" / "reference-clang"
-        candidate = ROOT / "build" / "candidate-clang"
-    ref = run([str(reference), "--chunk", "3", str(workload)])
-    machine = run([str(candidate), "--chunk", "31", str(workload)])
-    if ref.stdout != machine.stdout:
-        raise SystemExit("reference and candidate smoke outputs differ")
+    for workload_name in ("edge-cases.bin", "hostile.bin"):
+        workload = ROOT / "workloads" / workload_name
+        reference = execute(program("reference"), workload, 3, check=False)
+        for chunk in (1, 31, 4096):
+            candidate = execute(program("candidate"), workload, chunk, check=False)
+            if reference.stdout != candidate.stdout or reference.returncode != candidate.returncode:
+                raise SystemExit(
+                    f"reference and candidate smoke outputs differ: {workload_name}, chunk={chunk}"
+                )
+
+    regression = run_harness_regression()
+    if regression["status"] != "PASS":
+        raise SystemExit("harness regression corpus failed")
     return 0
 
 
