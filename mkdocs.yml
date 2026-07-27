@@ -20,6 +20,7 @@ nav:
   - MNCDS design decisions: mncds-decisions.md
   - Machine-Native Evidence Analyzer: machine-native-evidence-analyzer.md
   - Remote Water Control case study: remote-water-control.md
+  - CacheForge KV-cache case study: cacheforge.md
   - Evidence-derived conformance: evidence-derived-conformance.md
   - Certification vs validation: certification-vs-validation.md
   - Migration 0.1 to 0.1.1: migration-0.1-to-0.1.1.md
