@@ -1,9 +1,9 @@
 # SPDX-License-Identifier: Apache-2.0
 """Generated decision table. Do not edit by hand."""
 
-SOURCE_SPEC_SHA256 = "01ce91e7535a9e55a8e8dd30ef089443c245a540b92bf63f32d5e9b5a2d46c3f"
-PLANNER_ID = "mncs.remote-water.generated-table.v1"
-LEVEL_BANDS_PCT = (15.0, 35.0, 50.0, 65.0, 75.0, 90.0)
+SOURCE_SPEC_SHA256 = "1287bb254078d320846551b23930efeff9701b494e05db70ea541dda7629140b"
+PLANNER_ID = "mncs.remote-water.generated-table.v2"
+LEVEL_BANDS_PCT = (15.0, 35.0, 55.0, 65.0, 75.0, 90.0)
 DEMAND_BANDS_LPS = (2.5, 4.5)
 TABLE_SHAPE = (7, 3, 2, 2, 2, 3)
 
