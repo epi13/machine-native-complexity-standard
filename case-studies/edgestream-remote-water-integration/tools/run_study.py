@@ -317,8 +317,14 @@ def run(output: Path) -> dict[str, Any]:
             },
             "component_boundaries": boundary["component_boundaries"],
             "limitations": [
-                "This study exercises a local file and process boundary, not a network transport or live SCADA path.",
-                "An integration PASS does not promote either component claim or authorize production control.",
+                (
+                    "This study exercises a local file and process boundary, not a "
+                    "network transport or live SCADA path."
+                ),
+                (
+                    "An integration PASS does not promote either component claim or "
+                    "authorize production control."
+                ),
                 "The adapter contract is limited to one device and four declared metric mappings.",
             ],
         }
