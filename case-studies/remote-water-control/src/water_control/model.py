@@ -148,6 +148,9 @@ class Scenario:
     stale_windows: tuple[tuple[int, int], ...] = ()
     conflict_windows: tuple[tuple[int, int], ...] = ()
     restart_at_s: int | None = None
+    observed_demand_scale: float = 1.0
+    randomized: bool = False
+    seed: int | None = None
 
 
 @dataclass
@@ -155,6 +158,7 @@ class ScenarioResult:
     scenario_id: str
     planner_id: str
     steps: int
+    initial_level_pct: float
     final_level_pct: float
     energy_kwh: float
     pump_starts: int
@@ -162,10 +166,13 @@ class ScenarioResult:
     overflow_l: float
     emergency_steps: int
     degraded_steps: int
+    safety_interventions: dict[str, int] = field(default_factory=dict)
     safety_violations: list[str] = field(default_factory=list)
     sequence_end: int = 0
     journal_tail_hash: str = ""
     restart_performed: bool = False
+    randomized: bool = False
+    seed: int | None = None
 
     def as_dict(self) -> dict[str, Any]:
         return asdict(self)
