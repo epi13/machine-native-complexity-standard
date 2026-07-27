@@ -8,7 +8,7 @@
       "declared_before_generation": true,
       "direction": "higher_is_better",
       "metric": "telemetry throughput",
-      "minimum_sample_count": 7,
+      "minimum_sample_count": 30,
       "noise_policy": "No outlier deletion; paired measurements retained in execution order.",
       "threshold": 1.15,
       "unit": "bytes/second"
@@ -32,7 +32,7 @@
   "claimed_level": "MNCS-L4",
   "comparison_profile": {
     "benefit": {
-      "mean_throughput_ratio": 1.8469567055005875
+      "mean_throughput_ratio": 1.66420825488073
     },
     "complexity": {
       "candidate_source_bytes": 14752.0,
@@ -53,15 +53,17 @@
   },
   "environment": {
     "description": "Captured Linux x86_64 local development environment with GCC and Clang.",
-    "fingerprint": "sha256:9c45cd69124d86279472a3d69c76379fddef099d5f5948af4b59ddbdd523f500",
+    "fingerprint": "sha256:0ad8c7b3d934ccdb902eefe8bcf50034b92d02780303873d3db54645a648ce1b",
     "identity_evidence_id": "identity-environment"
   },
   "evidence_index": {
     "path": "evidence/index.json",
-    "sha256": "sha256:3cdce4d54b62bcf7df2fe3067475774d9a385963e85ead2215928c16e03593b1"
+    "sha256": "sha256:1add72bbf68217d135f3ffdbfc3c2529131ead2b57768ca2c7d085687cfaa890"
   },
   "extensions": {
     "mncs.dev:case-study": "edgestream",
+    "mncs.dev:evaluation-epoch": "edgestream-evaluation-epoch-2",
+    "mncs.dev:harness-regression-evidence": "raw-harness-regression",
     "mncs.dev:mncds-profile": "MNCDS-D2"
   },
   "final_status": "PASS",
@@ -135,10 +137,10 @@
   "structural_aggregate": {
     "bounded": true,
     "provider_assumptions": [
-      "Source-pattern checks are bounded rejection evidence, not semantic proof."
+      "The Clang AST and source-order provider is bounded to the declared invariant set."
     ],
     "required_invariants": [
-      "bounded-storage"
+      "invariant-bounded-storage"
     ]
   }
 }

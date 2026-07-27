@@ -132,11 +132,7 @@ def collect_facts(ast: dict[str, Any], source: Path | None = None) -> Facts:
                 facts.call_locations.setdefault(callee, []).append(location)
             else:
                 facts.unresolved_calls.append(location)
-        elif (
-            kind == "VarDecl"
-            and current_function is None
-            and _belongs_to_source(node, source)
-        ):
+        elif kind == "VarDecl" and current_function is None and _belongs_to_source(node, source):
             name = str(node.get("name", "<unnamed>"))
             storage = str(node.get("storageClass", ""))
             type_value = node.get("type")
@@ -161,7 +157,7 @@ def _cycles(calls: dict[str, set[str]]) -> list[list[str]]:
     def visit(function: str) -> None:
         if function in visiting:
             start = visiting.index(function)
-            cycle = visiting[start:] + [function]
+            cycle = [*visiting[start:], function]
             if cycle not in cycles:
                 cycles.append(cycle)
             return

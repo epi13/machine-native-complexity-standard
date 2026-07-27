@@ -14,7 +14,7 @@
         }
       ],
       "generator_id": "generator-edgestream-v1",
-      "objective_value": 72236024.38636412,
+      "objective_value": 57775029.73687879,
       "parent_ids": []
     },
     {
@@ -52,7 +52,7 @@
         }
       ],
       "generator_id": "generator-edgestream-v1",
-      "objective_value": 133416809.61909917,
+      "objective_value": 96149681.41409333,
       "parent_ids": [
         "candidate-readable-reference"
       ]
@@ -106,6 +106,8 @@
     }
   ],
   "extensions": {
+    "mncds.dev:evaluation-epoch": "edgestream-evaluation-epoch-2",
+    "mncds.dev:harness-regression-status": "PASS",
     "mncs.dev:study-status": "development"
   },
   "generator": {

@@ -209,10 +209,7 @@ def create_identities(
             "corpus",
             "EdgeStream deterministic workload corpus",
             "1.0",
-            (
-                "Steady, hostile, high-cardinality, and sequence/time edge-case "
-                "workloads."
-            ),
+            ("Steady, hostile, high-cardinality, and sequence/time edge-case workloads."),
             {"manifest_sha256": digest(corpus), "generated": True},
         ),
         "build": identity(
@@ -220,10 +217,7 @@ def create_identities(
             "build",
             "EdgeStream strict C11 build",
             "1.0",
-            (
-                "Optimized local binaries built from the indexed reference and "
-                "candidate sources."
-            ),
+            ("Optimized local binaries built from the indexed reference and candidate sources."),
             {"optimization": "O3", "language": "C11"},
         ),
     }
@@ -354,5 +348,3 @@ def create_invariant(
         },
     )
     return path
-
-

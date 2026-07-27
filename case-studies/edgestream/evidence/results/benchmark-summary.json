@@ -1,277 +1,35 @@
 {
   "maximum_latency_ratio": 1.1,
-  "median_paired_throughput_ratio": 1.8289594794003339,
-  "noise_policy": "No outlier deletion; paired measurements retained in execution order.",
-  "repetitions_per_workload": 7,
-  "samples": [
-    {
-      "candidate": {
-        "accepted": 38400,
-        "bytes": 1228832,
-        "elapsed_ns": 9482409,
-        "implementation": "machine-generated",
-        "rejected": 0
-      },
-      "reference": {
-        "accepted": 38400,
-        "bytes": 1228832,
-        "elapsed_ns": 17161907,
-        "implementation": "reference",
-        "rejected": 0
-      },
-      "repetition": 1,
-      "throughput_ratio": 1.8098678299997395,
-      "workload": "steady.bin"
+  "mean_throughput_ratio": 1.66420825488073,
+  "mean_throughput_ratio_method": "arithmetic mean candidate throughput divided by arithmetic mean reference throughput",
+  "median_paired_throughput_ratio": 1.6639667099064126,
+  "paired_mean_ratio_bootstrap_ci95": {
+    "lower": 1.6441845343083252,
+    "upper": 1.6825519827950857
+  },
+  "protocol": {
+    "cpu_affinity": {
+      "cpu": 0,
+      "governor": null,
+      "pinned": true,
+      "supported": true
     },
-    {
-      "candidate": {
-        "accepted": 38400,
-        "bytes": 1228832,
-        "elapsed_ns": 9157318,
-        "implementation": "machine-generated",
-        "rejected": 0
-      },
-      "reference": {
-        "accepted": 38400,
-        "bytes": 1228832,
-        "elapsed_ns": 16424124,
-        "implementation": "reference",
-        "rejected": 0
-      },
-      "repetition": 2,
-      "throughput_ratio": 1.793551780117279,
-      "workload": "steady.bin"
-    },
-    {
-      "candidate": {
-        "accepted": 38400,
-        "bytes": 1228832,
-        "elapsed_ns": 9354600,
-        "implementation": "machine-generated",
-        "rejected": 0
-      },
-      "reference": {
-        "accepted": 38400,
-        "bytes": 1228832,
-        "elapsed_ns": 17160274,
-        "implementation": "reference",
-        "rejected": 0
-      },
-      "repetition": 3,
-      "throughput_ratio": 1.8344209266029547,
-      "workload": "steady.bin"
-    },
-    {
-      "candidate": {
-        "accepted": 38400,
-        "bytes": 1228832,
-        "elapsed_ns": 9283775,
-        "implementation": "machine-generated",
-        "rejected": 0
-      },
-      "reference": {
-        "accepted": 38400,
-        "bytes": 1228832,
-        "elapsed_ns": 16716837,
-        "implementation": "reference",
-        "rejected": 0
-      },
-      "repetition": 4,
-      "throughput_ratio": 1.800650812842836,
-      "workload": "steady.bin"
-    },
-    {
-      "candidate": {
-        "accepted": 38400,
-        "bytes": 1228832,
-        "elapsed_ns": 9043248,
-        "implementation": "machine-generated",
-        "rejected": 0
-      },
-      "reference": {
-        "accepted": 38400,
-        "bytes": 1228832,
-        "elapsed_ns": 16826760,
-        "implementation": "reference",
-        "rejected": 0
-      },
-      "repetition": 5,
-      "throughput_ratio": 1.860698722405932,
-      "workload": "steady.bin"
-    },
-    {
-      "candidate": {
-        "accepted": 38400,
-        "bytes": 1228832,
-        "elapsed_ns": 9842143,
-        "implementation": "machine-generated",
-        "rejected": 0
-      },
-      "reference": {
-        "accepted": 38400,
-        "bytes": 1228832,
-        "elapsed_ns": 16520046,
-        "implementation": "reference",
-        "rejected": 0
-      },
-      "repetition": 6,
-      "throughput_ratio": 1.6785009118440974,
-      "workload": "steady.bin"
-    },
-    {
-      "candidate": {
-        "accepted": 38400,
-        "bytes": 1228832,
-        "elapsed_ns": 8888059,
-        "implementation": "machine-generated",
-        "rejected": 0
-      },
-      "reference": {
-        "accepted": 38400,
-        "bytes": 1228832,
-        "elapsed_ns": 17729984,
-        "implementation": "reference",
-        "rejected": 0
-      },
-      "repetition": 7,
-      "throughput_ratio": 1.994809440396379,
-      "workload": "steady.bin"
-    },
-    {
-      "candidate": {
-        "accepted": 51200,
-        "bytes": 1638656,
-        "elapsed_ns": 11874333,
-        "implementation": "machine-generated",
-        "rejected": 0
-      },
-      "reference": {
-        "accepted": 51200,
-        "bytes": 1638656,
-        "elapsed_ns": 22294312,
-        "implementation": "reference",
-        "rejected": 0
-      },
-      "repetition": 1,
-      "throughput_ratio": 1.8775212047699859,
-      "workload": "high-cardinality.bin"
-    },
-    {
-      "candidate": {
-        "accepted": 51200,
-        "bytes": 1638656,
-        "elapsed_ns": 12419921,
-        "implementation": "machine-generated",
-        "rejected": 0
-      },
-      "reference": {
-        "accepted": 51200,
-        "bytes": 1638656,
-        "elapsed_ns": 22300751,
-        "implementation": "reference",
-        "rejected": 0
-      },
-      "repetition": 2,
-      "throughput_ratio": 1.795563031359056,
-      "workload": "high-cardinality.bin"
-    },
-    {
-      "candidate": {
-        "accepted": 51200,
-        "bytes": 1638656,
-        "elapsed_ns": 12005538,
-        "implementation": "machine-generated",
-        "rejected": 0
-      },
-      "reference": {
-        "accepted": 51200,
-        "bytes": 1638656,
-        "elapsed_ns": 23572705,
-        "implementation": "reference",
-        "rejected": 0
-      },
-      "repetition": 3,
-      "throughput_ratio": 1.9634859345745272,
-      "workload": "high-cardinality.bin"
-    },
-    {
-      "candidate": {
-        "accepted": 51200,
-        "bytes": 1638656,
-        "elapsed_ns": 12347794,
-        "implementation": "machine-generated",
-        "rejected": 0
-      },
-      "reference": {
-        "accepted": 51200,
-        "bytes": 1638656,
-        "elapsed_ns": 21887188,
-        "implementation": "reference",
-        "rejected": 0
-      },
-      "repetition": 4,
-      "throughput_ratio": 1.7725585639021837,
-      "workload": "high-cardinality.bin"
-    },
-    {
-      "candidate": {
-        "accepted": 51200,
-        "bytes": 1638656,
-        "elapsed_ns": 12732314,
-        "implementation": "machine-generated",
-        "rejected": 0
-      },
-      "reference": {
-        "accepted": 51200,
-        "bytes": 1638656,
-        "elapsed_ns": 26332895,
-        "implementation": "reference",
-        "rejected": 0
-      },
-      "repetition": 5,
-      "throughput_ratio": 2.068193966941123,
-      "workload": "high-cardinality.bin"
-    },
-    {
-      "candidate": {
-        "accepted": 51200,
-        "bytes": 1638656,
-        "elapsed_ns": 12038557,
-        "implementation": "machine-generated",
-        "rejected": 0
-      },
-      "reference": {
-        "accepted": 51200,
-        "bytes": 1638656,
-        "elapsed_ns": 21952285,
-        "implementation": "reference",
-        "rejected": 0
-      },
-      "repetition": 6,
-      "throughput_ratio": 1.8234980321977128,
-      "workload": "high-cardinality.bin"
-    },
-    {
-      "candidate": {
-        "accepted": 51200,
-        "bytes": 1638656,
-        "elapsed_ns": 11928022,
-        "implementation": "machine-generated",
-        "rejected": 0
-      },
-      "reference": {
-        "accepted": 51200,
-        "bytes": 1638656,
-        "elapsed_ns": 21905475,
-        "implementation": "reference",
-        "rejected": 0
-      },
-      "repetition": 7,
-      "throughput_ratio": 1.8364717134156863,
-      "workload": "high-cardinality.bin"
-    }
-  ],
+    "maximum_batch_iterations": 64,
+    "minimum_observed_sample_elapsed_ns": 125481319,
+    "order_policy": "deterministically counterbalanced by paired repetition",
+    "outlier_policy": "retain every measured sample in execution order",
+    "repetitions_per_workload": 15,
+    "target_minimum_sample_elapsed_ns": 100000000,
+    "timer": "CLOCK_MONOTONIC inside each process; batch values sum raw runs",
+    "warmup_runs_per_implementation": 3
+  },
+  "raw_benchmark_sha256": "sha256:cb45a026de7e2375eb8ac5629b3e5e935d565ea88b9fba9ab7408800142b47f5",
+  "sample_count_per_implementation": 30,
   "status": "PASS",
   "threshold": 1.15,
-  "worst_workload_p99_batch_latency_ratio": 0.5551129092953496
+  "workload_p99_latency_ratios": {
+    "high-cardinality.bin": 0.6332974148739291,
+    "steady.bin": 0.6023154242110312
+  },
+  "worst_workload_p99_batch_latency_ratio": 0.6332974148739291
 }

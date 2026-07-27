@@ -11,6 +11,9 @@ long-lived per-device state, rolling aggregation, sequence rollover, explicit ev
 alarm transitions, bounded admission, persistence, recovery, and injected checkpoint
 failures.
 
-The required structural provider is a bounded local source checker. Joern is optional and
-was unavailable in the captured run, so Joern-specific evidence is recorded as UNKNOWN
-and is not silently converted to PASS.
+The required structural provider is a bounded Clang-AST and source-order analyzer tied to
+the generated candidate identity. It establishes only the declared invariant set and does
+not claim complete C semantic proof. A versioned regression corpus confirms that the
+provider rejects representative missing-marker, dynamic-allocation, validation-order,
+benchmark-awareness, and checkpoint-integrity defects. Joern remains optional and is
+recorded separately when unavailable; its absence is not silently converted to PASS.

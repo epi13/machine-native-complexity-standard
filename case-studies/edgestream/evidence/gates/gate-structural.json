@@ -3,7 +3,7 @@
     "The checked-in contract and declared environment delimit this result."
   ],
   "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
-  "completed_at": "2026-07-26T23:00:00Z",
+  "completed_at": "2026-07-27T03:41:51Z",
   "component_identity": {
     "identity_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
     "name": "EdgeStream",
@@ -11,14 +11,14 @@
   },
   "contract_id": "mncs.edgestream.telemetry.v1",
   "environment": {
-    "fingerprint": "sha256:9c45cd69124d86279472a3d69c76379fddef099d5f5948af4b59ddbdd523f500",
+    "fingerprint": "sha256:0ad8c7b3d934ccdb902eefe8bcf50034b92d02780303873d3db54645a648ce1b",
     "identity_evidence_id": "identity-environment"
   },
   "evaluator": {
     "identity_evidence_id": "identity-evaluator",
-    "identity_hash": "sha256:ab7d1e5d9560d27fdd89593b7022e06eb477d485087319ef4c106365bdd1fbca",
+    "identity_hash": "sha256:8252ea6061a1d88b9738f5d8ddc2e6d47a97e9f78e1c0b3989e904ebdf468346",
     "name": "EdgeStream study evaluator",
-    "version": "1.0"
+    "version": "2.0"
   },
   "evidence_references": [
     "contract",
@@ -36,13 +36,13 @@
   "mncs_version": "0.2",
   "observation_counts": {
     "failed": 0,
-    "passed": 7,
-    "total": 7,
+    "passed": 9,
+    "total": 9,
     "unknown": 0
   },
   "reference_source_hash": "sha256:7268208dae41cad6a42f9a33ee8cfc31140f3f0cb9da9b45492699efefba3c64",
   "result_id": "gate-structural",
   "schema_version": "0.2",
-  "started_at": "2026-07-26T22:00:00Z",
+  "started_at": "2026-07-27T03:41:51Z",
   "status": "PASS"
 }
