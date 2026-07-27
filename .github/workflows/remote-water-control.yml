@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - "case-studies/remote-water-control/**"
+      - "case-studies/edgestream-remote-water-integration/**"
+      - "case-studies/edgestream/evidence/results/study-summary.json"
       - "docs/remote-water-control.md"
       - "mkdocs.yml"
       - "Makefile"
@@ -12,6 +14,8 @@ on:
   pull_request:
     paths:
       - "case-studies/remote-water-control/**"
+      - "case-studies/edgestream-remote-water-integration/**"
+      - "case-studies/edgestream/evidence/results/study-summary.json"
       - "docs/remote-water-control.md"
       - "mkdocs.yml"
       - "Makefile"
@@ -45,13 +49,15 @@ jobs:
       - run: python -m pip install -e '.[dev]'
       - name: Check case-study source
         run: |
-          ruff format --check case-studies/remote-water-control
-          ruff check case-studies/remote-water-control
+          ruff format --check case-studies/remote-water-control case-studies/edgestream-remote-water-integration
+          ruff check case-studies/remote-water-control case-studies/edgestream-remote-water-integration
       - name: Run tests and controlled development study
         run: make remote-water-study
+      - name: Run bounded telemetry integration study
+        run: python case-studies/edgestream-remote-water-integration/tools/run_study.py
       - name: Verify regenerated evidence
         run: |
-          git diff --check -- case-studies/remote-water-control
+          git diff --check -- case-studies/remote-water-control case-studies/edgestream-remote-water-integration
           git diff --exit-code -- case-studies/remote-water-control/evidence/results
       - uses: actions/upload-artifact@v4
         if: always()
@@ -59,4 +65,6 @@ jobs:
           name: remote-water-evidence-${{ matrix.python-version }}-${{ github.sha }}
           if-no-files-found: error
           retention-days: 14
-          path: case-studies/remote-water-control/evidence/results/
+          path: |
+            case-studies/remote-water-control/evidence/results/
+            case-studies/edgestream-remote-water-integration/evidence/results/
