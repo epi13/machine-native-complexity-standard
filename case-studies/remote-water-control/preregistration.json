@@ -1,16 +1,17 @@
 {
-  "schema_version": "0.1",
-  "record_id": "mncs.remote-water.preregistration.v1",
-  "study_id": "mncs.remote-water-control.development-epoch-1",
-  "title": "Remote Water Resilience Controller development study",
+  "schema_version": "0.2",
+  "record_id": "mncs.remote-water.preregistration.v2",
+  "study_id": "mncs.remote-water-control.development-epoch-2",
+  "title": "Remote Water Resilience Controller evidence-hardening study",
   "status": "FROZEN_FOR_DEVELOPMENT_EPOCH",
   "target": {
     "future_combined_label": "MNCDS-D3 / MNCS-L5",
     "currently_claimed": false,
-    "reason": "Protected holdout, independent final evaluation, release binding, cross-host evidence, and operational lifecycle evidence are not yet complete."
+    "reason": "Independent final evaluation, release binding, domain review, and operational lifecycle evidence are not complete."
   },
   "candidate": {
     "kind": "deterministically generated table planner",
+    "candidate_id": "mncs.remote-water.generated-table.v2",
     "generator": "tools/generate_planner.py",
     "generator_spec": "generator/planner-spec.json",
     "generated_artifact": "machine/generated_planner.py"
@@ -22,24 +23,50 @@
       "bypass the safety kernel",
       "append directly to the intent journal",
       "modify checkpoints, thresholds, scenarios, or evidence"
+    ],
+    "required_reporting": [
+      "accepted unchanged proposals",
+      "modified proposals",
+      "held proposals",
+      "rejected proposals",
+      "intervention reasons"
     ]
   },
   "hard_gates": [
-    "No declared safety invariant violation in any development scenario.",
+    "No declared safety invariant violation in any selection, combined-fault, or deterministic randomized scenario.",
     "Exact deterministic replay from identical identified inputs.",
     "Exact monotonically increasing intent sequence across checkpoint restart.",
-    "Corrupted checkpoint rejection.",
+    "Every injected checkpoint corruption is rejected without changing live state.",
+    "Every candidate scenario passes the predeclared per-scenario regression limits.",
     "Experimental contract-profile and assurance-case schema validation."
   ],
   "selection_objective": {
-    "primary": "Reduce total pump starts across the declared scenario suite.",
+    "scope": "The six frozen selection scenarios only; robustness scenarios cannot retroactively change the selection corpus.",
+    "primary": "Reduce total pump starts across the frozen selection suite.",
     "candidate_to_baseline_pump_start_ratio_max": 0.75,
-    "candidate_to_baseline_energy_ratio_max": 1.1,
+    "candidate_to_baseline_raw_energy_ratio_max": 1.1,
+    "candidate_to_baseline_inventory_adjusted_energy_ratio_max": 1.05,
     "unmet_demand_regression_l_max": 0.0,
     "overflow_regression_l_max": 0.0,
     "selection_rule": "Hard gates dominate. The objective is evaluated only after every hard gate passes."
   },
-  "development_scenarios": [
+  "terminal_state_normalization": {
+    "method": "Normalize candidate energy to the baseline terminal stored-water inventory using the declared duty-pump marginal kWh per stored liter.",
+    "formula": "candidate_energy_kwh - ((candidate_final_volume_l - baseline_final_volume_l) * duty_power_kw / (duty_flow_lps * 3600))",
+    "raw_energy_still_reported": true,
+    "terminal_reserve_deficit_pct_min": -5.0,
+    "limitation": "This corrects finite-horizon inventory borrowing but is not a hydraulic efficiency or pump-curve model."
+  },
+  "per_scenario_regression_limits": {
+    "inventory_adjusted_energy_ratio_max": 1.05,
+    "pump_start_increase_max": 1,
+    "terminal_level_delta_pct_min": -5.0,
+    "unmet_demand_regression_l_max": 0.0,
+    "overflow_regression_l_max": 0.0,
+    "candidate_safety_violations_max": 0,
+    "checkpoint_corruption_acceptances_max": 0
+  },
+  "selection_scenarios": [
     "normal-day",
     "peak-demand",
     "power-outage",
@@ -47,19 +74,37 @@
     "conflicting-sensor",
     "checkpoint-restart"
   ],
-  "protected_holdout_policy": {
-    "status": "NOT_YET_EXECUTED",
+  "combined_fault_scenarios": [
+    "outage-plus-stale-telemetry",
+    "restart-during-degraded-telemetry",
+    "near-empty-initial-storage",
+    "demand-model-error",
+    "repeated-checkpoint-corruption"
+  ],
+  "randomized_development_campaign": {
+    "seed": 20260727,
+    "count": 16,
+    "best_run_selection_forbidden": true,
+    "all_generated_scenarios_reported": true
+  },
+  "protected_evaluation_policy": {
+    "status": "AUTOMATED_PROTECTED_AT_EXECUTION",
     "required_for_future_claim": true,
+    "evaluator_lock": "protected-evaluator-lock.json",
+    "exact_scenario_seed_disclosed_before_run": false,
+    "runners": ["ubuntu-24.04 x64", "ubuntu-24.04 ARM64"],
     "requirements": [
-      "Scenario identities and expected outcomes remain inaccessible to generator and candidate agents until selection is frozen.",
-      "The final evaluator is independently identified and cannot alter thresholds after observing candidates.",
-      "The holdout includes novel demand, outage, telemetry, restart, corruption, and boundary combinations.",
-      "Final evidence is run on at least two physical hosts and one independent architecture when available."
+      "The candidate and evaluator lock are committed before the runtime seed is generated.",
+      "Both architectures receive the same runtime seed and produce matching rounded comparison digests.",
+      "The workflow retains every result and forbids best-run selection.",
+      "The development repository owner is not treated as an independent evaluator.",
+      "A future formal claim still requires separately identified independent evaluation and release authority."
     ]
   },
   "reporting": {
     "report_all_scenarios": true,
     "report_fail_and_unknown": true,
+    "report_safety_interventions": true,
     "best_run_selection_forbidden": true,
     "repository_visible_results_are_development_evidence_only": true
   }
