@@ -30,4 +30,5 @@ protected-evaluation: check-generated
 clean:
 	rm -f evidence/results/study-summary.json
 	rm -f evidence/results/epoch-2-development.json
+	rm -f evidence/results/epoch-2-scenario-results.json
 	rm -f evidence/results/protected-evaluation.json
