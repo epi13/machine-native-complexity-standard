@@ -29,9 +29,8 @@ env:
 jobs:
   refresh-captured-evidence:
     if: >-
-      github.event_name == 'push' &&
-      github.ref_name == 'agent/strengthen-edgestream-evidence' &&
-      !contains(github.event.head_commit.message, 'Refresh EdgeStream captured evidence')
+      github.event_name == 'pull_request' &&
+      github.head_ref == 'agent/strengthen-edgestream-evidence'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
@@ -40,19 +39,34 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: agent/strengthen-edgestream-evidence
+          fetch-depth: 2
+      - name: Decide whether capture needs refresh
+        id: guard
+        shell: bash
+        run: |
+          if [ "$(git log -1 --pretty=%s)" = "Refresh EdgeStream captured evidence" ]; then
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/setup-python@v5
+        if: steps.guard.outputs.run == 'true'
         with:
           python-version: "3.13"
-      - run: python -m pip install -e '.[dev]'
+      - if: steps.guard.outputs.run == 'true'
+        run: python -m pip install -e '.[dev]'
       - name: Canonicalize evaluator source
+        if: steps.guard.outputs.run == 'true'
         run: |
           ruff format case-studies/edgestream/tools
           ruff check --fix --unsafe-fixes case-studies/edgestream/tools
           ruff format --check case-studies/edgestream/tools
           ruff check case-studies/edgestream/tools
       - name: Regenerate and validate captured evidence
+        if: steps.guard.outputs.run == 'true'
         run: make -C case-studies/edgestream thorough
       - name: Commit refreshed capture
+        if: steps.guard.outputs.run == 'true'
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
