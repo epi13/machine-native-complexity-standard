@@ -25,6 +25,23 @@ from water_control.simulator import run_scenario
 ROOT = Path(__file__).resolve().parents[1]
 
 
+class FixedPlanner:
+    planner_id = "test-fixed-planner"
+
+    def __init__(self, duty_on: bool, standby_on: bool) -> None:
+        self.duty_on = duty_on
+        self.standby_on = standby_on
+
+    def propose(
+        self,
+        sample: TelemetrySample,
+        state: ControllerState,
+        config: SystemConfig,
+    ) -> PlannerProposal:
+        del sample, state, config
+        return PlannerProposal(self.duty_on, self.standby_on, self.planner_id, "test")
+
+
 def sample(
     *,
     level: float = 50.0,
@@ -64,6 +81,32 @@ def test_safety_holds_on_bad_telemetry() -> None:
     assert result.mode is ControlMode.DEGRADED
     assert result.duty_on
     assert not result.standby_on
+
+
+def test_intervention_counts_distinguish_all_dispositions() -> None:
+    accepted = Controller(FixedPlanner(False, False))
+    accepted.decide(sample(), 1_000)
+    assert accepted.intervention_counts == {
+        "accepted": 1,
+        "modified": 0,
+        "held": 0,
+        "rejected": 0,
+    }
+
+    held = Controller(
+        FixedPlanner(False, True),
+        state=ControllerState(duty_on=True, standby_on=False),
+    )
+    held.decide(sample(quality=TelemetryQuality.CONFLICT), 1_000)
+    assert held.intervention_counts["held"] == 1
+
+    rejected = Controller(FixedPlanner(True, True))
+    rejected.decide(sample(level=95.0), 1_000)
+    assert rejected.intervention_counts["rejected"] == 1
+
+    modified = Controller(FixedPlanner(False, True))
+    modified.decide(sample(), 1_000)
+    assert modified.intervention_counts["modified"] == 1
 
 
 def test_journal_rejects_replay() -> None:
