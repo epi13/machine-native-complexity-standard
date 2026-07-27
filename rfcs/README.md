@@ -13,6 +13,7 @@ experimentation but cannot claim core status.
 Draft RFCs:
 
 - [RFC 0004: Machine-Native Complexity Development Specification](0004-machine-native-development-specification.md)
+- [RFC 0005: Machine-Native Foundation and Evidence Analyzer Architecture](0005-machine-native-foundation-and-evidence-analyzer.md)
 
 Accepted RFCs:
 
