@@ -64,8 +64,7 @@ def main() -> int:
             item["development_result"] == "PASS" for item in observations
         ),
         "formal_claims_remain_unknown": all(
-            item["formal_mncs_status"] == "UNKNOWN"
-            and item["formal_mncds_status"] == "UNKNOWN"
+            item["formal_mncs_status"] == "UNKNOWN" and item["formal_mncds_status"] == "UNKNOWN"
             for item in observations
         ),
         "semantic_evidence_identical": len(study_hashes) == 1,
