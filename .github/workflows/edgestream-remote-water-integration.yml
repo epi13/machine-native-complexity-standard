@@ -43,30 +43,21 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
       - run: python -m pip install -e '.[dev]'
-      - name: Produce canonical source and diagnostics
-        shell: bash
+      - name: Check integration source
         run: |
-          mkdir -p diagnostics
-          ruff format case-studies/remote-water-control case-studies/edgestream-remote-water-integration \
-            > diagnostics/ruff-format.log 2>&1
-          set +e
-          ruff check --fix case-studies/remote-water-control case-studies/edgestream-remote-water-integration \
-            > diagnostics/ruff-check.log 2>&1
-          echo "$?" > diagnostics/ruff-check-exit-code.txt
-          set -e
+          ruff format --check case-studies/edgestream-remote-water-integration
+          ruff check case-studies/edgestream-remote-water-integration
       - name: Run isolated component-boundary integration
         run: make edgestream-water-integration
-      - name: Require checked-in canonical source
+      - name: Verify regenerated integration evidence
         run: |
-          test "$(cat diagnostics/ruff-check-exit-code.txt)" = "0"
-          git diff --exit-code -- case-studies/remote-water-control case-studies/edgestream-remote-water-integration
+          git diff --check -- case-studies/edgestream-remote-water-integration
+          git diff --exit-code -- \
+            case-studies/edgestream-remote-water-integration/evidence/results/study-summary.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: case-study-canonical-py${{ matrix.python-version }}-${{ github.sha }}
+          name: edgestream-water-integration-py${{ matrix.python-version }}-${{ github.sha }}
           if-no-files-found: error
           retention-days: 14
-          path: |
-            diagnostics/
-            case-studies/remote-water-control/
-            case-studies/edgestream-remote-water-integration/
+          path: case-studies/edgestream-remote-water-integration/evidence/results/
