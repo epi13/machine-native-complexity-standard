@@ -1,0 +1,27 @@
+{
+  "schema_version": "0.1",
+  "lock_id": "mncs.remote-water.protected-evaluator-lock.v1",
+  "candidate_id": "mncs.remote-water.generated-table.v2",
+  "contract_id": "mncs.remote-water.supervisory-control.v2",
+  "created_for": "mncs.remote-water-control.development-epoch-2",
+  "files": {
+    "generator/planner-spec.json": "sha256:1287bb254078d320846551b23930efeff9701b494e05db70ea541dda7629140b",
+    "machine/generated_planner.py": "sha256:da461760f86f3fac2eb8dfdbcf20fc1f1d7136b55f9672275b29fef3af584a30",
+    "preregistration.json": "sha256:2c06c3bb97b57faea48a5b2a6dd869331b19d69eb12d55fa8a90729dabc29db6",
+    "contract/contract-profile.json": "sha256:a22053f47fb23cca4f76faa1546d428907f1612995062fff6857286751b437b2",
+    "src/water_control/controller.py": "sha256:fdf7c1f794e50e4bc6ded33b03f674b3cf1fbb330d1c1d1121ccbff1d93e729c",
+    "src/water_control/model.py": "sha256:d1e5877bdd99c794fdb748b282f23632effbaec9629459272215a781e2991d60",
+    "src/water_control/planner.py": "sha256:e60200ef707e14fd1e8f67c94c66b5b7dc2c24ed2828867c95bc546947d3c368",
+    "src/water_control/safety.py": "sha256:757621031db31cbdceb8bfa34f49c2c15e2751ed3b65699204e0f779d03766be",
+    "src/water_control/scenarios.py": "sha256:e32a1c699bf446c9a4f394ccd2a07487bdbe686ffc4b7b56d97a3ffd87a82f52",
+    "src/water_control/simulator.py": "sha256:f7a699bd7d57a3a5e46c5b3b8f7887fd8c7fb46188a0c92add6df1da03c3dbc2",
+    "tools/run_study.py": "sha256:485cfa1293407a067a32d938b31d9867f323060523cbc09fe1daec7e2fff53d2",
+    "tools/run_protected_evaluation.py": "sha256:883baf1e399f6188e20c479f9545cedbcd3f429fd384363a6065dc4e794dad8e"
+  },
+  "policy": {
+    "runtime_seed_generated_after_lock": true,
+    "same_seed_required_across_architectures": true,
+    "best_run_selection_forbidden": true,
+    "independent_evaluator_claimed": false
+  }
+}
