@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - agent/strengthen-study-evidence
+  pull_request:
+    paths:
+      - "case-studies/remote-water-control/**"
+      - "case-studies/edgestream-remote-water-integration/**"
+      - ".github/workflows/branch-format-artifact.yml"
 
 permissions:
   contents: read
