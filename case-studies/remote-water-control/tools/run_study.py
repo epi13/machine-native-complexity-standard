@@ -14,7 +14,11 @@ REPOSITORY_ROOT = ROOT.parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "machine"))
 
-from water_control.checkpoint import CheckpointError, decode_checkpoint, encode_checkpoint  # noqa: E402
+from water_control.checkpoint import (  # noqa: E402
+    CheckpointError,
+    decode_checkpoint,
+    encode_checkpoint,
+)
 from water_control.model import SystemConfig  # noqa: E402
 from water_control.planner import GeneratedTablePlanner, ReadableBaselinePlanner  # noqa: E402
 from water_control.scenarios import scenario_suite, smoke_suite  # noqa: E402
