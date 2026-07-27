@@ -24,5 +24,5 @@ protected: test
 		--output evidence/protected/local.json
 
 clean:
-	rm -f evidence/results/scenario-results.json evidence/results/study-summary.json
+	rm -f evidence/results/scenario-results.json.gz evidence/results/study-summary.json.gz
 	rm -rf evidence/protected
