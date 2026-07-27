@@ -212,9 +212,7 @@ def summarize_policy_results(
             "segmented_lru_final_state_digest": segmented.scenarios[scenario_id][
                 "final_state_digest"
             ],
-            "candidate_final_state_digest": candidate.scenarios[scenario_id][
-                "final_state_digest"
-            ],
+            "candidate_final_state_digest": candidate.scenarios[scenario_id]["final_state_digest"],
         }
 
         totals["lru_recomputed_blocks"] += lru_recomputed
@@ -261,9 +259,7 @@ def summarize_policy_results(
     all_capacity_aggregates_non_regressive = all(
         bool(bucket["aggregate_non_regressive"]) for bucket in capacity_summary.values()
     )
-    seed_summary = {
-        str(seed): _finalize_bucket(bucket) for seed, bucket in sorted(by_seed.items())
-    }
+    seed_summary = {str(seed): _finalize_bucket(bucket) for seed, bucket in sorted(by_seed.items())}
     hot_prefix_summary = {
         str(count): _finalize_bucket(bucket)
         for count, bucket in sorted(by_hot_prefix_families.items())
@@ -279,7 +275,9 @@ def summarize_policy_results(
     all_capacities_improved = sum(
         int(bucket["improved"]) == len(CAPACITY_SWEEP) for bucket in seed_summary.values()
     )
-    seeds_with_any_regression = sum(int(bucket["regressed"]) > 0 for bucket in seed_summary.values())
+    seeds_with_any_regression = sum(
+        int(bucket["regressed"]) > 0 for bucket in seed_summary.values()
+    )
     maximum_regressed_capacities = max(
         (int(bucket["regressed"]) for bucket in seed_summary.values()), default=0
     )
