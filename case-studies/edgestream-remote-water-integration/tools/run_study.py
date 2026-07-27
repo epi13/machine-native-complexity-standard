@@ -115,7 +115,8 @@ def main() -> int:
     behavior_checks = {
         "sequence_monotonic": [item["sequence"] for item in intents] == [1, 2, 3],
         "stale_envelope_degraded": intents[1]["mode"] in {"DEGRADED", "HOLD"},
-        "high_high_disables_pumps": not intents[2]["duty_on"] and not intents[2]["standby_on"],
+        "high_high_disables_pumps": not intents[2]["duty_on"]
+        and not intents[2]["standby_on"],
         "journal_valid": controller.journal.verify(),
     }
 
@@ -135,9 +136,18 @@ def main() -> int:
             "adapter": sha256(Path(__file__)),
         },
         "limitations": [
-            "This study consumes a normalized EdgeStream-shaped envelope, not a live EdgeStream process.",
-            "Component claims and evidence roots remain separate and are not promoted by this result.",
-            "No protected holdout, independent evaluator, industrial protocol, or actuator is in scope.",
+            (
+                "This study consumes a normalized EdgeStream-shaped envelope, "
+                "not a live EdgeStream process."
+            ),
+            (
+                "Component claims and evidence roots remain separate and are not "
+                "promoted by this result."
+            ),
+            (
+                "No protected holdout, independent evaluator, industrial protocol, "
+                "or actuator is in scope."
+            ),
         ],
     }
     output = ROOT / "evidence" / "results"
