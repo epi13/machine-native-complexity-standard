@@ -1,0 +1,56 @@
+{
+  "schema_version": "0.1-experimental",
+  "profile_id": "contract-profile-http-decoder-v1",
+  "contract_id": "contract-http-decoder-v1",
+  "status": "PASS",
+  "intended_use": {
+    "statement": "Incrementally decode bounded HTTP chunked-transfer input.",
+    "exclusions": ["HTTP message routing", "TLS processing"]
+  },
+  "interfaces": {
+    "inputs": ["byte spans and explicit lengths"],
+    "outputs": ["decoded bytes, consumed count, and status"],
+    "state": ["decoder phase, remaining chunk bytes, terminal status"],
+    "state_transitions": ["size to data", "data to terminator", "terminator to size or complete"]
+  },
+  "behavior": {
+    "observable": ["matches the reference decoder for declared input classes"],
+    "errors": ["malformed syntax returns a declared error without output overrun"],
+    "malformed_inputs": ["invalid hexadecimal sizes", "missing CRLF", "truncated chunks"],
+    "adversarial_inputs": ["maximum declared chunk size", "repeated one-byte fragments"],
+    "external_effects": []
+  },
+  "limits": {
+    "resource": ["no allocation proportional to declared chunk size"],
+    "timing": ["work is bounded by supplied input bytes"]
+  },
+  "invariants": {
+    "safety": ["no read or write beyond supplied spans"],
+    "security": ["malformed input cannot bypass terminal error state"]
+  },
+  "environment": ["portable C11", "8-bit bytes", "declared compiler matrix"],
+  "compatibility": ["preserve the public decoder interface"],
+  "undefined_behavior": {
+    "undefined": ["caller supplies an invalid pointer for a non-zero span"],
+    "implementation_defined": ["size_t width follows the declared environment"],
+    "excluded": ["concurrent mutation of one decoder instance"]
+  },
+  "reference_oracle": {
+    "identity": "reference-http-decoder-v1",
+    "limitations": ["reference agreement does not prove the contract complete"],
+    "tolerances": ["output bytes and statuses require exact agreement"]
+  },
+  "ambiguities": [],
+  "versioning": {
+    "contract_version": "1.0.0",
+    "material_change_rule": "Any broader accepted input, output, state, limit, or exclusion receives a new contract identity.",
+    "supersedes_contract_id": null
+  },
+  "findings": [
+    {"field": "observable behavior", "status": "PASS", "summary": "Declared for every public result."},
+    {"field": "malformed inputs", "status": "PASS", "summary": "Representative malformed classes are explicit."}
+  ],
+  "evidence_ids": ["contract-review-http-decoder-v1"],
+  "limitations": ["This experimental profile does not prove philosophical completeness."],
+  "extensions": {}
+}
