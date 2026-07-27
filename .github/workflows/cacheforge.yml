@@ -1,6 +1,15 @@
 name: CacheForge KV Cache Study
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "case-studies/cacheforge/**"
+      - "docs/cacheforge.md"
+      - "README.md"
+      - "Makefile"
+      - "mkdocs.yml"
+      - ".github/workflows/cacheforge.yml"
   pull_request:
     paths:
       - "case-studies/cacheforge/**"
@@ -11,71 +20,43 @@ on:
       - ".github/workflows/cacheforge.yml"
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: cacheforge-finalize-source-${{ github.ref }}
+  group: cacheforge-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  finalize-source:
+  study:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.13"]
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: agent/cacheforge-kv-cache-study
-          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: ${{ matrix.python-version }}
           cache: pip
       - run: python -m pip install -e '.[dev]'
-      - name: Apply canonical formatting and lint fixes
+      - name: Check CacheForge source
         run: |
-          ruff format case-studies/cacheforge
-          ruff check --fix --unsafe-fixes case-studies/cacheforge
-          ruff format case-studies/cacheforge
+          ruff format --check case-studies/cacheforge
           ruff check case-studies/cacheforge
-      - name: Add CacheForge to the repository overview
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-
-          path = Path("README.md")
-          text = path.read_text()
-          case_study_anchor = '''- [`case-studies/remote-water-control/`](case-studies/remote-water-control/README.md)
-            implements a development-only remote water-system digital twin with a generated planner,
-            readable safety authority, expiring intent journal, checkpoint continuity, fault
-            injection, and a review-required composed assurance case.
-          '''
-          cacheforge_case = '''- [`case-studies/cacheforge/`](case-studies/cacheforge/README.md) evaluates a bounded,
-            trace-driven LLM KV-cache planner with generated eviction policy, readable allocation
-            authority, mutation rejection, checkpoint continuity, and controlled benefit evidence.
-          '''
-          if "case-studies/cacheforge/" not in text:
-              text = text.replace(case_study_anchor, case_study_anchor + cacheforge_case)
-          map_anchor = "- [`case-studies/remote-water-control/`](case-studies/remote-water-control/README.md) — composed supervisory-control development study\n"
-          map_entry = "- [`case-studies/cacheforge/`](case-studies/cacheforge/README.md) — LLM KV-cache planning development study\n"
-          if map_entry not in text:
-              text = text.replace(map_anchor, map_anchor + map_entry)
-          path.write_text(text)
-          PY
-      - name: Run complete CacheForge study
+      - name: Run controlled study
         run: make cacheforge-study
-      - name: Verify deterministic outputs
+      - name: Verify regenerated evidence
         run: |
-          git diff --check -- case-studies/cacheforge README.md
-          PYTHONPATH=case-studies/cacheforge/src:case-studies/cacheforge/machine \
-            python case-studies/cacheforge/tools/generate_policy.py --check
-      - name: Commit finalized source and evidence
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add case-studies/cacheforge README.md
-          if git diff --cached --quiet; then
-            echo "No source finalization changes were required."
-          else
-            git commit -m "Finalize CacheForge source and evidence"
-            git push origin HEAD:agent/cacheforge-kv-cache-study
-          fi
+          git diff --check -- case-studies/cacheforge
+          git diff --exit-code -- \
+            case-studies/cacheforge/machine/generated_policy.py \
+            case-studies/cacheforge/evidence/results/study-summary.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cacheforge-evidence-py${{ matrix.python-version }}-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 14
+          path: case-studies/cacheforge/evidence/results/
