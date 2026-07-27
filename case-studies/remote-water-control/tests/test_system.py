@@ -6,13 +6,12 @@ import json
 from pathlib import Path
 
 import pytest
-
 from water_control.checkpoint import CheckpointError, decode_checkpoint, encode_checkpoint
 from water_control.controller import Controller
 from water_control.journal import IntentJournal
 from water_control.model import (
-    ControlMode,
     ControllerState,
+    ControlMode,
     PlannerProposal,
     SystemConfig,
     TelemetryQuality,
@@ -40,7 +39,7 @@ def test_generated_planner_matches_spec() -> None:
     from generated_planner import SOURCE_SPEC_SHA256
 
     expected = hashlib.sha256((ROOT / "generator" / "planner-spec.json").read_bytes()).hexdigest()
-    assert SOURCE_SPEC_SHA256 == expected
+    assert expected == SOURCE_SPEC_SHA256
 
 
 def test_safety_stops_at_high_high() -> None:
