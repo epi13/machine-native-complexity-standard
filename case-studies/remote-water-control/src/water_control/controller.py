@@ -22,16 +22,42 @@ class Controller:
         *,
         state: ControllerState | None = None,
         journal: IntentJournal | None = None,
+        intervention_counts: dict[str, int] | None = None,
     ) -> None:
         self.planner = planner
         self.config = config or SystemConfig()
         self.state = state or ControllerState()
         self.journal = journal or IntentJournal(last_sequence=self.state.last_sequence)
         self.safety = SafetyKernel(self.config)
+        self.intervention_counts = intervention_counts or {
+            "accepted": 0,
+            "modified": 0,
+            "held": 0,
+            "rejected": 0,
+        }
 
     def decide(self, sample: TelemetrySample, now_s: int) -> AuthorizedIntent:
         proposal = self.planner.propose(sample, self.state, self.config)
         adjudication = self.safety.authorize(proposal, sample, self.state, now_s)
+        unchanged = (
+            proposal.duty_on == adjudication.duty_on
+            and proposal.standby_on == adjudication.standby_on
+        )
+        if unchanged and not adjudication.reasons:
+            outcome = "accepted"
+        elif (
+            adjudication.duty_on == self.state.duty_on
+            and adjudication.standby_on == self.state.standby_on
+        ):
+            outcome = "held"
+        elif (proposal.duty_on or proposal.standby_on) and not (
+            adjudication.duty_on or adjudication.standby_on
+        ):
+            outcome = "rejected"
+        else:
+            outcome = "modified"
+        self.intervention_counts[outcome] += 1
+
         sequence = self.state.last_sequence + 1
         intent = AuthorizedIntent(
             sequence=sequence,
@@ -60,10 +86,11 @@ class Controller:
 
     def checkpoint_payload(self) -> dict[str, Any]:
         return {
-            "schema_version": "0.1",
+            "schema_version": "0.2",
             "planner_id": self.planner.planner_id,
             "controller_state": self.state.as_dict(),
             "journal": self.journal.snapshot(),
+            "intervention_counts": dict(self.intervention_counts),
         }
 
     @classmethod
@@ -83,4 +110,14 @@ class Controller:
         )
         if journal.last_sequence != state.last_sequence:
             raise ValueError("checkpoint sequence mismatch")
-        return cls(planner, config, state=state, journal=journal)
+        counts = {
+            key: int(value)
+            for key, value in payload.get("intervention_counts", {}).items()
+        }
+        return cls(
+            planner,
+            config,
+            state=state,
+            journal=journal,
+            intervention_counts=counts or None,
+        )
