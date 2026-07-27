@@ -25,7 +25,7 @@ def decode_checkpoint(data: bytes) -> dict[str, Any]:
         envelope = json.loads(data)
         payload = envelope["payload"]
         expected = envelope["sha256"]
-    except (json.JSONDecodeError, KeyError, TypeError) as exc:
+    except (UnicodeDecodeError, json.JSONDecodeError, KeyError, TypeError) as exc:
         raise CheckpointError("checkpoint envelope is malformed") from exc
     actual = hashlib.sha256(canonical_bytes(payload)).hexdigest()
     if actual != expected:
