@@ -59,6 +59,12 @@ def _bundle_payload() -> dict[str, object]:
     }
 
 
+def _write_bundle(tmp_path: Path, payload: dict[str, object]) -> Path:
+    bundle_path = tmp_path / "bundle.json"
+    bundle_path.write_text(json.dumps(payload, sort_keys=True))
+    return bundle_path
+
+
 def test_epoch2_workload_is_deterministic_and_paired() -> None:
     first = generate_epoch2_scenario(DEVELOPMENT_SEEDS[0], CAPACITY_SWEEP[0])
     second = generate_epoch2_scenario(DEVELOPMENT_SEEDS[0], CAPACITY_SWEEP[-1])
@@ -78,17 +84,35 @@ def test_epoch2_candidate_meets_frozen_development_gates() -> None:
     assert result["aggregate"]["candidate_recomputed_blocks"] == 39654
     assert result["aggregate"]["strongest_baseline_recomputed_blocks"] == 41167
     assert result["aggregate"]["improved_scenarios"] == 53
-    assert result["scenario_observation_digest"] == (
-        "sha256:23dace9d5e3b537c4aef930ddf512475c6924f14bb0c603fcf59d852b831f897"
-    )
+    assert len(result["observations"]) == 64
+    assert result["scenario_observation_digest"].startswith("sha256:")
+
+    seed_summary = result["seed_cluster_summary"]
+    assert seed_summary["independent_seed_count"] == 16
+    assert seed_summary["favorable_seed_aggregates"] == 16
+    assert seed_summary["all_capacities_improved_seeds"] == 7
+    assert seed_summary["seeds_with_any_regression"] == 9
+    assert seed_summary["maximum_regressed_capacities_for_one_seed"] == 2
+
+    high_capacity = result["high_capacity_regime"]["by_hot_prefix_families"]
+    assert high_capacity["1"]["improved"] == 0
+    assert high_capacity["1"]["regressed"] == 4
+    assert high_capacity["2"]["improved"] == 0
+    assert high_capacity["2"]["regressed"] == 4
+    assert high_capacity["3"]["improved"] == 4
+    assert high_capacity["3"]["regressed"] == 0
+    assert high_capacity["4"]["improved"] == 3
+    assert high_capacity["4"]["regressed"] == 1
 
 
 def test_external_trace_bundle_never_auto_promotes(tmp_path: Path) -> None:
-    bundle_path = tmp_path / "bundle.json"
-    bundle_path.write_text(json.dumps(_bundle_payload(), sort_keys=True))
-    bundle = load_trace_bundle(bundle_path)
+    bundle = load_trace_bundle(_write_bundle(tmp_path, _bundle_payload()))
     result = evaluate_trace_bundle(bundle, GeneratedEvictionPolicy)
     assert result["bundle_id"] == "cacheforge.test.external.v1"
+    assert result["schema_valid"] is True
+    assert result["protocol_eligible"] == "NOT_ESTABLISHED"
+    assert result["custody_verified"] == "NOT_ESTABLISHED"
+    assert result["evaluation_result"] == "REVIEW_REQUIRED"
     assert result["promotion_authorized"] is False
     assert result["formal_mncs_status"] == "UNKNOWN"
     assert result["disposition"] == "REVIEW_REQUIRED"
@@ -100,10 +124,45 @@ def test_external_trace_bundle_rejects_duplicate_request_ids(tmp_path: Path) -> 
     assert isinstance(scenario, dict)
     requests = scenario["requests"]
     assert isinstance(requests, list)
-    duplicate = dict(requests[0])
-    requests.append(duplicate)
+    requests.append(dict(requests[0]))
 
-    bundle_path = tmp_path / "duplicate.json"
-    bundle_path.write_text(json.dumps(payload))
     with pytest.raises(ValueError, match="duplicate request_id"):
-        load_trace_bundle(bundle_path)
+        load_trace_bundle(_write_bundle(tmp_path, payload))
+
+
+def test_external_trace_bundle_enforces_additional_properties(tmp_path: Path) -> None:
+    payload = _bundle_payload()
+    payload["unexpected"] = True
+    with pytest.raises(ValueError, match="schema validation failed"):
+        load_trace_bundle(_write_bundle(tmp_path, payload))
+
+
+@pytest.mark.parametrize("invalid_priority", ["1", 1.5, True])
+def test_external_trace_bundle_enforces_priority_type(
+    tmp_path: Path, invalid_priority: object
+) -> None:
+    payload = _bundle_payload()
+    scenario = payload["scenarios"][0]
+    assert isinstance(scenario, dict)
+    requests = scenario["requests"]
+    assert isinstance(requests, list)
+    request = requests[0]
+    assert isinstance(request, dict)
+    request["priority"] = invalid_priority
+
+    with pytest.raises(ValueError, match="schema validation failed"):
+        load_trace_bundle(_write_bundle(tmp_path, payload))
+
+
+def test_external_trace_bundle_rejects_invalid_cancellation_point(tmp_path: Path) -> None:
+    payload = _bundle_payload()
+    scenario = payload["scenarios"][0]
+    assert isinstance(scenario, dict)
+    requests = scenario["requests"]
+    assert isinstance(requests, list)
+    request = requests[0]
+    assert isinstance(request, dict)
+    request["cancel_after_generated"] = 3
+
+    with pytest.raises(ValueError, match="outside the generated block range"):
+        load_trace_bundle(_write_bundle(tmp_path, payload))
