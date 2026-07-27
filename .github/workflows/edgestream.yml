@@ -55,6 +55,21 @@ jobs:
         run: |
           ruff format --check case-studies/edgestream/tools
           ruff check case-studies/edgestream/tools
+      - name: Verify checked-in derived evidence is current
+        shell: bash
+        run: |
+          set -euo pipefail
+          python case-studies/edgestream/tools/package_evidence.py
+          git diff --check -- case-studies/edgestream
+          git diff --exit-code -- \
+            case-studies/edgestream/manifest.json \
+            case-studies/edgestream/mncds/development-record.json \
+            case-studies/edgestream/evidence/index.json \
+            case-studies/edgestream/evidence/identities \
+            case-studies/edgestream/evidence/results/gate-*.json \
+            case-studies/edgestream/evidence/results/invariant-*.json \
+            case-studies/edgestream/evidence/results/performance-*.json
+          git reset --hard HEAD
       - name: Run full controlled study
         run: make -C case-studies/edgestream thorough
       - name: Check generated whitespace
