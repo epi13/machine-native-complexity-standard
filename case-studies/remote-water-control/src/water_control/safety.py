@@ -5,8 +5,8 @@ import math
 
 from water_control.model import (
     Adjudication,
-    ControlMode,
     ControllerState,
+    ControlMode,
     PlannerProposal,
     SystemConfig,
     TelemetryQuality,
