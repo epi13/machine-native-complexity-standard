@@ -7,13 +7,8 @@ from typing import Protocol
 from water_control.model import ControllerState, PlannerProposal, SystemConfig, TelemetrySample
 
 try:
-    from generated_planner import (
-        DECISION_TABLE,
-        DEMAND_BANDS_LPS,
-        LEVEL_BANDS_PCT,
-        PLANNER_ID,
-    )
-except ModuleNotFoundError as exc:  # pragma: no cover - configuration error
+    from generated_planner import DECISION_TABLE, DEMAND_BANDS_LPS, LEVEL_BANDS_PCT, PLANNER_ID
+except ModuleNotFoundError as exc:  # pragma: no cover
     raise RuntimeError("machine/ must be present on PYTHONPATH") from exc
 
 
@@ -21,10 +16,7 @@ class Planner(Protocol):
     planner_id: str
 
     def propose(
-        self,
-        sample: TelemetrySample,
-        state: ControllerState,
-        config: SystemConfig,
+        self, sample: TelemetrySample, state: ControllerState, config: SystemConfig
     ) -> PlannerProposal: ...
 
 
@@ -32,15 +24,11 @@ class ReadableBaselinePlanner:
     planner_id = "mncs.remote-water.readable-baseline.v1"
 
     def propose(
-        self,
-        sample: TelemetrySample,
-        state: ControllerState,
-        config: SystemConfig,
+        self, sample: TelemetrySample, state: ControllerState, config: SystemConfig
     ) -> PlannerProposal:
         del config
         duty_on = state.duty_on
         standby_on = state.standby_on
-
         if not sample.power_available:
             duty_on = False
             standby_on = False
@@ -53,7 +41,6 @@ class ReadableBaselinePlanner:
         elif sample.tank_level_pct > 55.0:
             duty_on = False
             standby_on = False
-
         return PlannerProposal(
             duty_on=duty_on,
             standby_on=standby_on,
@@ -66,10 +53,7 @@ class GeneratedTablePlanner:
     planner_id = PLANNER_ID
 
     def propose(
-        self,
-        sample: TelemetrySample,
-        state: ControllerState,
-        config: SystemConfig,
+        self, sample: TelemetrySample, state: ControllerState, config: SystemConfig
     ) -> PlannerProposal:
         del config
         level_index = bisect_right(LEVEL_BANDS_PCT, sample.tank_level_pct)
