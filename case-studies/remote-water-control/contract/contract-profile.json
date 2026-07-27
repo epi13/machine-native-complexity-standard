@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1-experimental",
-  "profile_id": "mncs.remote-water.contract-profile.v1",
-  "contract_id": "mncs.remote-water.supervisory-control.v1",
+  "profile_id": "mncs.remote-water.contract-profile.v2",
+  "contract_id": "mncs.remote-water.supervisory-control.v2",
   "status": "UNKNOWN",
   "intended_use": {
     "statement": "Evaluate supervisory pump-scheduling candidates against a deterministic digital twin for commissioning support, operator training, sequence review, and machine-native assurance research.",
@@ -13,14 +13,16 @@
   },
   "interfaces": {
     "inputs": [
-      "Timestamped tank-level percentage, demand estimate, power availability, and telemetry quality.",
+      "Timestamped tank-level percentage, observed demand estimate, power availability, and telemetry quality.",
+      "Actual digital-twin demand, which may differ from the planner-visible demand estimate in model-error scenarios.",
       "Bounded plant configuration and pump characteristics.",
       "Controller checkpoint containing command state, sequence, dwell timers, and journal tail identity."
     ],
     "outputs": [
       "Expiring, monotonically sequenced duty and standby pump intent records.",
-      "Safety adjudication mode and reasons.",
-      "Hash-chained audit journal entries and deterministic scenario evidence."
+      "Original planner proposal states, safety disposition, adjudication mode, and reasons.",
+      "Hash-chained audit journal entries and deterministic scenario evidence.",
+      "Per-scenario terminal-inventory-normalized comparisons and safety-kernel intervention statistics."
     ],
     "state": [
       "Last authorized pump states and transition times.",
@@ -31,13 +33,15 @@
       "Planner proposal is always adjudicated by the readable safety kernel before journaling.",
       "Journal sequence advances exactly once for each decision step.",
       "Checkpoint restoration must preserve controller sequence and journal continuity.",
-      "Digital-twin state advances only from an authorized, non-expired intent and scenario inputs."
+      "Rejected corrupted checkpoint probes cannot alter live plant or controller state.",
+      "Digital-twin state advances only from an authorized, non-expired intent and actual scenario inputs."
     ]
   },
   "behavior": {
     "observable": [
-      "Authorized pump intents, modes, reasons, sequence numbers, expiration times, and journal hashes.",
-      "Scenario-level tank state, energy proxy, starts, unmet demand, overflow, and invariant violations.",
+      "Authorized pump intents, original proposals, safety dispositions, modes, reasons, sequence numbers, expiration times, and journal hashes.",
+      "Scenario-level initial and final storage, energy proxy, starts, unmet demand, overflow, corruption rejection, and invariant violations.",
+      "Inventory-adjusted energy, terminal reserve delta, pump-start regression, and all per-scenario gate outcomes.",
       "Deterministic reproduction of the same results from the same identified inputs."
     ],
     "errors": [
@@ -48,10 +52,12 @@
     "malformed_inputs": [
       "Non-finite, negative-demand, or out-of-range level telemetry produces HOLD without a command change.",
       "Unknown checkpoint structure or missing required fields is rejected.",
-      "A scenario with no demand value for a step is rejected."
+      "A scenario with no actual demand value for a step is rejected."
     ],
     "adversarial_inputs": [
       "Stale, conflicting, replayed, reordered, or corrupted state and telemetry inputs.",
+      "Concurrent power outage and stale telemetry, restart during degraded telemetry, near-empty storage, and repeated checkpoint corruption.",
+      "Planner-visible demand estimates that understate or overstate actual digital-twin demand.",
       "Planner proposals that enable standby without duty or request operation at high-high level.",
       "Artifact substitution through a checkpoint carrying a different planner identity."
     ],
@@ -83,20 +89,23 @@
     ],
     "security": [
       "Intent sequences advance exactly once and replay is rejected.",
-      "Every journal entry binds the previous hash and complete authorized intent.",
+      "Every journal entry binds the previous hash and complete authorized intent, including the original proposal and safety disposition.",
       "Checkpoint payloads are digest protected and bind the planner identity.",
+      "Every injected checkpoint corruption is rejected without changing live state.",
       "The planner has no direct actuator, journal, or checkpoint write authority."
     ]
   },
   "environment": [
-    "Python 3.11 or newer with deterministic integer and IEEE-754 floating-point behavior used by the test environment.",
-    "Repository-local source, generated table, contract, scenarios, and preregistration are treated as identified inputs.",
+    "Python 3.11 or newer with deterministic integer and rounded IEEE-754 floating-point evidence behavior used by the test environment.",
+    "Repository-local source, generated table, contract, scenarios, thresholds, and preregistration are treated as identified inputs.",
+    "Development CI includes fresh GitHub-hosted x64 and ARM64 virtual machines.",
     "The digital twin uses fixed-step simulation and does not model water quality, pressure zones, pipe transients, or equipment curves."
   ],
   "compatibility": [
-    "Development scenarios and evidence format version 0.1.",
+    "Development scenarios and evidence format version 0.2.",
     "Experimental MNCS contract-profile schema 0.1.",
-    "Planner replacements must preserve the Planner protocol and receive a new identity."
+    "Planner replacements must preserve the Planner protocol and receive a new identity.",
+    "EdgeStream integration is isolated behind a separately evidenced telemetry adapter."
   ],
   "undefined_behavior": {
     "undefined": [],
@@ -111,25 +120,27 @@
     ]
   },
   "reference_oracle": {
-    "identity": "mncs.remote-water.digital-twin.v1",
+    "identity": "mncs.remote-water.digital-twin.v2",
     "limitations": [
       "The reference is a deterministic software model, not an independently calibrated physical system.",
-      "Repository-visible scenarios cannot serve as a protected final holdout."
+      "Repository-visible scenarios cannot serve as an independent final holdout.",
+      "The protected-at-execution campaign hides exact runtime scenarios until the candidate and evaluator are committed, but the evaluator authority remains the repository owner."
     ],
     "tolerances": [
       "Scenario evidence rounds continuous quantities to six decimal places.",
-      "Safety invariants, sequence values, starts, and journal identities require exact agreement."
+      "Safety invariants, sequence values, starts, corruption counts, and journal identities require exact agreement.",
+      "Terminal inventory normalization uses the declared duty-pump marginal energy per stored liter."
     ]
   },
   "ambiguities": [
     "A domain reviewer has not yet determined whether the low-low response should always start both pumps for every real installation.",
-    "Energy values are development proxies and do not include pump curves, motor efficiency, demand charges, or generator loading.",
+    "Energy and inventory-normalized values are development proxies and do not include pump curves, motor efficiency, demand charges, or generator loading.",
     "The operational criticality mapping for a future real deployment remains unresolved."
   ],
   "versioning": {
-    "contract_version": "1.0-development",
-    "material_change_rule": "Any change to authority boundaries, safety thresholds, telemetry semantics, plant topology, intent lifetime, checkpoint meaning, or objective thresholds creates a new contract identity.",
-    "supersedes_contract_id": null
+    "contract_version": "2.0-development",
+    "material_change_rule": "Any change to authority boundaries, safety thresholds, telemetry semantics, plant topology, intent lifetime, checkpoint meaning, output evidence semantics, or objective thresholds creates a new contract identity.",
+    "supersedes_contract_id": "mncs.remote-water.supervisory-control.v1"
   },
   "findings": [
     {
@@ -140,13 +151,14 @@
     {
       "field": "protected_holdout",
       "status": "UNKNOWN",
-      "summary": "The checked-in development scenarios are repository visible and cannot support a final D3 or L5 claim."
+      "summary": "Cross-host protected-at-execution development evaluation is automated, but no independently controlled final holdout exists."
     }
   ],
   "evidence_ids": [
-    "mncs.remote-water.preregistration.v1",
-    "mncs.remote-water.development-results.v1",
-    "mncs.remote-water.safety-tests.v1"
+    "mncs.remote-water.preregistration.v2",
+    "mncs.remote-water.development-results.v2",
+    "mncs.remote-water.safety-tests.v2",
+    "mncs.edgestream-remote-water.integration.development.v1"
   ],
   "limitations": [
     "Contract status remains UNKNOWN until independent adequacy and domain review are completed.",
@@ -155,7 +167,7 @@
   "extensions": {
     "mncs.dev:case-study": {
       "name": "Remote Water Resilience Controller",
-      "epoch": 1
+      "epoch": 2
     }
   }
 }
