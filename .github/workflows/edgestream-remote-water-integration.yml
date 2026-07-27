@@ -1,0 +1,58 @@
+name: EdgeStream Remote Water Integration
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "case-studies/edgestream/**"
+      - "case-studies/remote-water-control/**"
+      - "case-studies/edgestream-remote-water-integration/**"
+      - ".github/workflows/edgestream-remote-water-integration.yml"
+      - "Makefile"
+  pull_request:
+    paths:
+      - "case-studies/edgestream/**"
+      - "case-studies/remote-water-control/**"
+      - "case-studies/edgestream-remote-water-integration/**"
+      - ".github/workflows/edgestream-remote-water-integration.yml"
+      - "Makefile"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: edgestream-water-integration-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHONHASHSEED: "0"
+  LC_ALL: C.UTF-8
+
+jobs:
+  integration-study:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.13"]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: python -m pip install -e '.[dev]'
+      - name: Check integration source
+        run: |
+          ruff format --check case-studies/edgestream-remote-water-integration
+          ruff check case-studies/edgestream-remote-water-integration
+      - name: Run isolated component-boundary integration
+        run: make edgestream-water-integration
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: edgestream-water-integration-py${{ matrix.python-version }}-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 14
+          path: case-studies/edgestream-remote-water-integration/evidence/results/
