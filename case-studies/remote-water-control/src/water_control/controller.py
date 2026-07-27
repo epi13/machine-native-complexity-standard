@@ -7,6 +7,7 @@ from water_control.journal import IntentJournal
 from water_control.model import (
     AuthorizedIntent,
     ControllerState,
+    ControlMode,
     SystemConfig,
     TelemetrySample,
 )
@@ -39,23 +40,7 @@ class Controller:
     def decide(self, sample: TelemetrySample, now_s: int) -> AuthorizedIntent:
         proposal = self.planner.propose(sample, self.state, self.config)
         adjudication = self.safety.authorize(proposal, sample, self.state, now_s)
-        unchanged = (
-            proposal.duty_on == adjudication.duty_on
-            and proposal.standby_on == adjudication.standby_on
-        )
-        if unchanged and not adjudication.reasons:
-            outcome = "accepted"
-        elif (
-            adjudication.duty_on == self.state.duty_on
-            and adjudication.standby_on == self.state.standby_on
-        ):
-            outcome = "held"
-        elif (proposal.duty_on or proposal.standby_on) and not (
-            adjudication.duty_on or adjudication.standby_on
-        ):
-            outcome = "rejected"
-        else:
-            outcome = "modified"
+        outcome = self._classify_intervention(proposal, adjudication)
         self.intervention_counts[outcome] += 1
 
         sequence = self.state.last_sequence + 1
@@ -73,6 +58,23 @@ class Controller:
         self.journal.append(intent)
         self._apply_intent(intent)
         return intent
+
+    def _classify_intervention(self, proposal: Any, adjudication: Any) -> str:
+        proposal_pair = (proposal.duty_on, proposal.standby_on)
+        authorized_pair = (adjudication.duty_on, adjudication.standby_on)
+        current_pair = (self.state.duty_on, self.state.standby_on)
+
+        if proposal_pair == authorized_pair:
+            return "accepted"
+        if adjudication.mode in {ControlMode.DEGRADED, ControlMode.HOLD}:
+            return "held"
+        if authorized_pair == current_pair:
+            return "held"
+        if (proposal.duty_on or proposal.standby_on) and not (
+            adjudication.duty_on or adjudication.standby_on
+        ):
+            return "rejected"
+        return "modified"
 
     def _apply_intent(self, intent: AuthorizedIntent) -> None:
         if intent.duty_on != self.state.duty_on:
