@@ -1,0 +1,32 @@
+name: Branch Format Artifact
+
+on:
+  push:
+    branches:
+      - agent/strengthen-study-evidence
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python -m pip install -e '.[dev]'
+      - run: ruff format case-studies/remote-water-control case-studies/edgestream-remote-water-integration
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ruff-formatted-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 1
+          path: |
+            case-studies/remote-water-control/src/water_control/model.py
+            case-studies/remote-water-control/src/water_control/controller.py
+            case-studies/remote-water-control/src/water_control/scenarios.py
+            case-studies/remote-water-control/src/water_control/simulator.py
+            case-studies/remote-water-control/tools/run_study.py
+            case-studies/edgestream-remote-water-integration/tools/run_study.py
