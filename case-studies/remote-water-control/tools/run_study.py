@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import gzip
 import hashlib
+import io
 import json
 import sys
 from collections import Counter
@@ -41,6 +43,14 @@ def sha256(path: Path) -> str:
 def canonical_sha256(payload: Any) -> str:
     encoded = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
     return f"sha256:{hashlib.sha256(encoded).hexdigest()}"
+
+
+def write_deterministic_gzip(path: Path, payload: Any) -> None:
+    data = (json.dumps(payload, indent=2) + "\n").encode()
+    buffer = io.BytesIO()
+    with gzip.GzipFile(filename="", mode="wb", fileobj=buffer, mtime=0) as compressed:
+        compressed.write(data)
+    path.write_bytes(buffer.getvalue())
 
 
 def aggregate(results: list[dict[str, Any]]) -> dict[str, Any]:
@@ -204,7 +214,9 @@ def evaluate_scenarios(scenarios: tuple[Any, ...]) -> dict[str, Any]:
     baseline_by_id = {item["scenario_id"]: item for item in grouped[baseline_id]}
     candidate_by_id = {item["scenario_id"]: item for item in grouped[candidate_id]}
     comparisons = [
-        compare_scenario(baseline_by_id[scenario.scenario_id], candidate_by_id[scenario.scenario_id])
+        compare_scenario(
+            baseline_by_id[scenario.scenario_id], candidate_by_id[scenario.scenario_id]
+        )
         for scenario in scenarios
     ]
     return {
@@ -358,11 +370,11 @@ def run(mode: str) -> dict[str, Any]:
     if mode == "all":
         output = ROOT / "evidence" / "results"
         output.mkdir(parents=True, exist_ok=True)
-        (output / "scenario-results.json").write_text(
-            json.dumps({"schema_version": "0.2", "results": evaluated["observations"]}, indent=2)
-            + "\n"
+        write_deterministic_gzip(
+            output / "scenario-results.json.gz",
+            {"schema_version": "0.2", "results": evaluated["observations"]},
         )
-        (output / "study-summary.json").write_text(json.dumps(summary, indent=2) + "\n")
+        write_deterministic_gzip(output / "study-summary.json.gz", summary)
     return summary
 
 
