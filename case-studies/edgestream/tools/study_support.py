@@ -1,27 +1,70 @@
 #!/usr/bin/env python3
-"""Shared build and workload support for the EdgeStream study."""
+"""Shared build, execution, workload, and environment support for EdgeStream."""
 
 from __future__ import annotations
 
 import binascii
 import hashlib
 import json
+import os
 import shutil
 import struct
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / "build"
 WORKLOADS = ROOT / "workloads"
 RESULTS = ROOT / "evidence" / "results"
 
+STRICT_FLAGS = [
+    "-std=c11",
+    "-D_POSIX_C_SOURCE=200809L",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-Wconversion",
+    "-Wshadow",
+    "-Wformat=2",
+    "-Wstrict-prototypes",
+    "-Wcast-align",
+    "-Wnull-dereference",
+    "-Werror",
+    "-fno-common",
+    "-Iinclude",
+    "-O3",
+]
+SANITIZER_FLAGS = [
+    "-std=c11",
+    "-D_POSIX_C_SOURCE=200809L",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-Wconversion",
+    "-Wshadow",
+    "-Wformat=2",
+    "-Wstrict-prototypes",
+    "-Wcast-align",
+    "-Wnull-dereference",
+    "-Werror",
+    "-fno-common",
+    "-Iinclude",
+    "-O1",
+    "-g",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+]
+
 
 def sha256(path: Path) -> str:
     return "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def sha256_bytes(value: bytes) -> str:
+    return "sha256:" + hashlib.sha256(value).hexdigest()
 
 
 def write_json(path: Path, value: Any) -> None:
@@ -34,13 +77,20 @@ def run(
     *,
     check: bool = True,
     capture: bool = True,
+    env: Mapping[str, str] | None = None,
+    timeout: float = 180.0,
 ) -> subprocess.CompletedProcess[str]:
+    merged_env = os.environ.copy()
+    if env:
+        merged_env.update(env)
     return subprocess.run(
         command,
         cwd=ROOT,
         check=check,
         text=True,
         capture_output=capture,
+        env=merged_env,
+        timeout=timeout,
     )
 
 
@@ -173,7 +223,10 @@ def generate_candidate() -> dict[str, Any]:
     result = {
         "status": "PASS" if first == second else "FAIL",
         "candidate_sha256": sha256(output),
+        "reference_sha256": sha256(ROOT / "reference" / "edgestream_reference.c"),
+        "generator_sha256": sha256(ROOT / "generator" / "generate_candidate.py"),
         "bytes": len(first),
+        "byte_identical_regeneration": first == second,
     }
     write_json(RESULTS / "generation.json", result)
     return result
@@ -184,57 +237,59 @@ def compiler_version(compiler: str) -> str:
     return completed.stdout.splitlines()[0]
 
 
+def compile_flags(*, sanitizers: bool = False) -> list[str]:
+    return list(SANITIZER_FLAGS if sanitizers else STRICT_FLAGS)
+
+
 def compile_binary(
     compiler: str,
     implementation: Path,
     output: Path,
     sanitizers: bool = False,
-) -> None:
-    flags = [
-        "-std=c11",
-        "-D_POSIX_C_SOURCE=200809L",
-        "-Wall",
-        "-Wextra",
-        "-Wpedantic",
-        "-Wconversion",
-        "-Wshadow",
-        "-Werror",
-        "-Iinclude",
-        "-O3",
+) -> list[str]:
+    flags = compile_flags(sanitizers=sanitizers)
+    command = [
+        compiler,
+        *flags,
+        "runner/edgestream_cli.c",
+        str(implementation.relative_to(ROOT)),
+        "-o",
+        str(output),
     ]
-    if sanitizers:
-        flags[-1] = "-O1"
-        flags.extend(
-            ["-g", "-fsanitize=address,undefined", "-fno-omit-frame-pointer"]
-        )
-    run(
-        [
-            compiler,
-            *flags,
-            "runner/edgestream_cli.c",
-            str(implementation.relative_to(ROOT)),
-            "-o",
-            str(output),
-        ]
-    )
+    run(command)
+    return command
 
 
 def build_all() -> dict[str, Any]:
     BUILD.mkdir(parents=True, exist_ok=True)
     compilers = [name for name in ("gcc", "clang") if shutil.which(name)]
-    results: dict[str, Any] = {"compilers": {}, "status": "PASS"}
+    results: dict[str, Any] = {
+        "compilers": {},
+        "status": "PASS",
+        "strict_flags": compile_flags(),
+    }
     for compiler in compilers:
-        compiler_result: dict[str, Any] = {"version": compiler_version(compiler), "builds": {}}
+        compiler_result: dict[str, Any] = {
+            "version": compiler_version(compiler),
+            "builds": {},
+        }
         for name, source in (
             ("reference", ROOT / "reference" / "edgestream_reference.c"),
             ("candidate", ROOT / "machine" / "edgestream_generated.c"),
         ):
             output = BUILD / f"{name}-{compiler}"
             try:
-                compile_binary(compiler, source, output)
-                compiler_result["builds"][name] = "PASS"
+                command = compile_binary(compiler, source, output)
+                compiler_result["builds"][name] = {
+                    "status": "PASS",
+                    "binary_sha256": sha256(output),
+                    "command": command,
+                }
             except subprocess.CalledProcessError as error:
-                compiler_result["builds"][name] = {"status": "FAIL", "stderr": error.stderr}
+                compiler_result["builds"][name] = {
+                    "status": "FAIL",
+                    "stderr": error.stderr,
+                }
                 results["status"] = "FAIL"
         results["compilers"][compiler] = compiler_result
     if not compilers:
@@ -256,12 +311,15 @@ def execute(
     chunk: int,
     extra: list[str] | None = None,
     check: bool = True,
+    *,
+    env: Mapping[str, str] | None = None,
+    timeout: float = 180.0,
 ) -> subprocess.CompletedProcess[str]:
     command = [str(binary), "--chunk", str(chunk)]
     if extra:
         command.extend(extra)
     command.append(str(workload))
-    return run(command, check=check)
+    return run(command, check=check, env=env, timeout=timeout)
 
 
 def filter_control(text: str) -> list[str]:
@@ -270,5 +328,3 @@ def filter_control(text: str) -> list[str]:
         for line in text.splitlines()
         if '"type":"checkpoint"' not in line and '"type":"recovery"' not in line
     ]
-
-
