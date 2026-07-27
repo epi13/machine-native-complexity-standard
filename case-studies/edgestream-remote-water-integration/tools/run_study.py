@@ -303,6 +303,9 @@ def run(output: Path) -> dict[str, Any]:
                     EDGESTREAM_ROOT / "machine" / "edgestream_generated.c"
                 ),
                 "remote_water_assurance": sha256_file(WATER_ROOT / "assurance-case.json"),
+                "remote_water_controller": sha256_file(
+                    WATER_ROOT / "src" / "water_control" / "controller.py"
+                ),
                 "remote_water_planner": sha256_file(
                     WATER_ROOT / "machine" / "generated_planner.py"
                 ),
