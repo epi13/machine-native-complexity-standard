@@ -54,7 +54,14 @@ def envelope_to_sample(envelope: dict[str, Any]) -> TelemetrySample:
 
 
 def main() -> int:
-    edge_summary_path = REPOSITORY_ROOT / "case-studies" / "edgestream" / "evidence" / "results" / "study-summary.json"
+    edge_summary_path = (
+        REPOSITORY_ROOT
+        / "case-studies"
+        / "edgestream"
+        / "evidence"
+        / "results"
+        / "study-summary.json"
+    )
     water_summary_path = REMOTE_ROOT / "evidence" / "results" / "study-summary.json"
     edge_summary = load(edge_summary_path)
     water_summary = load(water_summary_path)
@@ -62,8 +69,10 @@ def main() -> int:
     boundary_checks = {
         "edgestream_development_pass": edge_summary.get("status") == "PASS",
         "remote_water_development_pass": water_summary.get("development_result") == "PASS",
-        "separate_evidence_roots": edge_summary_path.parent.resolve() != water_summary_path.parent.resolve(),
-        "separate_component_identities": edge_summary.get("target") != water_summary.get("study_id"),
+        "separate_evidence_roots": edge_summary_path.parent.resolve()
+        != water_summary_path.parent.resolve(),
+        "separate_component_identities": edge_summary.get("target")
+        != water_summary.get("study_id"),
         "remote_formal_status_not_promoted": water_summary.get("formal_mncs_status") == "UNKNOWN",
     }
 

@@ -58,10 +58,27 @@ def checkpoint_corruption_probe() -> dict[str, Any]:
             try:
                 decode_checkpoint(bytes(encoded))
             except CheckpointError as exc:
-                cases.append({"corruption": corruption, "repetition": str(repetition), "status": "PASS", "observation": str(exc)})
+                cases.append(
+                    {
+                        "corruption": corruption,
+                        "repetition": str(repetition),
+                        "status": "PASS",
+                        "observation": str(exc),
+                    }
+                )
             else:
-                cases.append({"corruption": corruption, "repetition": str(repetition), "status": "FAIL", "observation": "corrupted checkpoint was accepted"})
-    return {"status": "PASS" if all(case["status"] == "PASS" for case in cases) else "FAIL", "cases": cases}
+                cases.append(
+                    {
+                        "corruption": corruption,
+                        "repetition": str(repetition),
+                        "status": "FAIL",
+                        "observation": "corrupted checkpoint was accepted",
+                    }
+                )
+    return {
+        "status": "PASS" if all(case["status"] == "PASS" for case in cases) else "FAIL",
+        "cases": cases,
+    }
 
 
 def validate_experimental_records() -> dict[str, Any]:
@@ -77,7 +94,9 @@ def validate_experimental_records() -> dict[str, Any]:
     for schema_name, record_path in checks:
         schema = json.loads((REPOSITORY_ROOT / "schemas" / schema_name).read_text())
         record = json.loads(record_path.read_text())
-        errors = sorted(Draft202012Validator(schema).iter_errors(record), key=lambda item: item.path)
+        errors = sorted(
+            Draft202012Validator(schema).iter_errors(record), key=lambda item: item.path
+        )
         failures.extend(f"{record_path.name}: {error.message}" for error in errors)
     return {"status": "FAIL" if failures else "PASS", "failures": failures}
 
@@ -88,40 +107,52 @@ def _equivalent_storage_energy_kwh(level_deficit_pct: float) -> float:
     return liters / config.duty_flow_lps / 3600.0 * config.duty_power_kw
 
 
-def scenario_comparisons(baseline: list[dict[str, Any]], candidate: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def scenario_comparisons(
+    baseline: list[dict[str, Any]], candidate: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
     baseline_by_id = {item["scenario_id"]: item for item in baseline}
     comparisons: list[dict[str, Any]] = []
     for cand in candidate:
         base = baseline_by_id[cand["scenario_id"]]
         common_terminal = max(float(base["final_level_pct"]), float(cand["final_level_pct"]))
-        base_adjusted = float(base["energy_kwh"]) + _equivalent_storage_energy_kwh(common_terminal - float(base["final_level_pct"]))
-        cand_adjusted = float(cand["energy_kwh"]) + _equivalent_storage_energy_kwh(common_terminal - float(cand["final_level_pct"]))
+        base_adjusted = float(base["energy_kwh"]) + _equivalent_storage_energy_kwh(
+            common_terminal - float(base["final_level_pct"])
+        )
+        cand_adjusted = float(cand["energy_kwh"]) + _equivalent_storage_energy_kwh(
+            common_terminal - float(cand["final_level_pct"])
+        )
         normalized_ratio = cand_adjusted / max(0.000001, base_adjusted)
         terminal_deficit = float(base["final_level_pct"]) - float(cand["final_level_pct"])
-        status = "PASS" if (
-            normalized_ratio <= PER_SCENARIO_NORMALIZED_ENERGY_RATIO_MAX
-            and terminal_deficit <= PER_SCENARIO_TERMINAL_RESERVE_DEFICIT_PCT_MAX
-            and float(cand["unmet_demand_l"]) <= float(base["unmet_demand_l"])
-            and float(cand["overflow_l"]) <= float(base["overflow_l"])
-            and not cand["safety_violations"]
-        ) else "FAIL"
-        comparisons.append({
-            "scenario_id": cand["scenario_id"],
-            "status": status,
-            "randomized": cand["randomized"],
-            "seed": cand["seed"],
-            "terminal_normalization_target_pct": round(common_terminal, 6),
-            "baseline_normalized_energy_kwh": round(base_adjusted, 6),
-            "candidate_normalized_energy_kwh": round(cand_adjusted, 6),
-            "candidate_to_baseline_normalized_energy_ratio": round(normalized_ratio, 6),
-            "terminal_reserve_deficit_pct": round(terminal_deficit, 6),
-            "limits": {
-                "normalized_energy_ratio_max": PER_SCENARIO_NORMALIZED_ENERGY_RATIO_MAX,
-                "terminal_reserve_deficit_pct_max": PER_SCENARIO_TERMINAL_RESERVE_DEFICIT_PCT_MAX,
-                "unmet_demand_regression_l_max": 0.0,
-                "overflow_regression_l_max": 0.0,
-            },
-        })
+        status = (
+            "PASS"
+            if (
+                normalized_ratio <= PER_SCENARIO_NORMALIZED_ENERGY_RATIO_MAX
+                and terminal_deficit <= PER_SCENARIO_TERMINAL_RESERVE_DEFICIT_PCT_MAX
+                and float(cand["unmet_demand_l"]) <= float(base["unmet_demand_l"])
+                and float(cand["overflow_l"]) <= float(base["overflow_l"])
+                and not cand["safety_violations"]
+            )
+            else "FAIL"
+        )
+        comparisons.append(
+            {
+                "scenario_id": cand["scenario_id"],
+                "status": status,
+                "randomized": cand["randomized"],
+                "seed": cand["seed"],
+                "terminal_normalization_target_pct": round(common_terminal, 6),
+                "baseline_normalized_energy_kwh": round(base_adjusted, 6),
+                "candidate_normalized_energy_kwh": round(cand_adjusted, 6),
+                "candidate_to_baseline_normalized_energy_ratio": round(normalized_ratio, 6),
+                "terminal_reserve_deficit_pct": round(terminal_deficit, 6),
+                "limits": {
+                    "normalized_energy_ratio_max": PER_SCENARIO_NORMALIZED_ENERGY_RATIO_MAX,
+                    "terminal_reserve_deficit_pct_max": PER_SCENARIO_TERMINAL_RESERVE_DEFICIT_PCT_MAX,
+                    "unmet_demand_regression_l_max": 0.0,
+                    "overflow_regression_l_max": 0.0,
+                },
+            }
+        )
     return comparisons
 
 
@@ -137,7 +168,9 @@ def run(mode: str) -> dict[str, Any]:
 
     candidate_id = GeneratedTablePlanner.planner_id
     baseline_id = ReadableBaselinePlanner.planner_id
-    candidate_replay = [run_scenario(GeneratedTablePlanner(), scenario).as_dict() for scenario in scenarios]
+    candidate_replay = [
+        run_scenario(GeneratedTablePlanner(), scenario).as_dict() for scenario in scenarios
+    ]
     deterministic_replay = candidate_replay == grouped[candidate_id]
     checkpoint_probe = checkpoint_corruption_probe()
     schema_validation = validate_experimental_records()
@@ -155,7 +188,12 @@ def run(mode: str) -> dict[str, Any]:
         and ("restart" not in result["scenario_id"] or result["restart_performed"])
         for result in grouped[candidate_id]
     )
-    hard_gates_pass = scenario_gates_pass and deterministic_replay and checkpoint_probe["status"] == "PASS" and schema_validation["status"] == "PASS"
+    hard_gates_pass = (
+        scenario_gates_pass
+        and deterministic_replay
+        and checkpoint_probe["status"] == "PASS"
+        and schema_validation["status"] == "PASS"
+    )
 
     summary = {
         "schema_version": "0.2",
@@ -205,7 +243,9 @@ def run(mode: str) -> dict[str, Any]:
     if mode == "all":
         output = ROOT / "evidence" / "results"
         output.mkdir(parents=True, exist_ok=True)
-        (output / "scenario-results.json").write_text(json.dumps({"schema_version": "0.2", "results": observations}, indent=2) + "\n")
+        (output / "scenario-results.json").write_text(
+            json.dumps({"schema_version": "0.2", "results": observations}, indent=2) + "\n"
+        )
         (output / "study-summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     return summary
 

@@ -31,7 +31,15 @@ class Plant:
     def level_pct(self) -> float:
         return self.state.tank_volume_l / self.config.tank_capacity_l * 100.0
 
-    def step(self, *, duty_command: bool, standby_command: bool, demand_lps: float, power_available: bool, duration_s: int) -> None:
+    def step(
+        self,
+        *,
+        duty_command: bool,
+        standby_command: bool,
+        demand_lps: float,
+        power_available: bool,
+        duration_s: int,
+    ) -> None:
         duty_running = duty_command and power_available
         standby_running = standby_command and power_available
         if duty_running and not self.state.duty_running:
@@ -40,7 +48,10 @@ class Plant:
             self.state.standby_starts += 1
         self.state.duty_running = duty_running
         self.state.standby_running = standby_running
-        inflow_l = duration_s * (self.config.duty_flow_lps * int(duty_running) + self.config.standby_flow_lps * int(standby_running))
+        inflow_l = duration_s * (
+            self.config.duty_flow_lps * int(duty_running)
+            + self.config.standby_flow_lps * int(standby_running)
+        )
         demand_l = duration_s * demand_lps
         available_l = self.state.tank_volume_l + inflow_l
         delivered_l = min(available_l, demand_l)
@@ -50,7 +61,14 @@ class Plant:
             self.state.overflow_l += next_volume_l - self.config.tank_capacity_l
             next_volume_l = self.config.tank_capacity_l
         self.state.tank_volume_l = max(0.0, next_volume_l)
-        self.state.energy_kwh += duration_s / 3600.0 * (self.config.duty_power_kw * int(duty_running) + self.config.standby_power_kw * int(standby_running))
+        self.state.energy_kwh += (
+            duration_s
+            / 3600.0
+            * (
+                self.config.duty_power_kw * int(duty_running)
+                + self.config.standby_power_kw * int(standby_running)
+            )
+        )
 
 
 def _inside(now_s: int, windows: tuple[tuple[int, int], ...]) -> bool:
@@ -65,10 +83,16 @@ def _demand_at(now_s: int, scenario: Scenario) -> float:
 
 
 def _checkpoint_payload(plant: Plant, controller: Controller) -> dict[str, Any]:
-    return {"schema_version": "0.2", "plant_state": plant.state.as_dict(), "controller": controller.checkpoint_payload()}
+    return {
+        "schema_version": "0.2",
+        "plant_state": plant.state.as_dict(),
+        "controller": controller.checkpoint_payload(),
+    }
 
 
-def run_scenario(planner: Planner, scenario: Scenario, config: SystemConfig | None = None) -> ScenarioResult:
+def run_scenario(
+    planner: Planner, scenario: Scenario, config: SystemConfig | None = None
+) -> ScenarioResult:
     active_config = config or SystemConfig()
     plant = Plant.at_level(active_config, scenario.initial_level_pct)
     controller = Controller(planner, active_config)
@@ -111,16 +135,26 @@ def run_scenario(planner: Planner, scenario: Scenario, config: SystemConfig | No
             emergency_steps += 1
         if intent.mode is ControlMode.DEGRADED:
             degraded_steps += 1
-        if quality is not TelemetryQuality.GOOD and (intent.duty_on != previous_duty or intent.standby_on != previous_standby):
+        if quality is not TelemetryQuality.GOOD and (
+            intent.duty_on != previous_duty or intent.standby_on != previous_standby
+        ):
             safety_violations.append(f"{now_s}: command changed on degraded telemetry")
-        if sample.tank_level_pct >= active_config.high_high_pct and (intent.duty_on or intent.standby_on):
+        if sample.tank_level_pct >= active_config.high_high_pct and (
+            intent.duty_on or intent.standby_on
+        ):
             safety_violations.append(f"{now_s}: pumps enabled at high-high level")
         if intent.standby_on and not intent.duty_on:
             safety_violations.append(f"{now_s}: standby enabled without duty")
         if intent.expires_at_s <= intent.issued_at_s:
             safety_violations.append(f"{now_s}: non-positive intent lifetime")
 
-        plant.step(duty_command=intent.duty_on, standby_command=intent.standby_on, demand_lps=demand_lps, power_available=power_available, duration_s=scenario.step_s)
+        plant.step(
+            duty_command=intent.duty_on,
+            standby_command=intent.standby_on,
+            demand_lps=demand_lps,
+            power_available=power_available,
+            duration_s=scenario.step_s,
+        )
         previous_duty = intent.duty_on
         previous_standby = intent.standby_on
 

@@ -110,10 +110,7 @@ class Controller:
         )
         if journal.last_sequence != state.last_sequence:
             raise ValueError("checkpoint sequence mismatch")
-        counts = {
-            key: int(value)
-            for key, value in payload.get("intervention_counts", {}).items()
-        }
+        counts = {key: int(value) for key, value in payload.get("intervention_counts", {}).items()}
         return cls(
             planner,
             config,
