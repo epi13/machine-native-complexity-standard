@@ -419,9 +419,9 @@
       "overflow_l": 0.0,
       "safety_violations": 0,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 85,
-        "held": 8915,
+        "accepted": 8701,
+        "modified": 0,
+        "held": 299,
         "rejected": 0
       }
     },
@@ -432,9 +432,9 @@
       "overflow_l": 0.0,
       "safety_violations": 0,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 38,
-        "held": 8962,
+        "accepted": 8940,
+        "modified": 0,
+        "held": 60,
         "rejected": 0
       }
     }
