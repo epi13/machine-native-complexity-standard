@@ -1,31 +1,18 @@
 # Remote Water Resilience Controller
 
-The Remote Water Resilience Controller is a development-only MNCS case study for a composed,
-fault-aware supervisory control system. It deliberately advances beyond the EdgeStream
-component study by separating machine proposal authority from readable safety authority and
-by evaluating state, recovery, audit continuity, system dependencies, and multi-objective
-utility together.
+The Remote Water case study evaluates generated supervisory decision logic behind a readable
+safety authority. It is a digital twin only and cannot emit industrial control traffic.
 
-The bounded digital twin contains one tank, one duty pump, one standby pump, variable demand,
-power interruption, degraded telemetry, checkpoint restart, and a hash-chained intent
-journal. A deterministically generated table planner proposes pump states. A compact safety
-kernel independently enforces high-high shutdown, low-low response, telemetry hold,
-power-loss shutdown, pump ordering, minimum dwell, sequence, and intent-expiry rules.
+Epoch 2 adds terminal-inventory normalization, per-scenario regression limits, safety-kernel
+intervention statistics, named combined-fault scenarios, deterministic randomized campaigns,
+repeated checkpoint-corruption probes, fresh x64 and ARM64 execution, and a separately bounded
+EdgeStream telemetry adapter study.
 
-The current repository evidence is a transparent development epoch. The experimental
-contract profile and combined assurance case remain `UNKNOWN` for formal MNCS and MNCDS
-status. Protected holdout evaluation, independent review, cross-host reproduction, release
-binding, and operational evidence are explicitly deferred rather than simulated or implied.
+The checked-in development evidence may pass, but formal `MNCS-L5` and `MNCDS-D3` status remain
+`UNKNOWN`. The runtime-seeded cross-architecture workflow freezes evaluator identities before
+exact scenarios are generated; it does not provide independent evaluator authority, physical
+system validation, domain approval, or a production release.
 
-The implementation cannot emit industrial control traffic and must not be connected to live
-equipment. Its utility is in commissioning-oriented sequence review, operator-training
-simulation, fault injection, planner comparison, and continued development of machine-native
-composition and lifecycle evidence.
-
-Run the complete development study from the repository root:
-
-```bash
-make remote-water-study
-```
-
-The case-study source and records are under `case-studies/remote-water-control/`.
+See the [case-study README](../case-studies/remote-water-control/README.md),
+[`preregistration.json`](../case-studies/remote-water-control/preregistration.json), and
+[`assurance-case.json`](../case-studies/remote-water-control/assurance-case.json).
