@@ -42,11 +42,7 @@ def performance_samples(
             metric = sample[label]
             if not isinstance(metric, dict):
                 raise TypeError(f"benchmark metric must be an object: {label}")
-            throughput = (
-                float(metric["bytes"])
-                * 1_000_000_000.0
-                / float(metric["elapsed_ns"])
-            )
+            throughput = float(metric["bytes"]) * 1_000_000_000.0 / float(metric["elapsed_ns"])
             target = baseline_samples if label == "reference" else candidate_samples
             target.append(throughput)
             sample_order.append("baseline" if label == "reference" else "candidate")
