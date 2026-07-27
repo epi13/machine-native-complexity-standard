@@ -31,6 +31,7 @@ RFC 0005 proposes the remaining conceptual foundation, experimental contract and
 assurance-case profiles, and a focused compiler-backed Machine-Native Evidence Analyzer.
 It remains Draft and does not change MNCS 0.2 or promote MNCDS.
 
+- [Remote Water Resilience Controller case study](remote-water-control.md)
 - [Machine-native complexity foundation](foundational-model.md)
 - [Machine-Native Evidence Analyzer](machine-native-evidence-analyzer.md)
 - [Machine-native development](mncds.md)
