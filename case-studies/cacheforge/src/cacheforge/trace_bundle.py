@@ -177,9 +177,7 @@ def evaluate_trace_bundle(
         "baseline_ids": [lru.policy_id, segmented.policy_id],
         "scenario_count": len(bundle.scenarios),
         "request_count": sum(len(scenario.requests) for scenario in bundle.scenarios),
-        "distinct_capacity_count": len(
-            {scenario.capacity_blocks for scenario in bundle.scenarios}
-        ),
+        "distinct_capacity_count": len({scenario.capacity_blocks for scenario in bundle.scenarios}),
         "artifact_identities": collect_artifact_identities(),
         **observations,
         "limitations": [
