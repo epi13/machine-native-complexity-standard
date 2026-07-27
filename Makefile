@@ -1,4 +1,4 @@
-.PHONY: format lint type test build examples corpus mncds-corpus interoperability docs edgestream-smoke edgestream-evidence remote-water-smoke remote-water-test remote-water-study check
+.PHONY: format lint type test build examples corpus mncds-corpus interoperability docs edgestream-smoke edgestream-evidence remote-water-smoke remote-water-test remote-water-study edgestream-water-integration check
 
 format:
 	ruff format .
@@ -45,5 +45,8 @@ remote-water-test:
 
 remote-water-study:
 	$(MAKE) -C case-studies/remote-water-control study
+
+edgestream-water-integration:
+	$(MAKE) -C case-studies/edgestream-remote-water-integration study
 
 check: lint type test build examples corpus mncds-corpus interoperability docs
