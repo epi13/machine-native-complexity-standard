@@ -13,7 +13,7 @@ proof that the proposal is already accepted.
 | Reject omitted or promoted UNKNOWN | Unit tests and `invalid/unknown-promoted` corpus case | Implemented |
 | D2 reproducible generation and repeated measurement | Seeded profile test and D4 reference record | Implemented |
 | D3 protected holdout and independent evaluator | D3 profile test and D4 reference record | Implemented |
-| Recursive harness improvement across epochs | Normative epoch rules and reference record supersession fields | Partially implemented; full two-epoch Joern study required |
+| Recursive analyzer or harness improvement across epochs | Normative epoch rules, reference-record supersession fields, and RFC 0005 study protocol | Partially implemented; reproducible two-epoch study required |
 | D4 rollback, regeneration drill, retirement | D4 reference record and rejection tests | Implemented |
 | Independent validator agreement | Versioned corpus format ready for another implementation | Not yet satisfied |
 
@@ -39,7 +39,7 @@ Current corpus coverage includes:
 - post-hoc selection rules;
 - evaluator authority and executable conflicts;
 - mismatched MNCS candidate binding;
-- untested rollback;
+- untested rollback; and
 - failed regeneration drills.
 
 ## Required independent evidence
@@ -50,25 +50,36 @@ its own tests. Before acceptance, at least one independently implemented consume
 1. parse `mncds-conformance-corpus/corpus.json` without importing the Python validator;
 2. apply the declared mutations;
 3. produce normalized validity, status, and issue-class outcomes;
-4. publish an agreement report including every disagreement and unsupported rule;
+4. publish an agreement report including every disagreement and unsupported rule; and
 5. preserve unsupported behavior as UNKNOWN rather than PASS.
 
 A Rust implementation is a natural candidate because MNCS already uses Rust for
 cross-language interoperability, but the standard does not require Rust.
 
-## Recursive Joern study
+## Recursive analyzer and harness study
 
-The remaining high-value demonstration should use the repository's Joern harness work:
+The remaining high-value demonstration is a reproducible two-epoch analyzer or harness
+improvement study. The original Joern harness may serve as epoch one, but Joern is not
+required for epoch two and is not a normative dependency.
 
-1. freeze the original harness, corpus, and evaluation policy as epoch 1;
+The study should:
+
+1. freeze the original analyzer or harness, corpus, environment, and evaluation policy as
+   epoch one;
 2. evaluate at least two competing implementation or analysis ideas;
-3. convert discovered disagreements and blind spots into classified regression fixtures;
-4. create a newly identified epoch-2 harness;
-5. rerun the harness regression corpus;
-6. evaluate new candidates using a fresh protected holdout;
-7. compare detection quality, UNKNOWN rate, runtime, memory, false positives, and false
-   negatives across epochs;
-8. retain unresolved disagreement cases as UNKNOWN.
+3. record false positives, false negatives, incorrect PASS, UNKNOWN, crashes, timeouts,
+   runtime, memory, determinism, and diagnostic utility;
+4. convert discovered disagreements and blind spots into classified regression fixtures;
+5. create a newly identified epoch-two analyzer or harness;
+6. rerun the analyzer regression corpus;
+7. evaluate new candidates using a fresh protected holdout;
+8. compare detection quality, evidence quality, resource cost, and reproducibility across
+   epochs; and
+9. retain unresolved disagreement cases as UNKNOWN.
+
+The experimental Machine-Native Evidence Analyzer described in
+`docs/machine-native-evidence-analyzer.md` is one possible epoch-two implementation. It is
+not required for conformance and must be evaluated as an untrusted provider.
 
 The study should produce both an MNCDS development record and an MNCS bundle for the
 selected machine-native artifact. This will test whether the two specifications bind
@@ -80,6 +91,6 @@ MNCDS 0.1 should remain Draft until all of the following are true:
 
 - the Python implementation and corpus pass CI;
 - an independent corpus consumer publishes normalized agreement;
-- the recursive two-epoch harness study is reproducible;
-- security and privacy review finds no unresolved claim-broadening issue;
+- the recursive two-epoch analyzer or harness study is reproducible;
+- security and privacy review finds no unresolved claim-broadening issue; and
 - the RFC receives the independent approvals required by governance.
