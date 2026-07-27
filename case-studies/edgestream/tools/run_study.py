@@ -4,7 +4,8 @@
 from __future__ import annotations
 
 import argparse
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from harness_regression import run_harness_regression
 from study_evaluation import (
