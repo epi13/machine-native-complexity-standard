@@ -42,6 +42,30 @@ validation without executing generators, candidates, evaluators, or evidence.
 A project may state both, for example `MNCDS-D3 / MNCS-L4`, only when each result is
 independently supported.
 
+## Foundation and experimental analyzer
+
+[RFC 0005](rfcs/0005-machine-native-foundation-and-evidence-analyzer.md) proposes the
+broader machine-native complexity model, contract adequacy, applicability and criticality,
+composition, a combined assurance-case record, generic threat and measurement frameworks,
+and governance completion criteria. It remains Draft and does not change MNCS 0.2 or
+promote MNCDS.
+
+The experimental [Machine-Native Evidence Analyzer](docs/machine-native-evidence-analyzer.md)
+architecture produces bounded PASS, FAIL, or UNKNOWN evidence without making one analyzer
+normative. The first prototype uses Clang AST JSON for a deliberately small C11 structural
+invariant set. Joern may serve as the frozen epoch-one baseline, but is not required for
+epoch two.
+
+Experimental schemas are available for:
+
+```text
+mncs schema contract-profile
+mncs schema assurance-case
+mncs schema analyzer-result
+```
+
+These schemas are not inputs to MNCS 0.2 certification.
+
 ## Attested interoperability in MNCS 0.2
 
 Evidence-derived results have RFC 8785 canonical bytes, Ed25519 DSSE-compatible
@@ -183,18 +207,20 @@ proof assistants, custom analyzers, runtime instrumentation, language-specific
 verification, and independent combinations are all possible providers. Joern is one
 optional provider and is not a normative dependency.
 
-MNCDS explicitly permits evidence from one development epoch to improve a Joern harness,
-generator, evaluator, or search strategy in the next epoch. The changed toolchain must
-receive a new identity, be regression-tested, and use uncontaminated protected evidence
-for any new final claim.
+MNCDS explicitly permits evidence from one development epoch to improve an analyzer,
+harness, generator, evaluator, benchmark, or search strategy in the next epoch. The
+changed toolchain must receive a new identity, be regression-tested, and use
+uncontaminated protected evidence for any new final claim.
 
 ## Repository map
 
 - [`spec/MNCS-v0.2.md`](spec/MNCS-v0.2.md) — normative MNCS 0.2 text
 - [`spec/MNCDS-v0.1-draft.md`](spec/MNCDS-v0.1-draft.md) — draft development specification
+- [`rfcs/0005-machine-native-foundation-and-evidence-analyzer.md`](rfcs/0005-machine-native-foundation-and-evidence-analyzer.md) — draft foundation and analyzer proposal
 - [`schemas/`](schemas/mncs-manifest.schema.json) — machine-readable contracts
+- [`experimental/mnea/`](experimental/mnea/README.md) — bounded Clang-backed analyzer prototype
 - [`src/mncs_validator/`](src/mncs_validator/validation.py) — offline validators
-- [`examples/`](examples/minimal/README.md) — accepted, rejected, repair, and MNCDS examples
+- [`examples/`](examples/minimal/README.md) — accepted, rejected, repair, MNCDS, and experimental foundation examples
 - [`docs/`](docs/index.md) — documentation site
 - [`rfcs/`](rfcs/README.md) — change process
 - [`conformance-corpus/`](conformance-corpus/expected.json) — deterministic MNCS corpus
