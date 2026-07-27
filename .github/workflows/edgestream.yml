@@ -27,54 +27,6 @@ env:
   LC_ALL: C.UTF-8
 
 jobs:
-  format-repository:
-    if: >-
-      github.event_name == 'pull_request' &&
-      github.head_ref == 'agent/strengthen-edgestream-evidence'
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: agent/strengthen-edgestream-evidence
-          fetch-depth: 2
-      - name: Decide whether formatting is complete
-        id: guard
-        shell: bash
-        run: |
-          if [ "$(git log -1 --pretty=%s)" = "Format repository after EdgeStream changes" ]; then
-            echo "run=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "run=true" >> "$GITHUB_OUTPUT"
-          fi
-      - uses: actions/setup-python@v5
-        if: steps.guard.outputs.run == 'true'
-        with:
-          python-version: "3.13"
-      - if: steps.guard.outputs.run == 'true'
-        run: python -m pip install -e '.[dev]'
-      - name: Apply repository formatting
-        if: steps.guard.outputs.run == 'true'
-        run: |
-          ruff format .
-          ruff check --fix --unsafe-fixes .
-          ruff format --check .
-          ruff check .
-      - name: Commit formatting
-        if: steps.guard.outputs.run == 'true'
-        shell: bash
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet; then
-            exit 0
-          fi
-          git add -u
-          git commit -m "Format repository after EdgeStream changes"
-          git push origin HEAD:agent/strengthen-edgestream-evidence
-
   smoke:
     strategy:
       fail-fast: false
