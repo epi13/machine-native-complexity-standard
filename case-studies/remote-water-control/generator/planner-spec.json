@@ -1,8 +1,8 @@
 {
-  "schema_version": "0.1",
-  "generator_id": "mncs.remote-water.table-generator.v1",
-  "planner_id": "mncs.remote-water.generated-table.v1",
-  "level_bands_pct": [15.0, 35.0, 50.0, 65.0, 75.0, 90.0],
+  "schema_version": "0.2",
+  "generator_id": "mncs.remote-water.table-generator.v2",
+  "planner_id": "mncs.remote-water.generated-table.v2",
+  "level_bands_pct": [15.0, 35.0, 55.0, 65.0, 75.0, 90.0],
   "level_names": [
     "critical_low",
     "low",
@@ -25,5 +25,6 @@
     "critical_high": "stop_all",
     "bad_telemetry": "hold_current_state",
     "power_unavailable": "stop_all"
-  }
+  },
+  "change_note": "Raise the duty-start boundary from 50% to 55% to prevent finite-horizon pump-start gains from relying on materially lower terminal storage."
 }
