@@ -1,4 +1,4 @@
-.PHONY: generate check-generated test smoke study clean
+.PHONY: generate check-generated test smoke study protected clean
 
 PYTHONPATH := src:machine
 
@@ -17,5 +17,12 @@ smoke: check-generated
 study: test
 	PYTHONPATH=$(PYTHONPATH) python tools/run_study.py all
 
+protected: test
+	test -n "$(PROTECTED_SEED)"
+	PYTHONPATH=$(PYTHONPATH) python tools/run_protected_evaluation.py \
+		--seed "$(PROTECTED_SEED)" \
+		--output evidence/protected/local.json
+
 clean:
 	rm -f evidence/results/scenario-results.json evidence/results/study-summary.json
+	rm -rf evidence/protected
