@@ -62,9 +62,13 @@ class Plant:
             self.state.overflow_l += next_volume_l - self.config.tank_capacity_l
             next_volume_l = self.config.tank_capacity_l
         self.state.tank_volume_l = max(0.0, next_volume_l)
-        self.state.energy_kwh += duration_s / 3600.0 * (
-            self.config.duty_power_kw * int(duty_running)
-            + self.config.standby_power_kw * int(standby_running)
+        self.state.energy_kwh += (
+            duration_s
+            / 3600.0
+            * (
+                self.config.duty_power_kw * int(duty_running)
+                + self.config.standby_power_kw * int(standby_running)
+            )
         )
 
 
