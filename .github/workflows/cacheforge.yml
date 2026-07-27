@@ -55,7 +55,8 @@ jobs:
           git diff --exit-code -- \
             case-studies/cacheforge/machine/generated_policy.py \
             case-studies/cacheforge/evidence/results/study-summary.json \
-            case-studies/cacheforge/evidence/results/epoch-2-development.json
+            case-studies/cacheforge/evidence/results/epoch-2-development.json \
+            case-studies/cacheforge/evidence/results/epoch-2-scenario-results.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
