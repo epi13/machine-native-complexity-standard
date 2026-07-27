@@ -124,6 +124,20 @@ intentionally incomplete: replace it with real evidence and hashes before making
 claim. MNCS and MNCDS validation are offline and never launch, import, or execute an
 evidence binary, generator, candidate, analyzer, or benchmark.
 
+## Research case studies
+
+- [`case-studies/edgestream/`](case-studies/edgestream/README.md) evaluates a bounded,
+  fault-tolerant C11 telemetry processor with controlled correctness, structural,
+  recovery, and performance evidence.
+- [`case-studies/remote-water-control/`](case-studies/remote-water-control/README.md)
+  implements a development-only remote water-system digital twin with a generated planner,
+  readable safety authority, expiring intent journal, checkpoint continuity, fault
+  injection, and a review-required composed assurance case.
+
+The remote-water study deliberately records formal MNCS and MNCDS status as `UNKNOWN` until
+independent protected holdout, cross-host reproduction, domain review, and release evidence
+exist. It cannot emit industrial control traffic and must not be connected to live equipment.
+
 ## Cumulative conformance levels
 
 ### MNCS implementation levels
@@ -221,6 +235,8 @@ uncontaminated protected evidence for any new final claim.
 - [`experimental/mnea/`](experimental/mnea/README.md) — bounded Clang-backed analyzer prototype
 - [`src/mncs_validator/`](src/mncs_validator/validation.py) — offline validators
 - [`examples/`](examples/minimal/README.md) — accepted, rejected, repair, MNCDS, and experimental foundation examples
+- [`case-studies/edgestream/`](case-studies/edgestream/README.md) — stateful C11 development study
+- [`case-studies/remote-water-control/`](case-studies/remote-water-control/README.md) — composed supervisory-control development study
 - [`docs/`](docs/index.md) — documentation site
 - [`rfcs/`](rfcs/README.md) — change process
 - [`conformance-corpus/`](conformance-corpus/expected.json) — deterministic MNCS corpus
