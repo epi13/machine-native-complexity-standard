@@ -1,27 +1,24 @@
 # EdgeStream to Remote Water Integration Study
 
-This development-only study evaluates a narrow telemetry-envelope boundary between the
-EdgeStream case study and the Remote Water Resilience Controller. It does not merge either
-component's evidence graph, claim, evaluator, or release identity.
+This development-only study compiles and executes the existing generated EdgeStream C
+candidate, feeds it binary telemetry frames under the EdgeStream contract, adapts accepted
+canonical event records into the Remote Water telemetry interface, and compares the resulting
+authorized intents against direct Remote Water inputs.
 
-The integration runner refuses to execute unless:
+The adapter is deliberately narrow: one device, four metrics, strictly increasing event
+sequences, and complete timestamp groups. It rejects duplicate or replayed sequences,
+mixed-device records, unsupported metrics, invalid power values, and invalid quality codes.
 
-- the checked-in EdgeStream development summary is `PASS`;
-- the checked-in Remote Water development summary is `PASS`;
-- the two evidence roots, component identities, and evaluator identities remain distinct;
-- neither component's formal claim is promoted by the integration result.
-
-The adapter accepts a normalized JSON envelope with a sequence number, observation and
-receipt times, tank level, demand, power state, and quality. It maps that envelope into the
-Remote Water telemetry model and executes the readable safety authority boundary. No C
-binary is imported into Python and no industrial protocol or actuator output is present.
+The component evidence boundaries remain separate. EdgeStream retains its own captured
+`MNCS-L4` development result. Remote Water retains formal `MNCS-L5` and `MNCDS-D3` status as
+`UNKNOWN`. An integration PASS cannot promote either component claim or authorize live control.
 
 Run from the repository root:
 
 ```bash
-python case-studies/edgestream-remote-water-integration/tools/run_study.py
+make edgestream-water-integration
 ```
 
-The result is written to `evidence/results/integration-summary.json`. A passing integration
-result means only that the declared envelope and evidence-boundary checks passed in the
-captured development environment.
+The result is written to `evidence/results/study-summary.json`. This exercises a local file and
+process boundary only. It provides no network transport, authentication, SCADA connection,
+industrial protocol, or actuator output.
