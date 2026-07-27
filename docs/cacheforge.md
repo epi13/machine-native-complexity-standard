@@ -29,5 +29,6 @@ server, or establish production isolation. Its formal MNCS and MNCDS statuses re
 `UNKNOWN` pending protected holdout traces, independent evaluation, cross-host reproduction,
 and a real serving-system adapter.
 
-See [`case-studies/cacheforge/`](../case-studies/cacheforge/README.md) for the executable study,
-contract, preregistration, threat model, generated candidate, and checked-in evidence.
+See the [executable CacheForge study](https://github.com/epi13/machine-native-complexity-standard/tree/main/case-studies/cacheforge)
+for the contract, preregistration, threat model, generated candidate, tests, and checked-in
+evidence.
