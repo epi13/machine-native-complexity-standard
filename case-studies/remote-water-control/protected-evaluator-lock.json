@@ -15,7 +15,7 @@
     "src/water_control/safety.py": "sha256:757621031db31cbdceb8bfa34f49c2c15e2751ed3b65699204e0f779d03766be",
     "src/water_control/scenarios.py": "sha256:e32a1c699bf446c9a4f394ccd2a07487bdbe686ffc4b7b56d97a3ffd87a82f52",
     "src/water_control/simulator.py": "sha256:f7a699bd7d57a3a5e46c5b3b8f7887fd8c7fb46188a0c92add6df1da03c3dbc2",
-    "tools/run_study.py": "sha256:485cfa1293407a067a32d938b31d9867f323060523cbc09fe1daec7e2fff53d2",
+    "tools/run_study.py": "sha256:ee43cff864d03cc4d84cbcaaddc19328f669b3b63b0f2abc0fa279c4c3c02307",
     "tools/run_protected_evaluation.py": "sha256:883baf1e399f6188e20c479f9545cedbcd3f429fd384363a6065dc4e794dad8e"
   },
   "policy": {
