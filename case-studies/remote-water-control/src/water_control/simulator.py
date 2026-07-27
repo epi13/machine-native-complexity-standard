@@ -62,9 +62,13 @@ class Plant:
             self.state.overflow_l += next_volume_l - self.config.tank_capacity_l
             next_volume_l = self.config.tank_capacity_l
         self.state.tank_volume_l = max(0.0, next_volume_l)
-        self.state.energy_kwh += duration_s / 3600.0 * (
-            self.config.duty_power_kw * int(duty_running)
-            + self.config.standby_power_kw * int(standby_running)
+        self.state.energy_kwh += (
+            duration_s
+            / 3600.0
+            * (
+                self.config.duty_power_kw * int(duty_running)
+                + self.config.standby_power_kw * int(standby_running)
+            )
         )
 
 
@@ -131,9 +135,7 @@ def run_scenario(
     steps = scenario.duration_s // scenario.step_s
     corruption_schedule = _corruption_schedule(steps, scenario.checkpoint_corruption_attempts)
 
-    for step_index, now_s in enumerate(
-        range(0, scenario.duration_s, scenario.step_s), start=1
-    ):
+    for step_index, now_s in enumerate(range(0, scenario.duration_s, scenario.step_s), start=1):
         power_available = not _inside(now_s, scenario.power_outages)
         demand_lps = _demand_at(now_s, scenario)
         observed_demand_lps = max(0.0, demand_lps * scenario.demand_observation_scale)

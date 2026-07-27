@@ -55,7 +55,9 @@ class Controller:
         return intent
 
     @staticmethod
-    def _disposition(proposal_duty: bool, proposal_standby: bool, adjudication: Any) -> SafetyDisposition:
+    def _disposition(
+        proposal_duty: bool, proposal_standby: bool, adjudication: Any
+    ) -> SafetyDisposition:
         if adjudication.mode in {ControlMode.DEGRADED, ControlMode.HOLD}:
             return SafetyDisposition.HELD
         if adjudication.mode is ControlMode.EMERGENCY:

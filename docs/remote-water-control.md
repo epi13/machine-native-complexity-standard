@@ -13,6 +13,8 @@ The checked-in development evidence may pass, but formal `MNCS-L5` and `MNCDS-D3
 exact scenarios are generated; it does not provide independent evaluator authority, physical
 system validation, domain approval, or a production release.
 
-See the [case-study README](../case-studies/remote-water-control/README.md),
-[`preregistration.json`](../case-studies/remote-water-control/preregistration.json), and
-[`assurance-case.json`](../case-studies/remote-water-control/assurance-case.json).
+The primary records are stored at these repository paths:
+
+- `case-studies/remote-water-control/README.md`
+- `case-studies/remote-water-control/preregistration.json`
+- `case-studies/remote-water-control/assurance-case.json`

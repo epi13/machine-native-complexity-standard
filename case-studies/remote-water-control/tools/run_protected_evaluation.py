@@ -99,9 +99,19 @@ def evaluate(seed: int) -> dict[str, Any]:
             "runner_os": os.environ.get("RUNNER_OS", platform.system()),
         },
         "limitations": [
-            "The exact runtime seed is generated after the candidate and evaluator lock are committed, but the scenario generator is repository visible.",
-            "The evaluator authority remains correlated with the repository owner and is not an independent third party.",
-            "This is a digital-twin evaluation with no physical equipment or industrial network.",
+            (
+                "The exact runtime seed is generated after the candidate and "
+                "evaluator lock are committed, but the scenario generator is "
+                "repository visible."
+            ),
+            (
+                "The evaluator authority remains correlated with the repository "
+                "owner and is not an independent third party."
+            ),
+            (
+                "This is a digital-twin evaluation with no physical equipment or "
+                "industrial network."
+            ),
         ],
     }
 

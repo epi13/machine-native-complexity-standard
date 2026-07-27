@@ -64,9 +64,7 @@ def test_safety_holds_on_bad_telemetry() -> None:
     kernel = SafetyKernel(SystemConfig())
     state = ControllerState(duty_on=True, standby_on=False)
     proposal = PlannerProposal(False, True, "test", "test")
-    result = kernel.authorize(
-        proposal, sample(quality=TelemetryQuality.CONFLICT), state, 1_000
-    )
+    result = kernel.authorize(proposal, sample(quality=TelemetryQuality.CONFLICT), state, 1_000)
     assert result.mode is ControlMode.DEGRADED
     assert result.duty_on
     assert not result.standby_on

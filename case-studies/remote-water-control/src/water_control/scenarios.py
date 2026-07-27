@@ -146,9 +146,7 @@ def randomized_suite(
             stale_windows = ((start, min(duration_s, start + rng.choice((600, 1_200, 1_800)))),)
         if fault_mode == 3:
             start = rng.randrange(20, max(21, duration_s // 60 - 50)) * 60
-            conflict_windows = (
-                (start, min(duration_s, start + rng.choice((600, 1_200, 1_800)))),
-            )
+            conflict_windows = ((start, min(duration_s, start + rng.choice((600, 1_200, 1_800)))),)
         if fault_mode == 5:
             stale_start, stale_end = stale_windows[0]
             restart_at_s = stale_start + min(600, (stale_end - stale_start) // 2)

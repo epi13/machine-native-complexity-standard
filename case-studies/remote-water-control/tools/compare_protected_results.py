@@ -30,9 +30,7 @@ def main() -> int:
         "matching_seed_commitment": len({item["seed_commitment"] for item in results}) == 1,
         "matching_scenario_digest": len({item["scenario_digest"] for item in results}) == 1,
         "matching_comparison_digest": len({item["comparison_digest"] for item in results}) == 1,
-        "matching_evaluator_lock": len(
-            {item["evaluator_lock"]["lock_sha256"] for item in results}
-        )
+        "matching_evaluator_lock": len({item["evaluator_lock"]["lock_sha256"] for item in results})
         == 1,
     }
     summary = {
@@ -53,8 +51,14 @@ def main() -> int:
         "shared_evidence": {field: results[0][field] for field in matching_fields},
         "result_set_digest": canonical_sha256(results),
         "limitations": [
-            "GitHub-hosted runners are separate fresh virtual machines, not evidence of specific physical host identity.",
-            "Architecture diversity and evaluator locking do not establish evaluator independence or production suitability.",
+            (
+                "GitHub-hosted runners are separate fresh virtual machines, not "
+                "evidence of specific physical host identity."
+            ),
+            (
+                "Architecture diversity and evaluator locking do not establish "
+                "evaluator independence or production suitability."
+            ),
         ],
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
