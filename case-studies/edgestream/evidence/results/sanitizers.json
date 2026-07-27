@@ -1,0 +1,14 @@
+{
+  "compiler": "clang",
+  "implementations": {
+    "candidate": {
+      "exit": 0,
+      "status": "PASS"
+    },
+    "reference": {
+      "exit": 0,
+      "status": "PASS"
+    }
+  },
+  "status": "PASS"
+}

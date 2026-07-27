@@ -1,0 +1,241 @@
+{
+  "extensions": {},
+  "immutable": false,
+  "mncs_version": "0.2",
+  "records": [
+    {
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "contract",
+      "kind": "contract",
+      "media_type": "text/markdown",
+      "path": "specification/contract.md",
+      "sha256": "sha256:843b402abedd48980f424769db2d7698e0ed9b7618b1cdbc7adcb31fa189d752"
+    },
+    {
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "reference",
+      "kind": "reference",
+      "media_type": "text/x-c",
+      "path": "reference/edgestream_reference.c",
+      "sha256": "sha256:7268208dae41cad6a42f9a33ee8cfc31140f3f0cb9da9b45492699efefba3c64"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "machine",
+      "kind": "machine",
+      "media_type": "text/x-c",
+      "path": "machine/edgestream_generated.c",
+      "sha256": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "identity-generator",
+      "kind": "identity",
+      "media_type": "application/json",
+      "path": "evidence/identities/identity-generator.json",
+      "sha256": "sha256:a027cbb595cc82aebf4ad9f34dc2f4981e72bfc75f07937cff406ea4424e6ad0"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "identity-evaluator",
+      "kind": "identity",
+      "media_type": "application/json",
+      "path": "evidence/identities/identity-evaluator.json",
+      "sha256": "sha256:ab7d1e5d9560d27fdd89593b7022e06eb477d485087319ef4c106365bdd1fbca"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "identity-environment",
+      "kind": "identity",
+      "media_type": "application/json",
+      "path": "evidence/identities/identity-environment.json",
+      "sha256": "sha256:9c45cd69124d86279472a3d69c76379fddef099d5f5948af4b59ddbdd523f500"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "identity-compiler",
+      "kind": "identity",
+      "media_type": "application/json",
+      "path": "evidence/identities/identity-compiler.json",
+      "sha256": "sha256:1ad3e8e49e693425f2f6ed750da2e50a2bcfc7590eff6c352ff628700aacd242"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "identity-benchmark",
+      "kind": "identity",
+      "media_type": "application/json",
+      "path": "evidence/identities/identity-benchmark.json",
+      "sha256": "sha256:10d16cecd9161904bc73c15613885c467e35da1a0e4113a2fe114a61616a1994"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "identity-corpus",
+      "kind": "identity",
+      "media_type": "application/json",
+      "path": "evidence/identities/identity-corpus.json",
+      "sha256": "sha256:5f1ad10fc243bf67b83dc843fb63cbc3ddcf0b999591187d15ff563963453da3"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "identity-build",
+      "kind": "identity",
+      "media_type": "application/json",
+      "path": "evidence/identities/identity-build.json",
+      "sha256": "sha256:d26305bb801c68cddd5e3d5c295ff373fca88475488036246aae7d5986a00561"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "gate-behavioral",
+      "kind": "gate_result",
+      "media_type": "application/json",
+      "path": "evidence/gates/gate-behavioral.json",
+      "sha256": "sha256:75f79d7e0bedb6fd1011aa0aa754aca59c02404caf2847cfc956dc33e1bcefde"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "gate-compiler-matrix",
+      "kind": "gate_result",
+      "media_type": "application/json",
+      "path": "evidence/gates/gate-compiler-matrix.json",
+      "sha256": "sha256:412ca7ec33fc8cd24dd3587f53a3e618d235e20d27b46f44473f39b5a23c8029"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "gate-safety",
+      "kind": "gate_result",
+      "media_type": "application/json",
+      "path": "evidence/gates/gate-safety.json",
+      "sha256": "sha256:4be7f93573c570fb6af9e434533d7d3fa8e8971f7824b1f0d2dba5322088d90c"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "gate-resource-bounds",
+      "kind": "gate_result",
+      "media_type": "application/json",
+      "path": "evidence/gates/gate-resource-bounds.json",
+      "sha256": "sha256:b6f4f7e1aa33bcf1f8d728914a10b5bb01ed5ce878bf59f991be2354e5a71852"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "gate-mutation",
+      "kind": "gate_result",
+      "media_type": "application/json",
+      "path": "evidence/gates/gate-mutation.json",
+      "sha256": "sha256:04fc8e2b2185872c58c1f4ee47c075d8353271070f2931b197e017513085b92b"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "gate-structural",
+      "kind": "gate_result",
+      "media_type": "application/json",
+      "path": "evidence/gates/gate-structural.json",
+      "sha256": "sha256:6cbde6d7e83d813d3c197165c51e2d4bcab638d175aef7a07840217e3f32f3e2"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "invariant-bounded-storage",
+      "kind": "invariant",
+      "media_type": "application/json",
+      "path": "evidence/invariants/invariant-bounded-storage.json",
+      "sha256": "sha256:359b5e7bac77ddbcb4f049df0f7c6b0c2002ce53ab955de186c22ac88962e1ae"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "performance-throughput",
+      "kind": "performance",
+      "media_type": "application/json",
+      "path": "evidence/performance/performance-throughput.json",
+      "sha256": "sha256:34cdaeeb14826b89a79ed60228e909fe195ae7ac3450ae1c36cfe0376059a726"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "raw-differential",
+      "kind": "fuzz",
+      "media_type": "application/json",
+      "path": "evidence/results/differential.json",
+      "sha256": "sha256:5b110aac32158c814819c88392c86221e281d06e5925213b6bdd73544d66fcec"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "raw-compiler-matrix",
+      "kind": "other",
+      "media_type": "application/json",
+      "path": "evidence/results/compiler-matrix.json",
+      "sha256": "sha256:89d48dae1ab240a200dc259f5918583cc1818f6f126f4136d7aa75ef94e4af10"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "raw-sanitizers",
+      "kind": "other",
+      "media_type": "application/json",
+      "path": "evidence/results/sanitizers.json",
+      "sha256": "sha256:93f607f3b92f7b3f62f3fccdb8c55f58e627b4211c585ca7a151f130a590aa06"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "raw-checkpoint-recovery",
+      "kind": "other",
+      "media_type": "application/json",
+      "path": "evidence/results/checkpoint-recovery.json",
+      "sha256": "sha256:6fa388bbef521d954000ee146a8c179f1e389192902eeebde82d8b266fcfd2f6"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "raw-mutation",
+      "kind": "mutation",
+      "media_type": "application/json",
+      "path": "evidence/results/mutation.json",
+      "sha256": "sha256:54da57b494a01ae3d4fa5eabff99646d77193d8f913e33d2dfe79bc59e430a67"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "raw-structural",
+      "kind": "other",
+      "media_type": "application/json",
+      "path": "evidence/results/structural.json",
+      "sha256": "sha256:52b340569ee6f35b8429d132b35873d5471c37ba69c75a91234ffb2359a5c04e"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "raw-generation",
+      "kind": "other",
+      "media_type": "application/json",
+      "path": "evidence/results/generation.json",
+      "sha256": "sha256:0d634b1fc6fcf64b5f6ccd08b0a3ad96f859a4e5e9d3db71f210c90472949ac2"
+    },
+    {
+      "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "contract_id": "mncs.edgestream.telemetry.v1",
+      "id": "raw-benchmark",
+      "kind": "other",
+      "media_type": "application/json",
+      "path": "evidence/results/benchmark.json",
+      "sha256": "sha256:84690100f9aa93f8968d99afaf5996dec39bda0b52cb2956ec864908fb3ac740"
+    }
+  ],
+  "schema_version": "0.2",
+  "unreferenced_evidence_policy": "warn"
+}

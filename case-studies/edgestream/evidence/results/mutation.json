@@ -1,0 +1,6 @@
+{
+  "candidate_exit": 0,
+  "mutation": "single-bit payload corruption without checksum repair",
+  "reference_exit": 0,
+  "status": "PASS"
+}

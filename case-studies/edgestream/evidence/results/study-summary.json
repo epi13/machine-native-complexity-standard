@@ -1,0 +1,26 @@
+{
+  "benchmark": {
+    "mean_throughput_ratio": 1.8469567055005875,
+    "median_paired_throughput_ratio": 1.8289594794003339,
+    "worst_workload_p99_batch_latency_ratio": 0.5551129092953496
+  },
+  "gates": {
+    "checkpoint_recovery": "PASS",
+    "compiler_matrix": "PASS",
+    "differential": "PASS",
+    "generation": "PASS",
+    "mutation": "PASS",
+    "sanitizers": "PASS",
+    "structural": "PASS"
+  },
+  "limitations": [
+    "The captured performance result is scoped to one development host.",
+    "Repository-visible separated workloads are not blind third-party holdout evidence.",
+    "This is an experimental development result, not accredited certification."
+  ],
+  "status": "PASS",
+  "target": "MNCDS-D2 / MNCS-L4 development study",
+  "unknown_evidence": [
+    "Joern-specific structural analysis was unavailable."
+  ]
+}

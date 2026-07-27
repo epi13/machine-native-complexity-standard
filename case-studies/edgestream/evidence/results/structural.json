@@ -1,0 +1,101 @@
+{
+  "checks": {
+    "bounded_storage": true,
+    "checkpoint_integrity": true,
+    "checksum_precedes_accept": true,
+    "frame_length_checked": true,
+    "generated_marker": true,
+    "no_benchmark_seed_branch": true,
+    "no_dynamic_allocation_in_processor": true
+  },
+  "ledger": [
+    {
+      "candidate": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "caused_repair": false,
+      "checker": "edgestream-structural-checker",
+      "duration_ms": 0,
+      "finding": "pattern satisfied",
+      "invariant": "generated_marker",
+      "status": "PASS",
+      "suspected_false_negative": true,
+      "suspected_false_positive": false,
+      "version": "1.0"
+    },
+    {
+      "candidate": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "caused_repair": false,
+      "checker": "edgestream-structural-checker",
+      "duration_ms": 0,
+      "finding": "pattern satisfied",
+      "invariant": "bounded_storage",
+      "status": "PASS",
+      "suspected_false_negative": true,
+      "suspected_false_positive": false,
+      "version": "1.0"
+    },
+    {
+      "candidate": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "caused_repair": false,
+      "checker": "edgestream-structural-checker",
+      "duration_ms": 0,
+      "finding": "pattern satisfied",
+      "invariant": "no_dynamic_allocation_in_processor",
+      "status": "PASS",
+      "suspected_false_negative": true,
+      "suspected_false_positive": false,
+      "version": "1.0"
+    },
+    {
+      "candidate": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "caused_repair": false,
+      "checker": "edgestream-structural-checker",
+      "duration_ms": 0,
+      "finding": "pattern satisfied",
+      "invariant": "frame_length_checked",
+      "status": "PASS",
+      "suspected_false_negative": true,
+      "suspected_false_positive": false,
+      "version": "1.0"
+    },
+    {
+      "candidate": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "caused_repair": false,
+      "checker": "edgestream-structural-checker",
+      "duration_ms": 0,
+      "finding": "pattern satisfied",
+      "invariant": "checksum_precedes_accept",
+      "status": "PASS",
+      "suspected_false_negative": true,
+      "suspected_false_positive": false,
+      "version": "1.0"
+    },
+    {
+      "candidate": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "caused_repair": false,
+      "checker": "edgestream-structural-checker",
+      "duration_ms": 0,
+      "finding": "pattern satisfied",
+      "invariant": "no_benchmark_seed_branch",
+      "status": "PASS",
+      "suspected_false_negative": true,
+      "suspected_false_positive": false,
+      "version": "1.0"
+    },
+    {
+      "candidate": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+      "caused_repair": false,
+      "checker": "edgestream-structural-checker",
+      "duration_ms": 0,
+      "finding": "pattern satisfied",
+      "invariant": "checkpoint_integrity",
+      "status": "PASS",
+      "suspected_false_negative": true,
+      "suspected_false_positive": false,
+      "version": "1.0"
+    }
+  ],
+  "limitations": [
+    "Source-pattern checks do not prove C semantics; Joern was unavailable and is recorded separately as UNKNOWN."
+  ],
+  "status": "PASS"
+}

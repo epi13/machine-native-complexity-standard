@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "machine": "x86_64",
+    "platform": "Linux-6.12.13-x86_64-with-glibc2.41",
+    "python": "3.13.5"
+  },
+  "description": "Captured host, compiler, and interpreter environment for the checked-in development run.",
+  "extensions": {},
+  "identity_id": "identity-environment",
+  "identity_kind": "environment",
+  "mncs_version": "0.2",
+  "name": "EdgeStream local development environment",
+  "schema_version": "0.2",
+  "version": "2026-07-26"
+}

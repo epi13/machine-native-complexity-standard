@@ -1,0 +1,36 @@
+{
+  "analysis_method": "Bounded source-pattern checks tied to declared constants and the generated candidate identity.",
+  "assumptions": [
+    "The C compiler preserves the declared fixed object bounds."
+  ],
+  "boundedness": {
+    "bounded": true,
+    "description": "Seven explicit source checks over one candidate source file."
+  },
+  "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+  "completed_at": "2026-07-26T23:00:00Z",
+  "contract_id": "mncs.edgestream.telemetry.v1",
+  "environment_fingerprint": "sha256:9c45cd69124d86279472a3d69c76379fddef099d5f5948af4b59ddbdd523f500",
+  "evaluator_identity_hash": "sha256:ab7d1e5d9560d27fdd89593b7022e06eb477d485087319ef4c106365bdd1fbca",
+  "evaluator_identity_id": "identity-evaluator",
+  "extensions": {},
+  "invariant_id": "bounded-storage",
+  "limitations": [
+    "Pattern analysis is a rejection gate and does not prove complete C semantics."
+  ],
+  "locations": [
+    {
+      "line": 1,
+      "message": "Generated candidate and fixed-capacity state.",
+      "path": "machine/edgestream_generated.c"
+    }
+  ],
+  "mncs_version": "0.2",
+  "provider": "edgestream-structural-checker",
+  "provider_version": "1.0",
+  "requirement": "The processor uses fixed-capacity device, metric, window, and parser storage and contains no processor-path dynamic allocation.",
+  "result_id": "invariant-bounded-storage",
+  "schema_version": "0.2",
+  "started_at": "2026-07-26T22:00:00Z",
+  "status": "PASS"
+}

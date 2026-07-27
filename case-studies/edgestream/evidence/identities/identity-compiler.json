@@ -1,0 +1,14 @@
+{
+  "attributes": {
+    "clang": "clang version 17.0.0 (https://github.com/swiftlang/llvm-project.git 10999b6d034fe318f3d56c83bddb6572593a8bb0)",
+    "gcc": "gcc (Debian 14.2.0-19) 14.2.0"
+  },
+  "description": "Strict-warning compiler matrix used by the development run.",
+  "extensions": {},
+  "identity_id": "identity-compiler",
+  "identity_kind": "compiler",
+  "mncs_version": "0.2",
+  "name": "GCC and Clang strict C11 matrix",
+  "schema_version": "0.2",
+  "version": "1.0"
+}

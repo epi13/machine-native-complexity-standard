@@ -1,0 +1,131 @@
+{
+  "baseline_sample_count": 14,
+  "baseline_samples": [
+    71602299.2083572,
+    74818723.96969238,
+    71609113.00134252,
+    73508642.81323075,
+    73028438.03560519,
+    74384296.50861748,
+    69308127.97123788,
+    73501079.55787109,
+    73479857.24785681,
+    69514975.05271457,
+    74868274.5357695,
+    62228478.866452016,
+    74646261.19786619,
+    74805773.44248413
+  ],
+  "baseline_summary": {
+    "maximum": 74868274.5357695,
+    "mean": 72236024.38636412,
+    "minimum": 62228478.866452016
+  },
+  "benchmark_harness_hash": "sha256:10d16cecd9161904bc73c15613885c467e35da1a0e4113a2fe114a61616a1994",
+  "benchmark_harness_identity_id": "identity-benchmark",
+  "benefit_threshold": {
+    "claimed_status": "PASS",
+    "reasons": [
+      "Candidate mean throughput exceeds the 1.15 predeclared ratio."
+    ]
+  },
+  "build_identity_hash": "sha256:d26305bb801c68cddd5e3d5c295ff373fca88475488036246aae7d5986a00561",
+  "build_identity_id": "identity-build",
+  "candidate_sample_count": 14,
+  "candidate_samples": [
+    129590697.89122152,
+    134191255.5619451,
+    131361255.42513843,
+    132363397.43261766,
+    135883921.35215136,
+    124854109.51659614,
+    138256507.97322565,
+    137999835.4433887,
+    131937715.2237925,
+    136491675.7583042,
+    132708401.19295803,
+    128700564.56351925,
+    136117310.4052255,
+    137378686.92730445
+  ],
+  "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+  "candidate_summary": {
+    "maximum": 138256507.97322565,
+    "mean": 133416809.61909917,
+    "minimum": 124854109.51659614
+  },
+  "checksums_or_semantic_identity": {
+    "method": "Byte-identical canonical JSONL differential comparison across all declared chunkings.",
+    "passed": true,
+    "required": true
+  },
+  "compiler_identity_hash": "sha256:1ad3e8e49e693425f2f6ed750da2e50a2bcfc7590eff6c352ff628700aacd242",
+  "compiler_identity_id": "identity-compiler",
+  "completed_at": "2026-07-26T23:00:00Z",
+  "contract_id": "mncs.edgestream.telemetry.v1",
+  "corpus_identity_hash": "sha256:5f1ad10fc243bf67b83dc843fb63cbc3ddcf0b999591187d15ff563963453da3",
+  "corpus_identity_id": "identity-corpus",
+  "declared_noise_policy": "No outlier deletion; paired measurements retained in execution order.",
+  "declared_threshold": 1.15,
+  "direction": "higher_is_better",
+  "environment_fingerprint": "sha256:9c45cd69124d86279472a3d69c76379fddef099d5f5948af4b59ddbdd523f500",
+  "environment_identity_id": "identity-environment",
+  "evaluator_identity_hash": "sha256:ab7d1e5d9560d27fdd89593b7022e06eb477d485087319ef4c106365bdd1fbca",
+  "evaluator_identity_id": "identity-evaluator",
+  "extensions": {},
+  "limitations": [
+    "Development host measurements are not a cross-host performance claim."
+  ],
+  "measurement_validity": {
+    "claimed_status": "PASS",
+    "reasons": [
+      "Fourteen samples per implementation; complete sample order; semantic identity passed."
+    ]
+  },
+  "minimum_sample_count": 7,
+  "mncs_version": "0.2",
+  "objective_metric": "telemetry throughput",
+  "reference_source_hash": "sha256:7268208dae41cad6a42f9a33ee8cfc31140f3f0cb9da9b45492699efefba3c64",
+  "result_id": "performance-throughput",
+  "sample_order": [
+    "baseline",
+    "candidate",
+    "candidate",
+    "baseline",
+    "baseline",
+    "candidate",
+    "candidate",
+    "baseline",
+    "baseline",
+    "candidate",
+    "candidate",
+    "baseline",
+    "baseline",
+    "candidate",
+    "baseline",
+    "candidate",
+    "candidate",
+    "baseline",
+    "baseline",
+    "candidate",
+    "candidate",
+    "baseline",
+    "baseline",
+    "candidate",
+    "candidate",
+    "baseline",
+    "baseline",
+    "candidate"
+  ],
+  "schema_version": "0.2",
+  "started_at": "2026-07-26T22:00:00Z",
+  "unit": "bytes/second",
+  "worst_regression": {
+    "claimed_status": "PASS",
+    "maximum_allowed_ratio": 1.1,
+    "observed_ratio": 0.4984095365974345,
+    "reasons": [
+      "Worst observed throughput ratio remains within the regression policy."
+    ]
+  }
+}

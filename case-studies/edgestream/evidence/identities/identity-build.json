@@ -1,0 +1,14 @@
+{
+  "attributes": {
+    "language": "C11",
+    "optimization": "O3"
+  },
+  "description": "Optimized local binaries built from the indexed reference and candidate sources.",
+  "extensions": {},
+  "identity_id": "identity-build",
+  "identity_kind": "build",
+  "mncs_version": "0.2",
+  "name": "EdgeStream strict C11 build",
+  "schema_version": "0.2",
+  "version": "1.0"
+}

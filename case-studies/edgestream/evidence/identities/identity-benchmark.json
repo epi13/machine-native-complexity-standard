@@ -1,0 +1,14 @@
+{
+  "attributes": {
+    "source_sha256": "sha256:0da7eab9abf4cc24e137cb503267ed2749dcb086869e8509ac3fdbfaa5f495d3",
+    "threshold": 1.15
+  },
+  "description": "Counterbalanced paired measurements with no outlier deletion.",
+  "extensions": {},
+  "identity_id": "identity-benchmark",
+  "identity_kind": "benchmark_harness",
+  "mncs_version": "0.2",
+  "name": "EdgeStream paired benchmark harness",
+  "schema_version": "0.2",
+  "version": "1.0"
+}

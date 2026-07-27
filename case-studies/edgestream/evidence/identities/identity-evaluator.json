@@ -1,0 +1,14 @@
+{
+  "attributes": {
+    "repetitions": 7,
+    "source_sha256": "sha256:0da7eab9abf4cc24e137cb503267ed2749dcb086869e8509ac3fdbfaa5f495d3"
+  },
+  "description": "Runs differential, mutation, recovery, compiler, sanitizer, structural, and benchmark gates.",
+  "extensions": {},
+  "identity_id": "identity-evaluator",
+  "identity_kind": "evaluator",
+  "mncs_version": "0.2",
+  "name": "EdgeStream study evaluator",
+  "schema_version": "0.2",
+  "version": "1.0"
+}

@@ -1,0 +1,229 @@
+{
+  "cases": [
+    {
+      "candidate_exit": 0,
+      "chunk": 1,
+      "output_sha256": "sha256:5d342abbe956ca632023d8a708a30ec20cf92c2526cb7e4801a99a9c6252d75d",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "edge-cases.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 3,
+      "output_sha256": "sha256:5d342abbe956ca632023d8a708a30ec20cf92c2526cb7e4801a99a9c6252d75d",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "edge-cases.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 7,
+      "output_sha256": "sha256:5d342abbe956ca632023d8a708a30ec20cf92c2526cb7e4801a99a9c6252d75d",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "edge-cases.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 31,
+      "output_sha256": "sha256:5d342abbe956ca632023d8a708a30ec20cf92c2526cb7e4801a99a9c6252d75d",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "edge-cases.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 32,
+      "output_sha256": "sha256:5d342abbe956ca632023d8a708a30ec20cf92c2526cb7e4801a99a9c6252d75d",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "edge-cases.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 257,
+      "output_sha256": "sha256:5d342abbe956ca632023d8a708a30ec20cf92c2526cb7e4801a99a9c6252d75d",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "edge-cases.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 4096,
+      "output_sha256": "sha256:5d342abbe956ca632023d8a708a30ec20cf92c2526cb7e4801a99a9c6252d75d",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "edge-cases.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 1,
+      "output_sha256": "sha256:1df0ab09a31ed6b7baffff5df5188fbb9489e89bb3f4fe6e55856a063dcc00d9",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "high-cardinality.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 3,
+      "output_sha256": "sha256:1df0ab09a31ed6b7baffff5df5188fbb9489e89bb3f4fe6e55856a063dcc00d9",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "high-cardinality.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 7,
+      "output_sha256": "sha256:1df0ab09a31ed6b7baffff5df5188fbb9489e89bb3f4fe6e55856a063dcc00d9",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "high-cardinality.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 31,
+      "output_sha256": "sha256:1df0ab09a31ed6b7baffff5df5188fbb9489e89bb3f4fe6e55856a063dcc00d9",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "high-cardinality.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 32,
+      "output_sha256": "sha256:1df0ab09a31ed6b7baffff5df5188fbb9489e89bb3f4fe6e55856a063dcc00d9",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "high-cardinality.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 257,
+      "output_sha256": "sha256:1df0ab09a31ed6b7baffff5df5188fbb9489e89bb3f4fe6e55856a063dcc00d9",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "high-cardinality.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 4096,
+      "output_sha256": "sha256:1df0ab09a31ed6b7baffff5df5188fbb9489e89bb3f4fe6e55856a063dcc00d9",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "high-cardinality.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 1,
+      "output_sha256": "sha256:c19d8af5e2e6a0bf18cbe6462f5cfee2167b2ce5f41f8f49f3eb161b69e2dbd0",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "hostile.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 3,
+      "output_sha256": "sha256:c19d8af5e2e6a0bf18cbe6462f5cfee2167b2ce5f41f8f49f3eb161b69e2dbd0",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "hostile.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 7,
+      "output_sha256": "sha256:c19d8af5e2e6a0bf18cbe6462f5cfee2167b2ce5f41f8f49f3eb161b69e2dbd0",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "hostile.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 31,
+      "output_sha256": "sha256:c19d8af5e2e6a0bf18cbe6462f5cfee2167b2ce5f41f8f49f3eb161b69e2dbd0",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "hostile.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 32,
+      "output_sha256": "sha256:c19d8af5e2e6a0bf18cbe6462f5cfee2167b2ce5f41f8f49f3eb161b69e2dbd0",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "hostile.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 257,
+      "output_sha256": "sha256:c19d8af5e2e6a0bf18cbe6462f5cfee2167b2ce5f41f8f49f3eb161b69e2dbd0",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "hostile.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 4096,
+      "output_sha256": "sha256:c19d8af5e2e6a0bf18cbe6462f5cfee2167b2ce5f41f8f49f3eb161b69e2dbd0",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "hostile.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 1,
+      "output_sha256": "sha256:781e1a09653e988c460ea373f1b20dad510f8fdf33df1421cc349bd217ddab49",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "steady.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 3,
+      "output_sha256": "sha256:781e1a09653e988c460ea373f1b20dad510f8fdf33df1421cc349bd217ddab49",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "steady.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 7,
+      "output_sha256": "sha256:781e1a09653e988c460ea373f1b20dad510f8fdf33df1421cc349bd217ddab49",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "steady.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 31,
+      "output_sha256": "sha256:781e1a09653e988c460ea373f1b20dad510f8fdf33df1421cc349bd217ddab49",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "steady.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 32,
+      "output_sha256": "sha256:781e1a09653e988c460ea373f1b20dad510f8fdf33df1421cc349bd217ddab49",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "steady.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 257,
+      "output_sha256": "sha256:781e1a09653e988c460ea373f1b20dad510f8fdf33df1421cc349bd217ddab49",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "steady.bin"
+    },
+    {
+      "candidate_exit": 0,
+      "chunk": 4096,
+      "output_sha256": "sha256:781e1a09653e988c460ea373f1b20dad510f8fdf33df1421cc349bd217ddab49",
+      "reference_exit": 0,
+      "status": "PASS",
+      "workload": "steady.bin"
+    }
+  ],
+  "status": "PASS"
+}

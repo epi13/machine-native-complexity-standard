@@ -1,0 +1,48 @@
+{
+  "assumptions": [
+    "The checked-in contract and declared environment delimit this result."
+  ],
+  "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+  "completed_at": "2026-07-26T23:00:00Z",
+  "component_identity": {
+    "identity_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
+    "name": "EdgeStream",
+    "version": "0.1.0-development"
+  },
+  "contract_id": "mncs.edgestream.telemetry.v1",
+  "environment": {
+    "fingerprint": "sha256:9c45cd69124d86279472a3d69c76379fddef099d5f5948af4b59ddbdd523f500",
+    "identity_evidence_id": "identity-environment"
+  },
+  "evaluator": {
+    "identity_evidence_id": "identity-evaluator",
+    "identity_hash": "sha256:ab7d1e5d9560d27fdd89593b7022e06eb477d485087319ef4c106365bdd1fbca",
+    "name": "EdgeStream study evaluator",
+    "version": "1.0"
+  },
+  "evidence_references": [
+    "contract",
+    "reference",
+    "machine",
+    "identity-evaluator",
+    "identity-environment",
+    "raw-structural"
+  ],
+  "extensions": {},
+  "gate_kind": "structural",
+  "limitations": [
+    "The required provider is the bounded source checker; Joern-specific evidence is separately UNKNOWN and is not required for this claim."
+  ],
+  "mncs_version": "0.2",
+  "observation_counts": {
+    "failed": 0,
+    "passed": 7,
+    "total": 7,
+    "unknown": 0
+  },
+  "reference_source_hash": "sha256:7268208dae41cad6a42f9a33ee8cfc31140f3f0cb9da9b45492699efefba3c64",
+  "result_id": "gate-structural",
+  "schema_version": "0.2",
+  "started_at": "2026-07-26T22:00:00Z",
+  "status": "PASS"
+}

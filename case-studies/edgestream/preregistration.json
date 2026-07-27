@@ -1,0 +1,33 @@
+{
+  "classification": "development pre-registration",
+  "contract_id": "mncs.edgestream.telemetry.v1",
+  "target_claim": "MNCDS-D2 / MNCS-L4",
+  "primary_metric": "telemetry throughput in bytes/second",
+  "minimum_useful_benefit_ratio": 1.15,
+  "maximum_worst_case_regression_ratio": 1.1,
+  "repetitions_per_workload": 7,
+  "workloads": [
+    "steady",
+    "high-cardinality"
+  ],
+  "measurement_policy": {
+    "order": "deterministically counterbalanced",
+    "outliers": "retain every measured sample",
+    "warmup": "workload generation and compilation precede measurement",
+    "summary": "evidence validator derives mean throughput ratio; study report also records paired median"
+  },
+  "hard_gates": [
+    "behavioral",
+    "compiler_matrix",
+    "safety",
+    "resource_bounds",
+    "mutation",
+    "structural",
+    "measurement_valid",
+    "benefit_threshold",
+    "worst_regression"
+  ],
+  "holdout_policy": "No D3 or L5 claim. Repository-visible separated workloads are not represented as blind holdout evidence.",
+  "unknown_policy": "reject required UNKNOWN evidence",
+  "noise_policy": "No outlier deletion; paired measurements retained in execution order."
+}

@@ -1,4 +1,4 @@
-.PHONY: format lint type test build examples corpus mncds-corpus interoperability docs check
+.PHONY: format lint type test build examples corpus mncds-corpus interoperability docs edgestream-smoke edgestream-evidence check
 
 format:
 	ruff format .
@@ -30,5 +30,11 @@ interoperability:
 
 docs:
 	./scripts/build-docs
+
+edgestream-smoke:
+	$(MAKE) -C case-studies/edgestream smoke
+
+edgestream-evidence:
+	$(MAKE) -C case-studies/edgestream evidence
 
 check: lint type test build examples corpus mncds-corpus interoperability docs

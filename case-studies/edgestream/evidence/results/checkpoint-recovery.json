@@ -1,0 +1,23 @@
+{
+  "cases": [
+    {
+      "checkpoint_bytes": 14896,
+      "fault_step_1": "PASS",
+      "fault_step_2": "PASS",
+      "fault_step_3": "PASS",
+      "fault_step_4": "PASS",
+      "implementation": "reference",
+      "status": "PASS"
+    },
+    {
+      "checkpoint_bytes": 14896,
+      "fault_step_1": "PASS",
+      "fault_step_2": "PASS",
+      "fault_step_3": "PASS",
+      "fault_step_4": "PASS",
+      "implementation": "candidate",
+      "status": "PASS"
+    }
+  ],
+  "status": "PASS"
+}
