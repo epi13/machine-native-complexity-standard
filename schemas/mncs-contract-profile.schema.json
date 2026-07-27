@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schema/experimental/0.1/mncs-contract-profile.schema.json",
+  "title": "Experimental MNCS contract adequacy profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_id",
+    "contract_id",
+    "status",
+    "intended_use",
+    "interfaces",
+    "behavior",
+    "limits",
+    "invariants",
+    "environment",
+    "compatibility",
+    "undefined_behavior",
+    "reference_oracle",
+    "ambiguities",
+    "versioning",
+    "findings",
+    "evidence_ids",
+    "limitations",
+    "extensions"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1-experimental"},
+    "profile_id": {"$ref": "#/$defs/id"},
+    "contract_id": {"$ref": "#/$defs/id"},
+    "status": {"$ref": "#/$defs/status"},
+    "intended_use": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statement", "exclusions"],
+      "properties": {
+        "statement": {"type": "string", "minLength": 1},
+        "exclusions": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "interfaces": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inputs", "outputs", "state", "state_transitions"],
+      "properties": {
+        "inputs": {"$ref": "#/$defs/nonEmptyStrings"},
+        "outputs": {"$ref": "#/$defs/nonEmptyStrings"},
+        "state": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "state_transitions": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "behavior": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observable",
+        "errors",
+        "malformed_inputs",
+        "adversarial_inputs",
+        "external_effects"
+      ],
+      "properties": {
+        "observable": {"$ref": "#/$defs/nonEmptyStrings"},
+        "errors": {"$ref": "#/$defs/nonEmptyStrings"},
+        "malformed_inputs": {"$ref": "#/$defs/nonEmptyStrings"},
+        "adversarial_inputs": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "external_effects": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resource", "timing"],
+      "properties": {
+        "resource": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "timing": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "invariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["safety", "security"],
+      "properties": {
+        "safety": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "security": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "environment": {"$ref": "#/$defs/nonEmptyStrings"},
+    "compatibility": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "undefined_behavior": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["undefined", "implementation_defined", "excluded"],
+      "properties": {
+        "undefined": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "implementation_defined": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "excluded": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "reference_oracle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity", "limitations", "tolerances"],
+      "properties": {
+        "identity": {"$ref": "#/$defs/id"},
+        "limitations": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "tolerances": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "ambiguities": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "versioning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_version", "material_change_rule"],
+      "properties": {
+        "contract_version": {"type": "string", "minLength": 1},
+        "material_change_rule": {"type": "string", "minLength": 1},
+        "supersedes_contract_id": {"type": ["string", "null"], "minLength": 1}
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["field", "status", "summary"],
+        "properties": {
+          "field": {"type": "string", "minLength": 1},
+          "status": {"$ref": "#/$defs/status"},
+          "summary": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "evidence_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "limitations": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "extensions": {"$ref": "#/$defs/extensions"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "PASS"}}, "required": ["status"]},
+      "then": {
+        "properties": {
+          "findings": {
+            "not": {"contains": {"properties": {"status": {"enum": ["FAIL", "UNKNOWN"]}}, "required": ["status"]}}
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "status": {"enum": ["PASS", "FAIL", "UNKNOWN"]},
+    "nonEmptyStrings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {"pattern": "^[a-z][a-z0-9.-]*:[A-Za-z0-9][A-Za-z0-9._-]*$"},
+      "additionalProperties": true
+    }
+  }
+}
