@@ -1,7 +1,18 @@
 #!/usr/bin/env python3
-"""Package current EdgeStream study results as an MNCS 0.2 L4 bundle."""
+"""Package EdgeStream evidence and derive conformance from raw observations."""
 
-from evidence_bundle import main
+from derive_evidence import derive
+from evidence_bundle import main as build_bundle
+
+
+def main() -> int:
+    """Build the evidence graph, then derive every acceptance status."""
+
+    result = build_bundle()
+    if result != 0:
+        return result
+    derive()
+    return 0
 
 
 if __name__ == "__main__":
