@@ -37,6 +37,23 @@ Deprecations require rationale, replacement, transition period, and a stated rem
 version. Archived schemas remain addressable. Release tags are annotated and release
 notes list accepted RFCs, compatibility, known limitations, and artifact hashes.
 
+## Bootstrap completion
+
+Bootstrap governance is complete only after the project publicly records:
+
+- an active maintainer and editor roster;
+- succession, inactivity, removal, and emergency-access rules;
+- release and signing authorities;
+- an independent reviewer pool or a disclosed inability to form one;
+- namespace and project-mark stewardship without a technical veto;
+- conflict, funding, employment, and tool-ownership disclosures material to decisions;
+- a durable process for changing assurance semantics; and
+- an explicit rule that reference validators, analyzers, and providers are
+  non-normative implementations.
+
+Until those records exist, the repository owner remains the bootstrap maintainer and
+contested normative changes wait when independent review requirements cannot be met.
+
 ## Appeals and conflicts
 
 An appeal identifies the decision, process defect, and requested remedy. An
