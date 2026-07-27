@@ -1,0 +1,56 @@
+name: Case Study Diagnostics
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: case-study-diagnostics-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  collect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: python -m pip install -e '.[dev]'
+      - name: Produce formatter result
+        run: |
+          ruff check --fix --exit-zero \
+            case-studies/remote-water-control \
+            case-studies/edgestream-remote-water-integration
+          ruff format \
+            case-studies/remote-water-control \
+            case-studies/edgestream-remote-water-integration
+      - name: Capture strict documentation output
+        shell: bash
+        run: |
+          mkdir -p diagnostics
+          set +e
+          mkdocs build --strict > diagnostics/mkdocs.log 2>&1
+          echo "$?" > diagnostics/mkdocs-exit-code.txt
+          set -e
+      - name: Capture formatter diff
+        shell: bash
+        run: |
+          mkdir -p diagnostics
+          git diff --binary -- \
+            case-studies/remote-water-control \
+            case-studies/edgestream-remote-water-integration \
+            > diagnostics/formatter.patch
+      - uses: actions/upload-artifact@v4
+        with:
+          name: case-study-diagnostics-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 7
+          path: |
+            diagnostics/
+            case-studies/remote-water-control/
+            case-studies/edgestream-remote-water-integration/
