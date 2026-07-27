@@ -11,12 +11,14 @@ theme:
 nav:
   - Home: index.md
   - Introduction: introduction.md
+  - Foundation: foundational-model.md
   - Philosophy: philosophy.md
   - Quickstart: quickstart.md
   - Conformance: conformance.md
   - Machine-native development: mncds.md
   - MNCDS evidence plan: mncds-evidence-plan.md
   - MNCDS design decisions: mncds-decisions.md
+  - Machine-Native Evidence Analyzer: machine-native-evidence-analyzer.md
   - Evidence-derived conformance: evidence-derived-conformance.md
   - Certification vs validation: certification-vs-validation.md
   - Migration 0.1 to 0.1.1: migration-0.1-to-0.1.1.md
