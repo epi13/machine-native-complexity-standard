@@ -79,14 +79,10 @@ def load_trace_bundle(path: Path) -> TraceBundle:
             if not isinstance(request_id, str) or not request_id:
                 raise ValueError("request_id must be a non-empty string")
             if request_id in seen_request_ids:
-                raise ValueError(
-                    f"duplicate request_id in scenario {scenario_id}: {request_id}"
-                )
+                raise ValueError(f"duplicate request_id in scenario {scenario_id}: {request_id}")
             seen_request_ids.add(request_id)
 
-            prompt_blocks = _require_list(
-                request_payload.get("prompt_blocks"), "prompt_blocks"
-            )
+            prompt_blocks = _require_list(request_payload.get("prompt_blocks"), "prompt_blocks")
             if not prompt_blocks or not all(
                 isinstance(block, str) and block for block in prompt_blocks
             ):
