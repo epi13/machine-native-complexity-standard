@@ -1,0 +1,39 @@
+name: CacheForge Evidence Sync
+
+on:
+  push:
+    branches:
+      - agent/cacheforge-evaluation-epoch-2
+    paths:
+      - ".github/workflows/cacheforge-evidence-sync.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/cacheforge-evaluation-epoch-2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -e '.[dev]'
+      - run: make cacheforge-epoch2
+      - name: Commit deterministic evidence
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            case-studies/cacheforge/evidence/results/epoch-2-development.json \
+            case-studies/cacheforge/evidence/results/epoch-2-scenario-results.json
+          if git diff --cached --quiet; then
+            echo "Evidence already current"
+          else
+            git commit -m "Regenerate CacheForge evidence"
+            git push origin HEAD:agent/cacheforge-evaluation-epoch-2
+          fi
