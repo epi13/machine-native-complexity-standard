@@ -1,0 +1,72 @@
+{
+  "schema_version": "0.1-experimental",
+  "assurance_case_id": "assurance-http-decoder-v1",
+  "candidate_id": "candidate-http-decoder-v1",
+  "release_id": "release-http-decoder-v1",
+  "contract_id": "contract-http-decoder-v1",
+  "environment_id": "environment-c11-matrix-v1",
+  "criticality": "moderate",
+  "applicability_policy_id": "example-applicability-policy-v1",
+  "trust_policy_id": "example-trust-policy-v1",
+  "contract_profile_id": "contract-profile-http-decoder-v1",
+  "combined_label": "MNCDS-D3 / MNCS-L4",
+  "mncs": {
+    "version": "0.2",
+    "level": "MNCS-L4",
+    "status": "PASS",
+    "result_id": "mncs-result-http-decoder-v1",
+    "scope_id": "scope-http-decoder-contract-environment-v1",
+    "issues": [],
+    "limitations": ["PASS is limited to the declared contract and environment."]
+  },
+  "mncds": {
+    "version": "0.1-draft",
+    "profile": "MNCDS-D3",
+    "status": "PASS",
+    "result_id": "mncds-result-http-decoder-v1",
+    "scope_id": "epoch-http-decoder-v2",
+    "issues": [],
+    "limitations": ["Identity separation does not prove absence of collusion."]
+  },
+  "dependencies": [
+    {
+      "dependency_id": "compiler-runtime-v1",
+      "relation": "runtime",
+      "required": true,
+      "status": "PASS",
+      "claim_id": "claim-compiler-runtime-v1",
+      "environment_compatible": "PASS",
+      "correlation_group": "toolchain-v1",
+      "invalidation_triggers": ["compiler or runtime identity changes"]
+    }
+  ],
+  "authorities": [
+    {"role": "release_authority", "authority_id": "authority-release-example"},
+    {"role": "independent_reviewer", "authority_id": "authority-review-example"}
+  ],
+  "unresolved_unknowns": [],
+  "deviations": [],
+  "limitations": ["This is an experimental assurance-case fixture, not accredited certification."],
+  "freshness": {
+    "evaluated_at": "2026-07-26T20:00:00Z",
+    "expires_at": null,
+    "revalidation_triggers": ["contract, candidate, dependency, environment, or evaluator identity changes"]
+  },
+  "rollback": {
+    "artifact_id": "reference-http-decoder-v1",
+    "procedure_id": "rollback-http-decoder-v1",
+    "test_status": "PASS"
+  },
+  "replacement": {
+    "regeneration_spec_id": "regenerate-http-decoder-v1",
+    "owner_id": "authority-release-example",
+    "retirement_triggers": ["contract drift", "security finding", "inability to regenerate"]
+  },
+  "supersedes": [],
+  "disposition": {
+    "decision": "accepted",
+    "policy_id": "example-applicability-policy-v1",
+    "rationale": "Separate implementation and development results satisfy the example policy."
+  },
+  "extensions": {}
+}
