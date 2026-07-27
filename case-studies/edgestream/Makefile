@@ -1,16 +1,19 @@
-.PHONY: generate build test benchmark evidence validate smoke clean
+.PHONY: generate build test benchmark harness-regression evidence validate smoke thorough clean
 
 generate:
 	python tools/run_study.py generate
 
-build: generate
+build:
 	python tools/run_study.py build
 
-test: build
+test:
 	python tools/run_study.py test
 
-benchmark: build
+benchmark:
 	python tools/run_study.py benchmark
+
+harness-regression:
+	python tools/run_study.py harness-regression
 
 evidence:
 	python tools/run_study.py all
@@ -22,9 +25,8 @@ validate:
 
 smoke:
 	python tools/smoke.py
-	python tools/package_evidence.py
-	mncs validate-bundle . --require-pass
-	mncds validate mncds/development-record.json --require-pass
+
+thorough: evidence validate
 
 clean:
 	rm -rf build
