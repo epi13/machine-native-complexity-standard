@@ -84,15 +84,81 @@ def _metric(result: PolicyResult, scenario_id: str, name: str) -> int:
     return int(result.scenarios[scenario_id][name])
 
 
+def _scenario_seed(scenario_id: str) -> int | None:
+    parts = scenario_id.split("-")
+    if len(parts) != 4 or parts[0] != "seeded" or parts[2] != "capacity":
+        return None
+    try:
+        return int(parts[1])
+    except ValueError:
+        return None
+
+
+def _new_bucket() -> dict[str, object]:
+    return {
+        "scenario_count": 0,
+        "lru_recomputed_blocks": 0,
+        "segmented_lru_recomputed_blocks": 0,
+        "candidate_recomputed_blocks": 0,
+        "strongest_baseline_recomputed_blocks": 0,
+        "ratios": [],
+        "improved": 0,
+        "tied": 0,
+        "regressed": 0,
+    }
+
+
+def _add_to_bucket(
+    bucket: dict[str, object],
+    *,
+    lru_recomputed: int,
+    segmented_recomputed: int,
+    candidate_recomputed: int,
+    strongest_recomputed: int,
+    ratio: float,
+    relation: str,
+) -> None:
+    bucket["scenario_count"] = int(bucket["scenario_count"]) + 1
+    for name, value in (
+        ("lru_recomputed_blocks", lru_recomputed),
+        ("segmented_lru_recomputed_blocks", segmented_recomputed),
+        ("candidate_recomputed_blocks", candidate_recomputed),
+        ("strongest_baseline_recomputed_blocks", strongest_recomputed),
+    ):
+        bucket[name] = int(bucket[name]) + value
+    ratios = bucket["ratios"]
+    assert isinstance(ratios, list)
+    ratios.append(ratio)
+    key = relation.lower()
+    bucket[key] = int(bucket[key]) + 1
+
+
+def _finalize_bucket(bucket: dict[str, object]) -> dict[str, int | float | bool]:
+    ratios = bucket["ratios"]
+    assert isinstance(ratios, list)
+    candidate_total = int(bucket["candidate_recomputed_blocks"])
+    strongest_total = int(bucket["strongest_baseline_recomputed_blocks"])
+    ratio = candidate_total / strongest_total if strongest_total else 1.0
+    return {
+        **{name: int(value) for name, value in bucket.items() if name != "ratios"},
+        "candidate_to_strongest_baseline_ratio": round(ratio, 6),
+        "median_scenario_ratio": round(statistics.median(ratios), 6) if ratios else 1.0,
+        "aggregate_non_regressive": ratio <= 1.0,
+    }
+
+
 def summarize_policy_results(
     scenarios: tuple[Scenario, ...],
     lru: PolicyResult,
     segmented: PolicyResult,
     candidate: PolicyResult,
 ) -> dict[str, object]:
-    observations: dict[str, dict[str, int | float | str]] = {}
+    observations: dict[str, dict[str, object]] = {}
     ratios: list[float] = []
     by_capacity: dict[int, dict[str, object]] = {}
+    by_seed: dict[int, dict[str, object]] = {}
+    by_hot_prefix_families: dict[int, dict[str, object]] = {}
+    high_capacity_by_hot_prefix_families: dict[int, dict[str, object]] = {}
     totals = {
         "lru_recomputed_blocks": 0,
         "segmented_lru_recomputed_blocks": 0,
@@ -109,6 +175,9 @@ def summarize_policy_results(
         segmented_recomputed = _metric(segmented, scenario_id, "recomputed_blocks")
         candidate_recomputed = _metric(candidate, scenario_id, "recomputed_blocks")
         strongest_recomputed = min(lru_recomputed, segmented_recomputed)
+        strongest_baseline_id = (
+            lru.policy_id if lru_recomputed <= segmented_recomputed else segmented.policy_id
+        )
         ratio = candidate_recomputed / strongest_recomputed if strongest_recomputed else 1.0
         ratios.append(ratio)
 
@@ -122,13 +191,30 @@ def summarize_policy_results(
             relation = "REGRESSED"
             regressed += 1
 
+        seed = _scenario_seed(scenario_id)
+        hot_prefix_families = 1 + seed % 4 if seed is not None else None
         observations[scenario_id] = {
+            "seed": seed,
+            "hot_prefix_families": hot_prefix_families,
             "capacity_blocks": scenario.capacity_blocks,
+            "request_count": len(scenario.requests),
+            "configured_cancellation_count": sum(
+                request.cancel_after_generated is not None for request in scenario.requests
+            ),
             "lru_recomputed_blocks": lru_recomputed,
             "segmented_lru_recomputed_blocks": segmented_recomputed,
             "candidate_recomputed_blocks": candidate_recomputed,
+            "strongest_baseline_id": strongest_baseline_id,
+            "strongest_baseline_recomputed_blocks": strongest_recomputed,
             "candidate_to_strongest_baseline_ratio": round(ratio, 6),
             "relation_to_strongest_baseline": relation,
+            "lru_final_state_digest": lru.scenarios[scenario_id]["final_state_digest"],
+            "segmented_lru_final_state_digest": segmented.scenarios[scenario_id][
+                "final_state_digest"
+            ],
+            "candidate_final_state_digest": candidate.scenarios[scenario_id][
+                "final_state_digest"
+            ],
         }
 
         totals["lru_recomputed_blocks"] += lru_recomputed
@@ -136,32 +222,30 @@ def summarize_policy_results(
         totals["candidate_recomputed_blocks"] += candidate_recomputed
         totals["strongest_baseline_recomputed_blocks"] += strongest_recomputed
 
-        bucket = by_capacity.setdefault(
-            scenario.capacity_blocks,
-            {
-                "scenario_count": 0,
-                "lru_recomputed_blocks": 0,
-                "segmented_lru_recomputed_blocks": 0,
-                "candidate_recomputed_blocks": 0,
-                "strongest_baseline_recomputed_blocks": 0,
-                "ratios": [],
-                "improved": 0,
-                "tied": 0,
-                "regressed": 0,
-            },
+        bucket_args = {
+            "lru_recomputed": lru_recomputed,
+            "segmented_recomputed": segmented_recomputed,
+            "candidate_recomputed": candidate_recomputed,
+            "strongest_recomputed": strongest_recomputed,
+            "ratio": ratio,
+            "relation": relation,
+        }
+        _add_to_bucket(
+            by_capacity.setdefault(scenario.capacity_blocks, _new_bucket()), **bucket_args
         )
-        bucket["scenario_count"] = int(bucket["scenario_count"]) + 1
-        for name, value in (
-            ("lru_recomputed_blocks", lru_recomputed),
-            ("segmented_lru_recomputed_blocks", segmented_recomputed),
-            ("candidate_recomputed_blocks", candidate_recomputed),
-            ("strongest_baseline_recomputed_blocks", strongest_recomputed),
-        ):
-            bucket[name] = int(bucket[name]) + value
-        bucket_ratios = bucket["ratios"]
-        assert isinstance(bucket_ratios, list)
-        bucket_ratios.append(ratio)
-        bucket[relation.lower()] = int(bucket[relation.lower()]) + 1
+        if seed is not None and hot_prefix_families is not None:
+            _add_to_bucket(by_seed.setdefault(seed, _new_bucket()), **bucket_args)
+            _add_to_bucket(
+                by_hot_prefix_families.setdefault(hot_prefix_families, _new_bucket()),
+                **bucket_args,
+            )
+            if scenario.capacity_blocks == max(CAPACITY_SWEEP):
+                _add_to_bucket(
+                    high_capacity_by_hot_prefix_families.setdefault(
+                        hot_prefix_families, _new_bucket()
+                    ),
+                    **bucket_args,
+                )
 
     scenario_count = len(scenarios)
     aggregate_ratio = (
@@ -171,20 +255,34 @@ def summarize_policy_results(
     )
     improved_fraction = improved / scenario_count if scenario_count else 0.0
 
-    capacity_summary: dict[str, dict[str, int | float]] = {}
-    all_capacity_aggregates_non_regressive = True
-    for capacity, raw_bucket in sorted(by_capacity.items()):
-        bucket_ratios = raw_bucket.pop("ratios")
-        assert isinstance(bucket_ratios, list)
-        candidate_total = int(raw_bucket["candidate_recomputed_blocks"])
-        strongest_total = int(raw_bucket["strongest_baseline_recomputed_blocks"])
-        capacity_ratio = candidate_total / strongest_total if strongest_total else 1.0
-        all_capacity_aggregates_non_regressive &= capacity_ratio <= 1.0
-        capacity_summary[str(capacity)] = {
-            **{name: int(value) for name, value in raw_bucket.items()},
-            "candidate_to_strongest_baseline_ratio": round(capacity_ratio, 6),
-            "median_scenario_ratio": round(statistics.median(bucket_ratios), 6),
-        }
+    capacity_summary = {
+        str(capacity): _finalize_bucket(bucket) for capacity, bucket in sorted(by_capacity.items())
+    }
+    all_capacity_aggregates_non_regressive = all(
+        bool(bucket["aggregate_non_regressive"]) for bucket in capacity_summary.values()
+    )
+    seed_summary = {
+        str(seed): _finalize_bucket(bucket) for seed, bucket in sorted(by_seed.items())
+    }
+    hot_prefix_summary = {
+        str(count): _finalize_bucket(bucket)
+        for count, bucket in sorted(by_hot_prefix_families.items())
+    }
+    high_capacity_summary = {
+        str(count): _finalize_bucket(bucket)
+        for count, bucket in sorted(high_capacity_by_hot_prefix_families.items())
+    }
+
+    favorable_seed_aggregates = sum(
+        bool(bucket["aggregate_non_regressive"]) for bucket in seed_summary.values()
+    )
+    all_capacities_improved = sum(
+        int(bucket["improved"]) == len(CAPACITY_SWEEP) for bucket in seed_summary.values()
+    )
+    seeds_with_any_regression = sum(int(bucket["regressed"]) > 0 for bucket in seed_summary.values())
+    maximum_regressed_capacities = max(
+        (int(bucket["regressed"]) for bucket in seed_summary.values()), default=0
+    )
 
     mean_ratio = statistics.mean(ratios) if ratios else 1.0
     median_ratio = statistics.median(ratios) if ratios else 1.0
@@ -223,6 +321,20 @@ def summarize_policy_results(
             "candidate_rejected_proposals": int(candidate.aggregate["rejected_proposals"]),
         },
         "by_capacity": capacity_summary,
+        "by_seed": seed_summary,
+        "seed_cluster_summary": {
+            "independent_seed_count": len(seed_summary),
+            "favorable_seed_aggregates": favorable_seed_aggregates,
+            "all_capacities_improved_seeds": all_capacities_improved,
+            "seeds_with_any_regression": seeds_with_any_regression,
+            "maximum_regressed_capacities_for_one_seed": maximum_regressed_capacities,
+        },
+        "by_hot_prefix_families": hot_prefix_summary,
+        "high_capacity_regime": {
+            "capacity_blocks": max(CAPACITY_SWEEP),
+            "by_hot_prefix_families": high_capacity_summary,
+        },
+        "observations": observations,
         "scenario_observation_digest": f"sha256:{observation_digest}",
     }
 
@@ -236,7 +348,7 @@ def evaluate_epoch2(
     candidate = evaluate_policy(candidate_factory, scenarios)
     summary = summarize_policy_results(scenarios, lru, segmented, candidate)
     return {
-        "schema_version": "0.2",
+        "schema_version": "0.3",
         "study_id": "mncs.cacheforge.kv-cache.epoch-2-development.v1",
         "mode": "repository-visible-seeded-development",
         "development_result": summary["status"],
@@ -249,6 +361,8 @@ def evaluate_epoch2(
         "workload": {
             "seeds": list(DEVELOPMENT_SEEDS),
             "capacity_blocks": list(CAPACITY_SWEEP),
+            "independent_trace_count": len(DEVELOPMENT_SEEDS),
+            "capacity_repeated_evaluation_count": len(scenarios),
             "scenario_count": len(scenarios),
             "requests_per_scenario": REQUESTS_PER_SCENARIO,
             "total_requests": len(scenarios) * REQUESTS_PER_SCENARIO,
@@ -257,7 +371,9 @@ def evaluate_epoch2(
         **summary,
         "limitations": [
             "All epoch-2 seeded scenarios remain repository-visible development evidence.",
+            "The 64 evaluations contain 16 independent traces repeated at four capacities.",
             "The seeded generator is deterministic and is not a blind third-party holdout.",
+            "The simulator processes requests sequentially and does not model continuous batching.",
             "The simulator does not execute a model or allocate accelerator memory.",
             "Candidate weights remain human-specified rather than learned from protected traces.",
             "A development PASS cannot promote formal MNCS or MNCDS status.",
