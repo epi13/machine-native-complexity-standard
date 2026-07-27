@@ -1,0 +1,62 @@
+name: Branch Targeted Patch
+
+on:
+  push:
+    branches:
+      - agent/strengthen-study-evidence
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python -m pip install -e '.[dev]'
+      - name: Apply targeted wrapping
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path("case-studies/remote-water-control/tools/run_study.py")
+          text = path.read_text()
+          text = text.replace(
+              '                    "terminal_reserve_deficit_pct_max": PER_SCENARIO_TERMINAL_RESERVE_DEFICIT_PCT_MAX,',
+              '                    "terminal_reserve_deficit_pct_max": (\n'
+              '                        PER_SCENARIO_TERMINAL_RESERVE_DEFICIT_PCT_MAX\n'
+              '                    ),',
+          )
+          text = text.replace(
+              '        "claim_note": "This development run does not claim MNCS-L5 or MNCDS-D3. Independent protected holdout evaluation, release binding, and operational evidence remain outstanding.",',
+              '        "claim_note": (\n'
+              '            "This development run does not claim MNCS-L5 or MNCDS-D3. "\n'
+              '            "Independent protected holdout evaluation, release binding, "\n'
+              '            "and operational evidence remain outstanding."\n'
+              '        ),',
+          )
+          text = text.replace(
+              '            "terminal_normalization": "Both planners are charged equivalent duty-pump energy to the higher terminal storage level before each per-scenario comparison.",',
+              '            "terminal_normalization": (\n'
+              '                "Both planners are charged equivalent duty-pump energy to the "\n'
+              '                "higher terminal storage level before each per-scenario comparison."\n'
+              '            ),',
+          )
+          path.write_text(text)
+          PY
+      - run: ruff format case-studies/remote-water-control case-studies/edgestream-remote-water-integration
+      - run: ruff check case-studies/remote-water-control case-studies/edgestream-remote-water-integration
+      - name: Commit targeted patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add case-studies/remote-water-control case-studies/edgestream-remote-water-integration
+          git commit -m "Resolve remaining study lint findings"
+          git push origin HEAD:${{ github.ref_name }}
