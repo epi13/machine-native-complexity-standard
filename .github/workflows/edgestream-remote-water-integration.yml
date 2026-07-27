@@ -43,16 +43,20 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
       - run: python -m pip install -e '.[dev]'
-      - name: Check integration source
+      - name: Produce canonical source
         run: |
-          ruff format --check case-studies/edgestream-remote-water-integration
-          ruff check case-studies/edgestream-remote-water-integration
+          ruff format case-studies/remote-water-control case-studies/edgestream-remote-water-integration
+          ruff check --fix case-studies/remote-water-control case-studies/edgestream-remote-water-integration
       - name: Run isolated component-boundary integration
         run: make edgestream-water-integration
+      - name: Require checked-in canonical source
+        run: git diff --exit-code -- case-studies/remote-water-control case-studies/edgestream-remote-water-integration
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: edgestream-water-integration-py${{ matrix.python-version }}-${{ github.sha }}
+          name: case-study-canonical-py${{ matrix.python-version }}-${{ github.sha }}
           if-no-files-found: error
           retention-days: 14
-          path: case-studies/edgestream-remote-water-integration/evidence/results/
+          path: |
+            case-studies/remote-water-control/
+            case-studies/edgestream-remote-water-integration/
