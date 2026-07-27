@@ -13,9 +13,9 @@ contract, reference behavior, limits, policy, evidence, provenance, development 
 regeneration, and rollback. Complexity is acceptable only for a predeclared measurable
 benefit.
 
-[Read the MNCS introduction](introduction.md), [review MNCDS](mncds.md), or
-[validate an example](quickstart.md). MNCS and MNCDS are not accredited ISO, ANSI, IEEE,
-IETF, or similar standards.
+[Read the MNCS introduction](introduction.md), [review the broader foundation](foundational-model.md),
+[review MNCDS](mncds.md), or [validate an example](quickstart.md). MNCS and MNCDS are not
+accredited ISO, ANSI, IEEE, IETF, or similar standards.
 
 MNCS 0.2 derives acceptance from content-addressed observations and adds portable
 canonical identities, signed attestations, explicit trust policy, reproducible packages,
@@ -27,6 +27,12 @@ offline validator for role boundaries, generator permissions, evidence partition
 candidate lineage, selection discipline, evaluator independence, MNCS binding, rollback,
 and regeneration drills.
 
+RFC 0005 proposes the remaining conceptual foundation, experimental contract and
+assurance-case profiles, and a focused compiler-backed Machine-Native Evidence Analyzer.
+It remains Draft and does not change MNCS 0.2 or promote MNCDS.
+
+- [Machine-native complexity foundation](foundational-model.md)
+- [Machine-Native Evidence Analyzer](machine-native-evidence-analyzer.md)
 - [Machine-native development](mncds.md)
 - [MNCDS test and evidence plan](mncds-evidence-plan.md)
 - [MNCDS initial decisions](mncds-decisions.md)
