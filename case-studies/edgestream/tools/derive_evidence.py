@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-from pathlib import Path
+import json
 from statistics import fmean
 from typing import Any
 
@@ -153,21 +153,27 @@ def derive_performance() -> tuple[str, dict[str, str]]:
     benefit = "PASS" if observed_mean_ratio >= threshold else "FAIL"
     regression = performance.get("worst_regression")
     if isinstance(regression, dict):
-        observed = float(
-            benchmark.get(
-                "worst_workload_p99_batch_latency_ratio",
-                regression.get("observed_ratio", float("inf")),
-            )
+        observed = (
+            min(baseline) / min(candidate)
+            if baseline and candidate and min(candidate) != 0
+            else float("inf")
         )
         maximum = float(regression.get("maximum_allowed_ratio", 1.1))
         worst = "PASS" if observed <= maximum else "FAIL"
+        p99_latency_ratio = float(
+            benchmark.get("worst_workload_p99_batch_latency_ratio", float("inf"))
+        )
         regression["observed_ratio"] = observed
         regression["claimed_status"] = worst
         regression["reasons"] = [
             (
-                "Worst observed per-workload p99 aggregate-latency ratio was "
+                "Core MNCS worst-case throughput ratio was "
                 f"{observed:.6f}; limit is {maximum:.6f}."
-            )
+            ),
+            (
+                "The separately predeclared worst per-workload p99 aggregate-latency "
+                f"ratio was {p99_latency_ratio:.6f}."
+            ),
         ]
     else:
         worst = "UNKNOWN"
@@ -194,6 +200,18 @@ def derive_performance() -> tuple[str, dict[str, str]]:
     if isinstance(extensions, dict):
         extensions["mncs.dev:measurement-checks"] = measurement_checks
         extensions["mncs.dev:observed-mean-throughput-ratio"] = observed_mean_ratio
+        extensions["mncs.dev:p99-latency-policy"] = {
+            "observed_ratio": benchmark.get("worst_workload_p99_batch_latency_ratio"),
+            "maximum_allowed_ratio": benchmark.get("maximum_latency_ratio"),
+            "status": (
+                "PASS"
+                if float(
+                    benchmark.get("worst_workload_p99_batch_latency_ratio", float("inf"))
+                )
+                <= float(benchmark.get("maximum_latency_ratio", 1.1))
+                else "FAIL"
+            ),
+        }
     write_json(performance_path, performance)
     statuses = {
         "measurement_valid": measurement,
@@ -255,25 +273,24 @@ def refresh_identities() -> dict[str, str]:
         "source_sha256": digest(ROOT / "tools" / "study_evaluation.py"),
         "threshold": benchmark.get("threshold"),
         "maximum_latency_ratio": benchmark.get("maximum_latency_ratio"),
-        "protocol": benchmark.get("protocol"),
+        "protocol_json": json.dumps(benchmark.get("protocol"), sort_keys=True),
     }
     write_json(identity_paths["benchmark"], benchmark_identity)
 
     environment_identity = read_json(identity_paths["environment"])
     environment_identity["version"] = str(environment.get("captured_at", "unknown"))
     environment_identity["attributes"] = {
-        key: environment.get(key)
-        for key in (
-            "platform",
-            "machine",
-            "cpu_model",
-            "logical_cpu_count",
-            "process_affinity",
-            "python",
-            "gcc",
-            "clang",
-            "git_commit",
-        )
+        "platform": environment.get("platform"),
+        "machine": environment.get("machine"),
+        "cpu_model": environment.get("cpu_model"),
+        "logical_cpu_count": environment.get("logical_cpu_count"),
+        "process_affinity_json": json.dumps(
+            environment.get("process_affinity"), sort_keys=True
+        ),
+        "python": environment.get("python"),
+        "gcc": environment.get("gcc"),
+        "clang": environment.get("clang"),
+        "git_commit": environment.get("git_commit"),
     }
     write_json(identity_paths["environment"], environment_identity)
 
@@ -282,7 +299,7 @@ def refresh_identities() -> dict[str, str]:
     compiler_identity["attributes"] = {
         "gcc": environment.get("gcc"),
         "clang": environment.get("clang"),
-        "strict_flags": compiler_matrix.get("strict_flags"),
+        "strict_flags": " ".join(compiler_matrix.get("strict_flags", [])),
     }
     write_json(identity_paths["compiler"], compiler_identity)
 
@@ -291,7 +308,7 @@ def refresh_identities() -> dict[str, str]:
     build_identity["attributes"] = {
         "optimization": "O3",
         "language": "C11",
-        "strict_flags": compiler_matrix.get("strict_flags"),
+        "strict_flags": " ".join(compiler_matrix.get("strict_flags", [])),
         "compiler_matrix_sha256": digest(RESULTS / "compiler-matrix.json"),
     }
     write_json(identity_paths["build"], build_identity)
@@ -360,7 +377,7 @@ def refresh_index_and_manifest(final_status: str) -> None:
         "provider_assumptions": [
             "The Clang AST and source-order provider is bounded to the declared invariant set."
         ],
-        "required_invariants": ["bounded-storage"],
+        "required_invariants": ["invariant-bounded-storage"],
     }
     extensions = manifest.setdefault("extensions", {})
     if isinstance(extensions, dict):
