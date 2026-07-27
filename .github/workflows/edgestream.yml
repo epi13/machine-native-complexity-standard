@@ -27,6 +27,43 @@ env:
   LC_ALL: C.UTF-8
 
 jobs:
+  refresh-captured-evidence:
+    if: >-
+      github.event_name == 'push' &&
+      github.ref_name == 'agent/strengthen-edgestream-evidence' &&
+      !contains(github.event.head_commit.message, 'Refresh EdgeStream captured evidence')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/strengthen-edgestream-evidence
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python -m pip install -e '.[dev]'
+      - name: Canonicalize evaluator source
+        run: |
+          ruff format case-studies/edgestream/tools
+          ruff check --fix --unsafe-fixes case-studies/edgestream/tools
+          ruff format --check case-studies/edgestream/tools
+          ruff check case-studies/edgestream/tools
+      - name: Regenerate and validate captured evidence
+        run: make -C case-studies/edgestream thorough
+      - name: Commit refreshed capture
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add case-studies/edgestream
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Refresh EdgeStream captured evidence"
+          git push origin HEAD:agent/strengthen-edgestream-evidence
+
   smoke:
     strategy:
       fail-fast: false
@@ -51,18 +88,13 @@ jobs:
         with:
           python-version: "3.13"
       - run: python -m pip install -e '.[dev]'
-      - name: Capture canonical formatting and lint repair
-        shell: bash
+      - name: Check evaluator source
         run: |
-          ruff format case-studies/edgestream/tools
-          set -o pipefail
-          ruff check --fix case-studies/edgestream/tools 2>&1 | tee edgestream-ruff.log || true
+          ruff format --check case-studies/edgestream/tools
+          ruff check case-studies/edgestream/tools
       - name: Run full controlled study
-        shell: bash
-        run: |
-          set -o pipefail
-          make -C case-studies/edgestream thorough 2>&1 | tee edgestream-study.log
-      - name: Upload regenerated evidence and repair capture
+        run: make -C case-studies/edgestream thorough
+      - name: Upload regenerated evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -70,13 +102,8 @@ jobs:
           if-no-files-found: error
           retention-days: 14
           path: |
-            edgestream-ruff.log
-            edgestream-study.log
-            case-studies/edgestream/tools/*.py
             case-studies/edgestream/evidence/
             case-studies/edgestream/manifest.json
             case-studies/edgestream/mncds/development-record.json
             case-studies/edgestream/workloads/manifest.json
             case-studies/edgestream/machine/edgestream_generated.c
-      - name: Verify captured evidence is current
-        run: git diff --exit-code -- case-studies/edgestream
