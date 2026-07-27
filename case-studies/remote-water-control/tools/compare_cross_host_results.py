@@ -27,7 +27,14 @@ def main() -> int:
     host_files = sorted(args.input.rglob("host-identity.json"))
     observations: list[dict[str, Any]] = []
     for host_path in host_files:
-        summary_path = host_path.parent / "case-studies" / "remote-water-control" / "evidence" / "results" / "study-summary.json"
+        summary_path = (
+            host_path.parent
+            / "case-studies"
+            / "remote-water-control"
+            / "evidence"
+            / "results"
+            / "study-summary.json"
+        )
         if not summary_path.exists():
             candidates = list(host_path.parent.rglob("study-summary.json"))
             if len(candidates) != 1:
@@ -71,8 +78,14 @@ def main() -> int:
         "checks": {key: "PASS" if value else "FAIL" for key, value in checks.items()},
         "hosts": observations,
         "limitations": [
-            "Matching hosted-runner evidence is cross-host development reproducibility, not independent protected holdout evidence.",
-            "This comparison does not establish domain review, release binding, operational monitoring, or physical-system validity."
+            (
+                "Matching hosted-runner evidence is cross-host development "
+                "reproducibility, not independent protected holdout evidence."
+            ),
+            (
+                "This comparison does not establish domain review, release binding, "
+                "operational monitoring, or physical-system validity."
+            ),
         ],
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
