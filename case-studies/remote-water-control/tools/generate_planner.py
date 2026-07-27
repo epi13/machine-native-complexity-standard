@@ -67,13 +67,11 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
-
     rendered = render(SPEC_PATH.read_bytes())
     if args.check and (not OUTPUT_PATH.exists() or OUTPUT_PATH.read_text() != rendered):
         raise SystemExit("generated planner is out of date")
     if args.check:
         return 0
-
     OUTPUT_PATH.write_text(rendered)
     return 0
 
