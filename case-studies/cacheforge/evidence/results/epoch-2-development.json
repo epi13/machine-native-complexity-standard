@@ -1,0 +1,131 @@
+{
+  "aggregate": {
+    "candidate_fallback_uses": 0,
+    "candidate_recomputed_blocks": 39654,
+    "candidate_rejected_proposals": 0,
+    "candidate_to_strongest_baseline_ratio": 0.963247,
+    "improved_scenario_fraction": 0.828125,
+    "improved_scenarios": 53,
+    "lru_recomputed_blocks": 43500,
+    "mean_scenario_ratio": 0.965143,
+    "median_scenario_ratio": 0.966886,
+    "p95_scenario_ratio": 1.035928,
+    "regressed_scenarios": 11,
+    "segmented_lru_recomputed_blocks": 41167,
+    "strongest_baseline_recomputed_blocks": 41167,
+    "tied_scenarios": 0,
+    "worst_scenario_ratio": 1.051546
+  },
+  "baseline_ids": [
+    "cacheforge.baseline.lru.v1",
+    "cacheforge.readable.segmented-lru.v1"
+  ],
+  "by_capacity": {
+    "16": {
+      "candidate_recomputed_blocks": 10988,
+      "candidate_to_strongest_baseline_ratio": 0.973682,
+      "improved": 15,
+      "lru_recomputed_blocks": 11640,
+      "median_scenario_ratio": 0.971257,
+      "regressed": 1,
+      "scenario_count": 16,
+      "segmented_lru_recomputed_blocks": 11285,
+      "strongest_baseline_recomputed_blocks": 11285,
+      "tied": 0
+    },
+    "24": {
+      "candidate_recomputed_blocks": 9996,
+      "candidate_to_strongest_baseline_ratio": 0.941775,
+      "improved": 16,
+      "lru_recomputed_blocks": 10998,
+      "median_scenario_ratio": 0.941228,
+      "regressed": 0,
+      "scenario_count": 16,
+      "segmented_lru_recomputed_blocks": 10614,
+      "strongest_baseline_recomputed_blocks": 10614,
+      "tied": 0
+    },
+    "32": {
+      "candidate_recomputed_blocks": 9556,
+      "candidate_to_strongest_baseline_ratio": 0.943244,
+      "improved": 15,
+      "lru_recomputed_blocks": 10716,
+      "median_scenario_ratio": 0.936212,
+      "regressed": 1,
+      "scenario_count": 16,
+      "segmented_lru_recomputed_blocks": 10131,
+      "strongest_baseline_recomputed_blocks": 10131,
+      "tied": 0
+    },
+    "48": {
+      "candidate_recomputed_blocks": 9114,
+      "candidate_to_strongest_baseline_ratio": 0.997483,
+      "improved": 7,
+      "lru_recomputed_blocks": 10146,
+      "median_scenario_ratio": 1.023949,
+      "regressed": 9,
+      "scenario_count": 16,
+      "segmented_lru_recomputed_blocks": 9137,
+      "strongest_baseline_recomputed_blocks": 9137,
+      "tied": 0
+    }
+  },
+  "candidate_id": "cacheforge.machine.eviction-table.v1",
+  "development_result": "PASS",
+  "disposition": "REVIEW_REQUIRED",
+  "formal_mncds_status": "UNKNOWN",
+  "formal_mncs_status": "UNKNOWN",
+  "gates": {
+    "aggregate_ratio_at_most_0_98": "PASS",
+    "all_capacity_aggregates_non_regressive": "PASS",
+    "candidate_proposals_all_valid": "PASS",
+    "candidate_used_no_fallback": "PASS",
+    "improved_scenario_fraction_at_least_0_75": "PASS",
+    "median_ratio_at_most_0_98": "PASS",
+    "p95_ratio_at_most_1_05": "PASS",
+    "worst_ratio_at_most_1_06": "PASS"
+  },
+  "limitations": [
+    "All epoch-2 seeded scenarios remain repository-visible development evidence.",
+    "The seeded generator is deterministic and is not a blind third-party holdout.",
+    "The simulator does not execute a model or allocate accelerator memory.",
+    "Candidate weights remain human-specified rather than learned from protected traces.",
+    "A development PASS cannot promote formal MNCS or MNCDS status."
+  ],
+  "mode": "repository-visible-seeded-development",
+  "promotion_authorized": false,
+  "scenario_observation_digest": "sha256:23dace9d5e3b537c4aef930ddf512475c6924f14bb0c603fcf59d852b831f897",
+  "schema_version": "0.2",
+  "status": "PASS",
+  "study_id": "mncs.cacheforge.kv-cache.epoch-2-development.v1",
+  "workload": {
+    "capacity_blocks": [
+      16,
+      24,
+      32,
+      48
+    ],
+    "paired_capacity_sweep": true,
+    "requests_per_scenario": 48,
+    "scenario_count": 64,
+    "seeds": [
+      1000,
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011,
+      1012,
+      1013,
+      1014,
+      1015
+    ],
+    "total_requests": 3072
+  }
+}
