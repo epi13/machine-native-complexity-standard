@@ -6,7 +6,7 @@
       "disposition": "rejected",
       "evaluator_results": [
         {
-          "evaluator_id": "evaluator-edgestream-v1",
+          "evaluator_id": "evaluator-edgestream-v2",
           "evidence_id": "gate-behavioral",
           "gate_id": "behavioral",
           "required": true,
@@ -23,28 +23,28 @@
       "disposition": "selected",
       "evaluator_results": [
         {
-          "evaluator_id": "evaluator-edgestream-v1",
+          "evaluator_id": "evaluator-edgestream-v2",
           "evidence_id": "gate-behavioral",
           "gate_id": "behavioral",
           "required": true,
           "status": "PASS"
         },
         {
-          "evaluator_id": "evaluator-edgestream-v1",
+          "evaluator_id": "evaluator-edgestream-v2",
           "evidence_id": "gate-safety",
           "gate_id": "safety",
           "required": true,
           "status": "PASS"
         },
         {
-          "evaluator_id": "evaluator-edgestream-v1",
+          "evaluator_id": "evaluator-edgestream-v2",
           "evidence_id": "gate-resource-bounds",
           "gate_id": "resource_bounds",
           "required": true,
           "status": "PASS"
         },
         {
-          "evaluator_id": "evaluator-edgestream-selection-v1",
+          "evaluator_id": "evaluator-edgestream-selection-v2",
           "evidence_id": "performance-throughput",
           "gate_id": "benefit_threshold",
           "required": true,
@@ -80,29 +80,29 @@
     },
     "planned_mncs_level": "MNCS-L4",
     "problem_statement": "Produce a faster contract-equivalent fault-tolerant telemetry processor without weakening correctness, safety, resource, or recovery behavior.",
-    "selection_policy_id": "edgestream-selection-policy-v1",
+    "selection_policy_id": "edgestream-selection-policy-v2",
     "threat_model_id": "edgestream-threat-model-v1"
   },
-  "created_at": "2026-07-26T23:00:00Z",
-  "epoch_id": "edgestream-epoch-1",
+  "created_at": "2026-07-27T03:41:51Z",
+  "epoch_id": "edgestream-epoch-2",
   "evaluators": [
     {
       "authority_id": "authority-edgestream-evaluator",
-      "configuration_id": "evaluator-config-v1",
-      "evaluator_id": "evaluator-edgestream-v1",
-      "executable_id": "evaluator-run-study-v1",
+      "configuration_id": "evaluator-config-v2",
+      "evaluator_id": "evaluator-edgestream-v2",
+      "executable_id": "evaluator-run-study-v2",
       "independent": false,
       "purpose": "development",
-      "regression_corpus_id": "edgestream-evaluator-regression-v1"
+      "regression_corpus_id": "edgestream-evaluator-regression-v2"
     },
     {
       "authority_id": "authority-edgestream-selection",
-      "configuration_id": "selection-config-v1",
-      "evaluator_id": "evaluator-edgestream-selection-v1",
-      "executable_id": "selection-policy-v1",
+      "configuration_id": "selection-config-v2",
+      "evaluator_id": "evaluator-edgestream-selection-v2",
+      "executable_id": "selection-policy-v2",
       "independent": false,
       "purpose": "selection",
-      "regression_corpus_id": "edgestream-evaluator-regression-v1"
+      "regression_corpus_id": "edgestream-evaluator-regression-v2"
     }
   ],
   "extensions": {
@@ -137,13 +137,13 @@
     "manifest_or_package_id": "edgestream-manifest-v1"
   },
   "partitions": {
-    "development_id": "edgestream-development-corpus-v1",
+    "development_id": "edgestream-development-corpus-v2",
     "holdout_contaminated": false,
     "holdout_id": null,
-    "selection_id": "edgestream-selection-corpus-v1"
+    "selection_id": "edgestream-selection-corpus-v2"
   },
   "profile": "MNCDS-D2",
-  "record_id": "edgestream-epoch-1-d2",
+  "record_id": "edgestream-epoch-2-d2",
   "release_controls": null,
   "reproducibility": {
     "class": "EXACT",
@@ -164,12 +164,12 @@
     },
     {
       "authority_id": "authority-edgestream-evaluator",
-      "executable_id": "evaluator-run-study-v1",
+      "executable_id": "evaluator-run-study-v2",
       "role": "evaluator_authority"
     },
     {
       "authority_id": "authority-edgestream-selection",
-      "executable_id": "selection-policy-v1",
+      "executable_id": "selection-policy-v2",
       "role": "selection_authority"
     },
     {
@@ -187,11 +187,11 @@
   "selection": {
     "human_review": null,
     "minimum_useful_benefit_met": true,
-    "policy_id": "edgestream-selection-policy-v1",
+    "policy_id": "edgestream-selection-policy-v2",
     "rationale": "The generated candidate passed every hard gate and exceeded the predeclared throughput threshold. No protected holdout or independent-review claim is made.",
     "rule_recorded_before_holdout": true,
     "selected_candidate_id": "candidate-generated-crc-table",
     "unknown_policy": "reject"
   },
-  "supersedes_record_id": null
+  "supersedes_record_id": "edgestream-epoch-1-d2"
 }

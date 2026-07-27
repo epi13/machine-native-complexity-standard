@@ -14,9 +14,9 @@
       "emergency_steps": 0,
       "degraded_steps": 0,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 3,
-        "held": 717,
+        "accepted": 720,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -39,9 +39,9 @@
       "emergency_steps": 0,
       "degraded_steps": 0,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 17,
-        "held": 463,
+        "accepted": 410,
+        "modified": 0,
+        "held": 70,
         "rejected": 0
       },
       "safety_violations": [],
@@ -64,9 +64,9 @@
       "emergency_steps": 60,
       "degraded_steps": 0,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 1,
-        "held": 479,
+        "accepted": 480,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -89,9 +89,9 @@
       "emergency_steps": 0,
       "degraded_steps": 30,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 2,
-        "held": 358,
+        "accepted": 360,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -114,9 +114,9 @@
       "emergency_steps": 0,
       "degraded_steps": 30,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 3,
-        "held": 357,
+        "accepted": 330,
+        "modified": 0,
+        "held": 30,
         "rejected": 0
       },
       "safety_violations": [],
@@ -139,9 +139,9 @@
       "emergency_steps": 0,
       "degraded_steps": 0,
       "safety_interventions": {
-        "accepted": 0,
-        "held": 479,
-        "modified": 1,
+        "accepted": 480,
+        "held": 0,
+        "modified": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -164,9 +164,9 @@
       "emergency_steps": 0,
       "degraded_steps": 80,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 1,
-        "held": 479,
+        "accepted": 420,
+        "modified": 0,
+        "held": 60,
         "rejected": 0
       },
       "safety_violations": [],
@@ -189,9 +189,9 @@
       "emergency_steps": 0,
       "degraded_steps": 60,
       "safety_interventions": {
-        "accepted": 0,
-        "held": 479,
-        "modified": 1,
+        "accepted": 480,
+        "held": 0,
+        "modified": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -214,9 +214,9 @@
       "emergency_steps": 0,
       "degraded_steps": 0,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 1,
-        "held": 359,
+        "accepted": 360,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -239,9 +239,9 @@
       "emergency_steps": 0,
       "degraded_steps": 0,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 1,
-        "held": 479,
+        "accepted": 480,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -264,9 +264,9 @@
       "emergency_steps": 0,
       "degraded_steps": 0,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 3,
-        "held": 477,
+        "accepted": 480,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -289,9 +289,9 @@
       "emergency_steps": 60,
       "degraded_steps": 30,
       "safety_interventions": {
-        "accepted": 0,
-        "held": 465,
-        "modified": 15,
+        "accepted": 418,
+        "held": 62,
+        "modified": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -314,9 +314,9 @@
       "emergency_steps": 60,
       "degraded_steps": 30,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 14,
-        "held": 466,
+        "accepted": 430,
+        "modified": 0,
+        "held": 50,
         "rejected": 0
       },
       "safety_violations": [],
@@ -339,9 +339,9 @@
       "emergency_steps": 0,
       "degraded_steps": 15,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 2,
-        "held": 478,
+        "accepted": 480,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -364,9 +364,9 @@
       "emergency_steps": 30,
       "degraded_steps": 15,
       "safety_interventions": {
-        "accepted": 0,
-        "held": 477,
-        "modified": 3,
+        "accepted": 480,
+        "held": 0,
+        "modified": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -389,9 +389,9 @@
       "emergency_steps": 45,
       "degraded_steps": 15,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 4,
-        "held": 476,
+        "accepted": 480,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -414,9 +414,9 @@
       "emergency_steps": 30,
       "degraded_steps": 30,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 9,
-        "held": 471,
+        "accepted": 453,
+        "modified": 0,
+        "held": 27,
         "rejected": 0
       },
       "safety_violations": [],
@@ -439,9 +439,9 @@
       "emergency_steps": 0,
       "degraded_steps": 15,
       "safety_interventions": {
-        "accepted": 0,
-        "held": 479,
-        "modified": 1,
+        "accepted": 480,
+        "held": 0,
+        "modified": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -464,9 +464,9 @@
       "emergency_steps": 30,
       "degraded_steps": 15,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 3,
-        "held": 477,
+        "accepted": 480,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -489,9 +489,9 @@
       "emergency_steps": 0,
       "degraded_steps": 0,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 3,
-        "held": 717,
+        "accepted": 720,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -514,9 +514,9 @@
       "emergency_steps": 0,
       "degraded_steps": 0,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 1,
-        "held": 479,
+        "accepted": 480,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -539,9 +539,9 @@
       "emergency_steps": 60,
       "degraded_steps": 0,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 3,
-        "held": 477,
+        "accepted": 480,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -564,9 +564,9 @@
       "emergency_steps": 0,
       "degraded_steps": 30,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 1,
-        "held": 359,
+        "accepted": 360,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -589,9 +589,9 @@
       "emergency_steps": 0,
       "degraded_steps": 30,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 2,
-        "held": 358,
+        "accepted": 360,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -614,9 +614,9 @@
       "emergency_steps": 0,
       "degraded_steps": 0,
       "safety_interventions": {
-        "accepted": 0,
-        "held": 479,
-        "modified": 1,
+        "accepted": 480,
+        "held": 0,
+        "modified": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -639,9 +639,9 @@
       "emergency_steps": 0,
       "degraded_steps": 80,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 1,
-        "held": 479,
+        "accepted": 420,
+        "modified": 0,
+        "held": 60,
         "rejected": 0
       },
       "safety_violations": [],
@@ -664,9 +664,9 @@
       "emergency_steps": 0,
       "degraded_steps": 60,
       "safety_interventions": {
-        "accepted": 0,
-        "held": 479,
-        "modified": 1,
+        "accepted": 480,
+        "held": 0,
+        "modified": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -689,9 +689,9 @@
       "emergency_steps": 0,
       "degraded_steps": 0,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 1,
-        "held": 359,
+        "accepted": 360,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -714,9 +714,9 @@
       "emergency_steps": 0,
       "degraded_steps": 0,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 1,
-        "held": 479,
+        "accepted": 480,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -739,9 +739,9 @@
       "emergency_steps": 0,
       "degraded_steps": 0,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 3,
-        "held": 477,
+        "accepted": 480,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -764,9 +764,9 @@
       "emergency_steps": 60,
       "degraded_steps": 30,
       "safety_interventions": {
-        "accepted": 0,
-        "held": 479,
-        "modified": 1,
+        "accepted": 480,
+        "held": 0,
+        "modified": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -789,9 +789,9 @@
       "emergency_steps": 74,
       "degraded_steps": 30,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 4,
-        "held": 476,
+        "accepted": 480,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -814,9 +814,9 @@
       "emergency_steps": 0,
       "degraded_steps": 15,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 2,
-        "held": 478,
+        "accepted": 480,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -839,9 +839,9 @@
       "emergency_steps": 30,
       "degraded_steps": 15,
       "safety_interventions": {
-        "accepted": 0,
-        "held": 477,
-        "modified": 3,
+        "accepted": 480,
+        "held": 0,
+        "modified": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -864,9 +864,9 @@
       "emergency_steps": 45,
       "degraded_steps": 15,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 3,
-        "held": 477,
+        "accepted": 480,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -889,9 +889,9 @@
       "emergency_steps": 30,
       "degraded_steps": 30,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 3,
-        "held": 477,
+        "accepted": 480,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -914,9 +914,9 @@
       "emergency_steps": 0,
       "degraded_steps": 15,
       "safety_interventions": {
-        "accepted": 0,
-        "held": 479,
-        "modified": 1,
+        "accepted": 480,
+        "held": 0,
+        "modified": 0,
         "rejected": 0
       },
       "safety_violations": [],
@@ -939,9 +939,9 @@
       "emergency_steps": 30,
       "degraded_steps": 15,
       "safety_interventions": {
-        "accepted": 0,
-        "modified": 3,
-        "held": 477,
+        "accepted": 480,
+        "modified": 0,
+        "held": 0,
         "rejected": 0
       },
       "safety_violations": [],

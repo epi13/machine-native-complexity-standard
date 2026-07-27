@@ -105,8 +105,33 @@ jobs:
             host-identity.json
             case-studies/remote-water-control/evidence/results/
 
-  boundary:
+  compare-hosts:
     needs: evaluate
+    runs-on: ubuntu-24.04
+    environment: protected-evaluation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: protected-remote-water-*-${{ github.sha }}
+          path: protected-hosts
+      - name: Require matching x86_64 and ARM64 evidence
+        run: |
+          python case-studies/remote-water-control/tools/compare_cross_host_results.py \
+            --input protected-hosts \
+            --output cross-host-summary.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: protected-remote-water-cross-host-${{ github.sha }}
+          path: cross-host-summary.json
+          if-no-files-found: error
+          retention-days: 90
+
+  boundary:
+    needs: compare-hosts
     runs-on: ubuntu-24.04
     if: always()
     steps:
@@ -114,5 +139,5 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test '${{ needs.evaluate.result }}' = 'success'
+          test '${{ needs.compare-hosts.result }}' = 'success'
           echo "Cross-host execution success does not independently establish protected-holdout, MNCS-L5, MNCDS-D3, domain-review, or production-release status."
