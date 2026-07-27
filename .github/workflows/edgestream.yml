@@ -55,6 +55,21 @@ jobs:
           python-version: "3.13"
       - if: steps.guard.outputs.run == 'true'
         run: python -m pip install -e '.[dev]'
+      - name: Apply final source repair
+        if: steps.guard.outputs.run == 'true'
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("case-studies/edgestream/tools/derive_evidence.py")
+          text = path.read_text(encoding="utf-8")
+          old = 'extensions["mncs.dev:p99-latency-policy"] = {\n            "observed_ratio": benchmark.get("worst_workload_p99_batch_latency_ratio"),\n            "maximum_allowed_ratio": benchmark.get("maximum_latency_ratio"),\n            "status": ('
+          new = 'extensions["mncs.dev:p99-latency-policy"] = {\n            "observed_ratio": benchmark.get("worst_workload_p99_batch_latency_ratio"),\n            "maximum_allowed_ratio": benchmark.get("maximum_latency_ratio"),\n            "policy_result": ('
+          if old not in text:
+              raise SystemExit("expected p99 policy extension block not found")
+          path.write_text(text.replace(old, new, 1), encoding="utf-8")
+          PY
       - name: Canonicalize evaluator source
         if: steps.guard.outputs.run == 'true'
         run: |
@@ -64,9 +79,27 @@ jobs:
           ruff check case-studies/edgestream/tools
       - name: Regenerate and validate captured evidence
         if: steps.guard.outputs.run == 'true'
-        run: make -C case-studies/edgestream thorough
+        shell: bash
+        run: |
+          set -o pipefail
+          make -C case-studies/edgestream thorough 2>&1 | tee refresh-study.log
+      - name: Upload refresh diagnostics
+        if: always() && steps.guard.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: edgestream-refresh-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            refresh-study.log
+            case-studies/edgestream/tools/*.py
+            case-studies/edgestream/evidence/
+            case-studies/edgestream/manifest.json
+            case-studies/edgestream/mncds/development-record.json
+            case-studies/edgestream/workloads/manifest.json
+            case-studies/edgestream/machine/edgestream_generated.c
       - name: Commit refreshed capture
-        if: steps.guard.outputs.run == 'true'
+        if: steps.guard.outputs.run == 'true' && success()
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
