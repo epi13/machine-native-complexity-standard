@@ -86,9 +86,7 @@ def run(mode: str) -> dict[str, object]:
             "candidate_recomputed_blocks": comparison["candidate"]["scenarios"][scenario_id][
                 "recomputed_blocks"
             ],
-            "candidate_hit_rate": comparison["candidate"]["scenarios"][scenario_id][
-                "hit_rate"
-            ],
+            "candidate_hit_rate": comparison["candidate"]["scenarios"][scenario_id]["hit_rate"],
             "candidate_final_state_digest": comparison["candidate"]["scenarios"][scenario_id][
                 "final_state_digest"
             ],

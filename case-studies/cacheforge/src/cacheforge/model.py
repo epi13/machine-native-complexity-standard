@@ -38,12 +38,10 @@ class RequestTrace:
             raise ValueError("generated_blocks must be non-negative")
         if self.priority < 0:
             raise ValueError("priority must be non-negative")
-        if self.cancel_after_generated is not None:
-            if (
-                self.cancel_after_generated < 0
-                or self.cancel_after_generated > self.generated_blocks
-            ):
-                raise ValueError("cancel_after_generated is outside the generated block range")
+        if self.cancel_after_generated is not None and (
+            self.cancel_after_generated < 0 or self.cancel_after_generated > self.generated_blocks
+        ):
+            raise ValueError("cancel_after_generated is outside the generated block range")
 
 
 @dataclass

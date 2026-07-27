@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable
 
 from cacheforge.model import StudyMetrics
 from cacheforge.policies import EvictionPolicy, ReferenceFIFO, ReferenceLRU
@@ -55,15 +55,9 @@ def compare_candidate(
     candidate_work = int(candidate.aggregate["planner_candidates_inspected"])
     work_ratio = candidate_work / baseline_work if baseline_work else 1.0
 
-    low_reuse_baseline = int(
-        baseline.scenarios["low-reuse-control"]["recomputed_blocks"]
-    )
-    low_reuse_candidate = int(
-        candidate.scenarios["low-reuse-control"]["recomputed_blocks"]
-    )
-    low_reuse_ratio = (
-        low_reuse_candidate / low_reuse_baseline if low_reuse_baseline else 1.0
-    )
+    low_reuse_baseline = int(baseline.scenarios["low-reuse-control"]["recomputed_blocks"])
+    low_reuse_candidate = int(candidate.scenarios["low-reuse-control"]["recomputed_blocks"])
+    low_reuse_ratio = low_reuse_candidate / low_reuse_baseline if low_reuse_baseline else 1.0
 
     gates = {
         "all_authority_proposals_valid": candidate.aggregate["rejected_proposals"] == 0,

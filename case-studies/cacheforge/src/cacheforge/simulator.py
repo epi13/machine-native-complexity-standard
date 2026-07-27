@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from collections import deque
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Iterable
 
 from cacheforge.authority import AllocationAuthority
 from cacheforge.model import CacheBlock, CacheState, GroupSpec, RequestTrace, StudyMetrics

@@ -4,7 +4,6 @@ from dataclasses import dataclass
 
 from cacheforge.model import GroupSpec, RequestTrace
 
-
 DEFAULT_GROUPS = (
     GroupSpec(name="full", mode="full"),
     GroupSpec(name="sliding", mode="sliding", window_blocks=2),

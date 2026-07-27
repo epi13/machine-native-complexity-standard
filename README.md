@@ -133,6 +133,9 @@ evidence binary, generator, candidate, analyzer, or benchmark.
   implements a development-only remote water-system digital twin with a generated planner,
   readable safety authority, expiring intent journal, checkpoint continuity, fault
   injection, and a review-required composed assurance case.
+- [`case-studies/cacheforge/`](case-studies/cacheforge/README.md) evaluates a bounded,
+  trace-driven LLM KV-cache planner with generated eviction policy, readable allocation
+  authority, mutation rejection, checkpoint continuity, and controlled benefit evidence.
 
 The remote-water study deliberately records formal MNCS and MNCDS status as `UNKNOWN` until
 independent protected holdout, cross-host reproduction, domain review, and release evidence
@@ -237,6 +240,7 @@ uncontaminated protected evidence for any new final claim.
 - [`examples/`](examples/minimal/README.md) — accepted, rejected, repair, MNCDS, and experimental foundation examples
 - [`case-studies/edgestream/`](case-studies/edgestream/README.md) — stateful C11 development study
 - [`case-studies/remote-water-control/`](case-studies/remote-water-control/README.md) — composed supervisory-control development study
+- [`case-studies/cacheforge/`](case-studies/cacheforge/README.md) — LLM KV-cache planning development study
 - [`docs/`](docs/index.md) — documentation site
 - [`rfcs/`](rfcs/README.md) — change process
 - [`conformance-corpus/`](conformance-corpus/expected.json) — deterministic MNCS corpus
