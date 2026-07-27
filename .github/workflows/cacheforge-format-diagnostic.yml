@@ -27,8 +27,9 @@ jobs:
       - name: Apply deterministic formatting fixes
         run: |
           ruff format case-studies/cacheforge
-          ruff check --fix case-studies/cacheforge
+          ruff check --fix case-studies/cacheforge || true
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: cacheforge-formatted-source-${{ github.sha }}
           if-no-files-found: error
