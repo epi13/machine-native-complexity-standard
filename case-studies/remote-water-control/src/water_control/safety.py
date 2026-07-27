@@ -93,9 +93,5 @@ class SafetyKernel:
         return requested, None
 
     @staticmethod
-    def _hold(
-        state: ControllerState,
-        mode: ControlMode,
-        reason: str,
-    ) -> Adjudication:
+    def _hold(state: ControllerState, mode: ControlMode, reason: str) -> Adjudication:
         return Adjudication(state.duty_on, state.standby_on, mode, (reason,))
