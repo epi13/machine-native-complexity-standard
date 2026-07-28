@@ -9,7 +9,7 @@
     {
       "id": "epoch-1-acoustic-observation",
       "input": "working expressive desk-pet firmware plus dedicated A1 piezo sensor",
-      "evidence": "artifacts/epoch-1-reactivity.csv.zlib.b85",
+      "evidence": "artifacts/epoch-1-canonical.json.zlib.b85",
       "result": "FAIL",
       "finding": "event detector saturated near its refractory limit and novelty lost discriminating value"
     },

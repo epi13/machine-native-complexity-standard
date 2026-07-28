@@ -52,7 +52,7 @@ button, persistence, and rollback gates in `preregistration.json` are captured.
 - **Machine execution plane:** fixed-width sensor state, predictive channels, learned couplings,
   episodic summaries, expression motor state, icon/numeric UI, generated timing relationships, and
   binary packets.
-- **Evidence plane:** raw telemetry, reproducible analysis, compile observations, artifact hashes,
+- **Evidence plane:** a canonical telemetry extract tied to the original capture hash, reproducible analysis, compile observations, artifact hashes,
   decoder tests, and future AVR/hardware results.
 - **Development-control plane:** retained failing baseline, frozen V5 candidate, explicit epoch
   record, preregistered gates, and prohibition on evaluator self-modification.
@@ -79,7 +79,7 @@ make check
 The check materializes artifacts in memory and:
 
 - verifies SHA-256 identities;
-- regenerates the epoch-1 analysis from the raw mixed-record CSV;
+- regenerates the epoch-1 analysis from the canonical telemetry extract;
 - tests V5 binary framing, checksum rejection, fragmentation, and resynchronization;
 - verifies the production and telemetry sketches differ only by `DEBUG_SERIAL`;
 - confirms the candidate contains no C/C++ string literals or decimal `Serial.print()` path;
@@ -115,9 +115,9 @@ Packet types are:
 ## Repository layout
 
 ```text
-artifacts/                chunked compressed text envelopes for baseline, V5, and raw telemetry
+artifacts/                retained V4 baseline, verified V5 delta, and canonical telemetry extract
 tools/                    materializer, capture, analysis, and offline verifier
-evidence/raw/             raw-evidence storage description
+evidence/raw/             canonical-extract and original-capture identity description
 evidence/results/         derived findings, compile observations, and hashes
 CONTRACT.md               readable behavior, authority, and acceptance gates
 HARDWARE.md               wiring, electrical limits, and capture safety
