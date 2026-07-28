@@ -1,4 +1,4 @@
-.PHONY: format lint type test build examples corpus mncds-corpus interoperability docs edgestream-smoke edgestream-evidence remote-water-smoke remote-water-test remote-water-study edgestream-water-integration cacheforge-smoke cacheforge-test cacheforge-study cacheforge-epoch2 check
+.PHONY: format lint type test build examples corpus mncds-corpus interoperability docs edgestream-smoke edgestream-evidence remote-water-smoke remote-water-test remote-water-study edgestream-water-integration cacheforge-smoke cacheforge-test cacheforge-study cacheforge-epoch2 ravel-test ravel-training-check check
 
 format:
 	ruff format .
@@ -60,5 +60,11 @@ cacheforge-study:
 
 cacheforge-epoch2:
 	$(MAKE) -C case-studies/cacheforge epoch2
+
+ravel-test:
+	$(MAKE) -C case-studies/ravel test
+
+ravel-training-check:
+	$(MAKE) -C case-studies/ravel training-check
 
 check: lint type test build examples corpus mncds-corpus interoperability docs
