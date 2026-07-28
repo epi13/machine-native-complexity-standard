@@ -14,7 +14,7 @@
   },
   "evidence": {
     "record": "training-evidence.json",
-    "record_sha256": "19469be2a24d5947e153d62f1c4cc125ee3d3c3b00c4f2788d9eec46253a7aa6",
+    "record_sha256": "a3ba60ef239c1b61bcd66671ffeda29f30f5a55dfd3f858723f743e9899a0dec",
     "deterministic_reproduction": true,
     "routed_oracle_agreement": true,
     "holdout_protected": false
