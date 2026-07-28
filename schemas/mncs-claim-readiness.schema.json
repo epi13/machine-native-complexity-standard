@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schema/experimental/0.4/mncs-claim-readiness.schema.json",
+  "title": "Experimental MNCS and MNCDS claim-readiness record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "record_id", "system_contract_id", "candidate_freeze_identity",
+    "mncs_inputs", "mncds_inputs", "release_authorization", "formal_mncs_status",
+    "formal_mncds_status", "promotion_authorized", "disposition", "limitations", "extensions"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.4-experimental"},
+    "record_id": {"type": "string", "minLength": 1},
+    "system_contract_id": {"type": "string", "minLength": 1},
+    "candidate_freeze_identity": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "mncs_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["development_epoch", "cross_host_agreement", "protected_holdout", "independent_evaluation", "service_boundary"],
+      "properties": {
+        "development_epoch": {"$ref": "#/$defs/status"},
+        "cross_host_agreement": {"$ref": "#/$defs/status"},
+        "protected_holdout": {"$ref": "#/$defs/status"},
+        "independent_evaluation": {"$ref": "#/$defs/status"},
+        "service_boundary": {"$ref": "#/$defs/status"}
+      }
+    },
+    "mncds_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["regeneration", "replacement_drill", "release_controls", "monitoring", "retirement", "independent_witness"],
+      "properties": {
+        "regeneration": {"$ref": "#/$defs/status"},
+        "replacement_drill": {"$ref": "#/$defs/status"},
+        "release_controls": {"$ref": "#/$defs/status"},
+        "monitoring": {"$ref": "#/$defs/status"},
+        "retirement": {"$ref": "#/$defs/status"},
+        "independent_witness": {"$ref": "#/$defs/status"}
+      }
+    },
+    "release_authorization": {"$ref": "#/$defs/status"},
+    "formal_mncs_status": {"$ref": "#/$defs/status"},
+    "formal_mncds_status": {"$ref": "#/$defs/status"},
+    "promotion_authorized": {"type": "boolean"},
+    "disposition": {"enum": ["PASS", "FAIL", "REVIEW_REQUIRED"]},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "extensions": {"type": "object"}
+  },
+  "$defs": {"status": {"enum": ["PASS", "FAIL", "UNKNOWN"]}}
+}

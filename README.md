@@ -6,19 +6,17 @@ MNCS is an open experimental standard for accepting generated or machine-optimiz
 
 ## Experimental multilingual and composed evidence
 
-Wave One established non-normative C11, Rust, and Python language profiles and Provider Protocol fixtures. Wave Two added Go, native FFI and process boundary contracts, generated bindings, and composed-result propagation without changing MNCS 0.2 or promoting MNCDS 0.1-draft.
+Wave One established non-normative C11, Rust, and Python language profiles and Provider Protocol fixtures. Wave Two added Go, native FFI and process boundary contracts, generated bindings, and composed-result propagation. Wave Three added identity-bound recovery, mutation, measurement, replacement, and Ubuntu/macOS evidence jobs.
 
-Wave Three adds a measured composition epoch while preserving every Wave Two identity and historical claim. The new epoch includes:
+Wave Four adds the claim-readiness layer without changing MNCS 0.2 or promoting MNCDS 0.1-draft:
 
-- a versioned Go host with atomic, identity-bound checkpoints;
-- a pinned Rust 1.97.1 authority using a new `V2` process protocol;
-- deterministic generated-binding regeneration and drift detection;
-- restart, restore, stale-state rejection, and readable replacement drills;
-- eighteen retained fault, operational-error, and UNKNOWN fixtures;
-- repeated component and system resource measurements with no outlier removal;
-- a second aggregation implementation;
-- Ubuntu and macOS hosted reproduction artifact jobs;
-- an explicit protected-holdout commitment that remains `UNKNOWN` without external custody.
+- protected-holdout custody and disclosure records;
+- developer, custodian, evaluator, witness, and release-authority separation;
+- cross-host artifact reconciliation by contract, epoch, component, tool, and semantic identities;
+- separate MNCS implementation and MNCDS lifecycle readiness aggregation;
+- a bounded Go loopback HTTP service boundary with cancellation, malformed-input, size, shutdown, and restart tests;
+- release monitoring, rollback, and retirement policies;
+- explicit `UNKNOWN` when external custody, independence, witnessing, or production evidence is absent.
 
 Every component and boundary retains its own evidence and environment. `FAIL` dominates `UNKNOWN`, and `UNKNOWN` dominates `PASS`. `REVIEW_REQUIRED` is a workflow disposition, not a formal MNCS result.
 
@@ -26,13 +24,12 @@ Every component and boundary retains its own evidence and environment. `FAIL` do
 make language-profile-schema
 make language-provider-corpus
 make multilingual-wave-one
-make go-profile
-make go-provider-corpus
 make multilingual-wave-two
 make multilingual-wave-three
+make multilingual-wave-four
 ```
 
-Provider execution, compilers, generators, benchmarks, and services remain explicit. Ordinary offline validation never launches them.
+Provider execution, compilers, generators, benchmarks, services, and custody verification remain explicit. Ordinary offline validation never launches them.
 
 ## Research case studies
 
@@ -40,14 +37,14 @@ Provider execution, compilers, generators, benchmarks, and services remain expli
 - [CacheForge](case-studies/cacheforge/README.md) — Python AI/ML cache planning.
 - [Multilingual Stream](case-studies/multilingual-stream/README.md) — shared C11/Rust contract.
 - [Go Gateway](case-studies/go-gateway/README.md) — bounded concurrency and cancellation.
-- [Composed Gateway](case-studies/composed-gateway/README.md) — C11 FFI, generated Go bindings, Go orchestration, Rust authority, recovery, and replacement evidence.
+- [Composed Gateway](case-studies/composed-gateway/README.md) — C11 FFI, generated Go bindings, Go orchestration, Rust authority, recovery, measurement, external evidence contracts, and claim readiness.
 - [Remote Water Control](case-studies/remote-water-control/README.md), [RAVEL](case-studies/ravel/README.md), and [dSense](case-studies/dsense-desk-pet/README.md) — additional bounded studies.
 
 ## Current claim boundary
 
-The checked-in Wave Three local development epoch is `REVIEW_REQUIRED`. C11, generated-binding, Go unit, Go vet, Go race, Go fuzz, readable checkpoint, identity-rejection, and local measurement gates pass in the recorded environment. Rust-dependent process recovery, replacement, mutation, and cross-host evidence remain pending the hosted artifacts. Formal MNCS and MNCDS status remain `UNKNOWN`, promotion is prohibited, and full MNCDS-D4 is unclaimed.
+The checked-in Wave Four local readiness record is `REVIEW_REQUIRED`. The Wave Three development epoch, deterministic regeneration, and Wave Four loopback service-boundary tests are recorded as PASS. Cross-host agreement, protected holdout, organizationally independent evaluation, witnessed replacement, operational monitoring, retirement exercise, and release authorization remain `UNKNOWN`.
 
-A successful hosted replacement drill can support only the narrow regeneration/replacement subclaim. It cannot establish D4 without release controls, production monitoring, retirement policy, protected evidence custody, and independent witnessing.
+Formal MNCS and MNCDS statuses remain `UNKNOWN`, promotion is prohibited, and full MNCDS-D4 is unclaimed. The public repository can validate externally supplied evidence records; it cannot self-create organizational independence or protected custody.
 
 ## Repository map
 

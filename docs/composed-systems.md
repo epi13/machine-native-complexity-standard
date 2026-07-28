@@ -16,55 +16,62 @@ A component PASS cannot erase a boundary FAIL. A boundary PASS cannot erase a co
 
 ## Wave Three evidence epoch
 
-The Wave Three composed gateway creates new identities rather than editing Wave Two evidence. It records:
+Wave Three created new identities rather than editing Wave Two evidence. It records system and preregistration identities; C header, binding, generator, Go host, Rust authority, and protocol identities; build, recovery, mutation, and measurement outcomes; development, hosted reproduction, and protected partitions; and separate MNCS and MNCDS statuses.
 
-- system contract and preregistration identities;
-- C header, generated cgo binding, generator, Go host, Rust authority, and protocol identities;
-- strict build, unit, vet, race, fuzz, regeneration, recovery, replacement, mutation, and measurement outcomes;
-- local development, public hosted reproduction, and protected holdout partitions;
-- a second aggregation implementation that is explicitly not an independent evaluator;
-- formal MNCS and MNCDS statuses separately from the development disposition.
+Checkpoints bind the system contract, C header, binding specification, binding generator, authority, canonical input digest, processed count, accumulated state, and state digest. Restore rejects stale input, partial state, unknown fields, incompatible binding identity, authority mismatch, and out-of-range progress. The declared replacement path from `rust-authority-v2` to `go-readable-authority-v2` requires explicit authorization and digest equivalence.
 
-## Checkpoint and restore
+## Wave Four evidence custody
 
-A checkpoint binds the system contract, C header, binding specification, binding generator, authority, canonical input digest, processed count, accumulated state, and state digest. Writes use a temporary file followed by an atomic rename. Restore rejects stale input, partial state, unknown fields, incompatible binding identity, authority mismatch, and out-of-range progress.
+Wave Four adds records that can be supplied by actors outside the development process. A protected evidence record binds:
 
-The only declared replacement path is from `rust-authority-v2` to `go-readable-authority-v2`, and it requires an explicit authorization flag. The continued execution digest must match uninterrupted execution.
+- preregistration and candidate-freeze identities;
+- protected corpus identity;
+- custodian and evaluator identities and organizations;
+- raw and normalized result identities;
+- attestation identity;
+- preregistration, freeze, disclosure, and evaluation timestamps;
+- explicit confirmation that the corpus is not embedded publicly and was unavailable to development participants before disclosure.
 
-## Generated bindings
+The reference verifier rejects self-custody, self-evaluation, invalid timestamp order, missing identities, and attempts to relabel public development evidence. Software can check record consistency, but organizational independence remains an externally attested fact.
 
-The cgo binding is regenerated from the C header and a binding specification. The record binds:
+## Cross-host agreement
 
-- header hash;
-- binding-specification hash;
-- generator identity and source hash;
-- normalized gofmt output hash;
-- ABI version;
-- exact regeneration command.
+Cross-host reconciliation requires at least two distinct environments. The reconciler compares:
 
-Drift fails before compatibility and recovery tests. A generator may not silently alter integer width, ownership, error mapping, or ABI version.
+- system contract and evidence epoch;
+- component, binding, generator, and tool identities;
+- all required build, recovery, replacement, and mutation gates;
+- semantic output digests.
 
-## Measurements
+An identity or semantic mismatch is `FAIL`. An unavailable required gate is `UNKNOWN`. Agreement becomes `PASS` only when all required host records pass under the same frozen identities. Synthetic fixtures test the reconciler but are not reproduction evidence.
 
-Wave Three uses two warmups and nine retained repetitions. Readable and composed order alternates; checkpoint mode follows each pair. The report retains wall time, child user and system CPU, maximum RSS observation, throughput, process-boundary overhead, checkpoint overhead, recovery time, fallback events, proposal rejections, and bounded Go component benchmarks.
+## Service boundary
 
-RSS units are platform dependent. Process overhead includes serialization and child lifecycle and is not presented as a global language comparison. No observation is removed as an outlier.
+Wave Four adds a bounded Go HTTP service on `127.0.0.1` with an ephemeral port. The service uses exact `V1` JSON messages, a 1,024-byte body limit, a bounded integer domain, strict unknown-field rejection, caller cancellation, bounded shutdown, and identity-bound restart policy. Tests cover valid execution, malformed JSON, unknown fields, wrong method, version mismatch, oversized body, cancellation, shutdown, and restart.
 
-## Holdout and independent evaluation
+Loopback tests establish only the declared local transport contract. Production networking, reverse proxies, orchestration, kernel variance, and service-manager behavior outside the simulated restart remain `UNKNOWN`.
 
-The public repository contains a commitment and input interface, not a protected corpus. In the absence of external custody records, protected holdout remains `UNKNOWN`. Public development or CI traces cannot be relabeled as protected.
+## Separate claim readiness
 
-The second evaluator implementation checks schema validity, outcome precedence, holdout labeling, formal claim boundaries, and the regeneration/replacement subclaim. It is structurally separate but not organizationally independent, so independent evaluation remains `UNKNOWN`.
+Wave Four never combines implementation and lifecycle claims into one score.
 
-## D4 boundary
+MNCS readiness requires the development epoch, cross-host agreement, protected holdout, independent evaluation, and service boundary to pass. MNCDS-D4 readiness additionally requires deterministic regeneration, a witnessed replacement drill, release controls, monitoring, retirement controls, and an independent witness. Release authorization is a separate required result.
 
-A successful binding regeneration and readable replacement execution supports a narrow regeneration/replacement drill subclaim. Full MNCDS-D4 additionally requires controlled release approval, independently witnessed replacement, production monitoring, rollback thresholds, retirement triggers, and retained evidence custody. Wave Three does not claim those controls.
+A failure in either claim family produces a failed readiness disposition. Missing external evidence leaves the corresponding formal result `UNKNOWN` and the workflow disposition `REVIEW_REQUIRED`. Promotion is permitted only when both formal results and release authorization are PASS.
+
+## Monitoring and retirement
+
+The Wave Four release policy defines immediate rollback for identity mismatch or fallback failure, bounded thresholds for protocol rejection, timeout, and memory growth, and a readable rollback target. Retirement triggers include incompatible boundaries, unsupported toolchains, unresolved identity mismatches, repeated rollback thresholds, expired evidence policy, or acceptance of a replacement under a new identity.
+
+These policies are design evidence. They remain `UNKNOWN` as operational D4 evidence until exercised in a controlled release environment and independently witnessed.
 
 ## Reproduction
 
 ```bash
 make composed-wave-three
 make multilingual-wave-three
+make composed-wave-four
+make multilingual-wave-four
 ```
 
-The full job requires Go 1.23.x, Rust 1.97.1, Python 3.11 or later, cgo, and a strict C11 compiler. CI executes the epoch on Ubuntu and macOS and uploads separate immutable workflow artifacts. Hosted artifacts require review before a checked-in claim can be changed.
+Wave Four requires Go 1.23.x and Python 3.11 or later for its local checks. Cross-host reconciliation consumes the separate Wave Three Ubuntu and macOS artifacts. Protected evaluation requires a custody record and corpus supplied after candidate freeze by external actors.

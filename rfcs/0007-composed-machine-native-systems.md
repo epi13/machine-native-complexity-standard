@@ -2,14 +2,18 @@
 
 Status: Draft
 
-This RFC proposes non-normative boundary contracts, composed assurance records, and measured evidence epochs. It does not change MNCS 0.2 or promote MNCDS 0.1-draft.
+This RFC proposes non-normative boundary contracts, composed assurance records, measured composition epochs, evidence-custody records, cross-host agreement, and claim-readiness semantics. It does not change MNCS 0.2 or promote MNCDS 0.1-draft.
 
 Composition retains component and boundary claims, binds every provider and environment, and applies `FAIL > UNKNOWN > PASS`. Missing required evidence is UNKNOWN. `REVIEW_REQUIRED` is an experimental workflow disposition, not an MNCS PASS.
 
-## Wave Three amendment
+Wave Four adds three experimental record families:
 
-Wave Three adds an experimental composed-evidence-epoch schema and a recovery-focused C11/Go/Rust implementation. An epoch records preregistration, evidence partitions, identities, strict builds, generated-binding regeneration, checkpoint and replacement drills, mutation artifacts, repeated measurements, evaluator status, cross-host status, formal claim status, and known limitations.
+1. **Evidence custody** binds preregistration, candidate freeze, protected corpus, raw output, normalized output, actors, attestations, and disclosure order. It prohibits development evidence from being relabeled as protected.
+2. **Cross-host agreement** reconciles distinct host records by contract, epoch, component, tool, and semantic identities. Identity or output mismatch fails; unavailable required gates remain unknown.
+3. **Claim readiness** evaluates MNCS implementation and MNCDS lifecycle inputs separately. Promotion requires both formal results and release authorization to pass.
 
-The amendment does not permit a system PASS when a required component, boundary, recovery drill, mutation campaign, or environment remains UNKNOWN. Public CI evidence is not a protected holdout. A second implementation maintained in the same repository is not organizationally independent.
+The reference tools validate structural separation but cannot prove organizational independence. A developer-controlled repository cannot act as its own protected corpus custodian, independent evaluator, or independent witness merely by running separate processes.
 
-A successful regeneration and readable replacement drill can support only a narrow D4-related subclaim. Full MNCDS-D4 remains UNKNOWN without controlled release, production monitoring, retirement controls, independent witnessing, and retained evidence custody.
+The new loopback service boundary is evidence for one bounded local HTTP contract only. It does not broaden the native or process boundary claims and does not establish general distributed-system correctness.
+
+Full MNCDS-D4 remains unclaimed until release approval, operational monitoring, rollback thresholds, retirement controls, protected evidence custody, and an independently witnessed replacement drill are actually performed and retained.

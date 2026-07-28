@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schema/experimental/0.4/mncs-evidence-custody.schema.json",
+  "title": "Experimental MNCS protected-evidence custody record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "record_id", "commitment_id", "developer_id", "custodian", "evaluator",
+    "preregistration_identity", "candidate_freeze_identity", "corpus_identity",
+    "raw_artifact_identity", "normalized_result_identity", "attestation_identity",
+    "timestamps", "corpus_embedded_in_repository", "development_access_before_disclosure",
+    "result", "limitations", "extensions"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.4-experimental"},
+    "record_id": {"type": "string", "minLength": 1},
+    "commitment_id": {"type": "string", "minLength": 1},
+    "developer_id": {"type": "string", "minLength": 1},
+    "custodian": {"$ref": "#/$defs/actor"},
+    "evaluator": {"$ref": "#/$defs/actor"},
+    "preregistration_identity": {"$ref": "#/$defs/identity"},
+    "candidate_freeze_identity": {"$ref": "#/$defs/identity"},
+    "corpus_identity": {"$ref": "#/$defs/identity"},
+    "raw_artifact_identity": {"$ref": "#/$defs/identity"},
+    "normalized_result_identity": {"$ref": "#/$defs/identity"},
+    "attestation_identity": {"$ref": "#/$defs/identity"},
+    "timestamps": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["preregistered_at", "candidate_frozen_at", "corpus_disclosed_at", "evaluated_at"],
+      "properties": {
+        "preregistered_at": {"type": "string", "format": "date-time"},
+        "candidate_frozen_at": {"type": "string", "format": "date-time"},
+        "corpus_disclosed_at": {"type": "string", "format": "date-time"},
+        "evaluated_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "corpus_embedded_in_repository": {"const": false},
+    "development_access_before_disclosure": {"const": false},
+    "result": {"$ref": "#/$defs/status"},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "extensions": {"type": "object"}
+  },
+  "$defs": {
+    "identity": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "status": {"enum": ["PASS", "FAIL", "UNKNOWN"]},
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "role", "organization", "attestation_method"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "role": {"type": "string", "minLength": 1},
+        "organization": {"type": "string", "minLength": 1},
+        "attestation_method": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

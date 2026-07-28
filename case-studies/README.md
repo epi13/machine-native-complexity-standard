@@ -7,6 +7,6 @@ A favorable development result is not automatically a formal MNCS or MNCDS claim
 - [CacheForge](cacheforge/README.md) — Python LLM KV-cache planning.
 - [Multilingual Stream](multilingual-stream/README.md) — one C11/Rust behavioral contract.
 - [Go Gateway](go-gateway/README.md) — worker-pool, cancellation, race, and fuzz evidence.
-- [Composed Gateway](composed-gateway/README.md) — C11 native FFI, generated Go binding, Go host, Rust process authority, and a Wave Three recovery and measurement epoch.
+- [Composed Gateway](composed-gateway/README.md) — C11 native FFI, generated Go binding, Go host, Rust process authority, measured recovery, external evidence custody, and claim readiness.
 - [RAVEL](ravel/README.md) — recursive adaptive vector execution.
 - [dSense Desk Pet](dsense-desk-pet/README.md) — constrained Arduino evidence study.

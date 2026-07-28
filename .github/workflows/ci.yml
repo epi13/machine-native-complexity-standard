@@ -116,6 +116,64 @@ jobs:
           path: case-studies/composed-gateway/wave-three/evidence/cross-host-${{ runner.os }}
           retention-days: 90
 
+  multilingual-wave-four:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+      - uses: actions/setup-python@v6.2.0
+        with:
+          python-version: "3.11"
+          cache: pip
+      - uses: actions/setup-go@v6.4.0
+        with:
+          go-version: "1.23.x"
+          cache: false
+      - run: python -m pip install -e '.[dev]'
+      - name: Verify custody, readiness, service, and fixture semantics
+        run: make multilingual-wave-four WAVE_FOUR_OUTPUT=evidence/actual
+      - name: Validate Wave Four packaged schemas
+        run: |
+          mncs schema evidence-custody >/dev/null
+          mncs schema cross-host-agreement >/dev/null
+          mncs schema claim-readiness >/dev/null
+      - name: Check Wave Four tree cleanliness
+        run: git diff --check -- case-studies/composed-gateway/wave-four schemas src tests scripts docs README.md Makefile
+      - uses: actions/upload-artifact@v7.0.1
+        with:
+          name: multilingual-wave-four-reference
+          path: case-studies/composed-gateway/wave-four/evidence/actual
+          retention-days: 90
+
+  wave-four-cross-host-reconcile:
+    needs: multilingual-wave-three
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+      - uses: actions/setup-python@v6.2.0
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -e '.[dev]'
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: multilingual-wave-three-*
+          path: wave-three-hosts
+      - name: Reconcile Ubuntu and macOS evidence
+        shell: bash
+        run: |
+          mapfile -t records < <(find wave-three-hosts -type f -name wave-three-epoch.json -print | sort)
+          test "${#records[@]}" -eq 2
+          PYTHONPATH=src python case-studies/composed-gateway/wave-four/tools/reconcile_cross_host.py \
+            "${records[@]}" \
+            --output case-studies/composed-gateway/wave-four/evidence/cross-host-agreement.json
+      - name: Validate cross-host agreement
+        run: python -c "import json; from jsonschema import Draft202012Validator; s=json.load(open('schemas/mncs-cross-host-agreement.schema.json')); r=json.load(open('case-studies/composed-gateway/wave-four/evidence/cross-host-agreement.json')); assert not list(Draft202012Validator(s).iter_errors(r))"
+      - uses: actions/upload-artifact@v7.0.1
+        with:
+          name: multilingual-wave-four-cross-host-agreement
+          path: case-studies/composed-gateway/wave-four/evidence/cross-host-agreement.json
+          retention-days: 90
+
   ravel:
     runs-on: ubuntu-latest
     steps:

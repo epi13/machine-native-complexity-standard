@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schema/experimental/0.4/mncs-cross-host-agreement.schema.json",
+  "title": "Experimental MNCS cross-host agreement record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "agreement_id", "source_records", "system_contract_id", "epoch_id", "status", "findings", "summary", "evaluator_identity", "extensions"],
+  "properties": {
+    "schema_version": {"const": "0.4-experimental"},
+    "agreement_id": {"type": "string", "minLength": 1},
+    "source_records": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "system_contract_id": {"type": "string", "minLength": 1},
+    "epoch_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["PASS", "FAIL", "UNKNOWN"]},
+    "findings": {"type": "array", "items": {"type": "string"}},
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_count", "host_environments", "semantic_output_digests", "required_gate_status"],
+      "properties": {
+        "record_count": {"type": "integer", "minimum": 2},
+        "host_environments": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string"}},
+        "semantic_output_digests": {"type": "array", "maxItems": 1, "items": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+        "required_gate_status": {"enum": ["PASS", "FAIL", "UNKNOWN"]}
+      }
+    },
+    "evaluator_identity": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "extensions": {"type": "object"}
+  }
+}
