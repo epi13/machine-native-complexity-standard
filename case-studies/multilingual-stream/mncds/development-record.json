@@ -11,10 +11,17 @@
           "gate_id": "wave1-required-evidence",
           "required": true,
           "status": "UNKNOWN"
+        },
+        {
+          "evaluator_id": "multilingual-stream-evaluator-0.1.0",
+          "evidence_id": "multilingual-stream-c11-local-development-benchmark-v1",
+          "gate_id": "useful-benefit-development",
+          "required": false,
+          "status": "PASS"
         }
       ],
       "generator_id": "multilingual-stream-template-generator-0.1.0",
-      "objective_value": null,
+      "objective_value": 0.3941151486052267,
       "parent_ids": [
         "multilingual-stream-readable-pair-v1"
       ]
@@ -160,7 +167,7 @@
     },
     "minimum_useful_benefit_met": true,
     "policy_id": "multilingual-stream-selection-policy-v1",
-    "rationale": "The record is a process-control binding, not a promotion. The candidate pair is retained for evaluation; required execution evidence remains UNKNOWN and promotion is prohibited.",
+    "rationale": "The local C11 candidate passed the predeclared useful-benefit threshold. The full C11/Rust execution remains required UNKNOWN, so the record is retained for evaluation and promotion remains prohibited.",
     "rule_recorded_before_holdout": true,
     "selected_candidate_id": "multilingual-stream-generated-pair-v1",
     "unknown_policy": "human_review"

@@ -30,6 +30,12 @@
       "status": "PASS"
     },
     {
+      "evidence_id": "multilingual-stream-c11-local-development-benchmark-v1",
+      "id": "c11-local-useful-benefit",
+      "scope": "seven repeated measurements on the declared local C11 environment; candidate/reference median ratio 0.3941151486052267",
+      "status": "PASS"
+    },
+    {
       "id": "rust-pinned-build",
       "scope": "requires Rust 1.97.1 CI environment",
       "status": "UNKNOWN"
