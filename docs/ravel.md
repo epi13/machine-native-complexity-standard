@@ -10,8 +10,8 @@ The repository contains three cumulative mechanism studies:
 
 In the RAVEL-U synthetic study, the frozen model scored 71.899% after semantic drift. Recursive adaptation proposed 24 experts, retired eight low-utility duplicates, restored drift accuracy to 100%, retained 96.704% on the original task, reached 505 of 512 planning targets, preserved exact routed-versus-complete agreement, and reproduced checkpoint identity and evaluation behavior.
 
-`ARCHITECTURE_GAPS.md` explains the actual blockers to a unified architecture and why modality adapters, use policy, evaluator authority, protected evidence, external effects, deployment, and promotion remain outside the recursive execution plane.
+`ARCHITECTURE_GAPS.md` in the case-study directory explains the actual blockers to a unified architecture and why modality adapters, use policy, evaluator authority, protected evidence, external effects, deployment, and promotion remain outside the recursive execution plane.
 
 These are repository-visible development observations, not claims of real-data, language, multimodal, foundation-model, or production superiority. The tasks are deliberately favorable, holdouts are not independently protected, formal MNCS and MNCDS status remain `UNKNOWN`, and promotion is unauthorized.
 
-See the [RAVEL case-study directory](../case-studies/ravel/README.md) for source, contracts, preregistration, evidence, threat models, and assurance records.
+The complete source, contracts, preregistration, evidence, threat models, and assurance records are maintained in the RAVEL case-study directory in the GitHub repository.
