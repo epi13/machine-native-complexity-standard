@@ -144,8 +144,8 @@ def verify_binary_protocol() -> None:
 def verify_evidence(artifacts: dict[str, bytes]) -> None:
     module = materializer()
     analyzer = load_module(ROOT / "tools" / "analyze_epoch1.py", "dsense_analyzer")
-    raw = artifacts[module.RAW_NAME]
-    regenerated = analyzer.canonical_json(analyzer.build_summary(raw))
+    extract = json.loads(artifacts[module.EVIDENCE_NAME])
+    regenerated = analyzer.canonical_json(analyzer.build_summary(extract))
     require(ANALYSIS.read_text(encoding="utf-8") == regenerated, "epoch-1 evidence drift")
 
     analysis = load_json(ANALYSIS)
