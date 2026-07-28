@@ -1,4 +1,6 @@
-.PHONY: format lint type test build examples corpus mncds-corpus interoperability docs edgestream-smoke edgestream-evidence remote-water-smoke remote-water-test remote-water-study edgestream-water-integration cacheforge-smoke cacheforge-test cacheforge-study cacheforge-epoch2 ravel-test ravel-training-check ravel-unified-check dsense-check language-profile-schema language-provider-corpus multilingual-stream cacheforge-language-profile multilingual-wave-one go-profile go-provider-corpus go-gateway composed-gateway multilingual-wave-two check
+.PHONY: format lint type test build examples corpus mncds-corpus interoperability docs edgestream-smoke edgestream-evidence remote-water-smoke remote-water-test remote-water-study edgestream-water-integration cacheforge-smoke cacheforge-test cacheforge-study cacheforge-epoch2 ravel-test ravel-training-check ravel-unified-check dsense-check language-profile-schema language-provider-corpus multilingual-stream cacheforge-language-profile multilingual-wave-one go-profile go-provider-corpus go-gateway composed-gateway multilingual-wave-two composed-wave-three multilingual-wave-three check
+
+WAVE_THREE_OUTPUT ?= evidence/actual
 
 format:
 	ruff format .
@@ -73,4 +75,9 @@ multilingual-wave-two: go-profile go-provider-corpus
 	PYTHONPATH=src ./scripts/verify-wave-two
 	$(MAKE) go-gateway
 	$(MAKE) composed-gateway
+composed-wave-three:
+	$(MAKE) -C case-studies/composed-gateway/wave-three OUTPUT=$(WAVE_THREE_OUTPUT) check
+multilingual-wave-three: go-profile go-provider-corpus
+	PYTHONPATH=src ./scripts/verify-wave-three
+	$(MAKE) composed-wave-three WAVE_THREE_OUTPUT=$(WAVE_THREE_OUTPUT)
 check: lint type test build examples corpus mncds-corpus interoperability docs

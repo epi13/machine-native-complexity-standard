@@ -1,0 +1,321 @@
+{
+  "$defs": {
+    "status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "UNKNOWN"
+      ]
+    }
+  },
+  "$id": "https://mncs.dev/schema/experimental/0.3/mncs-composed-evidence-epoch.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "build_results": {
+      "properties": {
+        "binding_identity_after": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "binding_identity_before": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "binding_regeneration": {
+          "$ref": "#/$defs/status"
+        },
+        "c11_build": {
+          "$ref": "#/$defs/status"
+        },
+        "go_component_benchmark_output": {
+          "type": "string"
+        },
+        "go_component_benchmarks": {
+          "$ref": "#/$defs/status"
+        },
+        "go_fuzz_smoke": {
+          "$ref": "#/$defs/status"
+        },
+        "go_race": {
+          "$ref": "#/$defs/status"
+        },
+        "go_tests": {
+          "$ref": "#/$defs/status"
+        },
+        "go_vet": {
+          "$ref": "#/$defs/status"
+        },
+        "rust_toolchain": {
+          "$ref": "#/$defs/status"
+        }
+      },
+      "required": [
+        "binding_regeneration",
+        "binding_identity_before",
+        "binding_identity_after",
+        "c11_build",
+        "go_tests",
+        "go_race",
+        "go_fuzz_smoke",
+        "rust_toolchain",
+        "go_vet",
+        "go_component_benchmarks",
+        "go_component_benchmark_output"
+      ],
+      "type": "object"
+    },
+    "cross_host_reproduction": {
+      "$ref": "#/$defs/status"
+    },
+    "d4_regeneration_replacement_subclaim": {
+      "$ref": "#/$defs/status"
+    },
+    "environment": {
+      "type": "object"
+    },
+    "epoch_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "formal_mncds_status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "UNKNOWN"
+      ]
+    },
+    "formal_mncs_status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "UNKNOWN"
+      ]
+    },
+    "identities": {
+      "additionalProperties": {
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "minProperties": 5,
+      "type": "object"
+    },
+    "independent_evaluation": {
+      "$ref": "#/$defs/status"
+    },
+    "known_limitations": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "measurements": {
+      "properties": {
+        "events": {
+          "properties": {
+            "configured_max_messages": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "fallback_attempts": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "fallback_successes": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "rejected_generated_proposals": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "valid_workload_protocol_rejections": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "fallback_attempts",
+            "fallback_successes",
+            "rejected_generated_proposals",
+            "valid_workload_protocol_rejections",
+            "configured_max_messages"
+          ],
+          "type": "object"
+        },
+        "ordering": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "outlier_policy": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "raw": {
+          "minProperties": 2,
+          "type": "object"
+        },
+        "repetitions": {
+          "minimum": 3,
+          "type": "integer"
+        },
+        "rss_note": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "summaries": {
+          "minProperties": 2,
+          "type": "object"
+        },
+        "uncertainty": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "warmups": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "warmups",
+        "repetitions",
+        "ordering",
+        "outlier_policy",
+        "uncertainty",
+        "rss_note",
+        "summaries",
+        "raw",
+        "events"
+      ],
+      "type": "object"
+    },
+    "mutation_campaign": {
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "summary": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "summary"
+      ],
+      "type": "object"
+    },
+    "partitions": {
+      "additionalProperties": false,
+      "properties": {
+        "development": {
+          "$ref": "#/$defs/status"
+        },
+        "protected_holdout": {
+          "$ref": "#/$defs/status"
+        },
+        "public_reproduction": {
+          "$ref": "#/$defs/status"
+        }
+      },
+      "required": [
+        "development",
+        "public_reproduction",
+        "protected_holdout"
+      ],
+      "type": "object"
+    },
+    "promotion_authorized": {
+      "type": "boolean"
+    },
+    "propagated_result": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "UNKNOWN",
+        "REVIEW_REQUIRED"
+      ]
+    },
+    "recovery_drill": {
+      "properties": {
+        "composed_output_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "composed_uninterrupted": {
+          "$ref": "#/$defs/status"
+        },
+        "identity_rejection": {
+          "$ref": "#/$defs/status"
+        },
+        "readable_output_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "readable_uninterrupted": {
+          "$ref": "#/$defs/status"
+        },
+        "recovery": {
+          "$ref": "#/$defs/status"
+        },
+        "recovery_output_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "recovery_seconds": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "replacement": {
+          "$ref": "#/$defs/status"
+        },
+        "replacement_mode": {
+          "type": "string"
+        },
+        "replacement_output_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "readable_uninterrupted",
+        "readable_output_digest",
+        "recovery",
+        "replacement",
+        "identity_rejection"
+      ],
+      "type": "object"
+    },
+    "schema_version": {
+      "const": "0.3-experimental"
+    },
+    "system_contract_id": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "epoch_id",
+    "system_contract_id",
+    "environment",
+    "partitions",
+    "identities",
+    "build_results",
+    "recovery_drill",
+    "mutation_campaign",
+    "measurements",
+    "d4_regeneration_replacement_subclaim",
+    "independent_evaluation",
+    "cross_host_reproduction",
+    "propagated_result",
+    "formal_mncs_status",
+    "formal_mncds_status",
+    "promotion_authorized",
+    "known_limitations"
+  ],
+  "title": "Experimental MNCS composed evidence epoch",
+  "type": "object"
+}

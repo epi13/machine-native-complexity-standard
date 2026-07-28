@@ -46,6 +46,7 @@ SCHEMA_NAMES = {
     "cross-language-comparison": "mncs-cross-language-comparison.schema.json",
     "boundary-contract": "mncs-boundary-contract.schema.json",
     "composed-assurance-case": "mncs-composed-assurance-case.schema.json",
+    "composed-evidence-epoch": "mncs-composed-evidence-epoch.schema.json",
     "manifest-0.1.1": "mncs-manifest.schema.json",
     "gate-result-0.1.1": "mncs-gate-result.schema.json",
     "identity-0.1.1": "mncs-identity.schema.json",
@@ -99,9 +100,17 @@ def _nonfinite_paths(value: Any, path: str = "$") -> list[str]:
     if isinstance(value, float) and not math.isfinite(value):
         return [f"{path}: nonfinite numbers are forbidden"]
     if isinstance(value, dict):
-        return [finding for key, child in value.items() for finding in _nonfinite_paths(child, f"{path}/{key}")]
+        return [
+            finding
+            for key, child in value.items()
+            for finding in _nonfinite_paths(child, f"{path}/{key}")
+        ]
     if isinstance(value, list):
-        return [finding for index, child in enumerate(value) for finding in _nonfinite_paths(child, f"{path}/{index}")]
+        return [
+            finding
+            for index, child in enumerate(value)
+            for finding in _nonfinite_paths(child, f"{path}/{index}")
+        ]
     return []
 
 
