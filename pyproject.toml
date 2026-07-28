@@ -57,7 +57,7 @@ where = ["src"]
 [tool.ruff]
 target-version = "py311"
 line-length = 100
-extend-exclude = ["conformance-corpus", "examples"]
+extend-exclude = ["conformance-corpus", "examples", "case-studies/dsense-desk-pet"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "SIM", "RUF"]

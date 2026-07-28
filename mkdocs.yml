@@ -22,6 +22,7 @@ nav:
   - Remote Water Control case study: remote-water-control.md
   - CacheForge KV-cache case study: cacheforge.md
   - RAVEL unified architecture: ravel.md
+  - dSense Desk Pet case study: dsense-desk-pet.md
   - Evidence-derived conformance: evidence-derived-conformance.md
   - Certification vs validation: certification-vs-validation.md
   - Migration 0.1 to 0.1.1: migration-0.1-to-0.1.1.md
