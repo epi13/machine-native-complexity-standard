@@ -141,9 +141,9 @@
   },
   "schema_version": "1.0",
   "source": {
-    "decoded_sha256": "01c76dca4582673df89d8834d109a1cad6c984d0a5c493063ed8ff526ff74eb3",
-    "encoding": "zlib+base85 text envelope",
-    "path": "artifacts/epoch-1-reactivity.csv.zlib.b85",
+    "encoding": "canonical JSON + zlib + base85",
+    "original_capture_sha256": "01c76dca4582673df89d8834d109a1cad6c984d0a5c493063ed8ff526ff74eb3",
+    "path": "artifacts/epoch-1-canonical.json.zlib.b85",
     "telemetry_protocol": "DSENSE_TELEMETRY_V1"
   },
   "study_id": "dsense.desk-pet.calibration.epoch-1"
