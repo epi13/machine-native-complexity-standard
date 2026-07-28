@@ -1,7 +1,6 @@
 # dSense Desk Pet case study
 
-The [dSense Desk Pet](../case-studies/dsense-desk-pet/README.md) is a physical Arduino Uno
-experiment in recursive embedded cognition and machine-native representation.
+The dSense Desk Pet case study is a physical Arduino Uno experiment in recursive embedded cognition and machine-native representation.
 
 Its light, piezo, button, timing, OLED, RGB, buzzer, state, and prediction signals participate in a
 bounded feedback system. The pet exposes expressive behavior and an on-device introspection menu,
@@ -20,9 +19,7 @@ baseline, onset, sustained presence, self-sound, and external energy. Human labe
 formatting were then moved off the microcontroller into readable host tooling, while the OLED and
 serial link adopted compact icon/numeric and binary representations.
 
-The repository contains the failing baseline, frozen V5 candidates, raw telemetry, reproducible
-analysis, a readable contract, preregistered hardware gates, a threat model, and a bounded assurance
-case.
+The repository contains the failing baseline, frozen V5 candidates, a canonical telemetry extract tied to the original capture hash, reproducible analysis, a readable contract, preregistered hardware gates, a threat model, and a bounded assurance case.
 
 ## Status
 
