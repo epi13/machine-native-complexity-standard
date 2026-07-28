@@ -2,7 +2,7 @@ CC ?= cc
 CFLAGS ?= -std=c11 -O3 -Wall -Wextra -Werror -pedantic
 LDLIBS ?= -lm
 
-.PHONY: test evidence training-test training-evidence training-check all clean
+.PHONY: test evidence training-test training-evidence training-check unified-test unified-evidence unified-check all clean
 
 test: ravel
 	./ravel >/dev/null
@@ -22,7 +22,19 @@ training-check: ravel_train
 	./ravel_train > "$$tmp"; \
 	diff -u training-evidence.json "$$tmp"
 
-all: test training-check
+unified-test: ravel_unified
+	./ravel_unified >/dev/null
+
+unified-evidence: ravel_unified
+	./ravel_unified | tee unified-evidence.json
+
+unified-check: ravel_unified
+	@tmp=$$(mktemp); \
+	trap 'rm -f "$$tmp"' EXIT; \
+	./ravel_unified > "$$tmp"; \
+	diff -u unified-evidence.json "$$tmp"
+
+all: test training-check unified-check
 
 ravel: ravel.c
 	$(CC) $(CFLAGS) $< -o $@
@@ -30,5 +42,8 @@ ravel: ravel.c
 ravel_train: ravel_train.c
 	$(CC) $(CFLAGS) $< $(LDLIBS) -o $@
 
+ravel_unified: ravel_unified.c ravel_unified/00_core.inc ravel_unified/10_route.inc ravel_unified/20_train.inc ravel_unified/30_eval.inc
+	$(CC) $(CFLAGS) ravel_unified.c $(LDLIBS) -o $@
+
 clean:
-	rm -f ravel ravel_train evidence.json
+	rm -f ravel ravel_train ravel_unified evidence.json ravel-unified-checkpoint.bin
