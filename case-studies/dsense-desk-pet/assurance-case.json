@@ -9,7 +9,7 @@
   "promotion_authorized": false,
   "implementation": {
     "baseline": "artifacts/baseline-v4.ino.zlib.b85",
-    "telemetry_candidate": "artifacts/firmware-v5-telemetry.ino.zlib.b85",
+    "telemetry_candidate": "materialized from artifacts/baseline-v4.ino.zlib.b85.part* plus artifacts/firmware-v5-from-v4.delta.zlib.b85",
     "production_candidate": "deterministically materialized by toggling DEBUG_SERIAL",
     "telemetry_candidate_sha256": "8c413fb12cc5ff3333175ff20ff5093b7cf98d297983b1472aa71ece53411808",
     "production_candidate_sha256": "bcaa5bb03a3d7b86001d45f7890003f6d82a8e982ebdc38163a84baa460fa74e",
@@ -17,14 +17,14 @@
     "language": "Arduino C++"
   },
   "evidence": {
-    "raw_epoch_1": "artifacts/epoch-1-reactivity.csv.zlib.b85",
+    "raw_epoch_1": "artifacts/epoch-1-canonical.json.zlib.b85",
     "raw_epoch_1_sha256": "01c76dca4582673df89d8834d109a1cad6c984d0a5c493063ed8ff526ff74eb3",
     "analysis": "evidence/results/epoch-1-analysis.json",
-    "analysis_sha256": "421523d9dacf78f09a78dab9c4a4ae492e9ef39674815042291a885eadaa3089",
+    "analysis_sha256": "0bbcfa50ef5afcc15c314bf1d8a893f4828aa3e2f4be38e4f0356f9a913b2d2b",
     "compile_observations": "evidence/results/compile-observations.json",
-    "compile_observations_sha256": "6590d0dfd3f91380c871aed5a40836fba411cceb78bc24bd13386ec52db8df64",
+    "compile_observations_sha256": "3d22df4b7aa4fffb74f4416cbcdf642aaedc42c6792eb4b74b85e21fd0b83e06",
     "artifact_index": "evidence/results/artifact-hashes.json",
-    "artifact_index_sha256": "649670e87a4beb3c4db13f98b29f3e1bc6ed7a972bbe70b95a02f3f1e7142e9a",
+    "artifact_index_sha256": "c360c9493975c90bf288685d91f8df98bf2835eb2af81a5bf340f42af6f927d2",
     "offline_reproduction": true,
     "avr_compile_observed": false,
     "v5_physical_protocol_observed": false,
@@ -40,7 +40,11 @@
     "v4_program_bytes": 34676,
     "v4_program_limit_bytes": 32256,
     "v4_program_headroom_bytes": -2420,
-    "v5_binary_packet_sizes": [49, 37, 20],
+    "v5_binary_packet_sizes": [
+      49,
+      37,
+      20
+    ],
     "v5_firmware_string_literals": 0
   },
   "supported_conclusions": [
