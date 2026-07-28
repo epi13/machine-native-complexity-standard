@@ -55,6 +55,18 @@ jobs:
       - name: Check RAVEL tree cleanliness
         run: git diff --check -- case-studies/ravel
 
+  dsense:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+      - name: Verify dSense Desk Pet case study
+        run: make dsense-check
+      - name: Check dSense tree cleanliness
+        run: git diff --check -- case-studies/dsense-desk-pet
+
   installed-wheel:
     runs-on: ubuntu-latest
     steps:
