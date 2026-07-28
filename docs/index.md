@@ -32,6 +32,7 @@ assurance-case profiles, and a focused compiler-backed Machine-Native Evidence A
 It remains Draft and does not change MNCS 0.2 or promote MNCDS.
 
 - [RAVEL recursive inference and training research](ravel.md)
+- [dSense Desk Pet case study](dsense-desk-pet.md)
 - [Remote Water Resilience Controller case study](remote-water-control.md)
 - [Machine-native complexity foundation](foundational-model.md)
 - [Machine-Native Evidence Analyzer](machine-native-evidence-analyzer.md)
