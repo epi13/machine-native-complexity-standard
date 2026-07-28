@@ -45,6 +45,13 @@ jobs:
         run: make ravel-training-check
       - name: Reproduce unified architecture evidence
         run: make ravel-unified-check
+      - name: Upload unified mismatch evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ravel-unified-actual
+          path: case-studies/ravel/unified-actual.json
+          if-no-files-found: ignore
       - name: Check RAVEL tree cleanliness
         run: git diff --check -- case-studies/ravel
 
