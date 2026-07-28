@@ -29,10 +29,8 @@ unified-evidence: ravel_unified
 	./ravel_unified | tee unified-evidence.json
 
 unified-check: ravel_unified
-	@tmp=$$(mktemp); \
-	trap 'rm -f "$$tmp"' EXIT; \
-	./ravel_unified > "$$tmp"; \
-	diff -u unified-evidence.json "$$tmp"
+	./ravel_unified > unified-actual.json
+	diff -u unified-evidence.json unified-actual.json
 
 all: test training-check unified-check
 
@@ -46,4 +44,4 @@ ravel_unified: ravel_unified.c ravel_unified/00_core.inc ravel_unified/10_route.
 	$(CC) $(CFLAGS) ravel_unified.c $(LDLIBS) -o $@
 
 clean:
-	rm -f ravel ravel_train ravel_unified evidence.json ravel-unified-checkpoint.bin
+	rm -f ravel ravel_train ravel_unified evidence.json unified-actual.json ravel-unified-checkpoint.bin
