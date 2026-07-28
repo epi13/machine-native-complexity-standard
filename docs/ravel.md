@@ -1,14 +1,17 @@
 # RAVEL research architecture
 
-RAVEL (Recursive Adaptive Vector Execution Lattice) is an MNCS research architecture that treats routing, retrieval, model storage, training state, and computational allocation as one bounded machine-native structure.
+RAVEL (Recursive Adaptive Vector Execution Lattice) is an MNCS research architecture that treats routing, retrieval, compression, representation, training state, temporal memory, planning, lifecycle, and computational allocation as one bounded machine-native structure.
 
-The project currently contains two mechanism studies:
+The repository contains three cumulative mechanism studies:
 
 - **RAVEL 0.1** demonstrates exact conditional inference over a generated expert lattice. A lower-bound certificate permits reduced computation only when the routed result is provably identical to a full scan.
 - **RAVEL-T 0.2** extends the lattice into recursive training. Current experts generate the router; the router creates exact training shards; error-heavy shards compile into child experts; child lineage regenerates the next router.
+- **RAVEL-U 0.3** turns the expert into a unified executable memory unit: retrieval key, compressed representation, decoder, classifier, action-conditioned predictor, transition-memory node, planning destination, replay shard, lifecycle object, and compute unit.
 
-The initial RAVEL-T synthetic study grew from eight to 64 experts through 56 deterministic births. It matched a flat 64-expert baseline's holdout accuracy while using 4,144,248 training expert evaluations rather than 87,031,808, and its routed holdout results agreed exactly with the full-scan oracle.
+In the RAVEL-U synthetic study, the frozen model scored 71.899% after semantic drift. Recursive adaptation proposed 24 experts, retired eight low-utility duplicates, restored drift accuracy to 100%, retained 96.704% on the original task, reached 505 of 512 planning targets, preserved exact routed-versus-complete agreement, and reproduced checkpoint identity and evaluation behavior.
 
-These are repository-visible development observations, not claims of real-data or foundation-model superiority. The task is deliberately favorable, the holdout is not independently protected, and formal MNCS and MNCDS status remain `UNKNOWN`.
+`ARCHITECTURE_GAPS.md` explains the actual blockers to a unified architecture and why modality adapters, use policy, evaluator authority, protected evidence, external effects, deployment, and promotion remain outside the recursive execution plane.
 
-See the [RAVEL case-study directory](../case-studies/ravel/README.md) for source, contracts, preregistration, evidence, threat model, and assurance record.
+These are repository-visible development observations, not claims of real-data, language, multimodal, foundation-model, or production superiority. The tasks are deliberately favorable, holdouts are not independently protected, formal MNCS and MNCDS status remain `UNKNOWN`, and promotion is unauthorized.
+
+See the [RAVEL case-study directory](../case-studies/ravel/README.md) for source, contracts, preregistration, evidence, threat models, and assurance records.
