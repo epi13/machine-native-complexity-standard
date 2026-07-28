@@ -44,6 +44,8 @@ SCHEMA_NAMES = {
     "analyzer-result": "mncs-analyzer-result.schema.json",
     "language-evidence-profile": "mncs-language-evidence-profile.schema.json",
     "cross-language-comparison": "mncs-cross-language-comparison.schema.json",
+    "boundary-contract": "mncs-boundary-contract.schema.json",
+    "composed-assurance-case": "mncs-composed-assurance-case.schema.json",
     "manifest-0.1.1": "mncs-manifest.schema.json",
     "gate-result-0.1.1": "mncs-gate-result.schema.json",
     "identity-0.1.1": "mncs-identity.schema.json",
@@ -62,8 +64,6 @@ SCHEMA_NAMES = {
 
 
 def schema_path(name: str) -> Traversable:
-    """Resolve a schema strictly from installed package resources."""
-
     filename = SCHEMA_NAMES.get(name, name)
     if filename not in SCHEMA_NAMES.values():
         raise SchemaNotFoundError(f"unknown schema: {name}")
@@ -74,8 +74,6 @@ def schema_path(name: str) -> Traversable:
 
 
 def load_schema(name: str) -> dict[str, Any]:
-    """Load and self-check a packaged schema."""
-
     value: Any = json.loads(schema_path(name).read_text(encoding="utf-8"))
     if not isinstance(value, dict):
         raise SchemaError(f"schema {name} is not an object")
@@ -86,8 +84,6 @@ def load_schema(name: str) -> dict[str, Any]:
 
 
 def _legacy_0_1_1_schema(schema: dict[str, Any]) -> dict[str, Any]:
-    """Derive the frozen 0.1.1 shape from the structurally identical 0.2 schema."""
-
     value = deepcopy(schema)
     identifier = value.get("$id")
     if isinstance(identifier, str):
@@ -103,23 +99,13 @@ def _nonfinite_paths(value: Any, path: str = "$") -> list[str]:
     if isinstance(value, float) and not math.isfinite(value):
         return [f"{path}: nonfinite numbers are forbidden"]
     if isinstance(value, dict):
-        return [
-            finding
-            for key, child in value.items()
-            for finding in _nonfinite_paths(child, f"{path}/{key}")
-        ]
+        return [finding for key, child in value.items() for finding in _nonfinite_paths(child, f"{path}/{key}")]
     if isinstance(value, list):
-        return [
-            finding
-            for index, child in enumerate(value)
-            for finding in _nonfinite_paths(child, f"{path}/{index}")
-        ]
+        return [finding for index, child in enumerate(value) for finding in _nonfinite_paths(child, f"{path}/{index}")]
     return []
 
 
 def schema_errors(instance: Any, name: str) -> list[str]:
-    """Return stable human-readable schema and numeric validation errors."""
-
     validator = Draft202012Validator(load_schema(name), format_checker=FormatChecker())
     errors = sorted(validator.iter_errors(instance), key=lambda item: list(item.absolute_path))
     rendered = _nonfinite_paths(instance)

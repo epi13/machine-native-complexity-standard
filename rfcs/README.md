@@ -1,20 +1,13 @@
 # MNCS RFC process
 
-Use an RFC for normative semantics, schemas, conformance levels, compatibility,
-governance, or removal. Copy `0000-template.md`, allocate the next number in a pull
-request, and keep status, authors, review dates, and conflicts current.
-
-States are Draft, Review, Accepted, Rejected, Withdrawn, and Superseded. Review lasts
-at least 14 days. Acceptance follows [GOVERNANCE.md](../GOVERNANCE.md), requires
-resolved security and compatibility concerns, and names the target release. Rejected
-RFCs remain as institutional memory. Implementation can precede acceptance for
-experimentation but cannot claim core status.
+Use an RFC for normative semantics, schemas, conformance levels, compatibility, governance, or removal. Draft experimental implementations may precede acceptance but cannot claim core status.
 
 Draft RFCs:
 
 - [RFC 0004: Machine-Native Complexity Development Specification](0004-machine-native-development-specification.md)
 - [RFC 0005: Machine-Native Foundation and Evidence Analyzer Architecture](0005-machine-native-foundation-and-evidence-analyzer.md)
-- [RFC 0006: Experimental Language Evidence Profiles](0006-experimental-language-evidence-profiles.md)
+- [RFC 0006: Experimental language evidence profiles](0006-experimental-language-evidence-profiles.md)
+- [RFC 0007: Experimental composed machine-native systems](0007-composed-machine-native-systems.md)
 
 Accepted RFCs:
 
