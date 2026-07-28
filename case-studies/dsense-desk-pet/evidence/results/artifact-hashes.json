@@ -1,0 +1,43 @@
+{
+  "algorithm": "sha256",
+  "artifacts": [
+    {"bytes":8482,"path":"artifacts/baseline-v4.ino.zlib.b85.part00","sha256":"10f397029645a2064b0cd8e6b67d786eb45aaea3ff5f940ef88df5dce82d16ee"},
+    {"bytes":7929,"path":"artifacts/baseline-v4.ino.zlib.b85.part01","sha256":"cee3e1a32766ff6f01865c23360b9eb4298f8b32cc20c7e21911b5a36e51375f"},
+    {"bytes":8287,"path":"artifacts/baseline-v4.ino.zlib.b85.part02","sha256":"4376c416c83e37342f0d0d1e89a018eedb24ab72b94843fba1ae2203a1d7a0e4"},
+    {"bytes":8209,"path":"artifacts/baseline-v4.ino.zlib.b85.part03","sha256":"8cade50ef8a322df5972895e2219aa3a7055c7a6e7bec42c0502b2422a6a81b0"},
+    {"bytes":8545,"path":"artifacts/baseline-v4.ino.zlib.b85.part04","sha256":"daebc304a3322a69f71feef35a2a34d2e52f89ec383c5ebefe3a96cdd51bd9a7"},
+    {"bytes":3787,"path":"artifacts/baseline-v4.ino.zlib.b85.part05","sha256":"ed97ab4888d82e7951b6e7eb1e4f642259ab2b61db2a5c428acc964f9281efe8"},
+    {"bytes":8330,"path":"artifacts/epoch-1-reactivity.csv.zlib.b85.part00","sha256":"8e5ad897df00f2fa3c0182f9a294aae58c17a8e225b0c40c2e51736958fcd9b9"},
+    {"bytes":8109,"path":"artifacts/epoch-1-reactivity.csv.zlib.b85.part01","sha256":"ebd5b1fdf87d4278226fb70d606922d44ad0a0f3b094580b529681b4991a3b18"},
+    {"bytes":8205,"path":"artifacts/epoch-1-reactivity.csv.zlib.b85.part02","sha256":"c7d68f76c171defa0fa6aa4e30d303347c242a4a4d83ffa0afd2464b625d1e48"},
+    {"bytes":8055,"path":"artifacts/epoch-1-reactivity.csv.zlib.b85.part03","sha256":"3ab7ff1127789f429deae74cfa924968ad4714adecdcdbe33af077a083365396"},
+    {"bytes":8231,"path":"artifacts/epoch-1-reactivity.csv.zlib.b85.part04","sha256":"46794e2d253f3620c7f7b7a053c718282697b2c3e1c0ff2d82245f9b3f3b9fe7"},
+    {"bytes":8372,"path":"artifacts/epoch-1-reactivity.csv.zlib.b85.part05","sha256":"a8b76669b9ad92e130d7977d895f8b2998a5fc4e7b63b0201b788a75572ed09d"},
+    {"bytes":7881,"path":"artifacts/epoch-1-reactivity.csv.zlib.b85.part06","sha256":"e27bae4162eaf80f407e1f3aab71bd65e70c9acf18d2af909033bbd18f83991d"},
+    {"bytes":8302,"path":"artifacts/firmware-v5-telemetry.ino.zlib.b85.part00","sha256":"a6e6f4df0753226b21ef2d119564015137ad321733ea8f95cf42c7f19295bddb"},
+    {"bytes":8263,"path":"artifacts/firmware-v5-telemetry.ino.zlib.b85.part01","sha256":"5058254ba30c2344888eedaabe07f844fb162dfc075c90de3e103b03de9694e3"},
+    {"bytes":8131,"path":"artifacts/firmware-v5-telemetry.ino.zlib.b85.part02","sha256":"d50ce0c78c935db211cde43f8d00f6d88c9f2da79964380507895904afe2423a"},
+    {"bytes":8119,"path":"artifacts/firmware-v5-telemetry.ino.zlib.b85.part03","sha256":"62e1e45d9bcfa587d605adfa50498c69eaa9fad2a797971c5a2f0b3bced7d5af"},
+    {"bytes":6698,"path":"artifacts/firmware-v5-telemetry.ino.zlib.b85.part04","sha256":"cab0fed821a284128eab4ee5b4951cef2171e82d794bf4e839432b82c9f94f3d"},
+    {"bytes":2991,"path":"tools/materialize.py","sha256":"64217cb84fa1d610ceb8ddc4b7a1f146b33f40026b2f5342f0bf325104413d11"},
+    {"bytes":8447,"path":"tools/capture_dsense_binary_v5.py","sha256":"837aa827f65a5a64f9e691888b3f32caf586a38809d1795f4ff14fe1ef178fd0"},
+    {"bytes":9073,"path":"tools/analyze_epoch1.py","sha256":"48a91267ee364bd57705d4466a2e0b351d6a47d5aae89249b942bf601b11842d"},
+    {"bytes":7599,"path":"tools/verify_case_study.py","sha256":"3199fbe11e31839df25e9cacef6a3d96e9a66d6df1ec60667ceb219681fd0375"},
+    {"bytes":362,"path":"evidence/raw/README.md","sha256":"fe9448b8b53034ac30099750ecd4c50498dce807e0c4d50c191d08008e032637"},
+    {"bytes":4881,"path":"evidence/results/epoch-1-analysis.json","sha256":"421523d9dacf78f09a78dab9c4a4ae492e9ef39674815042291a885eadaa3089"},
+    {"bytes":1986,"path":"evidence/results/compile-observations.json","sha256":"3d22df4b7aa4fffb74f4416cbcdf642aaedc42c6792eb4b74b85e21fd0b83e06"},
+    {"bytes":5400,"path":"CONTRACT.md","sha256":"983aaf47a9f9aa8ddc8e8be391557d1631951a3708e497d4250b810d4bd9e4a5"},
+    {"bytes":1726,"path":"HARDWARE.md","sha256":"232ddc5890fa5cc2e47e108f23ab6043228f9f229eed015fdd53bebde99d5f41"},
+    {"bytes":2589,"path":"preregistration.json","sha256":"6d3b8dec1ade9df607099a8ea80e90f2443183a3f015b37a09bfc3697a4ece52"},
+    {"bytes":4189,"path":"threat-model.json","sha256":"ed7abe10f26ac072013818bac73213128aec388e8d3d1fc8813d64a6168f6939"},
+    {"bytes":2477,"path":"development-record.json","sha256":"f2f4223aaed139f980997b27311fc294ddbb47be38b17e8e96881055a781d390"}
+  ],
+  "decoded_artifacts": [
+    {"bytes":155022,"name":"DeskPet_dSense_Interface_Telemetry_MNCS.ino","sha256":"3b55e368310f957d55588bd82afcbc905043e302634ef44ce478f2ced57abaca"},
+    {"bytes":128628,"name":"DeskPet_dSense_UnoMax_Binary_MNCS.ino","sha256":"8c413fb12cc5ff3333175ff20ff5093b7cf98d297983b1472aa71ece53411808"},
+    {"bytes":128629,"name":"DeskPet_dSense_UnoMax_MNCS.ino","sha256":"bcaa5bb03a3d7b86001d45f7890003f6d82a8e982ebdc38163a84baa460fa74e"},
+    {"bytes":185171,"name":"epoch-1-reactivity.csv","sha256":"01c76dca4582673df89d8834d109a1cad6c984d0a5c493063ed8ff526ff74eb3"}
+  ],
+  "schema_version": "1.0",
+  "study_id": "dsense.desk-pet.artifacts.v1"
+}
