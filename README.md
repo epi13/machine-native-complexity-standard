@@ -3,145 +3,132 @@
 [![CI](https://github.com/epi13/machine-native-complexity-standard/actions/workflows/ci.yml/badge.svg)](https://github.com/epi13/machine-native-complexity-standard/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Standard](https://img.shields.io/badge/MNCS-0.2-experimental-orange.svg)](spec/MNCS-v0.2.md)
-[![Schema](https://img.shields.io/badge/schema-0.2-blue.svg)](schemas/mncs-manifest.schema.json)
 [![Development specification](https://img.shields.io/badge/MNCDS-0.1--draft-purple.svg)](spec/MNCDS-v0.1-draft.md)
 
-The Machine-Native Complexity Standard (MNCS) is an open, experimental,
-community-developed, tool-neutral engineering standard for accepting generated or
-machine-optimized implementations that may exceed ordinary human-maintainability
-limits.
-
-The Machine-Native Complexity Development Specification (MNCDS) is its experimental
-companion for controlling how those implementations are generated, evaluated, selected,
-released, regenerated, and retired. MNCS evaluates the implementation evidence; MNCDS
-evaluates the development process. Neither claim implies the other.
+MNCS is an open, experimental, tool-neutral standard for accepting generated or
+machine-optimized implementations that may exceed ordinary human-maintainability limits.
+MNCDS is its companion process specification for controlling how those implementations are
+generated, evaluated, selected, released, regenerated, replaced, and retired.
 
 > **Human readability is relocated, not eliminated.**
 
-Humans retain readable specifications, contracts, limits, reference behavior,
-validation policy, provenance, regeneration instructions, development controls, and
-acceptance evidence. Machines may own internal execution complexity only when it
-purchases a declared, measurable benefit inside an auditable correctness, safety,
-resource, provenance, development, and regeneration envelope. Complexity is never a
-benefit by itself.
+Readable control remains in contracts, limits, reference behavior, evidence, provenance,
+development records, regeneration, rollback, and release policy. Machine-owned internal
+complexity is acceptable only when it buys a predeclared measurable benefit inside a bounded,
+auditable envelope. Complexity, novelty, or source size alone is never the useful benefit.
 
-MNCS and MNCDS are not accredited ISO, ANSI, IEEE, IETF, or similar standards. MNCS
-0.2 and MNCDS 0.1-draft are intended for experimentation and public review, not as
-blanket assurance claims. Validator release 0.2.0 adds portable canonical identities,
-offline attestations, explicit trust, reproducible packages, and independent
-implementation agreement. The experimental MNCDS validator adds offline process-record
-validation without executing generators, candidates, evaluators, or evidence.
+MNCS and MNCDS are not accredited ISO, ANSI, IEEE, IETF, or similar standards. MNCS 0.2 and
+MNCDS 0.1-draft are experimental and must not be represented as blanket certification.
 
-## Two complementary claims
+## Two separate claims
 
-| Claim | What it evaluates |
+| Claim family | What it evaluates |
 |---|---|
 | `MNCS-L1` through `MNCS-L5` | Candidate implementation and evidence conformance |
 | `MNCDS-D1` through `MNCDS-D4` | Development-process control and lifecycle assurance |
 
-A project may state both, for example `MNCDS-D3 / MNCS-L4`, only when each result is
-independently supported.
+A project may state both only when each result is independently supported. `FAIL` dominates
+`UNKNOWN`, and `UNKNOWN` dominates `PASS`; unavailable or unsupported evidence never silently
+passes.
 
-## Foundation and experimental analyzer
+## Experimental multilingual evidence layer
 
-[RFC 0005](rfcs/0005-machine-native-foundation-and-evidence-analyzer.md) proposes the
-broader machine-native complexity model, contract adequacy, applicability and criticality,
-composition, a combined assurance-case record, generic threat and measurement frameworks,
-and governance completion criteria. It remains Draft and does not change MNCS 0.2 or
-promote MNCDS.
+[RFC 0006](rfcs/0006-experimental-language-evidence-profiles.md) adds a non-normative,
+versioned language-evidence layer for C11, Rust, and Python. A language profile describes how
+evidence is collected. It does **not** make a programming language, compiler, interpreter,
+runtime, or analyzer MNCS compliant.
 
-The experimental [Machine-Native Evidence Analyzer](docs/machine-native-evidence-analyzer.md)
-architecture produces bounded PASS, FAIL, or UNKNOWN evidence without making one analyzer
-normative. The first prototype uses Clang AST JSON for a deliberately small C11 structural
-invariant set. Joern may serve as the frozen epoch-one baseline, but is not required for
-epoch two.
+Use the terms **profile-valid**, **provider-conformant**, and **evidence-supported** rather than
+“MNCS certified.” Provider execution is explicit; ordinary offline MNCS and MNCDS validation
+never launches a language provider.
 
-Experimental schemas are available for:
+Wave One:
 
-```text
-mncs schema contract-profile
-mncs schema assurance-case
-mncs schema analyzer-result
+- keeps C11 as the controlled anchor;
+- pins Rust 1.97.1 with edition 2024 and a Cargo lockfile;
+- binds CacheForge to a CPython 3.11 profile through a new amendment without rewriting history;
+- supplies bounded C11, Rust, and Python Provider Protocol 0.1 implementations;
+- tests PASS, FAIL, UNKNOWN, crash, timeout, deterministic output, and identity binding;
+- runs one shared C11/Rust stream contract without inventing a universal complexity score.
+
+```bash
+make language-profile-schema
+make language-provider-corpus
+make multilingual-stream
+make cacheforge-language-profile
+make multilingual-wave-one
 ```
 
-These schemas are not inputs to MNCS 0.2 certification.
+## Foundation and evidence analyzer
 
-## Attested interoperability in MNCS 0.2
+[RFC 0005](rfcs/0005-machine-native-foundation-and-evidence-analyzer.md) proposes the broader
+conceptual foundation, contract adequacy, applicability and criticality, composition, assurance
+cases, and a focused compiler-backed Machine-Native Evidence Analyzer. It remains Draft and does
+not change MNCS 0.2 or promote MNCDS.
 
-Evidence-derived results have RFC 8785 canonical bytes, Ed25519 DSSE-compatible
-envelopes, deterministic local trust policies, reproducible `.mncs` archives, and a
-versioned corpus shared with an independent Rust validator. Provider Protocol 0.1 makes
-analyzers interoperable without letting normal validation launch them.
+The analyzer architecture emits bounded PASS, FAIL, or UNKNOWN results. The first prototype uses
+Clang AST JSON for a deliberately small C11 invariant set. Joern and other providers remain
+optional and replaceable; no product is a normative dependency.
 
-`FAIL` dominates `UNKNOWN`, which dominates `PASS`. Missing required evidence never
-passes. Signature validity and trust are reported separately: a signature proves only
-that a key signed bytes, not correctness, safety, performance, process discipline, or
-truth.
-
-## Install
+## Install and validate
 
 ```bash
 python -m venv .venv
 . .venv/bin/activate
-python -m pip install .
+python -m pip install -e '.[dev]'
 mncs version
 mncds version
-```
-
-For development:
-
-```bash
-python -m pip install -e '.[dev]'
 make check
 ```
 
-## Five-minute examples
+Common MNCS commands:
 
-Validate MNCS implementation evidence:
-
-```bash
-mncs validate-bundle examples/minimal
-mncs certify-bundle examples/minimal
-mncs summarize examples/minimal/manifest.json
-mncs hash examples/minimal/machine/generated.py
-mncs compare examples/minimal/manifest.json \
-  examples/rejected-candidate/manifest.json
-mncs pack examples/minimal --output minimal.mncs
-mncs verify-package minimal.mncs
-mncs key generate ./release-key.pem
+```text
+mncs init PATH
+mncs validate MANIFEST
+mncs validate-bundle DIRECTORY
+mncs certify MANIFEST
+mncs certify-bundle DIRECTORY
+mncs summarize MANIFEST
+mncs compare MANIFEST_A MANIFEST_B
+mncs hash PATH
+mncs canonicalize FILE
+mncs pack BUNDLE --output FILE.mncs
+mncs verify-package FILE.mncs
+mncs provider inspect COMMAND
+mncs provider run DESCRIPTOR REQUEST
+mncs provider verify-result RESULT
+mncs schema NAME
 ```
 
-Validate an MNCDS development process record:
+MNCDS process records are validated independently:
 
-```bash
-mncds validate examples/mncds-d4/development-record.json
-mncds validate examples/mncds-d4/development-record.json --require-pass --json
-mncs schema mncds-development-record
+```text
+mncds validate DEVELOPMENT_RECORD
+mncds validate DEVELOPMENT_RECORD --require-pass --json
 ```
 
-Start an MNCS bundle with `mncs init my-component`. The resulting template is
-intentionally incomplete: replace it with real evidence and hashes before making a
-claim. MNCS and MNCDS validation are offline and never launch, import, or execute an
-evidence binary, generator, candidate, analyzer, or benchmark.
+Validation is offline and never executes a generator, candidate, evaluator, analyzer, benchmark,
+or evidence binary. Exit 1 means invalid evidence or record semantics, exit 2 means operational
+error, and exit 3 means structurally valid but non-PASS under a requested PASS policy.
 
 ## Research case studies
 
-- [`case-studies/edgestream/`](case-studies/edgestream/README.md) evaluates a bounded,
-  fault-tolerant C11 telemetry processor with controlled correctness, structural,
-  recovery, and performance evidence.
-- [`case-studies/remote-water-control/`](case-studies/remote-water-control/README.md)
-  implements a development-only remote water-system digital twin with a generated planner,
-  readable safety authority, expiring intent journal, checkpoint continuity, fault
-  injection, and a review-required composed assurance case.
-- [`case-studies/cacheforge/`](case-studies/cacheforge/README.md) evaluates a bounded,
-  trace-driven LLM KV-cache planner with generated eviction policy, readable allocation
-  authority, mutation rejection, checkpoint continuity, and controlled benefit evidence.
+- [EdgeStream](case-studies/edgestream/README.md): stateful C11 telemetry processing with strict
+  compiler, sanitizer, mutation, recovery, structural, and performance evidence.
+- [Remote Water Control](case-studies/remote-water-control/README.md): development-only supervisory
+  digital twin with readable safety authority and an explicit formal UNKNOWN boundary.
+- [CacheForge](case-studies/cacheforge/README.md): LLM KV-cache planning with generated eviction
+  policy, readable authority, deterministic epochs, and a new Python-profile amendment.
+- [Multilingual Stream](case-studies/multilingual-stream/README.md): one readable contract across
+  C11 and Rust reference/candidate pairs with typed comparability categories.
+- [RAVEL](case-studies/ravel/README.md): recursive adaptive vector execution and bounded training.
+- [dSense Desk Pet](case-studies/dsense-desk-pet/README.md): constrained Arduino evidence study.
 
-The remote-water study deliberately records formal MNCS and MNCDS status as `UNKNOWN` until
-independent protected holdout, cross-host reproduction, domain review, and release evidence
-exist. It cannot emit industrial control traffic and must not be connected to live equipment.
+A favorable development result is never automatically a formal MNCS or MNCDS claim. Each study
+states its own exact promotion boundary.
 
-## Cumulative conformance levels
+## Cumulative levels
 
 ### MNCS implementation levels
 
@@ -158,108 +145,43 @@ exist. It cannot emit industrial control traffic and must not be connected to li
 | Profile | Adds |
 |---|---|
 | MNCDS-D1 | Controlled generation, immutable baseline, candidate identity, append-only ledger |
-| MNCDS-D2 | Pinned experimentation, evidence partitions, reproducibility class, repeated measurement |
-| MNCDS-D3 | Predeclared selection, protected holdout, independent final evaluator, MNCS binding |
-| MNCDS-D4 | Release controls, tested rollback, regeneration drill, monitoring, retirement triggers |
-
-`UNKNOWN` never silently counts as `PASS`. Levels and profiles are cumulative within
-their own families.
-
-## CLI
-
-### MNCS
-
-```text
-mncs init PATH
-mncs validate MANIFEST
-mncs validate-bundle DIRECTORY
-mncs certify MANIFEST
-mncs certify-bundle DIRECTORY
-mncs key generate PRIVATE_PATH
-mncs key inspect KEY
-mncs attest STATEMENT --key PRIVATE --output ENVELOPE
-mncs verify-attestation ENVELOPE --key PUBLIC_KEY
-mncs trust validate-policy POLICY
-mncs trust evaluate ENVELOPE POLICY
-mncs pack BUNDLE --output FILE.mncs
-mncs inspect-package FILE.mncs
-mncs verify-package FILE.mncs
-mncs unpack FILE.mncs --output DIRECTORY
-mncs certify-package FILE.mncs
-mncs provider inspect COMMAND
-mncs provider run DESCRIPTOR REQUEST
-mncs provider verify-result RESULT
-mncs summarize MANIFEST
-mncs compare MANIFEST_A MANIFEST_B
-mncs hash PATH
-mncs schema NAME
-mncs version
-```
-
-### MNCDS
-
-```text
-mncds validate DEVELOPMENT_RECORD
-mncds version
-```
-
-Commands support `--json`. A structurally valid MNCS bundle or MNCDS record can
-truthfully produce `FAIL` or `UNKNOWN`; structural validation success does not itself
-mean the candidate or process passed.
-
-Use `--require-pass` when a non-PASS result must return exit 3. Exit 1 means invalid
-evidence or record semantics, exit 2 means an operational error, and exit 3 means valid
-but non-PASS under the requested policy.
-
-Frozen MNCS schema 0.1 resources remain supported. Legacy reports set
-`legacy_self_asserted_acceptance: true`; certification refuses them unless
-`--allow-legacy` is explicit, and an override remains reduced-assurance. MNCDS 0.1 is
-experimental and has no legacy certification path.
-
-## Structural tools
-
-MNCS and MNCDS standardize evidence and process semantics, not product names. Compiler
-CFG analysis, LLVM passes, abstract interpretation, model checking, symbolic execution,
-proof assistants, custom analyzers, runtime instrumentation, language-specific
-verification, and independent combinations are all possible providers. Joern is one
-optional provider and is not a normative dependency.
-
-MNCDS explicitly permits evidence from one development epoch to improve an analyzer,
-harness, generator, evaluator, benchmark, or search strategy in the next epoch. The
-changed toolchain must receive a new identity, be regression-tested, and use
-uncontaminated protected evidence for any new final claim.
+| MNCDS-D2 | Pinned experimentation, evidence partitions, reproducibility, repeated measurement |
+| MNCDS-D3 | Predeclared selection, protected holdout, independent evaluator, MNCS binding |
+| MNCDS-D4 | Release controls, tested rollback, regeneration drill, monitoring, retirement |
 
 ## Repository map
 
-- [`spec/MNCS-v0.2.md`](spec/MNCS-v0.2.md) — normative MNCS 0.2 text
-- [`spec/MNCDS-v0.1-draft.md`](spec/MNCDS-v0.1-draft.md) — draft development specification
-- [`rfcs/0005-machine-native-foundation-and-evidence-analyzer.md`](rfcs/0005-machine-native-foundation-and-evidence-analyzer.md) — draft foundation and analyzer proposal
-- [`schemas/`](schemas/mncs-manifest.schema.json) — machine-readable contracts
-- [`experimental/mnea/`](experimental/mnea/README.md) — bounded Clang-backed analyzer prototype
-- [`src/mncs_validator/`](src/mncs_validator/validation.py) — offline validators
-- [`examples/`](examples/minimal/README.md) — accepted, rejected, repair, MNCDS, and experimental foundation examples
-- [`case-studies/edgestream/`](case-studies/edgestream/README.md) — stateful C11 development study
-- [`case-studies/remote-water-control/`](case-studies/remote-water-control/README.md) — composed supervisory-control development study
-- [`case-studies/cacheforge/`](case-studies/cacheforge/README.md) — LLM KV-cache planning development study
-- [`docs/`](docs/index.md) — documentation site
-- [`rfcs/`](rfcs/README.md) — change process
-- [`conformance-corpus/`](conformance-corpus/expected.json) — deterministic MNCS corpus
-- [`interoperability/`](interoperability/corpus.json) — cross-language MNCS golden vectors
-- [`research/`](research/graphflow-machine-native-study.md) — preliminary motivation
+- [`spec/`](spec/MNCS-v0.2.md): normative MNCS 0.2 and draft MNCDS text.
+- [`schemas/`](schemas/mncs-manifest.schema.json): machine-readable normative and experimental
+  schemas.
+- [`src/mncs_validator/`](src/mncs_validator/validation.py): offline validators and provider client.
+- [`experimental/mnea/`](experimental/mnea/README.md): bounded Clang-backed analyzer prototype.
+- [`experimental/language-evidence/`](experimental/language-evidence/README.md): C11, Rust, and
+  Python profiles, providers, fixtures, and provider-conformance corpus.
+- [`case-studies/`](case-studies/README.md): research implementations and evidence records.
+- [`conformance-corpus/`](conformance-corpus/expected.json): deterministic validator corpus.
+- [`interoperability/`](interoperability/corpus.json): cross-implementation golden vectors.
+- [`docs/`](docs/index.md): documentation site.
+- [`rfcs/`](rfcs/README.md): standards change process.
+
+## Structural tools and recursive improvement
+
+MNCS standardizes evidence semantics, not vendor names. Compiler CFG analysis, LLVM passes,
+abstract interpretation, model checking, symbolic execution, proof assistants, runtime
+instrumentation, language-specific verification, and independent combinations can all be
+providers.
+
+MNCDS permits evidence from one development epoch to improve an analyzer, harness, generator,
+evaluator, benchmark, or search strategy in a later epoch. The changed toolchain receives a new
+identity, is regression-tested, and must use uncontaminated protected evidence for any new final
+claim.
 
 ## Participate
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md), the [governance model](GOVERNANCE.md), and
-the [RFC process](rfcs/README.md). Standard changes need public review, evidence, and
-consensus-seeking; no vendor receives a permanent seat or veto.
+Read [CONTRIBUTING.md](CONTRIBUTING.md), [GOVERNANCE.md](GOVERNANCE.md), and the
+[RFC process](rfcs/README.md). Standard changes require public review, evidence, and
+consensus-seeking; no vendor has a permanent veto.
 
-## License and citation
-
-Code, schemas, and documentation are licensed under the
-[Apache License 2.0](LICENSE). Cite the exact MNCS and MNCDS versions using
-[`CITATION.cff`](CITATION.cff); a conformance claim should also identify its manifest,
-development record, and selected-candidate hashes.
-
-A validator PASS is scoped to the declared contract, environment, evidence, policy,
-identities, and process record. MNCS 0.2 and MNCDS 0.1-draft are experimental and do not
-constitute accredited certification.
+Code, schemas, and documentation are licensed under the [Apache License 2.0](LICENSE). Cite the
+exact MNCS and MNCDS versions using [CITATION.cff](CITATION.cff), along with the relevant manifest,
+development record, environment, and selected-candidate identities.

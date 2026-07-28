@@ -14,6 +14,7 @@ Draft RFCs:
 
 - [RFC 0004: Machine-Native Complexity Development Specification](0004-machine-native-development-specification.md)
 - [RFC 0005: Machine-Native Foundation and Evidence Analyzer Architecture](0005-machine-native-foundation-and-evidence-analyzer.md)
+- [RFC 0006: Experimental Language Evidence Profiles](0006-experimental-language-evidence-profiles.md)
 
 Accepted RFCs:
 

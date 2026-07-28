@@ -1,0 +1,21 @@
+{
+  "contract_id": "contract:multilingual-bounded-stream-0.1",
+  "extensions": {
+    "mncs.dev:generator_kind": "deterministic retained-template materializer"
+  },
+  "generator_id": "multilingual-stream-template-generator-0.1.0",
+  "normalization": "UTF-8 bytes copied exactly; no environment-dependent substitution",
+  "outputs": [
+    {
+      "path": "c11/candidate.c",
+      "sha256": "30d67146e6b957f33def8813dfb050bd2e543d7c09e4221695ac1be2f437fb76",
+      "template": "generator/templates/c11-candidate.c.in"
+    },
+    {
+      "path": "src/main.rs",
+      "sha256": "36d3d18a9c8521e8f3238f57edb0bed4a94f377d59b608dadc990413da4a0a13",
+      "template": "generator/templates/rust-candidate.rs.in"
+    }
+  ],
+  "schema_version": "0.1-experimental"
+}

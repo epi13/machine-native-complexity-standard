@@ -29,8 +29,10 @@ and regeneration drills.
 
 RFC 0005 proposes the remaining conceptual foundation, experimental contract and
 assurance-case profiles, and a focused compiler-backed Machine-Native Evidence Analyzer.
-It remains Draft and does not change MNCS 0.2 or promote MNCDS.
+RFC 0006 proposes the non-normative multilingual language-evidence layer. Both remain Draft;
+neither changes MNCS 0.2 or promotes MNCDS.
 
+- [Experimental language evidence profiles](language-evidence-profiles.md)
 - [RAVEL recursive inference and training research](ravel.md)
 - [dSense Desk Pet case study](dsense-desk-pet.md)
 - [Remote Water Resilience Controller case study](remote-water-control.md)

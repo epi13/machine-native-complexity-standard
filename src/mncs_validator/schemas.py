@@ -42,6 +42,8 @@ SCHEMA_NAMES = {
     "contract-profile": "mncs-contract-profile.schema.json",
     "assurance-case": "mncs-assurance-case.schema.json",
     "analyzer-result": "mncs-analyzer-result.schema.json",
+    "language-evidence-profile": "mncs-language-evidence-profile.schema.json",
+    "cross-language-comparison": "mncs-cross-language-comparison.schema.json",
     "manifest-0.1.1": "mncs-manifest.schema.json",
     "gate-result-0.1.1": "mncs-gate-result.schema.json",
     "identity-0.1.1": "mncs-identity.schema.json",

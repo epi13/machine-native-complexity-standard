@@ -1,0 +1,93 @@
+{
+  "$id": "https://mncs.dev/schema/experimental/0.1/mncs-cross-language-comparison.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "benchmark_protocol": {
+      "type": "object"
+    },
+    "claim_boundary": {
+      "type": "object"
+    },
+    "contract_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "environment": {
+      "type": "object"
+    },
+    "extensions": {
+      "type": "object"
+    },
+    "observations": {
+      "additionalProperties": false,
+      "properties": {
+        "directly_comparable": {
+          "items": {
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "language_specific": {
+          "items": {
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "non_comparable": {
+          "items": {
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "normalized_imperfect": {
+          "items": {
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "unknown": {
+          "items": {
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "directly_comparable",
+        "normalized_imperfect",
+        "language_specific",
+        "non_comparable",
+        "unknown"
+      ],
+      "type": "object"
+    },
+    "report_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1-experimental"
+    },
+    "subjects": {
+      "items": {
+        "type": "object"
+      },
+      "minItems": 2,
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "report_id",
+    "contract_id",
+    "subjects",
+    "environment",
+    "observations",
+    "benchmark_protocol",
+    "claim_boundary",
+    "extensions"
+  ],
+  "title": "Experimental cross-language evidence comparison",
+  "type": "object"
+}

@@ -35,6 +35,36 @@ jobs:
       - run: python -m build
       - run: git diff --check
 
+  multilingual-wave-one:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.97.1
+          components: rustfmt, clippy
+      - run: python -m pip install -e '.[dev]'
+      - name: Verify multilingual evidence wave
+        run: make multilingual-wave-one
+      - name: Validate experimental schemas
+        run: |
+          mncs schema language-evidence-profile >/dev/null
+          mncs schema cross-language-comparison >/dev/null
+      - name: Generate cross-language report
+        run: >-
+          python case-studies/multilingual-stream/tools/run_experiment.py
+          --output multilingual-wave-one-report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: multilingual-wave-one-report
+          path: multilingual-wave-one-report.json
+      - name: Check multilingual tree cleanliness
+        run: git diff --check -- experimental/language-evidence case-studies/multilingual-stream case-studies/cacheforge/python-language-profile-epoch-3.json docs/language-evidence-profiles.md rfcs/0006-experimental-language-evidence-profiles.md
+
   ravel:
     runs-on: ubuntu-latest
     steps:

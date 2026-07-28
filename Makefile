@@ -1,4 +1,4 @@
-.PHONY: format lint type test build examples corpus mncds-corpus interoperability docs edgestream-smoke edgestream-evidence remote-water-smoke remote-water-test remote-water-study edgestream-water-integration cacheforge-smoke cacheforge-test cacheforge-study cacheforge-epoch2 ravel-test ravel-training-check ravel-unified-check dsense-check check
+.PHONY: format lint type test build examples corpus mncds-corpus interoperability docs edgestream-smoke edgestream-evidence remote-water-smoke remote-water-test remote-water-study edgestream-water-integration cacheforge-smoke cacheforge-test cacheforge-study cacheforge-epoch2 ravel-test ravel-training-check ravel-unified-check dsense-check language-profile-schema language-provider-corpus multilingual-stream cacheforge-language-profile multilingual-wave-one check
 
 format:
 	ruff format .
@@ -72,5 +72,22 @@ ravel-unified-check:
 
 dsense-check:
 	$(MAKE) -C case-studies/dsense-desk-pet check
+
+language-profile-schema:
+	PYTHONPATH=src ./scripts/validate-language-profile experimental/language-evidence/profiles/c11-reference-v0.1.json
+	PYTHONPATH=src ./scripts/validate-language-profile experimental/language-evidence/profiles/rust-1.97.1-edition-2024-v0.1.json
+	PYTHONPATH=src ./scripts/validate-language-profile experimental/language-evidence/profiles/python-cpython-3.11-v0.1.json
+
+language-provider-corpus:
+	./scripts/run-language-provider-corpus
+
+multilingual-stream:
+	$(MAKE) -C case-studies/multilingual-stream check
+
+cacheforge-language-profile:
+	./scripts/verify-cacheforge-language-profile
+
+multilingual-wave-one:
+	./scripts/run-multilingual-wave-one
 
 check: lint type test build examples corpus mncds-corpus interoperability docs
