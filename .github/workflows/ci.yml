@@ -35,6 +35,17 @@ jobs:
       - run: python -m build
       - run: git diff --check
 
+  ravel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Validate inference capsule
+        run: make ravel-test
+      - name: Reproduce recursive training evidence
+        run: make ravel-training-check
+      - name: Check RAVEL tree cleanliness
+        run: git diff --check -- case-studies/ravel
+
   installed-wheel:
     runs-on: ubuntu-latest
     steps:
