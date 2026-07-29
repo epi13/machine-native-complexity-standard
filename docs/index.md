@@ -56,4 +56,5 @@ neither changes MNCS 0.2 or promotes MNCDS.
 - [Attestations and trust](attestations.md)
 - [Reproducible packages](reproducible-packages.md)
 - [Provider Protocol 0.1](provider-protocol.md)
+- [MNCS Forge MCP integration](mncs-forge.md)
 - [Conformance corpus](conformance-corpus.md)

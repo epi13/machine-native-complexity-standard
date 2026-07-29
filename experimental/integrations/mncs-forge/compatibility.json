@@ -1,0 +1,21 @@
+{
+  "record_type": "experimental-non-normative-integration",
+  "forge": {
+    "commit": "5079c97a1e20fe5dfa3592a8b7597cae6785c2c6",
+    "repository": "https://github.com/epi13/mncs-forge-mcp",
+    "version": "0.1.0a1"
+  },
+  "mncs": {
+    "base_commit": "27e2a26d29077c049379470c40501f11265468f4",
+    "provider_protocol": "0.1",
+    "repository": "https://github.com/epi13/machine-native-complexity-standard"
+  },
+  "scope": "EdgeStream read-only inspection and Codex stdio MCP discovery",
+  "status_boundaries": {
+    "governance_approval": "UNKNOWN",
+    "independent_evaluation": "UNKNOWN",
+    "protected_holdout": "UNKNOWN",
+    "promotion": "PROHIBITED",
+    "witnessed_evidence": "UNKNOWN"
+  }
+}

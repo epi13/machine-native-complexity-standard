@@ -50,6 +50,10 @@ make multilingual-wave-five
 
 Provider execution, compilers, generators, benchmarks, services, custody verification, and portable host execution remain explicit. Ordinary offline validation never launches them.
 
+The separate [MNCS Forge MCP integration](docs/mncs-forge.md) is an optional,
+experimental, non-normative Codex control plane. It does not replace Provider Protocol
+or offline MNCS/MNCDS validation and cannot create independent or protected evidence.
+
 ## Research case studies
 
 - [EdgeStream](case-studies/edgestream/README.md) — C11 telemetry processing.
