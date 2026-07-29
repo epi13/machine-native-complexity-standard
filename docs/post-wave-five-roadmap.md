@@ -38,7 +38,7 @@ A PASS in one class does not imply PASS in another. Missing evidence remains
 | MNCDS 0.1-draft / RFC 0004 | Schema, validator, D1-D4 reference record, mutations, and deterministic corpus | Independent corpus consumer, reproducible two-epoch study with fresh protected evidence, security/privacy review, governance approvals |
 | RFC 0005 | Foundation records, experimental schemas, narrow Clang provider, analyzer documentation | Complete analyzer corpus, frozen epoch comparison, fresh protected holdout, independent schema consumers where normative use is proposed, security/privacy review, governance approvals |
 | RFC 0006 | Experimental C11, Rust, Python, and Go profiles and provider corpora | Independent reproduction threshold and resolution of the RFC's open packaging/environment questions |
-| RFC 0007 | Composed Gateway Waves Two through Five, custody and readiness fixtures, portable host schema and reconciler | Four physical host records, external protected custody/evaluation, witnessed operational controls, governance review |
+| RFC 0007 | Composed Gateway Waves Two through Five, custody and readiness fixtures, portable host schema and reconciler | Three physical host records, external protected custody/evaluation, witnessed operational controls, governance review |
 | EdgeStream | Full local smoke and evidence regeneration, including GCC/Clang, sanitizers, recovery, mutations, bounded structural checks, and performance | Reproduction of the full study on independent hosts; protected/independent/lifecycle evidence for broader claims |
 | Remote Water | Deterministic digital twin, tests, study, safety authority, recovery, and EdgeStream integration | Independently controlled holdout, independent evaluator/release authority, cross-host and cross-architecture runs, domain review, and any real PLC/SCADA/field evidence |
 | CacheForge | Initial study and epoch-2 capacity sweep with deterministic local reproduction | Protected trace custody, independent evaluator, inference-server/GPU adapter evidence, and cross-host reproduction |
@@ -46,7 +46,7 @@ A PASS in one class does not imply PASS in another. Missing evidence remains
 | dSense | Artifact identity, epoch-1 failure retention, binary framing, host checks, and non-uploading AVR compile capture | A new candidate epoch after the frozen V5 compile failures; then physical acoustic, button, persistence, power-cycle, and rollback evidence |
 | Multilingual Stream / Go Gateway | Shared contract, provider corpora, language-specific builds/tests, FFI/process boundaries, and development experiments | Independent protected evaluation, broader compiler/host reproduction, and non-experimental governance decisions |
 | Composed Gateway Waves Three and Four | Recovery, replacement, measurement, service boundary, custody/cross-host/readiness fixtures | Organizationally independent custody/evaluation, real cross-host records for the applicable full epoch, witnessed replacement, release monitoring, retirement exercise, and release authorization |
-| Composed Gateway Wave Five | Deterministic frozen archive, sidecar, local smoke, schemas, reconciler, and one valid Fedora-A physical-host record | `windows-a`, `windows-b`, `fedora-b`, and `pios-arm`; the cohort remains `UNKNOWN` until all five records are present |
+| Composed Gateway Wave Five | Deterministic frozen archive, sidecar, local smoke, schemas, reconciler, and valid Fedora-A and PiOS-ARM physical-host records | `windows-a`, `windows-b`, and `fedora-b`; the cohort remains `UNKNOWN` until all five records are present |
 
 The 42 top-level schemas match the 42 packaged schemas. The audit also exercised the
 MNCS corpus, the 11-case MNCDS corpus, and all current language-provider fixtures.
@@ -77,7 +77,39 @@ stale-input rejection, semantic corruption rejection, environment classification
 and schema validation. It remains operator-controlled evidence with protected holdout
 and independent evaluation `UNKNOWN`.
 
-One record is not a five-machine cohort. Cohort reconciliation was not performed.
+## PiOS-ARM Wave Five record
+
+The ignored PiOS-ARM record is
+`case-studies/composed-gateway/wave-five/evidence/hosts/pios-arm.json`.
+Its file SHA-256 for this run is
+`5e924e6c2a888a802eca1ef4ba108fcf5d0828a09bedacaff74df810150ce3d5`.
+The record and separately captured physical-host facts are:
+
+- record ID: `host:pios-arm:1785298643`;
+- execution started: `2026-07-29T04:17:23.593847Z`;
+- model: Raspberry Pi Zero 2 W Rev 1.0;
+- distribution: Debian GNU/Linux 12 (bookworm);
+- architecture: `arm64` in the record and `aarch64` from `uname -m`;
+- Python: CPython 3.11.2;
+- host result: `PASS`;
+- semantic-output digest:
+  `0bd3bcf6bc40caf9b15e9148972f822ef2a1afbe1a03a882ff765aba398ff2d4`;
+- required gates: bundle integrity `PASS`, deterministic vectors `PASS`,
+  checkpoint resume `PASS`, corruption rejection `PASS`, and offline capability
+  `PASS`;
+- frozen archive identity:
+  `sha256:98a6d338b7a60067781cd7cb41d9a9458917dbe0b3c9b2348b926e122439f7e8`;
+- manifest identity:
+  `sha256:ca4053025b6cdc0b17ee910c0a09011eba18fd5774df891d87a7465277126402`;
+- candidate-freeze identity:
+  `sha256:d858508276593494f9e8a255e07a2265954ac37424212f71f4bfa94aacbc4de9`;
+- evidence class: `OPERATOR_CONTROLLED`; and
+- protected holdout and independent evaluation: `UNKNOWN`.
+
+The record passes the checked-in host-execution schema and agrees with Fedora-A on
+the semantic-output digest, bundle identity, manifest identity, and candidate-freeze
+identity. Two records are not a five-machine cohort. Cohort reconciliation was not
+performed, and the cohort remains `UNKNOWN`.
 
 ## Exact remaining-machine procedure
 
@@ -124,18 +156,12 @@ sh ./run.sh fedora-b operator:alexander host-record-fedora-b.json \
   sha256:98a6d338b7a60067781cd7cb41d9a9458917dbe0b3c9b2348b926e122439f7e8
 ```
 
-Use the same commands on Raspberry Pi OS with label `pios-arm` and output
-`host-record-pios-arm.json`. Confirm that the resulting environment reports Raspberry
-Pi OS and an ARM architecture; an x86 emulator does not satisfy the preregistered
-physical-machine class.
-
-Copy the four records back without editing them as:
+Copy the three remaining records back without editing them as:
 
 ```text
 case-studies/composed-gateway/wave-five/evidence/hosts/windows-a.json
 case-studies/composed-gateway/wave-five/evidence/hosts/windows-b.json
 case-studies/composed-gateway/wave-five/evidence/hosts/fedora-b.json
-case-studies/composed-gateway/wave-five/evidence/hosts/pios-arm.json
 ```
 
 After all five records validate, reconcile exactly once:
@@ -215,5 +241,5 @@ The current open issues for Sigstore/in-toto mapping, multi-language SDKs,
 reproducible-build profiles, energy and hardware-utilization profiles, external pilots,
 transparency logs, hardware-backed signing, a third MNCS validator, and provider
 sandboxing remain useful future work. None replaces the missing dSense candidate,
-four physical Wave Five records, independent evidence, or governance approval, and none
+three physical Wave Five records, independent evidence, or governance approval, and none
 is made an MNCS 0.3 blocker by this audit.

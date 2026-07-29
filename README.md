@@ -42,7 +42,13 @@ Provider execution, compilers, generators, benchmarks, services, custody verific
 
 ## Current claim boundary
 
-The checked-in Wave Five physical-machine cohort remains `UNKNOWN` until the five host records are collected. A passing cohort can set operator-controlled public reproduction to `PASS` because it covers distinct machines, Windows and Linux, multiple distributions, and x86-64 plus ARM. It still cannot establish protected holdout, organizationally independent evaluation, or an independent witness because the same project operator controls the machines.
+Two of the five Wave Five physical-host records, Fedora-A and PiOS-ARM, have been
+collected and validated. The physical-machine cohort remains `UNKNOWN` until all five
+host records are collected. A passing cohort can set operator-controlled public
+reproduction to `PASS` because it covers distinct machines, Windows and Linux,
+multiple distributions, and x86-64 plus ARM. It still cannot establish protected
+holdout, organizationally independent evaluation, or an independent witness because
+the same project operator controls the machines.
 
 Formal MNCS and MNCDS statuses remain `UNKNOWN`, promotion is prohibited, and full MNCDS-D4 is unclaimed. The repository can validate externally supplied evidence; it cannot self-create independence or protected custody.
 
