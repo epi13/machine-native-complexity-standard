@@ -15,6 +15,24 @@ editor list is recorded in release notes until a dedicated roster RFC is adopted
 Roles are earned through sustained public contribution and may be removed for
 inactivity, misconduct, or unmanaged conflict by the same consensus process.
 
+For a release candidate, the editor assembles text, schemas, corpus, implementation
+reports, migration material, and the evidence index. The release authority verifies
+the checklist and authorizes creation of a tag; the signing authority controls the
+release key and signs only that authorized artifact. One person MAY hold more than one
+bootstrap role only when the overlap is disclosed. An author or editor MUST recuse from
+the independent-review approval of their own contested normative change.
+
+Current bootstrap assignments are deliberately not inferred from commit access:
+
+- active maintainer roster: **OPEN**;
+- active editor roster: **OPEN**;
+- independent reviewer pool: **OPEN**;
+- release authority: **OPEN**; and
+- signing authority and custody procedure: **OPEN**.
+
+These OPEN fields block final authorization, but they do not block preparation or
+testing of a release candidate.
+
 ## Decisions
 
 Work is public and consensus-seeking. Maintainers summarize objections and try to
@@ -61,6 +79,20 @@ uninvolved maintainer convenes public reconsideration; conduct or security-sensi
 facts may remain private. Participants disclose employment, funding, tool ownership,
 or other interests material to a decision and recuse when impartiality is reasonably
 in doubt.
+
+A release disclosure records participant, role, employer or sponsor when material,
+tool or implementation ownership, financial interest, affected decisions, and
+recusal/mitigation. “None known” is an affirmative disclosure; silence is not.
+
+## Succession and inactivity
+
+An active role holder SHOULD respond to role-related public requests within 30 days.
+After 90 days without response, another maintainer MAY propose inactive status through
+the normal public decision process. Succession requires a public nominee, conflict
+disclosure, at least two weeks of review, and the approvals otherwise required for a
+governance change. Emergency repository access MAY preserve availability but MUST NOT
+approve normative text, sign a release, or bypass recusal. Until an eligible successor
+is approved, the affected authority remains OPEN and releases requiring it wait.
 
 ## Security and independence
 

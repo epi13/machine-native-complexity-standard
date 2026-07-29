@@ -12,6 +12,7 @@ __pycache__/
 build/
 dist/
 site/
+**/target/
 *.egg-info/
 .coverage
 .DS_Store

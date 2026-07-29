@@ -4,6 +4,25 @@ MNCS is an open experimental standard for accepting generated or machine-optimiz
 
 > **Human readability is relocated, not eliminated.**
 
+## Release-candidate foundation
+
+The repository now contains implementation-ready proposals for MNCS 0.3-rc.1 and
+MNCDS 0.1-rc.1. They add contract adequacy, dependency/composition graphs,
+freshness and material-change invalidation, partial revalidation, lifecycle records,
+an offline MNCDS aggregate, a 72-case golden corpus, independent Python/Rust
+agreement, and a reproducible two-epoch improvement study.
+
+Both RFC 0004 and RFC 0005 remain Draft. Independent operation, organizational
+independence, externally protected custody, security/privacy acceptance, governance
+approval, and final release authorization remain OPEN or UNKNOWN.
+
+```bash
+make release-candidate-check
+mncs validate-record assurance examples/release-candidate-0.3/assurance-case.json
+mncds validate examples/mncds-0.1-rc/development-record.json
+mncs corpus release-candidate --json
+```
+
 ## Experimental multilingual and composed evidence
 
 Wave One established non-normative C11, Rust, and Python language profiles. Wave Two added Go, native FFI and process boundaries, generated bindings, and composed-result propagation. Wave Three added identity-bound recovery, mutation, measurement, replacement, and hosted evidence jobs. Wave Four added evidence custody, cross-host reconciliation, claim readiness, and a bounded service boundary.
@@ -61,8 +80,11 @@ local, physical-machine, Arduino, external-actor, and governance work.
 
 ## Repository map
 
-- `spec/` — MNCS 0.2 and MNCDS 0.1-draft.
+- `spec/` — frozen MNCS 0.2/MNCDS draft and the 0.3/0.1 release candidates.
 - `schemas/` — normative and experimental schemas.
+- `conformance/release-candidate/` — shared MNCS/MNCDS golden vectors.
+- `independent/rc-consumer/` — independent Rust release-candidate consumer.
+- `studies/recursive-analyzer/` — controlled two-epoch recursive study.
 - `experimental/language-evidence/` — profiles, providers, and fixtures.
 - `case-studies/` — bounded development studies and evidence epochs.
 - `docs/` — documentation.

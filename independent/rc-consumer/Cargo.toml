@@ -1,0 +1,16 @@
+[package]
+name = "mncs-rc-consumer"
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+description = "Independent offline consumer for the MNCS/MNCDS release-candidate corpus"
+
+[dependencies]
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.151"
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+pedantic = "warn"

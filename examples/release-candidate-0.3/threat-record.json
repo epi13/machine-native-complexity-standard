@@ -1,0 +1,28 @@
+{
+  "schema_version": "0.3-rc.1",
+  "mncs_version": "0.3-rc.1",
+  "threat_id": "threat.result-collapse-v1",
+  "category": "result collapse",
+  "affected_planes": ["evidence", "development_control", "operational_control"],
+  "assets": ["Separate MNCS and MNCDS results", "Explicit operational disposition"],
+  "actor_or_failure_source": "A producer or consumer that presents unlike results as one score.",
+  "preconditions": ["The consumer ignores the separate result objects."],
+  "path": ["Replace MNCS, MNCDS, and operational results with one favorable label."],
+  "assumptions": ["Consumers validate the normative assurance record."],
+  "mitigations": [
+    {
+      "mitigation_id": "mitigation.separate-results-v1",
+      "summary": "Require distinct MNCS and MNCDS objects and independently validate the display label.",
+      "evidence_ids": ["evidence.assurance-corpus-v1"],
+      "status": "PASS"
+    }
+  ],
+  "detection_signals": ["Missing result object", "Mismatched display label", "Operational decision used as conformance"],
+  "residual_risk": "moderate",
+  "owner_id": "OPEN",
+  "revalidation_triggers": ["Assurance presentation or schema changes."],
+  "privacy_impact": "No private payload is required; evidence identifiers can still reveal relationships.",
+  "status": "PASS",
+  "limitations": ["External review is not complete."],
+  "extensions": {}
+}

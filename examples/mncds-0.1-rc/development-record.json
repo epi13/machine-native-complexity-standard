@@ -1,0 +1,288 @@
+{
+  "schema_version": "0.1-rc.1",
+  "mncds_version": "0.1-rc.1",
+  "record_id": "development.recursive-study-v1",
+  "profile": "MNCDS-D4",
+  "epoch_id": "epoch.two",
+  "created_at": "2026-07-28T00:00:00Z",
+  "supersedes_record_id": null,
+  "charter": {
+    "charter_id": "charter.recursive-study-v1",
+    "problem_statement": "Reduce incorrect PASS classifications without weakening detection.",
+    "intended_use": "Develop and evaluate a bounded structural analyzer over a frozen corpus.",
+    "exclusions": ["External organizational independence is not claimed."],
+    "contract_id": "contract.example-v1",
+    "baseline_id": "baseline.epoch-one",
+    "environment_id": "environment.study-v1",
+    "threat_model_id": "threat.result-collapse-v1",
+    "objective": {
+      "objective_id": "objective.reduce-incorrect-pass-v1",
+      "metric": "incorrect PASS count",
+      "unit": "cases",
+      "direction": "minimize",
+      "minimum_useful_benefit": 1,
+      "operational_rationale": "Unsupported analysis must remain UNKNOWN rather than becoming an incorrect PASS."
+    },
+    "selection_policy_id": "selection.policy-v1",
+    "planned_mncs_level": "MNCS-L2",
+    "hard_rejection_gates": ["gate.no-false-negative-regression", "gate.no-crash", "gate.no-timeout"],
+    "release_owner_id": "authority.release",
+    "rollback_owner_id": "authority.rollback",
+    "retirement_owner_id": "authority.retirement"
+  },
+  "baseline": {
+    "baseline_id": "baseline.epoch-one",
+    "artifact_id": "analyzer.epoch-one",
+    "source_id": "source.epoch-one",
+    "build_id": "build.epoch-one",
+    "dependency_ids": ["dependency.python-runtime"],
+    "environment_id": "environment.study-v1",
+    "evaluator_ids": ["evaluator.development"],
+    "results": [
+      {
+        "evaluator_id": "evaluator.development",
+        "gate_id": "gate.baseline-captured",
+        "partition_id": "partition.development",
+        "required": true,
+        "status": "PASS",
+        "evidence_id": "evidence.baseline-v1"
+      }
+    ],
+    "captured_at": "2026-07-27T00:00:00Z",
+    "immutable": true
+  },
+  "environment_lock": {
+    "environment_id": "environment.study-v1",
+    "toolchain_id": "toolchain.python-v1",
+    "dependency_ids": ["dependency.python-runtime"],
+    "hardware_id": "hardware.local-v1",
+    "configuration_id": "configuration.study-v1",
+    "permitted_variance": ["Wall-clock and resident-memory measurements may vary and are reported per run."],
+    "locked": true
+  },
+  "roles": [
+    {"role": "contract_authority", "authority_id": "authority.contract", "executable_id": null},
+    {"role": "generator_authority", "authority_id": "authority.generator", "executable_id": "generator.repair-v1"},
+    {"role": "evaluator_authority", "authority_id": "authority.evaluator", "executable_id": "evaluator.development-exec-v1"},
+    {"role": "selection_authority", "authority_id": "authority.selection", "executable_id": null},
+    {"role": "release_authority", "authority_id": "authority.release", "executable_id": null},
+    {"role": "independent_reviewer", "authority_id": "authority.withheld-evaluator", "executable_id": "evaluator.final-exec-v1"}
+  ],
+  "authority_overlaps": [],
+  "generator": {
+    "generator_id": "generator.repair-v1",
+    "configuration_id": "generator.configuration-v1",
+    "authority_id": "authority.generator",
+    "executable_id": "generator.repair-exec-v1",
+    "permissions": {
+      "modify_contract": false,
+      "modify_baseline": false,
+      "modify_evaluators": false,
+      "modify_selection_policy": false,
+      "modify_thresholds": false,
+      "access_protected_holdout": false,
+      "network_access": false,
+      "filesystem_scope": ["study working directory"],
+      "process_scope": ["no subprocess execution"],
+      "tool_ids": ["analyzer.epoch-one", "analyzer.epoch-two"],
+      "mutation_scope": ["classification of unsupported alias constructs"]
+    },
+    "resource_limits": {
+      "max_candidates": 2,
+      "max_wall_seconds": 60,
+      "max_memory_bytes": 268435456,
+      "max_processes": 1
+    }
+  },
+  "partitions": {
+    "development_id": "partition.development",
+    "selection_id": "partition.selection",
+    "final_evaluation_id": "partition.final",
+    "holdout_contaminated": false,
+    "access_policy_ids": ["policy.partition-access-v1"]
+  },
+  "protected_evidence": [
+    {
+      "evidence_id": "evidence.final-withheld-v1",
+      "partition_id": "partition.final",
+      "commitment_id": "commitment.final-v1",
+      "custodian_id": "authority.withheld-evaluator",
+      "custody_class": "developer_withheld",
+      "disclosed_at": "2026-07-28T00:00:00Z",
+      "generator_access": false,
+      "reuse_claim_ids": ["result.analyzer-epoch-two"],
+      "contaminated": false,
+      "status": "UNKNOWN"
+    }
+  ],
+  "evaluators": [
+    {
+      "evaluator_id": "evaluator.development",
+      "purpose": "development",
+      "authority_id": "authority.evaluator",
+      "executable_id": "evaluator.development-exec-v1",
+      "configuration_id": "evaluator.configuration-v1",
+      "environment_id": "environment.study-v1",
+      "independent": false,
+      "operator_independence": "FAIL",
+      "organizational_independence": "FAIL",
+      "regression_corpus_id": "corpus.development-v1"
+    },
+    {
+      "evaluator_id": "evaluator.final",
+      "purpose": "independent",
+      "authority_id": "authority.withheld-evaluator",
+      "executable_id": "evaluator.final-exec-v1",
+      "configuration_id": "evaluator.final-configuration-v1",
+      "environment_id": "environment.study-v1",
+      "independent": true,
+      "operator_independence": "UNKNOWN",
+      "organizational_independence": "UNKNOWN",
+      "regression_corpus_id": "corpus.final-v1"
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "candidate.epoch-one",
+      "parent_ids": [],
+      "epoch_id": "epoch.one",
+      "generator_id": "generator.repair-v1",
+      "generation_sequence": 0,
+      "materially_evaluated": true,
+      "retained": true,
+      "build_status": "PASS",
+      "disposition": "retained",
+      "objective_value": 2,
+      "evaluator_results": [
+        {
+          "evaluator_id": "evaluator.development",
+          "gate_id": "gate.objective",
+          "partition_id": "partition.development",
+          "required": true,
+          "status": "PASS",
+          "evidence_id": "evidence.epoch-one-development-v1"
+        }
+      ]
+    },
+    {
+      "candidate_id": "candidate.epoch-two",
+      "parent_ids": ["candidate.epoch-one"],
+      "epoch_id": "epoch.two",
+      "generator_id": "generator.repair-v1",
+      "generation_sequence": 1,
+      "materially_evaluated": true,
+      "retained": true,
+      "build_status": "PASS",
+      "disposition": "selected",
+      "objective_value": 0,
+      "evaluator_results": [
+        {
+          "evaluator_id": "evaluator.development",
+          "gate_id": "gate.objective",
+          "partition_id": "partition.selection",
+          "required": true,
+          "status": "PASS",
+          "evidence_id": "evidence.epoch-two-selection-v1"
+        },
+        {
+          "evaluator_id": "evaluator.final",
+          "gate_id": "gate.final-evaluation",
+          "partition_id": "partition.final",
+          "required": true,
+          "status": "PASS",
+          "evidence_id": "evidence.final-withheld-v1"
+        }
+      ]
+    }
+  ],
+  "candidate_aggregates": [],
+  "selection": {
+    "policy_id": "selection.policy-v1",
+    "selection_epoch_id": "epoch.two",
+    "selected_candidate_id": "candidate.epoch-two",
+    "rule_recorded_before_final_evaluation": true,
+    "unknown_policy": "reject",
+    "minimum_useful_benefit_met": true,
+    "hard_gates_passed": true,
+    "rationale": "The selected candidate reduces incorrect PASS without regressing hard gates.",
+    "human_review": null
+  },
+  "reproducibility": {
+    "class": "EXACT",
+    "seeds_preserved": true,
+    "protocol": "Run the frozen offline evaluator over lexically ordered fixtures.",
+    "measurement_repetitions": 3,
+    "comparison_statistic": "Exact per-case outcome equality and median runtime.",
+    "acceptance_bounds": "All classifications must reproduce exactly.",
+    "failure_treatment": "A failed regeneration remains FAIL and blocks promotion."
+  },
+  "epochs": [
+    {
+      "epoch_id": "epoch.one",
+      "parent_epoch_id": null,
+      "toolchain_id": "analyzer.epoch-one",
+      "corpus_id": "corpus.epoch-one-v1",
+      "objective_id": "objective.reduce-incorrect-pass-v1",
+      "contract_id": "contract.example-v1",
+      "threshold_policy_id": "threshold.policy-v1",
+      "development_partition_id": "partition.development",
+      "final_partition_id": null,
+      "change_evidence_ids": [],
+      "regression_fixture_ids": []
+    },
+    {
+      "epoch_id": "epoch.two",
+      "parent_epoch_id": "epoch.one",
+      "toolchain_id": "analyzer.epoch-two",
+      "corpus_id": "corpus.epoch-two-v1",
+      "objective_id": "objective.reduce-incorrect-pass-v1",
+      "contract_id": "contract.example-v1",
+      "threshold_policy_id": "threshold.policy-v1",
+      "development_partition_id": "partition.selection",
+      "final_partition_id": "partition.final",
+      "change_evidence_ids": ["evidence.change-classifier-v1"],
+      "regression_fixture_ids": ["fixture.alias-call-v1", "fixture.indirect-call-v1"]
+    }
+  ],
+  "mncs_binding": {
+    "result_or_package_id": "result.analyzer-epoch-two",
+    "mncs_version": "0.3-rc.1",
+    "candidate_id": "candidate.epoch-two",
+    "contract_id": "contract.example-v1",
+    "environment_id": "environment.study-v1",
+    "status": "UNKNOWN"
+  },
+  "release_controls": {
+    "release_artifact_id": "analyzer.epoch-two",
+    "release_environment_id": "environment.study-v1",
+    "release_authority_id": "authority.release",
+    "build_procedure_id": "procedure.build-v1",
+    "package_procedure_id": "procedure.package-v1",
+    "monitoring": {
+      "signal_ids": ["signal.incorrect-pass", "signal.crash", "signal.timeout"],
+      "threshold_policy_id": "threshold.policy-v1",
+      "status": "PASS"
+    },
+    "rollback": {
+      "artifact_id": "analyzer.epoch-one",
+      "procedure_id": "procedure.rollback-v1",
+      "test_status": "PASS",
+      "evidence_id": "evidence.rollback-test-v1"
+    },
+    "regeneration_or_replacement": {
+      "procedure_id": "procedure.regeneration-v1",
+      "performed_at": "2026-07-28T00:00:00Z",
+      "status": "PASS",
+      "evidence_id": "evidence.regeneration-v1",
+      "replacement_candidate_id": "candidate.epoch-one"
+    },
+    "retirement": {
+      "trigger_ids": ["trigger.contract-change", "trigger.evaluator-regression"],
+      "retired": false,
+      "retired_at": null,
+      "reason": null,
+      "replacement_candidate_id": null
+    }
+  },
+  "extensions": {}
+}

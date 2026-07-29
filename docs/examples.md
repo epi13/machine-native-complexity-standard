@@ -18,6 +18,15 @@
 - **mncds-d4** — cumulative D4 process record with bounded generation, two candidates,
   a rejected alternative, protected holdout, independent evaluation, MNCS binding,
   tested rollback, regeneration drill, monitoring thresholds, and retirement triggers.
+- **mncds-0.1-rc** — stable RC aggregate for the two-epoch study; valid with
+  `UNKNOWN` external custody/independence.
+
+## Release-candidate assurance
+
+- **release-candidate-0.3** — adequate contract, mixed-version composed assurance,
+  separate MNCS/MNCDS results, threat record, and measurement profile.
+- **recursive-analyzer assurance bundle** — internally selected epoch-two analyzer
+  with an explicit `UNKNOWN` MNCS claim and review-required operational disposition.
 
 Run all examples with:
 
@@ -29,6 +38,8 @@ Run the deterministic process corpus with:
 
 ```bash
 PYTHONPATH=src python scripts/run-mncds-corpus
+PYTHONPATH=src ./scripts/run-release-candidate-corpus
+PYTHONPATH=src ./scripts/compare-release-candidate-consumers
 ```
 
 The example evidence files are illustrative records, not proof that the toy

@@ -30,9 +30,27 @@ jobs:
       - name: Validate JSON Schemas
         run: python -c "from mncs_validator.schemas import SCHEMA_NAMES, load_schema; [load_schema(n) for n in SCHEMA_NAMES]"
       - run: ./scripts/run-conformance-corpus
+      - run: python scripts/run-mncds-corpus
       - run: ./scripts/run-interoperability --python-only
       - run: ./scripts/verify-examples
       - run: python -m build
+      - run: git diff --check
+
+  release-candidate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.1
+      - uses: actions/setup-python@v6.2.0
+        with:
+          python-version: "3.11"
+          cache: pip
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.97.1
+          components: rustfmt, clippy
+      - run: python -m pip install -e '.[dev]'
+      - run: cargo fmt --manifest-path independent/rc-consumer/Cargo.toml -- --check
+      - run: make release-candidate-check
       - run: git diff --check
 
   multilingual-wave-one:

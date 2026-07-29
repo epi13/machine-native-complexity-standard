@@ -39,6 +39,11 @@ Validate the cumulative MNCDS-D4 reference record:
 mncds validate examples/mncds-d4/development-record.json
 mncds validate examples/mncds-d4/development-record.json --require-pass --json
 mncs schema mncds-development-record
+mncs schema contract-profile-0.3
+mncs schema assurance-case-0.3
+mncs validate-record assurance examples/release-candidate-0.3/assurance-case.json
+mncds validate examples/mncds-0.1-rc/development-record.json --json
+mncs corpus release-candidate --json
 ```
 
 MNCS and MNCDS produce separate results. An implementation PASS does not establish that

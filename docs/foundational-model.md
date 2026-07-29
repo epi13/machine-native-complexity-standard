@@ -1,8 +1,9 @@
 # Machine-native complexity foundation
 
 This page is informative. RFC 0005 proposes the corresponding experimental semantics.
-MNCS 0.2 and MNCDS 0.1-draft remain the current implementation and development claim
-families.
+MNCS 0.2 remains the stable implementation claim family. MNCS 0.3-rc.1 and
+MNCDS 0.1-rc.1 are implemented review candidates; MNCDS 0.1-draft remains
+historically addressable. These families remain separate.
 
 ## The foundation
 

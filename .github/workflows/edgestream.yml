@@ -69,7 +69,6 @@ jobs:
             case-studies/edgestream/evidence/results/gate-*.json \
             case-studies/edgestream/evidence/results/invariant-*.json \
             case-studies/edgestream/evidence/results/performance-*.json
-          git reset --hard HEAD
       - name: Run full controlled study
         shell: bash
         run: |

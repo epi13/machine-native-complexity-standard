@@ -3,6 +3,17 @@
 All notable changes are recorded here. MNCS uses semantic versioning for the
 validator and explicit version identifiers for the standard.
 
+## 0.3.0rc1 — unreleased
+
+- Add the MNCS 0.3-rc.1 and MNCDS 0.1-rc.1 specifications without changing
+  frozen historical claim semantics.
+- Add versioned contract, assurance/lifecycle, threat, measurement, and development
+  schemas with offline Python semantic validation.
+- Add a shared release-candidate corpus, an independent Rust consumer, migration and
+  governance material, and a reproducible two-epoch study.
+- Keep final release, external security/privacy acceptance, independent operation,
+  protected custody, and governance approval explicitly open.
+
 ## 0.2.0 — 2026-07-25
 
 - Publish normative MNCS 0.2 Attested Interoperability and RFC 0003.

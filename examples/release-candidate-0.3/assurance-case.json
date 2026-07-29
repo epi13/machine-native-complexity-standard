@@ -1,0 +1,174 @@
+{
+  "schema_version": "0.3-rc.1",
+  "mncs_version": "0.3-rc.1",
+  "assurance_case_id": "assurance.example-v1",
+  "subject_kind": "system",
+  "subject_id": "system.example-v1",
+  "root_claim_id": "claim.system",
+  "release_id": "release.example-v1",
+  "contract_profile_id": "contract-profile.example-v1",
+  "contract_profile_status": "PASS",
+  "criticality": "moderate",
+  "applicability_policy_id": "policy.applicability-v1",
+  "trust_policy_id": "policy.trust-v1",
+  "claims": [
+    {
+      "claim_id": "claim.system",
+      "subject_id": "system.example-v1",
+      "contract_id": "contract.example-v1",
+      "environment_id": "environment.example-v1",
+      "mncs_version": "0.3-rc.1",
+      "level": "MNCS-L2",
+      "base_status": "PASS",
+      "status": "PASS",
+      "result_id": "result.system-v1",
+      "scope_id": "scope.system-v1",
+      "evidence_ids": ["evidence.system-v1", "evidence.shared-v1"],
+      "mncds": {
+        "version": "0.1-rc.1",
+        "profile": "MNCDS-D2",
+        "status": "UNKNOWN",
+        "result_id": "result.development-v1",
+        "scope_id": "scope.development-v1",
+        "issues": ["Independent operator and organizational independence are not established locally."],
+        "limitations": ["Developer-controlled evidence is not externally protected."]
+      },
+      "freshness": {
+        "evaluated_at": "2026-07-01T00:00:00Z",
+        "valid_until": "2027-07-01T00:00:00Z",
+        "policy_id": "policy.freshness-v1",
+        "status": "PASS",
+        "revalidation_triggers": ["Material identity or policy change."]
+      },
+      "retired": false,
+      "issues": [],
+      "limitations": []
+    },
+    {
+      "claim_id": "claim.component",
+      "subject_id": "component.example-v1",
+      "contract_id": "contract.component-v1",
+      "environment_id": "environment.example-v1",
+      "mncs_version": "0.2",
+      "level": "MNCS-L1",
+      "base_status": "PASS",
+      "status": "PASS",
+      "result_id": "result.component-v1",
+      "scope_id": "scope.component-v1",
+      "evidence_ids": ["evidence.component-v1", "evidence.shared-v1"],
+      "mncds": {
+        "version": "0.1-draft",
+        "profile": "MNCDS-D1",
+        "status": "PASS",
+        "result_id": "result.component-development-v1",
+        "scope_id": "scope.component-development-v1",
+        "issues": [],
+        "limitations": ["Historical draft result remains under its original rules."]
+      },
+      "freshness": {
+        "evaluated_at": "2026-07-01T00:00:00Z",
+        "valid_until": "2027-07-01T00:00:00Z",
+        "policy_id": "policy.freshness-v1",
+        "status": "PASS",
+        "revalidation_triggers": ["Artifact, dependency, or environment change."]
+      },
+      "retired": false,
+      "issues": [],
+      "limitations": []
+    }
+  ],
+  "dependencies": [
+    {
+      "dependency_id": "dependency.system-component",
+      "source_claim_id": "claim.system",
+      "target_claim_id": "claim.component",
+      "relation": "runtime",
+      "required": true,
+      "interface_compatibility": "PASS",
+      "environment_compatibility": "PASS",
+      "shared_evidence_ids": ["evidence.shared-v1"],
+      "correlated_failure_group_ids": ["correlation.provider-v1"],
+      "invalidation_triggers": ["Component, interface, environment, or provider change."]
+    }
+  ],
+  "correlated_failure_groups": [
+    {
+      "group_id": "correlation.provider-v1",
+      "common_failure_source": "Both claims rely on the same developer-operated evaluator.",
+      "claim_ids": ["claim.system", "claim.component"],
+      "evidence_ids": ["evidence.shared-v1"],
+      "status": "PASS"
+    }
+  ],
+  "mncs": {
+    "version": "0.3-rc.1",
+    "level": "MNCS-L2",
+    "status": "PASS",
+    "result_id": "result.system-v1",
+    "scope_id": "scope.system-v1",
+    "issues": [],
+    "limitations": []
+  },
+  "mncds": {
+    "version": "0.1-rc.1",
+    "profile": "MNCDS-D2",
+    "status": "UNKNOWN",
+    "result_id": "result.development-v1",
+    "scope_id": "scope.development-v1",
+    "issues": ["Independent operator and organizational independence are not established locally."],
+    "limitations": ["Developer-controlled evidence is not externally protected."]
+  },
+  "display_label": "MNCDS-D2 / MNCS-L2",
+  "freshness": {
+    "evaluated_at": "2026-07-01T00:00:00Z",
+    "valid_until": "2027-07-01T00:00:00Z",
+    "policy_id": "policy.freshness-v1",
+    "status": "PASS",
+    "revalidation_triggers": ["Any material identity, evidence, dependency, or policy change."]
+  },
+  "material_changes": [],
+  "evidence_impact": {
+    "assessment_id": "impact.example-v1",
+    "affected_claim_ids": [],
+    "retained_evidence_ids": ["evidence.system-v1", "evidence.component-v1", "evidence.shared-v1"],
+    "invalidated_evidence_ids": [],
+    "required_new_evidence_ids": [],
+    "status": "PASS"
+  },
+  "revalidation": {
+    "revalidation_id": "revalidation.example-v1",
+    "mode": "none",
+    "scope_claim_ids": [],
+    "covered_change_ids": [],
+    "retained_evidence_ids": ["evidence.system-v1", "evidence.component-v1", "evidence.shared-v1"],
+    "new_evidence_ids": [],
+    "status": "PASS",
+    "performed_at": null
+  },
+  "lifecycle": {
+    "supersession": null,
+    "replacement": null,
+    "rollback": null,
+    "retirement": null
+  },
+  "threat_record_ids": ["threat.result-collapse-v1"],
+  "measurement_profile_ids": ["measurement.diagnostic-v1"],
+  "operational_disposition": {
+    "decision": "review_required",
+    "policy_id": "policy.operations-v1",
+    "authority_id": "OPEN",
+    "decided_at": "2026-07-01T00:00:00Z",
+    "rationale": "Conformance and operational acceptance are separate decisions."
+  },
+  "migration": {
+    "source_family": "none",
+    "source_version": null,
+    "source_identity": null,
+    "mode": "native",
+    "downgrade_detected": false,
+    "historical_facts_status": "PASS"
+  },
+  "unresolved_unknowns": ["Independent operator and organizational independence remain externally unverified."],
+  "limitations": ["This example does not assert external approval."],
+  "extensions": {}
+}

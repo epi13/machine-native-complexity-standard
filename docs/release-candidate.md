@@ -1,0 +1,57 @@
+# MNCS 0.3 / MNCDS 0.1 release candidate
+
+MNCS 0.3-rc.1 is the controlled-system-assurance proposal. It keeps MNCS 0.2
+identities, trust, attestations, packages, and implementation evidence while adding
+contract adequacy, claim/dependency composition, correlated failures, freshness,
+material change, evidence impact, revalidation, supersession, replacement, rollback,
+retirement, and migration.
+
+MNCDS 0.1-rc.1 is the stable-format development-process proposal. Its offline
+aggregate binds charter, baseline, environment, roles, authority overlap, partitions,
+protected evidence, generator, evaluators, candidate ledger/lineage, selection,
+reproducibility, recursive epochs, MNCS result, and D4 lifecycle controls.
+
+The specifications are `spec/MNCS-v0.3-rc.1.md` and
+`spec/MNCDS-v0.1-rc.1.md`. RFC 0004 and RFC 0005 remain Draft, so these are neither
+Accepted nor Final.
+
+## Discover and validate
+
+```console
+mncs version --json
+mncs schema contract-profile-0.3
+mncs schema assurance-case-0.3
+mncs schema threat-record-0.3
+mncs schema measurement-profile-0.3
+mncs schema mncds-development-record-0.1
+
+mncs validate-record contract examples/release-candidate-0.3/contract-profile.json
+mncs validate-record assurance examples/release-candidate-0.3/assurance-case.json
+mncs validate-record threat examples/release-candidate-0.3/threat-record.json
+mncs validate-record measurement examples/release-candidate-0.3/measurement-profile.json
+mncds validate examples/mncds-0.1-rc/development-record.json --json
+
+mncs migration-inspect examples/minimal/manifest.json --json
+mncs corpus release-candidate --json
+PYTHONPATH=src ./scripts/compare-release-candidate-consumers --json
+make release-candidate-check
+```
+
+Exit 4 means a distinct unsupported version. Ordinary validation is offline and
+executes no provider, analyzer, generator, candidate, compiler, benchmark, service, or
+evidence binary. Provider execution remains an explicit separate command.
+
+## Evidence boundary
+
+The Python and independent Rust consumers agree on all 72 golden vectors. This proves
+separate source and executable decision paths for the tested subset. It does not prove
+independent operation or organizational independence.
+
+The two-epoch study reduces final incorrect PASS from 3 to 0 and false negatives from
+2 to 0 without false-positive, crash, or timeout regression. Its final partition was
+developer-withheld until tool freeze, not externally protected. Internal selection is
+PASS; the MNCS and MNCDS assurance results remain UNKNOWN.
+
+The [gap matrix](release-gap-matrix.md), [security/privacy review](release-candidate-security-privacy-review.md),
+[migration model](migration-0.2-to-0.3-mncds-0.1.md), [known limitations](release-candidate-known-limitations.md),
+and [evidence index](release-candidate-evidence-index.md) define what remains.

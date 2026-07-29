@@ -1,0 +1,55 @@
+{
+  "suite_index_version": "0.1",
+  "corpus": "corpus.json",
+  "suites": [
+    {
+      "suite_id": "contract-adequacy",
+      "selection": {"id_prefix": "contract-"},
+      "required_categories": ["PASS", "FAIL", "UNKNOWN", "INVALID", "UNSUPPORTED"]
+    },
+    {
+      "suite_id": "composition",
+      "selection": {"id_prefix": "assurance-"},
+      "required_categories": ["PASS", "FAIL", "UNKNOWN", "INVALID", "UNSUPPORTED"]
+    },
+    {
+      "suite_id": "migration",
+      "selection": {
+        "ids": [
+          "assurance-mixed-mncs-levels",
+          "assurance-mixed-mncds-profiles",
+          "assurance-downgrade-attempt",
+          "assurance-unknown-version",
+          "mncds-unknown-version"
+        ]
+      },
+      "required_categories": ["PASS", "INVALID", "UNSUPPORTED"]
+    },
+    {
+      "suite_id": "mncds-d1-d4",
+      "selection": {"id_prefix": "mncds-"},
+      "required_categories": ["PASS", "FAIL", "UNKNOWN", "INVALID", "UNSUPPORTED"]
+    },
+    {
+      "suite_id": "security-regression",
+      "selection": {
+        "ids": [
+          "contract-circular",
+          "contract-unknown-field",
+          "assurance-dependency-cycle",
+          "assurance-correlated-provider-fail",
+          "assurance-attempted-result-collapse",
+          "assurance-downgrade-attempt",
+          "assurance-material-identity-unchanged",
+          "mncds-forbidden-generator-permission",
+          "mncds-holdout-contamination",
+          "mncds-evaluator-mutation",
+          "mncds-threshold-mutation",
+          "mncds-lineage-cycle",
+          "mncds-protected-evidence-reuse"
+        ]
+      },
+      "required_categories": ["FAIL", "UNKNOWN", "INVALID"]
+    }
+  ]
+}

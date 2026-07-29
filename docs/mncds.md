@@ -34,13 +34,14 @@ Install the repository and validate the reference record:
 ```bash
 python -m pip install -e '.[dev]'
 mncds validate examples/mncds-d4/development-record.json --require-pass
+mncds validate examples/mncds-0.1-rc/development-record.json --json
 ```
 
 Machine-readable output is available with `--json`. The validator performs schema and
 cross-record semantic checks. It never launches or imports a generator, candidate,
 evaluator, analyzer, benchmark, or evidence binary.
 
-The experimental validator currently checks:
+The release-candidate validator checks:
 
 - required roles and role uniqueness;
 - forbidden generator authority;
@@ -53,6 +54,10 @@ The experimental validator currently checks:
 - candidate/contract/environment agreement with an MNCS binding;
 - D4 rollback and regeneration-drill outcomes.
 
+The independent Rust consumer applies the same bounded RC semantics directly to the
+72-case golden corpus. It agrees with Python on all vectors without importing or
+executing Python.
+
 ## Recursive improvement
 
 Evidence from epoch `n` may improve a Joern harness, evaluator, generator, or search
@@ -62,6 +67,6 @@ a contaminated protected holdout for the same acceptance claim.
 
 ## Status
 
-MNCDS 0.1 remains a draft under RFC 0004. The validator and schemas are experimental
-implementations intended to make the proposal testable during review. They do not make
-the draft an accredited or accepted external standard.
+MNCDS 0.1-rc.1 remains a release-candidate proposal under Draft RFC 0004. The
+implementation is ready for independent review but does not make the proposal
+accredited, Accepted, Final, organizationally independent, or governance approved.

@@ -1,5 +1,9 @@
 # Post-Wave-Five local evidence roadmap
 
+> Historical note: this audit drove the MNCS 0.3-rc.1 / MNCDS 0.1-rc.1
+> implementation iteration. The current gap matrix and release evidence index
+> supersede its local-work recommendations; its external evidence record is preserved.
+
 This roadmap records the repository audit performed on 2026-07-28 from commit
 `0a5a1d0423c477749eec72be81b26a3b4ab07314`. It supersedes any earlier informal
 sequence of future waves. It is an implementation and evidence plan, not a normative
