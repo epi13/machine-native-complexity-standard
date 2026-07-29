@@ -172,8 +172,7 @@ def cross_host_agreement(records: list[dict[str, Any]]) -> tuple[str, list[str],
     summary = {
         "record_count": len(records),
         "host_environments": sorted(
-            f"{platform or 'unknown'}:{machine or 'unknown'}"
-            for platform, machine in platforms
+            f"{platform or 'unknown'}:{machine or 'unknown'}" for platform, machine in platforms
         ),
         "semantic_output_digests": sorted(digests),
         "required_gate_status": gate_status,

@@ -146,11 +146,9 @@ def test_missing_pi_is_unknown_and_mismatch_fails() -> None:
     ]
     missing = classify_reproduction_cohort(records, load(WAVE / "machine-plan.json"))
     assert missing["status"] == "UNKNOWN"
-    mismatched = records + [host("pios-arm", "Linux", "Raspberry Pi OS", "arm64")]
+    mismatched = [*records, host("pios-arm", "Linux", "Raspberry Pi OS", "arm64")]
     mismatched[-1]["semantic_output_digest"] = "f" * 64
-    mismatch_result = classify_reproduction_cohort(
-        mismatched, load(WAVE / "machine-plan.json")
-    )
+    mismatch_result = classify_reproduction_cohort(mismatched, load(WAVE / "machine-plan.json"))
     assert mismatch_result["status"] == "FAIL"
 
 

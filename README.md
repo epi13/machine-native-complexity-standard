@@ -46,6 +46,9 @@ The checked-in Wave Five physical-machine cohort remains `UNKNOWN` until the fiv
 
 Formal MNCS and MNCDS statuses remain `UNKNOWN`, promotion is prohibited, and full MNCDS-D4 is unclaimed. The repository can validate externally supplied evidence; it cannot self-create independence or protected custody.
 
+The [post-Wave-Five roadmap](docs/post-wave-five-roadmap.md) separates the remaining
+local, physical-machine, Arduino, external-actor, and governance work.
+
 ## Repository map
 
 - `spec/` — MNCS 0.2 and MNCDS 0.1-draft.

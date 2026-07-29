@@ -21,8 +21,7 @@ def run(
     return subprocess.run(
         command,
         input=data,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
         timeout=timeout,
         check=False,
         cwd=ROOT,

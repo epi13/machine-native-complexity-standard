@@ -638,6 +638,7 @@ def _decl_ref_name(node: dict[str, Any]) -> str | None:
 def _clang_ast(source: Path) -> tuple[dict[str, Any] | None, dict[str, Any]]:
     if not shutil.which("clang"):
         return None, {"status": "UNKNOWN", "reason": "clang is unavailable"}
+    source_argument = str(source.relative_to(ROOT)) if source.is_relative_to(ROOT) else str(source)
     command = [
         "clang",
         "-std=c11",
@@ -646,7 +647,11 @@ def _clang_ast(source: Path) -> tuple[dict[str, Any] | None, dict[str, Any]]:
         "-Xclang",
         "-ast-dump=json",
         "-fsyntax-only",
-        str(source),
+        source_argument,
+    ]
+    recorded_command = [
+        *command[:-1],
+        source_argument if source.is_relative_to(ROOT) else "<external-source>",
     ]
     try:
         completed = run(command, timeout=180.0)
@@ -655,7 +660,7 @@ def _clang_ast(source: Path) -> tuple[dict[str, Any] | None, dict[str, Any]]:
             raise TypeError("clang AST root is not an object")
         return ast, {
             "status": "PASS",
-            "command": command,
+            "command": recorded_command,
             "clang_version": compiler_version("clang"),
             "ast_sha256": _output_hash(completed.stdout),
         }
@@ -665,7 +670,7 @@ def _clang_ast(source: Path) -> tuple[dict[str, Any] | None, dict[str, Any]]:
         json.JSONDecodeError,
         TypeError,
     ) as error:
-        return None, {"status": "UNKNOWN", "reason": str(error), "command": command}
+        return None, {"status": "UNKNOWN", "reason": str(error), "command": recorded_command}
 
 
 def structural_checks(
@@ -797,6 +802,14 @@ def _cpu_model() -> str | None:
     return None
 
 
+def parse_joern_version(stdout: str, stderr: str) -> str | None:
+    """Extract a real Joern version without treating launcher warnings as identity."""
+
+    combined = stdout + "\n" + stderr
+    match = re.search(r"(?m)^Version:\s*([0-9][0-9A-Za-z.+-]*)\s*$", combined)
+    return match.group(1) if match else None
+
+
 def environment_record() -> dict[str, Any]:
     git = run(["git", "rev-parse", "HEAD"], check=False)
     affinity = sorted(os.sched_getaffinity(0)) if hasattr(os, "sched_getaffinity") else None
@@ -805,8 +818,8 @@ def environment_record() -> dict[str, Any]:
     joern_status = "UNKNOWN"
     if joern_path:
         joern = run([joern_path, "--version"], check=False, timeout=30.0)
-        if joern.returncode == 0:
-            joern_version = (joern.stdout or joern.stderr).splitlines()[0]
+        joern_version = parse_joern_version(joern.stdout, joern.stderr)
+        if joern.returncode == 0 and joern_version is not None:
             joern_status = "AVAILABLE"
     value = {
         "status": "PASS",

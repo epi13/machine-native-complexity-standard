@@ -21,7 +21,10 @@ struct Stats {
 impl Stats {
     fn push(&mut self, value: u32) -> Result<(), ParseError> {
         self.count = self.count.checked_add(1).ok_or(ParseError::Invalid)?;
-        self.sum = self.sum.checked_add(u64::from(value)).ok_or(ParseError::Invalid)?;
+        self.sum = self
+            .sum
+            .checked_add(u64::from(value))
+            .ok_or(ParseError::Invalid)?;
         self.checksum = self.checksum.wrapping_mul(PRIME) ^ value;
         Ok(())
     }
@@ -46,7 +49,9 @@ fn parse_decimal(record: &[u8]) -> Result<u32, ParseError> {
             return Err(ParseError::Invalid);
         }
         value = value.checked_mul(10).ok_or(ParseError::Invalid)?;
-        value = value.checked_add(u32::from(byte - b'0')).ok_or(ParseError::Invalid)?;
+        value = value
+            .checked_add(u32::from(byte - b'0'))
+            .ok_or(ParseError::Invalid)?;
         if value > MAX_VALUE {
             return Err(ParseError::Invalid);
         }
@@ -95,7 +100,9 @@ fn candidate(input: &[u8]) -> Result<Stats, ParseError> {
         if byte.is_ascii_digit() {
             digits = digits.checked_add(1).ok_or(ParseError::Invalid)?;
             value = value.checked_mul(10).ok_or(ParseError::Invalid)?;
-            value = value.checked_add(u32::from(byte - b'0')).ok_or(ParseError::Invalid)?;
+            value = value
+                .checked_add(u32::from(byte - b'0'))
+                .ok_or(ParseError::Invalid)?;
             if value > MAX_VALUE {
                 return Err(ParseError::Invalid);
             }
@@ -186,13 +193,7 @@ mod tests {
 
     #[test]
     fn malformed_is_rejected() {
-        let cases: [&[u8]; 5] = [
-            b"\n",
-            b"-1\n",
-            b"1 2\n",
-            b"100001\n",
-            b"1\r2\n",
-        ];
+        let cases: [&[u8]; 5] = [b"\n", b"-1\n", b"1 2\n", b"100001\n", b"1\r2\n"];
         for case in cases {
             assert!(reference(case).is_err());
             assert!(candidate(case).is_err());

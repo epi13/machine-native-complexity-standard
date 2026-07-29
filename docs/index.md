@@ -33,6 +33,7 @@ RFC 0006 proposes the non-normative multilingual language-evidence layer. Both r
 neither changes MNCS 0.2 or promotes MNCDS.
 
 - [Experimental language evidence profiles](language-evidence-profiles.md)
+- [Post-Wave-Five local evidence roadmap](post-wave-five-roadmap.md)
 - [RAVEL recursive inference and training research](ravel.md)
 - [dSense Desk Pet case study](dsense-desk-pet.md)
 - [Remote Water Resilience Controller case study](remote-water-control.md)

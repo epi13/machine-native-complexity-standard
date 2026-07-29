@@ -28,9 +28,9 @@ def main() -> int:
     schema = load(ROOT / "schemas/mncs-evidence-custody.schema.json")
     schema_findings = [
         error.message
-        for error in Draft202012Validator(
-            schema, format_checker=FormatChecker()
-        ).iter_errors(record)
+        for error in Draft202012Validator(schema, format_checker=FormatChecker()).iter_errors(
+            record
+        )
     ]
     findings = sorted(schema_findings + custody_findings(record))
     result = {

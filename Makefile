@@ -1,8 +1,10 @@
-.PHONY: format lint type test build examples corpus mncds-corpus interoperability docs edgestream-smoke edgestream-evidence remote-water-smoke remote-water-test remote-water-study edgestream-water-integration cacheforge-smoke cacheforge-test cacheforge-study cacheforge-epoch2 ravel-test ravel-training-check ravel-unified-check dsense-check language-profile-schema language-provider-corpus multilingual-stream cacheforge-language-profile multilingual-wave-one go-profile go-provider-corpus go-gateway composed-gateway multilingual-wave-two composed-wave-three multilingual-wave-three composed-wave-four multilingual-wave-four composed-wave-five multilingual-wave-five check
+.PHONY: format lint type test build examples corpus mncds-corpus interoperability docs edgestream-smoke edgestream-evidence remote-water-smoke remote-water-test remote-water-study edgestream-water-integration cacheforge-smoke cacheforge-test cacheforge-study cacheforge-epoch2 ravel-test ravel-training-check ravel-unified-check dsense-check dsense-avr-compile language-profile-schema language-provider-corpus multilingual-stream cacheforge-language-profile multilingual-wave-one go-profile go-provider-corpus go-gateway composed-gateway multilingual-wave-two composed-wave-three multilingual-wave-three composed-wave-four multilingual-wave-four composed-wave-five multilingual-wave-five check
 
 WAVE_THREE_OUTPUT ?= evidence/actual
 WAVE_FOUR_OUTPUT ?= evidence/actual
 WAVE_FIVE_OUTPUT ?= evidence/actual
+DSENSE_MACHINE_LABEL ?= local-host
+DSENSE_AVR_OUTPUT ?= evidence/local/avr-compile.json
 
 format:
 	ruff format .
@@ -53,6 +55,10 @@ ravel-unified-check:
 	$(MAKE) -C case-studies/ravel unified-check
 dsense-check:
 	$(MAKE) -C case-studies/dsense-desk-pet check
+dsense-avr-compile:
+	$(MAKE) -C case-studies/dsense-desk-pet avr-compile \
+		MACHINE_LABEL=$(DSENSE_MACHINE_LABEL) \
+		AVR_COMPILE_OUTPUT=$(DSENSE_AVR_OUTPUT)
 language-profile-schema:
 	PYTHONPATH=src ./scripts/validate-language-profile experimental/language-evidence/profiles/c11-reference-v0.1.json
 	PYTHONPATH=src ./scripts/validate-language-profile experimental/language-evidence/profiles/rust-1.97.1-edition-2024-v0.1.json

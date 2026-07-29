@@ -21,8 +21,7 @@ def build_report(
                 "observation": "throughput",
                 "status": benchmark["status"],
                 "reason": (
-                    "same workload and host; compiler, startup, and runtime "
-                    "differences remain"
+                    "same workload and host; compiler, startup, and runtime differences remain"
                 ),
                 "measurements": benchmark["measurements"],
             }
@@ -36,9 +35,7 @@ def build_report(
             {
                 "observation": "rust-safe-boundary",
                 "status": "PASS",
-                "method": (
-                    "crate contains no unsafe block; cargo clippy and tests pass"
-                ),
+                "method": ("crate contains no unsafe block; cargo clippy and tests pass"),
             },
             {
                 "observation": "tooling-burden",
@@ -51,9 +48,7 @@ def build_report(
             {
                 "observation": "source complexity score",
                 "status": "NOT_DEFINED",
-                "reason": (
-                    "language syntax and abstractions are not a common numerical scale"
-                ),
+                "reason": ("language syntax and abstractions are not a common numerical scale"),
             }
         ],
         "unknown": [
@@ -112,9 +107,7 @@ def build_report(
             "formal_mncds_status": "UNKNOWN",
             "promotion_authorized": False,
             "development_result": (
-                "PASS"
-                if direct_pass and benefit_status == "PASS"
-                else "REVIEW_REQUIRED"
+                "PASS" if direct_pass and benefit_status == "PASS" else "REVIEW_REQUIRED"
             ),
             "useful_benefit_status": benefit_status,
         },

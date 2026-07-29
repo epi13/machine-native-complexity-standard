@@ -20,10 +20,10 @@
     "-fno-omit-frame-pointer"
   ],
   "compiler": "clang",
-  "compiler_version": "Ubuntu clang version 18.1.3 (1ubuntu1)",
+  "compiler_version": "clang version 22.1.8 (Fedora 22.1.8-4.fc44)",
   "implementations": {
     "candidate": {
-      "binary_sha256": "sha256:bc8dd0863e2e30e6b2c99fade1ca047f6e7c1fefcb27dd4487d02bf37cda3250",
+      "binary_sha256": "sha256:389a25379bda165e2e941e8c34975a61d49598287830d511fef72c47e273db21",
       "cases": [
         {
           "chunk": 1,
@@ -32,12 +32,12 @@
           "metric": {
             "accepted": 6,
             "bytes": 256,
-            "elapsed_ns": 256167,
+            "elapsed_ns": 193430,
             "implementation": "machine-generated",
             "rejected": 0
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:d94963ccfca3a4da2506e43c5b63241d99c359bd1ae7ac35e7ab99f352c82054",
+          "stderr_sha256": "sha256:87bf1b749db8a65c983d4a22eb4a54ee5633a9c25e8a6a260749a6c915bc9eac",
           "workload": "edge-cases.bin"
         },
         {
@@ -47,12 +47,12 @@
           "metric": {
             "accepted": 6,
             "bytes": 256,
-            "elapsed_ns": 193821,
+            "elapsed_ns": 60842,
             "implementation": "machine-generated",
             "rejected": 0
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:e65aac7334a2312891089d2bc65076f97cd99b46e9145d91e9eb21562c2b65dc",
+          "stderr_sha256": "sha256:7a477bf34d688fe1f2d176e19f41b48d92f29d212504964e81634154f3e737b8",
           "workload": "edge-cases.bin"
         },
         {
@@ -62,12 +62,12 @@
           "metric": {
             "accepted": 6,
             "bytes": 256,
-            "elapsed_ns": 140441,
+            "elapsed_ns": 20387,
             "implementation": "machine-generated",
             "rejected": 0
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:91d4d5a563493b9b9f06c0efb75ce0c3d5b666928f9fa45ef042608a2d078841",
+          "stderr_sha256": "sha256:431994a6d0a8d39bfad1a961dc2112a1df62f6fd84d1136596be1f29d78caef6",
           "workload": "edge-cases.bin"
         },
         {
@@ -77,12 +77,12 @@
           "metric": {
             "accepted": 51200,
             "bytes": 1638656,
-            "elapsed_ns": 161624257,
+            "elapsed_ns": 184520280,
             "implementation": "machine-generated",
             "rejected": 0
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:69c976833347297e1c8aabe0ba5a98e0fb40085d773576238896600a41481755",
+          "stderr_sha256": "sha256:8b5d8d0923f2e07fe31139ad66ddd85bcc2e9673cf28e40d8e35b78779320d24",
           "workload": "high-cardinality.bin"
         },
         {
@@ -92,12 +92,12 @@
           "metric": {
             "accepted": 51200,
             "bytes": 1638656,
-            "elapsed_ns": 58600271,
+            "elapsed_ns": 58743823,
             "implementation": "machine-generated",
             "rejected": 0
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:7f5233e765aa4a3957b8d8b0dbb5643bd9c47a1abbf29b9324aea8074f966415",
+          "stderr_sha256": "sha256:1a58156483231ce3d6d8f71abba49ab2aaaefb89c5e5e3ccebab0613edb9d99c",
           "workload": "high-cardinality.bin"
         },
         {
@@ -107,12 +107,12 @@
           "metric": {
             "accepted": 51200,
             "bytes": 1638656,
-            "elapsed_ns": 61212534,
+            "elapsed_ns": 48943915,
             "implementation": "machine-generated",
             "rejected": 0
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:c1a7ec3ef89c09ded12bd8166721a86ef318c3385d8c7212e26b49d33b0e35a1",
+          "stderr_sha256": "sha256:7e8ebd2b8773ad9fcc9b8840e788544f751a72280851e163ca2c5dd30dfe8999",
           "workload": "high-cardinality.bin"
         },
         {
@@ -122,12 +122,12 @@
           "metric": {
             "accepted": 2247,
             "bytes": 83640,
-            "elapsed_ns": 14089275,
+            "elapsed_ns": 9465880,
             "implementation": "machine-generated",
             "rejected": 1310
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:cea980895eac3377168b9f2826f937c9f38da68bf224ac15613a5f0ab3ffc965",
+          "stderr_sha256": "sha256:5fa17529eedb8a7217a3b2154a9f3a4fce4e495834eda5dd2e8b89150f86ca69",
           "workload": "hostile.bin"
         },
         {
@@ -137,12 +137,12 @@
           "metric": {
             "accepted": 2247,
             "bytes": 83640,
-            "elapsed_ns": 4001859,
+            "elapsed_ns": 3673228,
             "implementation": "machine-generated",
             "rejected": 1310
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:33100c3d9b0c803e648127fe4ebc6d405bf6d74e2cf40aa25013b089ebafb811",
+          "stderr_sha256": "sha256:b0c958f8e37dc4fa05d531358711f6adfd1908292c6b7b688f77a940b253174d",
           "workload": "hostile.bin"
         },
         {
@@ -152,12 +152,12 @@
           "metric": {
             "accepted": 2247,
             "bytes": 83640,
-            "elapsed_ns": 4357450,
+            "elapsed_ns": 2811721,
             "implementation": "machine-generated",
             "rejected": 1310
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:3d83b36ea8526632f17aa64738b63296bf49e9b6b5fc976bd610b1f4fe8681b6",
+          "stderr_sha256": "sha256:b9e25d53f81929008dcf87c216ec26e1c9f579d40498a75e96257e8cbd369d1f",
           "workload": "hostile.bin"
         },
         {
@@ -167,12 +167,12 @@
           "metric": {
             "accepted": 38400,
             "bytes": 1228832,
-            "elapsed_ns": 122781014,
+            "elapsed_ns": 133227293,
             "implementation": "machine-generated",
             "rejected": 0
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:6219b7d835942f824aaa8cdad4d7f08374d705fb33fde651f79157e790a3a45e",
+          "stderr_sha256": "sha256:be4f99c8df00d7e2c1ed1a43c0cf78b55bd6cda3a7922c7b7b0e2125eca8f26c",
           "workload": "steady.bin"
         },
         {
@@ -182,12 +182,12 @@
           "metric": {
             "accepted": 38400,
             "bytes": 1228832,
-            "elapsed_ns": 42188394,
+            "elapsed_ns": 40920473,
             "implementation": "machine-generated",
             "rejected": 0
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:166aa3b8e4a80d0c88347d8be3cccd17b4d51d2dc11be9b151e33d338026a0ad",
+          "stderr_sha256": "sha256:34020ab1e594de9ba7462a7e0f26cb7f62c0a5f7f26f47053c76171ca88f6c3d",
           "workload": "steady.bin"
         },
         {
@@ -197,12 +197,12 @@
           "metric": {
             "accepted": 38400,
             "bytes": 1228832,
-            "elapsed_ns": 47634265,
+            "elapsed_ns": 33789573,
             "implementation": "machine-generated",
             "rejected": 0
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:e48eb63a2f6d4d98993e43f6feb7ab30006fd3745159e8784d93caea3c8bccf5",
+          "stderr_sha256": "sha256:c75d1858c76f01720f8900ba06a8b859e9d16ad16af211f6b324cabe1b421f02",
           "workload": "steady.bin"
         }
       ],
@@ -229,12 +229,12 @@
         "runner/edgestream_cli.c",
         "machine/edgestream_generated.c",
         "-o",
-        "/home/runner/work/machine-native-complexity-standard/machine-native-complexity-standard/case-studies/edgestream/build/candidate-sanitized"
+        "build/candidate-sanitized"
       ],
       "status": "PASS"
     },
     "reference": {
-      "binary_sha256": "sha256:7a793b268be973305f95caf452e70bc28b89fc7e9e474307d02222d1ca55db97",
+      "binary_sha256": "sha256:77ac69838c73586c70cecee5aae1f3001edfffdfb6dead52d75f45948d06e92b",
       "cases": [
         {
           "chunk": 1,
@@ -243,12 +243,12 @@
           "metric": {
             "accepted": 6,
             "bytes": 256,
-            "elapsed_ns": 250537,
+            "elapsed_ns": 184562,
             "implementation": "reference",
             "rejected": 0
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:18abe2b40405d99ea09f623d2d45163a12f0709b5c04fdc8e55b15177f046280",
+          "stderr_sha256": "sha256:39ad385b39c678ccb58060d84c3978bdf9095f83ce2eb9fca45a310226ddd786",
           "workload": "edge-cases.bin"
         },
         {
@@ -258,12 +258,12 @@
           "metric": {
             "accepted": 6,
             "bytes": 256,
-            "elapsed_ns": 232472,
+            "elapsed_ns": 59301,
             "implementation": "reference",
             "rejected": 0
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:ce9a097016c342c5a7003d19216f68540a65914bc4f9ab36a7e4a304a3473052",
+          "stderr_sha256": "sha256:bd3656664b64dd0f658db22c68791f7eb74e8fd9c4032061b22e382c6dfdb48e",
           "workload": "edge-cases.bin"
         },
         {
@@ -273,12 +273,12 @@
           "metric": {
             "accepted": 6,
             "bytes": 256,
-            "elapsed_ns": 139389,
+            "elapsed_ns": 21184,
             "implementation": "reference",
             "rejected": 0
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:002d85070aaaa705f7860a4b5b7ef6adf95b2cde9c593d4b645f5f2b4ea1862a",
+          "stderr_sha256": "sha256:bd8a161ca4c8e2ee364c7b31f31e159bee83c8ec996b01abce602d66c4810b3f",
           "workload": "edge-cases.bin"
         },
         {
@@ -288,12 +288,12 @@
           "metric": {
             "accepted": 51200,
             "bytes": 1638656,
-            "elapsed_ns": 168908365,
+            "elapsed_ns": 195025234,
             "implementation": "reference",
             "rejected": 0
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:cd220216a301ffd16dc3977d8bc72caa077f501e1573196b5b1cc50e29cae90b",
+          "stderr_sha256": "sha256:0ebed7de60cf2a4163017f9111b58279a779c2fe34c5a7645829baaa607edacc",
           "workload": "high-cardinality.bin"
         },
         {
@@ -303,12 +303,12 @@
           "metric": {
             "accepted": 51200,
             "bytes": 1638656,
-            "elapsed_ns": 74142247,
+            "elapsed_ns": 66395537,
             "implementation": "reference",
             "rejected": 0
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:6069ece07fe1bb90529c3c732f60ea9b2c9b3f589ac6345e64692a7c8bf06220",
+          "stderr_sha256": "sha256:d0d3aa18d931dcd43ef9a252de4545a60fd331363661cc9f383ec7902c81e10d",
           "workload": "high-cardinality.bin"
         },
         {
@@ -318,12 +318,12 @@
           "metric": {
             "accepted": 51200,
             "bytes": 1638656,
-            "elapsed_ns": 68659371,
+            "elapsed_ns": 57252367,
             "implementation": "reference",
             "rejected": 0
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:e9847facc6d1846dbe5490370aebf45570ff12149a280bbe5ed0e05918754434",
+          "stderr_sha256": "sha256:854e733bcba5469a93e7e0152fa744c820a6967e8d8fc76832aeb92e4ce24dd0",
           "workload": "high-cardinality.bin"
         },
         {
@@ -333,12 +333,12 @@
           "metric": {
             "accepted": 2247,
             "bytes": 83640,
-            "elapsed_ns": 9803367,
+            "elapsed_ns": 9999461,
             "implementation": "reference",
             "rejected": 1310
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:46e3854b277ca517d44fe98c984ed79a5329c1ebacd04ee0593763fc77ba9e20",
+          "stderr_sha256": "sha256:63fd5684dec3d922d5cbdae489dfcb3c7e1bb227dc0914befc28d8ea70282a49",
           "workload": "hostile.bin"
         },
         {
@@ -348,12 +348,12 @@
           "metric": {
             "accepted": 2247,
             "bytes": 83640,
-            "elapsed_ns": 4307027,
+            "elapsed_ns": 3552680,
             "implementation": "reference",
             "rejected": 1310
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:001ca7a5826c22ec349dcb62e8f9d4985060a55f0635ddfd57d6f2a97344ebc0",
+          "stderr_sha256": "sha256:9b8d33e642b30080a00d27cb4ab7d47be7ecc8eaae523c1e4ed5e19bc89a2a34",
           "workload": "hostile.bin"
         },
         {
@@ -363,12 +363,12 @@
           "metric": {
             "accepted": 2247,
             "bytes": 83640,
-            "elapsed_ns": 4688837,
+            "elapsed_ns": 2904690,
             "implementation": "reference",
             "rejected": 1310
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:5c23cadf39fc63b87ab32d6e48cd10f3b090ec8debac8de3a8551bc21b15a694",
+          "stderr_sha256": "sha256:ef18e5b96eed71bfb33094876a86ca66b6cf108e8606a63fcf113a49b32fcaca",
           "workload": "hostile.bin"
         },
         {
@@ -378,12 +378,12 @@
           "metric": {
             "accepted": 38400,
             "bytes": 1228832,
-            "elapsed_ns": 127523306,
+            "elapsed_ns": 139652534,
             "implementation": "reference",
             "rejected": 0
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:f414db334b98c80cf6c0325850002a9a4f2bd69b98a9ec938eddec5954357670",
+          "stderr_sha256": "sha256:aa81e68ad6f82ed345a6bc6077a2c8a816802c2c54c8b204d305b668cfbaa57a",
           "workload": "steady.bin"
         },
         {
@@ -393,12 +393,12 @@
           "metric": {
             "accepted": 38400,
             "bytes": 1228832,
-            "elapsed_ns": 60628744,
+            "elapsed_ns": 45735577,
             "implementation": "reference",
             "rejected": 0
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:9afade1f3a3edcb854505a46b6eaee7d6e55faf6e7f519ae50eab4ed9aeb8014",
+          "stderr_sha256": "sha256:c4e76e044dc565ae09514a0b860e23290c19658595592f26a2a74bf6c70871ff",
           "workload": "steady.bin"
         },
         {
@@ -408,12 +408,12 @@
           "metric": {
             "accepted": 38400,
             "bytes": 1228832,
-            "elapsed_ns": 44069405,
+            "elapsed_ns": 41538981,
             "implementation": "reference",
             "rejected": 0
           },
           "status": "PASS",
-          "stderr_sha256": "sha256:1a588ad9a266a8c40f295e2b3c8f70e3e05a5c0d878434dcc32b5967ba1aa2de",
+          "stderr_sha256": "sha256:caa97488748cfea43a3a6f4f556949f80f1084fb6ba77489e6d939a5ab2a4597",
           "workload": "steady.bin"
         }
       ],
@@ -440,7 +440,7 @@
         "runner/edgestream_cli.c",
         "reference/edgestream_reference.c",
         "-o",
-        "/home/runner/work/machine-native-complexity-standard/machine-native-complexity-standard/case-studies/edgestream/build/reference-sanitized"
+        "build/reference-sanitized"
       ],
       "status": "PASS"
     }

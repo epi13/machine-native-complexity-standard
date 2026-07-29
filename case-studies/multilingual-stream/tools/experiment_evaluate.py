@@ -32,12 +32,9 @@ def functional_observations(
         )
         if not passed:
             raise SystemExit(
-                f"functional failure: {name}: {first.returncode} "
-                f"{first.stdout!r} {first.stderr!r}"
+                f"functional failure: {name}: {first.returncode} {first.stdout!r} {first.stderr!r}"
             )
-    malformed = json.loads(
-        (ROOT / "corpus/malformed.json").read_text(encoding="utf-8")
-    )
+    malformed = json.loads((ROOT / "corpus/malformed.json").read_text(encoding="utf-8"))
     for name, command in implementations.items():
         passed = all(
             (result := run(command, data=item.encode("utf-8"))).returncode == 2
@@ -80,9 +77,7 @@ def provider_observations() -> list[dict[str, object]]:
                 "source_text": fixture.read_text(encoding="utf-8"),
                 "subject_id": f"fixture:multilingual-stream:{language}:defective",
                 "contract_id": "contract:multilingual-bounded-stream-0.1",
-                "environment_id": (
-                    "environment:multilingual-stream-wave1-linux-x86_64"
-                ),
+                "environment_id": ("environment:multilingual-stream-wave1-linux-x86_64"),
                 "evidence_partition": "public-development",
             },
             "limits": {"wall_seconds": 2, "input_bytes": 65_536},
@@ -90,9 +85,7 @@ def provider_observations() -> list[dict[str, object]]:
         }
         completed = run(
             ["python3", str(provider_root / f"{language}_provider.py")],
-            data=(
-                json.dumps(request, sort_keys=True, separators=(",", ":")) + "\n"
-            ).encode(),
+            data=(json.dumps(request, sort_keys=True, separators=(",", ":")) + "\n").encode(),
             timeout=2,
         )
         response = json.loads(completed.stdout) if completed.returncode == 0 else {}
@@ -135,10 +128,7 @@ def benchmark_report(
     *,
     skip: bool,
 ) -> dict[str, object]:
-    data = (
-        "\n".join(str((index * 7_919) % 100_001) for index in range(25_000))
-        + "\n"
-    ).encode()
+    data = ("\n".join(str((index * 7_919) % 100_001) for index in range(25_000)) + "\n").encode()
     report: dict[str, object] = {
         "status": "SKIPPED",
         "repeats": REPEATS,
@@ -154,9 +144,7 @@ def benchmark_report(
     }
     if skip:
         return report
-    measurements = {
-        name: measure(command, data) for name, command in implementations.items()
-    }
+    measurements = {name: measure(command, data) for name, command in implementations.items()}
     passing: list[str] = []
     ratios: dict[str, float] = {}
     for language in ("c11", "rust"):

@@ -51,7 +51,7 @@
   "identities": {
     "boundary_manifest": "sha256:f0c1de8aa2e502260429c3748a222ff2b83a9a8b987f65c306b84d182e3b51c4",
     "integration_runner": "sha256:381e870e2249fc9ad97ac74c8eecd559eeefa76f61f663644899154a648168bf",
-    "edgestream_manifest": "sha256:af2ebc72a4b19f7a012ef24b2646c7d741f3c6c3db40899970172c3fd087d67a",
+    "edgestream_manifest": "sha256:1b5ee9b5402c63798e55edbc9d48f24d5b1f525af6c423d3ac0c202061c58bb2",
     "edgestream_candidate": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
     "remote_water_assurance": "sha256:dc8b7c4c89d995225d3135dfb63629061d2fd1b7a869df1bb29c23e46d9a7bc1",
     "remote_water_controller": "sha256:a7660217094c2c6c92cf73cfab13b7390324c71d13e9751024e6a0df62dc0d97",

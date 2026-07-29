@@ -69,15 +69,10 @@ def sanitizer_observation(gcc: str, build: Path) -> tuple[str, str]:
         subprocess.run(
             command,
             check=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
         )
         result = run([str(sanitizer)], data=valid)
     except (OSError, subprocess.SubprocessError):
         return "UNKNOWN", "sanitizer toolchain unavailable"
-    status = (
-        "PASS"
-        if result.returncode == 0 and result.stdout == oracle(valid)
-        else "FAIL"
-    )
+    status = "PASS" if result.returncode == 0 and result.stdout == oracle(valid) else "FAIL"
     return status, "ASan and UBSan execution on declared corpus"

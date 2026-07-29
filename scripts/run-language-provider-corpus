@@ -162,7 +162,7 @@ def validate_case(
             )
         if result.get("analyzer_id") != PROVIDERS[language]["id"]:
             findings.append(f"{language}/{case}: analyzer identity mismatch")
-        if result.get("analyer_version") != PROVIDERS[language]["version"]:
+        if result.get("analyzer_version") != PROVIDERS[language]["version"]:
             findings.append(f"{language}/{case}: analyzer version mismatch")
         if (
             result.get("configuration_id")

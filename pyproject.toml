@@ -57,7 +57,14 @@ where = ["src"]
 [tool.ruff]
 target-version = "py311"
 line-length = 100
-extend-exclude = ["conformance-corpus", "examples", "case-studies/dsense-desk-pet"]
+extend-exclude = [
+  "conformance-corpus",
+  "examples",
+  "case-studies/dsense-desk-pet",
+  "case-studies/composed-gateway/tools_generate.py",
+  "case-studies/composed-gateway/wave-three",
+  "case-studies/composed-gateway/wave-five/bundle-src",
+]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "SIM", "RUF"]

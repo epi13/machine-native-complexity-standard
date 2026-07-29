@@ -35,9 +35,7 @@ def fixture_host(
     return {
         "bundle_id": "composed-gateway-wave5-portable-evaluator-v1",
         "manifest_identity": load(WAVE / "bundle-lock.json")["manifest_identity"],
-        "candidate_freeze_identity": load(WAVE / "bundle-lock.json")[
-            "candidate_freeze_identity"
-        ],
+        "candidate_freeze_identity": load(WAVE / "bundle-lock.json")["candidate_freeze_identity"],
         "machine_label": label,
         "operator_id": "operator:alexander",
         "result": "PASS",

@@ -101,9 +101,7 @@ def classify_reproduction_cohort(
         thresholds = plan.get("thresholds", {})
         if isinstance(thresholds, dict):
             minimum_hosts = int(thresholds.get("minimum_hosts", minimum_hosts))
-            minimum_os_families = int(
-                thresholds.get("minimum_os_families", minimum_os_families)
-            )
+            minimum_os_families = int(thresholds.get("minimum_os_families", minimum_os_families))
             minimum_distributions = int(
                 thresholds.get("minimum_distributions", minimum_distributions)
             )

@@ -50,8 +50,7 @@ def main() -> int:
         "formal_mncs_status": "UNKNOWN",
         "formal_mncds_status": "UNKNOWN",
         "promotion_authorized": False,
-        "evaluator_identity": "sha256:"
-        + hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "evaluator_identity": "sha256:" + hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "extensions": {
             "mncs.dev:wave": "five",
             "mncs.dev:operator_controlled": True,

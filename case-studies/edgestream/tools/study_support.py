@@ -255,7 +255,7 @@ def compile_binary(
         "runner/edgestream_cli.c",
         str(implementation.relative_to(ROOT)),
         "-o",
-        str(output),
+        str(output.relative_to(ROOT)),
     ]
     run(command)
     return command

@@ -25,11 +25,7 @@ def main() -> int:
     gcc = shutil.which("gcc")
     cargo = shutil.which("cargo")
     if gcc is None or cargo is None:
-        missing = [
-            name
-            for name, value in (("gcc", gcc), ("cargo", cargo))
-            if value is None
-        ]
+        missing = [name for name, value in (("gcc", gcc), ("cargo", cargo)) if value is None]
         raise SystemExit("missing required tool(s): " + ", ".join(missing))
     with tempfile.TemporaryDirectory(prefix="mncs-multilingual-") as temporary:
         build = Path(temporary)

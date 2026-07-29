@@ -13,7 +13,7 @@
     },
     {
       "path": "src/main.rs",
-      "sha256": "36d3d18a9c8521e8f3238f57edb0bed4a94f377d59b608dadc990413da4a0a13",
+      "sha256": "673c265b3009bbf0c2eb57d46a982ae98fc1aae9678f41a020f7fa4507ea1ded",
       "template": "generator/templates/rust-candidate.rs.in"
     }
   ],

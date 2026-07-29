@@ -14,7 +14,7 @@
         }
       ],
       "generator_id": "generator-edgestream-v1",
-      "objective_value": 57775029.73687879,
+      "objective_value": 66699589.29757428,
       "parent_ids": []
     },
     {
@@ -52,7 +52,7 @@
         }
       ],
       "generator_id": "generator-edgestream-v1",
-      "objective_value": 96149681.41409333,
+      "objective_value": 102261365.4882976,
       "parent_ids": [
         "candidate-readable-reference"
       ]

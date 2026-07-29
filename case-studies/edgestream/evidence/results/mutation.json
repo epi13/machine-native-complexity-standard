@@ -6,7 +6,7 @@
       "candidate_metric": {
         "accepted": 0,
         "bytes": 32,
-        "elapsed_ns": 11431,
+        "elapsed_ns": 8621,
         "implementation": "machine-generated",
         "rejected": 1
       },
@@ -19,7 +19,7 @@
       "reference_metric": {
         "accepted": 0,
         "bytes": 32,
-        "elapsed_ns": 23343,
+        "elapsed_ns": 14506,
         "implementation": "reference",
         "rejected": 1
       },
@@ -32,7 +32,7 @@
       "candidate_metric": {
         "accepted": 0,
         "bytes": 32,
-        "elapsed_ns": 10950,
+        "elapsed_ns": 12315,
         "implementation": "machine-generated",
         "rejected": 1
       },
@@ -45,7 +45,7 @@
       "reference_metric": {
         "accepted": 0,
         "bytes": 32,
-        "elapsed_ns": 10820,
+        "elapsed_ns": 8252,
         "implementation": "reference",
         "rejected": 1
       },
@@ -58,7 +58,7 @@
       "candidate_metric": {
         "accepted": 0,
         "bytes": 32,
-        "elapsed_ns": 15940,
+        "elapsed_ns": 9979,
         "implementation": "machine-generated",
         "rejected": 1
       },
@@ -71,7 +71,7 @@
       "reference_metric": {
         "accepted": 0,
         "bytes": 32,
-        "elapsed_ns": 17412,
+        "elapsed_ns": 9044,
         "implementation": "reference",
         "rejected": 1
       },
@@ -84,176 +84,176 @@
       "candidate_metric": {
         "accepted": 0,
         "bytes": 32,
+        "elapsed_ns": 9395,
+        "implementation": "machine-generated",
+        "rejected": 1
+      },
+      "candidate_output_sha256": "sha256:ef58ef10f805786c5f624c4f111a84bec184ce466d7d9c65160825d259c8ac57",
+      "chunk": 1,
+      "expected_rejection_reason": "version",
+      "mutation": "unsupported-version-with-valid-checksum",
+      "outputs_equal": true,
+      "reference_exit": 0,
+      "reference_metric": {
+        "accepted": 0,
+        "bytes": 32,
+        "elapsed_ns": 10511,
+        "implementation": "reference",
+        "rejected": 1
+      },
+      "reference_output_sha256": "sha256:ef58ef10f805786c5f624c4f111a84bec184ce466d7d9c65160825d259c8ac57",
+      "rejection_reason_observed": true,
+      "status": "PASS"
+    },
+    {
+      "candidate_exit": 0,
+      "candidate_metric": {
+        "accepted": 0,
+        "bytes": 32,
+        "elapsed_ns": 8093,
+        "implementation": "machine-generated",
+        "rejected": 1
+      },
+      "candidate_output_sha256": "sha256:ef58ef10f805786c5f624c4f111a84bec184ce466d7d9c65160825d259c8ac57",
+      "chunk": 5,
+      "expected_rejection_reason": "version",
+      "mutation": "unsupported-version-with-valid-checksum",
+      "outputs_equal": true,
+      "reference_exit": 0,
+      "reference_metric": {
+        "accepted": 0,
+        "bytes": 32,
+        "elapsed_ns": 10823,
+        "implementation": "reference",
+        "rejected": 1
+      },
+      "reference_output_sha256": "sha256:ef58ef10f805786c5f624c4f111a84bec184ce466d7d9c65160825d259c8ac57",
+      "rejection_reason_observed": true,
+      "status": "PASS"
+    },
+    {
+      "candidate_exit": 0,
+      "candidate_metric": {
+        "accepted": 0,
+        "bytes": 32,
+        "elapsed_ns": 7709,
+        "implementation": "machine-generated",
+        "rejected": 1
+      },
+      "candidate_output_sha256": "sha256:ef58ef10f805786c5f624c4f111a84bec184ce466d7d9c65160825d259c8ac57",
+      "chunk": 31,
+      "expected_rejection_reason": "version",
+      "mutation": "unsupported-version-with-valid-checksum",
+      "outputs_equal": true,
+      "reference_exit": 0,
+      "reference_metric": {
+        "accepted": 0,
+        "bytes": 32,
+        "elapsed_ns": 8828,
+        "implementation": "reference",
+        "rejected": 1
+      },
+      "reference_output_sha256": "sha256:ef58ef10f805786c5f624c4f111a84bec184ce466d7d9c65160825d259c8ac57",
+      "rejection_reason_observed": true,
+      "status": "PASS"
+    },
+    {
+      "candidate_exit": 1,
+      "candidate_metric": {
+        "accepted": 0,
+        "bytes": 32,
+        "elapsed_ns": 11013,
+        "implementation": "machine-generated",
+        "rejected": 32
+      },
+      "candidate_output_sha256": "sha256:dc4ea6adcbb3df21831bd8c1d544c098d1a722469fe3532d3c5c916917a0727c",
+      "chunk": 1,
+      "expected_rejection_reason": "length",
+      "mutation": "invalid-frame-length",
+      "outputs_equal": true,
+      "reference_exit": 1,
+      "reference_metric": {
+        "accepted": 0,
+        "bytes": 32,
+        "elapsed_ns": 14291,
+        "implementation": "reference",
+        "rejected": 32
+      },
+      "reference_output_sha256": "sha256:dc4ea6adcbb3df21831bd8c1d544c098d1a722469fe3532d3c5c916917a0727c",
+      "rejection_reason_observed": true,
+      "status": "PASS"
+    },
+    {
+      "candidate_exit": 1,
+      "candidate_metric": {
+        "accepted": 0,
+        "bytes": 32,
+        "elapsed_ns": 11528,
+        "implementation": "machine-generated",
+        "rejected": 32
+      },
+      "candidate_output_sha256": "sha256:dc4ea6adcbb3df21831bd8c1d544c098d1a722469fe3532d3c5c916917a0727c",
+      "chunk": 5,
+      "expected_rejection_reason": "length",
+      "mutation": "invalid-frame-length",
+      "outputs_equal": true,
+      "reference_exit": 1,
+      "reference_metric": {
+        "accepted": 0,
+        "bytes": 32,
+        "elapsed_ns": 13149,
+        "implementation": "reference",
+        "rejected": 32
+      },
+      "reference_output_sha256": "sha256:dc4ea6adcbb3df21831bd8c1d544c098d1a722469fe3532d3c5c916917a0727c",
+      "rejection_reason_observed": true,
+      "status": "PASS"
+    },
+    {
+      "candidate_exit": 1,
+      "candidate_metric": {
+        "accepted": 0,
+        "bytes": 32,
+        "elapsed_ns": 10544,
+        "implementation": "machine-generated",
+        "rejected": 32
+      },
+      "candidate_output_sha256": "sha256:dc4ea6adcbb3df21831bd8c1d544c098d1a722469fe3532d3c5c916917a0727c",
+      "chunk": 31,
+      "expected_rejection_reason": "length",
+      "mutation": "invalid-frame-length",
+      "outputs_equal": true,
+      "reference_exit": 1,
+      "reference_metric": {
+        "accepted": 0,
+        "bytes": 32,
+        "elapsed_ns": 13048,
+        "implementation": "reference",
+        "rejected": 32
+      },
+      "reference_output_sha256": "sha256:dc4ea6adcbb3df21831bd8c1d544c098d1a722469fe3532d3c5c916917a0727c",
+      "rejection_reason_observed": true,
+      "status": "PASS"
+    },
+    {
+      "candidate_exit": 1,
+      "candidate_metric": {
+        "accepted": 0,
+        "bytes": 17,
+        "elapsed_ns": 10422,
+        "implementation": "machine-generated",
+        "rejected": 1
+      },
+      "candidate_output_sha256": "sha256:b4086de551e6d8d70424cc7b8bc3cc27ea39150842d3b97e423214eb55570f98",
+      "chunk": 1,
+      "expected_rejection_reason": "truncated",
+      "mutation": "truncated-frame",
+      "outputs_equal": true,
+      "reference_exit": 1,
+      "reference_metric": {
+        "accepted": 0,
+        "bytes": 17,
         "elapsed_ns": 11281,
-        "implementation": "machine-generated",
-        "rejected": 1
-      },
-      "candidate_output_sha256": "sha256:ef58ef10f805786c5f624c4f111a84bec184ce466d7d9c65160825d259c8ac57",
-      "chunk": 1,
-      "expected_rejection_reason": "version",
-      "mutation": "unsupported-version-with-valid-checksum",
-      "outputs_equal": true,
-      "reference_exit": 0,
-      "reference_metric": {
-        "accepted": 0,
-        "bytes": 32,
-        "elapsed_ns": 19206,
-        "implementation": "reference",
-        "rejected": 1
-      },
-      "reference_output_sha256": "sha256:ef58ef10f805786c5f624c4f111a84bec184ce466d7d9c65160825d259c8ac57",
-      "rejection_reason_observed": true,
-      "status": "PASS"
-    },
-    {
-      "candidate_exit": 0,
-      "candidate_metric": {
-        "accepted": 0,
-        "bytes": 32,
-        "elapsed_ns": 10410,
-        "implementation": "machine-generated",
-        "rejected": 1
-      },
-      "candidate_output_sha256": "sha256:ef58ef10f805786c5f624c4f111a84bec184ce466d7d9c65160825d259c8ac57",
-      "chunk": 5,
-      "expected_rejection_reason": "version",
-      "mutation": "unsupported-version-with-valid-checksum",
-      "outputs_equal": true,
-      "reference_exit": 0,
-      "reference_metric": {
-        "accepted": 0,
-        "bytes": 32,
-        "elapsed_ns": 10540,
-        "implementation": "reference",
-        "rejected": 1
-      },
-      "reference_output_sha256": "sha256:ef58ef10f805786c5f624c4f111a84bec184ce466d7d9c65160825d259c8ac57",
-      "rejection_reason_observed": true,
-      "status": "PASS"
-    },
-    {
-      "candidate_exit": 0,
-      "candidate_metric": {
-        "accepted": 0,
-        "bytes": 32,
-        "elapsed_ns": 10179,
-        "implementation": "machine-generated",
-        "rejected": 1
-      },
-      "candidate_output_sha256": "sha256:ef58ef10f805786c5f624c4f111a84bec184ce466d7d9c65160825d259c8ac57",
-      "chunk": 31,
-      "expected_rejection_reason": "version",
-      "mutation": "unsupported-version-with-valid-checksum",
-      "outputs_equal": true,
-      "reference_exit": 0,
-      "reference_metric": {
-        "accepted": 0,
-        "bytes": 32,
-        "elapsed_ns": 11572,
-        "implementation": "reference",
-        "rejected": 1
-      },
-      "reference_output_sha256": "sha256:ef58ef10f805786c5f624c4f111a84bec184ce466d7d9c65160825d259c8ac57",
-      "rejection_reason_observed": true,
-      "status": "PASS"
-    },
-    {
-      "candidate_exit": 1,
-      "candidate_metric": {
-        "accepted": 0,
-        "bytes": 32,
-        "elapsed_ns": 15679,
-        "implementation": "machine-generated",
-        "rejected": 32
-      },
-      "candidate_output_sha256": "sha256:dc4ea6adcbb3df21831bd8c1d544c098d1a722469fe3532d3c5c916917a0727c",
-      "chunk": 1,
-      "expected_rejection_reason": "length",
-      "mutation": "invalid-frame-length",
-      "outputs_equal": true,
-      "reference_exit": 1,
-      "reference_metric": {
-        "accepted": 0,
-        "bytes": 32,
-        "elapsed_ns": 17502,
-        "implementation": "reference",
-        "rejected": 32
-      },
-      "reference_output_sha256": "sha256:dc4ea6adcbb3df21831bd8c1d544c098d1a722469fe3532d3c5c916917a0727c",
-      "rejection_reason_observed": true,
-      "status": "PASS"
-    },
-    {
-      "candidate_exit": 1,
-      "candidate_metric": {
-        "accepted": 0,
-        "bytes": 32,
-        "elapsed_ns": 13405,
-        "implementation": "machine-generated",
-        "rejected": 32
-      },
-      "candidate_output_sha256": "sha256:dc4ea6adcbb3df21831bd8c1d544c098d1a722469fe3532d3c5c916917a0727c",
-      "chunk": 5,
-      "expected_rejection_reason": "length",
-      "mutation": "invalid-frame-length",
-      "outputs_equal": true,
-      "reference_exit": 1,
-      "reference_metric": {
-        "accepted": 0,
-        "bytes": 32,
-        "elapsed_ns": 13395,
-        "implementation": "reference",
-        "rejected": 32
-      },
-      "reference_output_sha256": "sha256:dc4ea6adcbb3df21831bd8c1d544c098d1a722469fe3532d3c5c916917a0727c",
-      "rejection_reason_observed": true,
-      "status": "PASS"
-    },
-    {
-      "candidate_exit": 1,
-      "candidate_metric": {
-        "accepted": 0,
-        "bytes": 32,
-        "elapsed_ns": 13305,
-        "implementation": "machine-generated",
-        "rejected": 32
-      },
-      "candidate_output_sha256": "sha256:dc4ea6adcbb3df21831bd8c1d544c098d1a722469fe3532d3c5c916917a0727c",
-      "chunk": 31,
-      "expected_rejection_reason": "length",
-      "mutation": "invalid-frame-length",
-      "outputs_equal": true,
-      "reference_exit": 1,
-      "reference_metric": {
-        "accepted": 0,
-        "bytes": 32,
-        "elapsed_ns": 17283,
-        "implementation": "reference",
-        "rejected": 32
-      },
-      "reference_output_sha256": "sha256:dc4ea6adcbb3df21831bd8c1d544c098d1a722469fe3532d3c5c916917a0727c",
-      "rejection_reason_observed": true,
-      "status": "PASS"
-    },
-    {
-      "candidate_exit": 1,
-      "candidate_metric": {
-        "accepted": 0,
-        "bytes": 17,
-        "elapsed_ns": 10800,
-        "implementation": "machine-generated",
-        "rejected": 1
-      },
-      "candidate_output_sha256": "sha256:b4086de551e6d8d70424cc7b8bc3cc27ea39150842d3b97e423214eb55570f98",
-      "chunk": 1,
-      "expected_rejection_reason": "truncated",
-      "mutation": "truncated-frame",
-      "outputs_equal": true,
-      "reference_exit": 1,
-      "reference_metric": {
-        "accepted": 0,
-        "bytes": 17,
-        "elapsed_ns": 15619,
         "implementation": "reference",
         "rejected": 1
       },
@@ -266,7 +266,7 @@
       "candidate_metric": {
         "accepted": 0,
         "bytes": 17,
-        "elapsed_ns": 12663,
+        "elapsed_ns": 8234,
         "implementation": "machine-generated",
         "rejected": 1
       },
@@ -279,7 +279,7 @@
       "reference_metric": {
         "accepted": 0,
         "bytes": 17,
-        "elapsed_ns": 10379,
+        "elapsed_ns": 8864,
         "implementation": "reference",
         "rejected": 1
       },
@@ -292,7 +292,7 @@
       "candidate_metric": {
         "accepted": 0,
         "bytes": 17,
-        "elapsed_ns": 9898,
+        "elapsed_ns": 7493,
         "implementation": "machine-generated",
         "rejected": 1
       },
@@ -305,7 +305,7 @@
       "reference_metric": {
         "accepted": 0,
         "bytes": 17,
-        "elapsed_ns": 11171,
+        "elapsed_ns": 8664,
         "implementation": "reference",
         "rejected": 1
       },
@@ -318,7 +318,7 @@
       "candidate_metric": {
         "accepted": 1,
         "bytes": 36,
-        "elapsed_ns": 13735,
+        "elapsed_ns": 11124,
         "implementation": "machine-generated",
         "rejected": 4
       },
@@ -331,7 +331,7 @@
       "reference_metric": {
         "accepted": 1,
         "bytes": 36,
-        "elapsed_ns": 17332,
+        "elapsed_ns": 15586,
         "implementation": "reference",
         "rejected": 4
       },
@@ -344,7 +344,7 @@
       "candidate_metric": {
         "accepted": 1,
         "bytes": 36,
-        "elapsed_ns": 12223,
+        "elapsed_ns": 10548,
         "implementation": "machine-generated",
         "rejected": 4
       },
@@ -357,7 +357,7 @@
       "reference_metric": {
         "accepted": 1,
         "bytes": 36,
-        "elapsed_ns": 11651,
+        "elapsed_ns": 10481,
         "implementation": "reference",
         "rejected": 4
       },
@@ -370,7 +370,7 @@
       "candidate_metric": {
         "accepted": 1,
         "bytes": 36,
-        "elapsed_ns": 13315,
+        "elapsed_ns": 10353,
         "implementation": "machine-generated",
         "rejected": 4
       },
@@ -383,7 +383,7 @@
       "reference_metric": {
         "accepted": 1,
         "bytes": 36,
-        "elapsed_ns": 14567,
+        "elapsed_ns": 11396,
         "implementation": "reference",
         "rejected": 4
       },
@@ -396,7 +396,7 @@
       "candidate_metric": {
         "accepted": 0,
         "bytes": 32,
-        "elapsed_ns": 12092,
+        "elapsed_ns": 9881,
         "implementation": "machine-generated",
         "rejected": 1
       },
@@ -409,7 +409,7 @@
       "reference_metric": {
         "accepted": 0,
         "bytes": 32,
-        "elapsed_ns": 20278,
+        "elapsed_ns": 11012,
         "implementation": "reference",
         "rejected": 1
       },
@@ -422,7 +422,7 @@
       "candidate_metric": {
         "accepted": 0,
         "bytes": 32,
-        "elapsed_ns": 10861,
+        "elapsed_ns": 11504,
         "implementation": "machine-generated",
         "rejected": 1
       },
@@ -435,7 +435,7 @@
       "reference_metric": {
         "accepted": 0,
         "bytes": 32,
-        "elapsed_ns": 12523,
+        "elapsed_ns": 9134,
         "implementation": "reference",
         "rejected": 1
       },
@@ -448,7 +448,7 @@
       "candidate_metric": {
         "accepted": 0,
         "bytes": 32,
-        "elapsed_ns": 10450,
+        "elapsed_ns": 10077,
         "implementation": "machine-generated",
         "rejected": 1
       },
@@ -461,7 +461,7 @@
       "reference_metric": {
         "accepted": 0,
         "bytes": 32,
-        "elapsed_ns": 10630,
+        "elapsed_ns": 9102,
         "implementation": "reference",
         "rejected": 1
       },

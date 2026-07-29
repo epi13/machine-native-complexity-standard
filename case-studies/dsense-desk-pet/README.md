@@ -35,7 +35,7 @@ predeclared hardware protocol.
 | V4 Uno program storage | **FAIL** — 34,676 / 32,256 bytes, 2,420 bytes over budget |
 | V5 offline framing/checksum tests | **PASS** |
 | V5 source and evidence integrity checks | **PASS** |
-| V5 repository-bound AVR compile | **UNKNOWN** |
+| V5 checked-in AVR compile evidence | **UNKNOWN** — no machine-local capture is committed |
 | V5 preregistered hardware response protocol | **UNKNOWN** |
 | Formal MNCS status | **UNKNOWN** |
 | Formal MNCDS status | **UNKNOWN** |
@@ -87,6 +87,22 @@ The check materializes artifacts in memory and:
 - enforces the `UNKNOWN` formal-status and non-promotion boundary.
 
 These are host checks, not an AVR size measurement or physical-device certification.
+
+## Capture AVR compile evidence
+
+When Arduino CLI, `arduino:avr`, and the required libraries are available, capture both
+frozen V5 compiles without enumerating ports, uploading, or writing serial data:
+
+```bash
+make avr-compile MACHINE_LABEL=fedora-a \
+  AVR_COMPILE_OUTPUT=evidence/local/avr-compile-fedora-a.json
+```
+
+The ignored local record contains the Arduino CLI and AVR core identities, installed and
+used library versions, complete compiler output and its hashes, source identities,
+produced binary identities, flash/SRAM measurements, and headroom. An observed compile
+or resource failure is retained as `FAIL`; missing tools or unparseable measurements
+remain `UNKNOWN`. Formal MNCS/MNCDS and every physical protocol gate remain `UNKNOWN`.
 
 ## Capture V5 telemetry
 

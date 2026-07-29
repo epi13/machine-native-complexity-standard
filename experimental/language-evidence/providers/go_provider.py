@@ -16,7 +16,7 @@ DEFINITION = ProviderDefinition(
         "MNCS_DEFECT_PANIC_PATH",
         "MNCS_DEFECT_MALFORMED_INPUT",
     ),
-    unknown_tokens=("import \"C\"", "//go:build", "MNCS_UNSUPPORTED_GENERATED"),
+    unknown_tokens=('import "C"', "//go:build", "MNCS_UNSUPPORTED_GENERATED"),
     limitations=(
         "bounded source markers and declared fixture structure only",
         "go test, vet, race, and fuzz remain separate runtime evidence",

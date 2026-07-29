@@ -27,9 +27,7 @@ def test_preflight_cross_language_report_validates() -> None:
 
 
 def test_provider_descriptors_are_explicit_and_bounded() -> None:
-    descriptor_dir = (
-        ROOT / "experimental/language-evidence/providers/descriptors"
-    )
+    descriptor_dir = ROOT / "experimental/language-evidence/providers/descriptors"
     for path in sorted(descriptor_dir.glob("*.json")):
         descriptor = load(path)
         assert descriptor["protocol_version"] == "0.1"

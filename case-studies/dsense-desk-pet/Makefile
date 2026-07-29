@@ -1,6 +1,8 @@
-.PHONY: test evidence materialize check clean
+.PHONY: test evidence materialize avr-compile check clean
 
 PYTHON ?= python3
+MACHINE_LABEL ?= local-host
+AVR_COMPILE_OUTPUT ?= evidence/local/avr-compile.json
 
 # Offline mechanism, identity, and evidence checks. This does not replace AVR compilation.
 test:
@@ -11,6 +13,11 @@ evidence:
 
 materialize:
 	$(PYTHON) tools/materialize.py
+
+avr-compile:
+	$(PYTHON) tools/capture_avr_compile.py \
+		--machine-label "$(MACHINE_LABEL)" \
+		--output "$(AVR_COMPILE_OUTPUT)"
 
 check:
 	$(PYTHON) tools/materialize.py --check

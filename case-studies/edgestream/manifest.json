@@ -32,7 +32,7 @@
   "claimed_level": "MNCS-L4",
   "comparison_profile": {
     "benefit": {
-      "mean_throughput_ratio": 1.66420825488073
+      "mean_throughput_ratio": 1.5331633457601608
     },
     "complexity": {
       "candidate_source_bytes": 14752.0,
@@ -53,12 +53,12 @@
   },
   "environment": {
     "description": "Captured Linux x86_64 local development environment with GCC and Clang.",
-    "fingerprint": "sha256:0ad8c7b3d934ccdb902eefe8bcf50034b92d02780303873d3db54645a648ce1b",
+    "fingerprint": "sha256:088a38bf30f1cdf0c9a34128b7dfa516eca2373d30ff4b57c4dc52d89bc1db46",
     "identity_evidence_id": "identity-environment"
   },
   "evidence_index": {
     "path": "evidence/index.json",
-    "sha256": "sha256:1add72bbf68217d135f3ffdbfc3c2529131ead2b57768ca2c7d085687cfaa890"
+    "sha256": "sha256:973478f730d99c49e68f713aef56bbb23b749c7e14783950df8c9da268ef1e95"
   },
   "extensions": {
     "mncs.dev:case-study": "edgestream",

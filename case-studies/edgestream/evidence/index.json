@@ -44,7 +44,7 @@
       "kind": "identity",
       "media_type": "application/json",
       "path": "evidence/identities/identity-evaluator.json",
-      "sha256": "sha256:8252ea6061a1d88b9738f5d8ddc2e6d47a97e9f78e1c0b3989e904ebdf468346"
+      "sha256": "sha256:23e54df8cf14244348575172e226ba1cd2f0e0e2d5973a5aa4a3c2644d68a8c1"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -53,7 +53,7 @@
       "kind": "identity",
       "media_type": "application/json",
       "path": "evidence/identities/identity-environment.json",
-      "sha256": "sha256:0ad8c7b3d934ccdb902eefe8bcf50034b92d02780303873d3db54645a648ce1b"
+      "sha256": "sha256:088a38bf30f1cdf0c9a34128b7dfa516eca2373d30ff4b57c4dc52d89bc1db46"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -62,7 +62,7 @@
       "kind": "identity",
       "media_type": "application/json",
       "path": "evidence/identities/identity-compiler.json",
-      "sha256": "sha256:34c7ea7c151331542f4bb6075f78e3a4210ce250c5f0ff5dfe75ff47458062e9"
+      "sha256": "sha256:4fd819ac14bc11da746c220e1304c8efe51715ec12f4ab66ede2846c83be154b"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -71,7 +71,7 @@
       "kind": "identity",
       "media_type": "application/json",
       "path": "evidence/identities/identity-benchmark.json",
-      "sha256": "sha256:e56a35fb3b6afe267eabf5166b8ae4442a3b5f697046b3dc32e6a4abc78e8704"
+      "sha256": "sha256:956b291d6af181b94e82590e4adc4018b36a9f0176e6888b1200036afda8aabe"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -89,7 +89,7 @@
       "kind": "identity",
       "media_type": "application/json",
       "path": "evidence/identities/identity-build.json",
-      "sha256": "sha256:a55a4af8746f2492b8de386b66f7836fbc3658d9ef0d0ea5a374d68c859f6832"
+      "sha256": "sha256:94948b3c8a4e939b62b28a92a75142ab9037ae05cd810509981b4aa497f2103f"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -98,7 +98,7 @@
       "kind": "gate_result",
       "media_type": "application/json",
       "path": "evidence/gates/gate-behavioral.json",
-      "sha256": "sha256:aab82e2eaa09bf0b4a623eddaf0a886288c224ddd2e776b553d5923b2cda8479"
+      "sha256": "sha256:2e78a754c002d1bcdbeebcdf07eb292ea42750ba6fec738b86cbec52c8dea3db"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -107,7 +107,7 @@
       "kind": "gate_result",
       "media_type": "application/json",
       "path": "evidence/gates/gate-compiler-matrix.json",
-      "sha256": "sha256:03f90460f01267b6eba53c16e2cf7b3dd0beb4512193c336444ab0f190c8fa91"
+      "sha256": "sha256:d177794501acb27d17bd13427a2e3f2a474c964cedd007ae7775984ec2416fe0"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -116,7 +116,7 @@
       "kind": "gate_result",
       "media_type": "application/json",
       "path": "evidence/gates/gate-safety.json",
-      "sha256": "sha256:d1761ef9dfa642488b4bdea8ef0d3e157f3f52f04a1ce0f5892d389f1bc7a75f"
+      "sha256": "sha256:b9364e893720d71527791e472d93dbcdb5e886c6589566e58888231a4fb607a8"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -125,7 +125,7 @@
       "kind": "gate_result",
       "media_type": "application/json",
       "path": "evidence/gates/gate-resource-bounds.json",
-      "sha256": "sha256:161d30dece3ee08e5c8522ddf9895b9646873dc4849fbea89fca243664cf0721"
+      "sha256": "sha256:ffa5b3ffc9a6c3efc0461109cc4272e7a53af9ded6697bd5bb86754c0130b36c"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -134,7 +134,7 @@
       "kind": "gate_result",
       "media_type": "application/json",
       "path": "evidence/gates/gate-mutation.json",
-      "sha256": "sha256:2539e131a824b02994240f060079627963242279e5a0957932f16fa828a477fe"
+      "sha256": "sha256:b0c1430056a9670f2aaf6a35112bbcf8c417ccf7aef2112a63cc57d03a8f1e59"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -143,7 +143,7 @@
       "kind": "gate_result",
       "media_type": "application/json",
       "path": "evidence/gates/gate-structural.json",
-      "sha256": "sha256:583e115c82f67cbec047eea1a2f2b51d52c76e227060b104113637b845591ff4"
+      "sha256": "sha256:374ee1d7221ee0b06382f2a1189c919bdde6cf46fdc0634dbbec47993d8a95d8"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -152,7 +152,7 @@
       "kind": "invariant",
       "media_type": "application/json",
       "path": "evidence/invariants/invariant-bounded-storage.json",
-      "sha256": "sha256:9c19a2b1e38ed07df8b7c61123780158815b4d0c1b1cd02cd8fd5b05b6f2abe6"
+      "sha256": "sha256:4765449cb9416795a62e77008313c2bda572c9fd110ea56cfa43731a01e8addd"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -161,7 +161,7 @@
       "kind": "performance",
       "media_type": "application/json",
       "path": "evidence/performance/performance-throughput.json",
-      "sha256": "sha256:81b2dc62cf00a6b061c8ecb6b6cd9ec4f775be0a6fdfd1483c9663d053d325b8"
+      "sha256": "sha256:30432b3b2b07f6294b50bb18e5ddcb39b7e944a3ab8ab399017e2d550769a582"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -179,7 +179,7 @@
       "kind": "other",
       "media_type": "application/json",
       "path": "evidence/results/compiler-matrix.json",
-      "sha256": "sha256:3d5aac35a443adb0fbd024b81d63f293452051a728cfb33c1e8262ca349945e4"
+      "sha256": "sha256:3510492e43eef7ed455441da4736ab45b344826bcdc70edf5d1cde4bed5ceec6"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -188,7 +188,7 @@
       "kind": "other",
       "media_type": "application/json",
       "path": "evidence/results/sanitizers.json",
-      "sha256": "sha256:27d1b24f560f5c0dcac97d6fdccdadd3f1478d72d09ca8560e025432affdbf55"
+      "sha256": "sha256:78a2ee6168e55c032ed0b4a13f5f543deacb6ca07ba5bf07157961f94059cd0a"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -206,7 +206,7 @@
       "kind": "mutation",
       "media_type": "application/json",
       "path": "evidence/results/mutation.json",
-      "sha256": "sha256:45d57937b0a42adfa24fd7d49b621cac40a892fcc4305e1894a5079aa91ba8c7"
+      "sha256": "sha256:b25fde58d23063aba88a9008081dcda8c21a645ecd4a2877524739268ebefd9f"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -215,7 +215,7 @@
       "kind": "other",
       "media_type": "application/json",
       "path": "evidence/results/structural.json",
-      "sha256": "sha256:27975e97f405ffe38e5dfe34f6d03af93fe50cc5c1dbbe683588efcc8986a6cc"
+      "sha256": "sha256:a3b146f756ad6f10388a10909def78fbc28734bfa0ce6ce1889e02b3e37b1019"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",
@@ -233,7 +233,7 @@
       "kind": "other",
       "media_type": "application/json",
       "path": "evidence/results/benchmark.json",
-      "sha256": "sha256:cb45a026de7e2375eb8ac5629b3e5e935d565ea88b9fba9ab7408800142b47f5"
+      "sha256": "sha256:ed7bd45ac3e840f8ffe7ec90d5a9e0d80d401c4046d8d4cbda11307bae1cb0d4"
     },
     {
       "candidate_source_hash": "sha256:a45a149fdeab08bf1288351713958eff0d8447818139dddf64191ecd6c9e0e62",

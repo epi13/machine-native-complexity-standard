@@ -23,6 +23,10 @@ The repository contains the failing baseline, frozen V5 candidates, a canonical 
 
 ## Status
 
-Offline evidence and framing checks pass. The final AVR compile and physical V5 response protocol
-have not yet been captured as repository-bound evidence. Formal MNCS and MNCDS status therefore
-remain `UNKNOWN`, and promotion is unauthorized.
+Offline evidence and framing checks pass. The repository now includes a non-uploading AVR
+compile-capture tool whose machine-local records are ignored by default. No AVR result is
+silently promoted into the checked-in historical evidence, and the physical V5 response
+protocol has not been performed. See the
+[post-Wave-Five roadmap](post-wave-five-roadmap.md) for the latest local observation and
+remaining gates. Formal MNCS and MNCDS status remain `UNKNOWN`, and promotion is
+unauthorized.
