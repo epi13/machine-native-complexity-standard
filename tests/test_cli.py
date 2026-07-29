@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from mncs_validator.cli import main
+from mncs_validator.mncds_cli import main as mncds_main
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -15,7 +16,9 @@ def test_version_reports_all_version_concepts(capsys: object) -> None:
         "current_schema_version": "0.2",
         "normative_standard_family": "MNCS 0.2",
         "package": "mncs-validator",
-        "package_version": "0.2.0",
+        "package_version": "0.3.0rc1",
+        "record_schema_versions": ["0.3-rc.1"],
+        "release_candidate_families": ["MNCS 0.3-rc.1", "MNCDS 0.1-rc.1"],
         "supported_schema_versions": ["0.1", "0.1.1", "0.2"],
     }
 
@@ -68,3 +71,65 @@ def test_init_refuses_nonempty_directory(tmp_path: Path) -> None:
     (target / "existing").write_text("preserve")
     assert main(["init", str(target)]) == 2
     assert (target / "existing").read_text() == "preserve"
+
+
+def test_release_candidate_record_and_corpus_commands(capsys: object) -> None:
+    assurance = ROOT / "examples/release-candidate-0.3/assurance-case.json"
+    assert (
+        main(
+            [
+                "validate-record",
+                "assurance",
+                str(assurance),
+                "--at",
+                "2026-07-28T00:00:00Z",
+                "--json",
+            ]
+        )
+        == 0
+    )
+    assert json.loads(capsys.readouterr().out)["category"] == "PASS"  # type: ignore[attr-defined]
+    assert main(["corpus", "release-candidate", "--json"]) == 0
+    value = json.loads(capsys.readouterr().out)  # type: ignore[attr-defined]
+    assert value["summary"]["total"] == 72
+    assert value["summary"]["mismatched"] == 0
+
+
+def test_release_candidate_rejects_timezone_less_freshness_time(capsys: object) -> None:
+    assurance = ROOT / "examples/release-candidate-0.3/assurance-case.json"
+    assert (
+        main(
+            [
+                "validate-record",
+                "assurance",
+                str(assurance),
+                "--at",
+                "2026-07-28T00:00:00",
+            ]
+        )
+        == 2
+    )
+    assert "must include an RFC 3339 UTC offset" in capsys.readouterr().err  # type: ignore[attr-defined]
+
+
+def test_migration_inspection_never_upgrades(capsys: object) -> None:
+    manifest = ROOT / "case-studies/edgestream/manifest.json"
+    assert main(["migration-inspect", str(manifest), "--json"]) == 0
+    value = json.loads(capsys.readouterr().out)  # type: ignore[attr-defined]
+    assert value["family"] == "MNCS"
+    assert value["version"] == "0.2"
+    assert value["automatic_upgrade"] is False
+    assert value["historical_claim_preserved"] is True
+
+
+def test_mncds_cli_reports_rc_and_preserves_unknown(capsys: object) -> None:
+    assert mncds_main(["version", "--json"]) == 0
+    version = json.loads(capsys.readouterr().out)  # type: ignore[attr-defined]
+    assert version["mncds_version"] == "0.1-rc.1"
+    assert version["supported_versions"] == ["0.1-draft", "0.1-rc.1"]
+    record = ROOT / "examples/mncds-0.1-rc/development-record.json"
+    assert mncds_main(["validate", str(record), "--json"]) == 0
+    result = json.loads(capsys.readouterr().out)  # type: ignore[attr-defined]
+    assert result["category"] == "UNKNOWN"
+    assert mncds_main(["validate", str(record), "--require-pass"]) == 3
+    capsys.readouterr()  # type: ignore[attr-defined]

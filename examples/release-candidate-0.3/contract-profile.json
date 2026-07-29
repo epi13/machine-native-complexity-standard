@@ -1,0 +1,73 @@
+{
+  "schema_version": "0.3-rc.1",
+  "mncs_version": "0.3-rc.1",
+  "profile_id": "contract-profile.example-v1",
+  "contract_id": "contract.example-v1",
+  "contract_content_identity": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "correctness_basis": "independent_contract",
+  "status": "PASS",
+  "intended_use": {
+    "statement": "Classify bounded JSON records without network or process execution.",
+    "exclusions": ["Unbounded inputs and provider execution are excluded."]
+  },
+  "interfaces": {
+    "inputs": ["One UTF-8 JSON object no larger than 1 MiB."],
+    "outputs": ["A machine-readable PASS, FAIL, UNKNOWN, INVALID, or UNSUPPORTED result."],
+    "state": [],
+    "state_transitions": []
+  },
+  "behavior": {
+    "observable": ["Validation is deterministic for fixed bytes, policy, and time."],
+    "errors": ["Malformed records return INVALID without executing embedded content."],
+    "malformed_inputs": ["Malformed JSON and schema violations return INVALID."],
+    "adversarial_inputs": ["References and arrays are bounded by validator policy."],
+    "external_effects": ["Ordinary validation reads only caller-selected local files."]
+  },
+  "limits": {
+    "resource": ["Input size is limited to 1 MiB and references to 10000."],
+    "timing": ["Validation must terminate under the implementation resource policy."],
+    "resource_applicability": {
+      "applicable": true,
+      "rationale": "Untrusted records can otherwise exhaust memory."
+    },
+    "timing_applicability": {
+      "applicable": true,
+      "rationale": "Recursive dependency graphs require bounded processing."
+    }
+  },
+  "invariants": {
+    "safety": ["Ordinary validation never executes evidence, providers, or candidates."],
+    "security": ["FAIL dominates UNKNOWN and UNKNOWN dominates PASS."]
+  },
+  "environment_assumptions": ["JSON Schema Draft 2020-12 support is available offline."],
+  "compatibility": ["MNCS 0.1, 0.1.1, and 0.2 records retain their original meanings."],
+  "undefined_behavior": {
+    "undefined": [],
+    "implementation_defined": ["Resource ceilings may be stricter when disclosed."],
+    "excluded": ["Network retrieval and provider execution."]
+  },
+  "reference_oracle": {
+    "identity": "oracle.contract-example-v1",
+    "limitations": ["The oracle covers only the bounded example contract."],
+    "tolerances": ["No numeric tolerance is applicable."]
+  },
+  "ambiguities": [],
+  "versioning": {
+    "contract_version": "1",
+    "material_change_rule": "Behavioral, interface, limit, or environment changes require a new content identity.",
+    "supersedes_contract_id": null
+  },
+  "findings": [
+    {
+      "rule_id": "MNCS-03-CONTRACT-COMPLETE",
+      "field": "all required contract dimensions",
+      "required": true,
+      "status": "PASS",
+      "summary": "All portable adequacy dimensions are explicit.",
+      "evidence_ids": ["evidence.contract-review-v1"]
+    }
+  ],
+  "evidence_ids": ["evidence.contract-review-v1"],
+  "limitations": ["Adequacy does not establish implementation correctness."],
+  "extensions": {}
+}
