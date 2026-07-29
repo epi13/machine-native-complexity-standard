@@ -1,0 +1,258 @@
+{
+  "corpus_version": "0.1",
+  "mncs_version": "0.3-rc.1",
+  "mncds_version": "0.1-rc.1",
+  "evaluation_time": "2026-07-28T00:00:00Z",
+  "bases": {
+    "contract": "../../examples/release-candidate-0.3/contract-profile.json",
+    "assurance": "../../examples/release-candidate-0.3/assurance-case.json",
+    "threat": "../../examples/release-candidate-0.3/threat-record.json",
+    "measurement": "../../examples/release-candidate-0.3/measurement-profile.json",
+    "mncds": "../../examples/mncds-0.1-rc/development-record.json"
+  },
+  "cases": [
+    {"id": "contract-adequate", "kind": "contract", "expected": "PASS", "mutations": []},
+    {"id": "contract-circular", "kind": "contract", "expected": "FAIL", "issue_codes": ["MNCS-03-CONTRACT-CIRCULAR"], "mutations": [
+      {"op": "set", "path": "/correctness_basis", "value": "candidate_behavior"},
+      {"op": "set", "path": "/status", "value": "FAIL"}
+    ]},
+    {"id": "contract-material-ambiguity", "kind": "contract", "expected": "UNKNOWN", "mutations": [
+      {"op": "append", "path": "/ambiguities", "value": {"ambiguity_id": "ambiguity.material-v1", "material": true, "demonstrated_violation": false, "summary": "The required ordering is materially ambiguous."}},
+      {"op": "set", "path": "/status", "value": "UNKNOWN"}
+    ]},
+    {"id": "contract-missing-malformed-input", "kind": "contract", "expected": "INVALID", "issue_codes": ["SCHEMA"], "mutations": [
+      {"op": "delete", "path": "/behavior/malformed_inputs"}
+    ]},
+    {"id": "contract-missing-resource-limit", "kind": "contract", "expected": "FAIL", "issue_codes": ["MNCS-03-CONTRACT-RESOURCE-MISSING"], "mutations": [
+      {"op": "set", "path": "/limits/resource", "value": []},
+      {"op": "set", "path": "/status", "value": "FAIL"}
+    ]},
+    {"id": "contract-incompatible-environment", "kind": "contract", "expected": "FAIL", "mutations": [
+      {"op": "append", "path": "/findings", "value": {"rule_id": "MNCS-03-CONTRACT-ENVIRONMENT", "field": "environment assumptions", "required": true, "status": "FAIL", "summary": "The required environment is incompatible.", "evidence_ids": ["evidence.environment-v1"]}},
+      {"op": "set", "path": "/status", "value": "FAIL"}
+    ]},
+    {"id": "contract-unknown-field", "kind": "contract", "expected": "INVALID", "issue_codes": ["SCHEMA"], "mutations": [
+      {"op": "set", "path": "/unexpected", "value": true}
+    ]},
+    {"id": "contract-invalid-content-identity", "kind": "contract", "expected": "INVALID", "issue_codes": ["SCHEMA"], "mutations": [
+      {"op": "set", "path": "/contract_content_identity", "value": "sha256:not-a-digest"}
+    ]},
+    {"id": "contract-boundary-one-finding", "kind": "contract", "expected": "PASS", "mutations": []},
+    {"id": "contract-unknown-version", "kind": "contract", "expected": "UNSUPPORTED", "issue_codes": ["UNSUPPORTED-VERSION"], "mutations": [
+      {"op": "set", "path": "/schema_version", "value": "0.4"},
+      {"op": "set", "path": "/mncs_version", "value": "0.4"}
+    ]},
+    {"id": "assurance-simple-component-pass", "kind": "assurance", "expected": "PASS", "mutations": []},
+    {"id": "assurance-boundary-single-claim", "kind": "assurance", "expected": "PASS", "mutations": [
+      {"op": "delete", "path": "/claims/1"},
+      {"op": "set", "path": "/dependencies", "value": []},
+      {"op": "set", "path": "/correlated_failure_groups", "value": []}
+    ]},
+    {"id": "assurance-required-component-fail", "kind": "assurance", "expected": "FAIL", "mutations": [
+      {"op": "set", "path": "/claims/1/base_status", "value": "FAIL"},
+      {"op": "set", "path": "/claims/1/status", "value": "FAIL"},
+      {"op": "set", "path": "/claims/0/status", "value": "FAIL"},
+      {"op": "set", "path": "/mncs/status", "value": "FAIL"}
+    ]},
+    {"id": "assurance-required-component-unknown", "kind": "assurance", "expected": "UNKNOWN", "mutations": [
+      {"op": "set", "path": "/claims/1/base_status", "value": "UNKNOWN"},
+      {"op": "set", "path": "/claims/1/status", "value": "UNKNOWN"},
+      {"op": "set", "path": "/claims/0/status", "value": "UNKNOWN"},
+      {"op": "set", "path": "/mncs/status", "value": "UNKNOWN"}
+    ]},
+    {"id": "assurance-optional-dependency-unknown", "kind": "assurance", "expected": "PASS", "mutations": [
+      {"op": "set", "path": "/dependencies/0/required", "value": false},
+      {"op": "set", "path": "/claims/1/base_status", "value": "UNKNOWN"},
+      {"op": "set", "path": "/claims/1/status", "value": "UNKNOWN"},
+      {"op": "append", "path": "/claims/0/limitations", "value": "Optional dependency remains UNKNOWN."}
+    ]},
+    {"id": "assurance-dependency-cycle", "kind": "assurance", "expected": "INVALID", "issue_codes": ["MNCS-03-DEPENDENCY-CYCLE"], "mutations": [
+      {"op": "append", "path": "/dependencies", "value": {"dependency_id": "dependency.reverse", "source_claim_id": "claim.component", "target_claim_id": "claim.system", "relation": "runtime", "required": true, "interface_compatibility": "PASS", "environment_compatibility": "PASS", "shared_evidence_ids": [], "correlated_failure_group_ids": [], "invalidation_triggers": ["Dependency change."]}}
+    ]},
+    {"id": "assurance-correlated-provider-fail", "kind": "assurance", "expected": "FAIL", "mutations": [
+      {"op": "set", "path": "/correlated_failure_groups/0/status", "value": "FAIL"},
+      {"op": "set", "path": "/claims/0/status", "value": "FAIL"},
+      {"op": "set", "path": "/mncs/status", "value": "FAIL"}
+    ]},
+    {"id": "assurance-shared-evidence", "kind": "assurance", "expected": "PASS", "mutations": []},
+    {"id": "assurance-mixed-mncs-levels", "kind": "assurance", "expected": "PASS", "mutations": []},
+    {"id": "assurance-mixed-mncds-profiles", "kind": "assurance", "expected": "PASS", "mutations": []},
+    {"id": "assurance-stale-evidence", "kind": "assurance", "expected": "UNKNOWN", "at": "2028-01-01T00:00:00Z", "mutations": [
+      {"op": "set", "path": "/claims/0/status", "value": "UNKNOWN"},
+      {"op": "set", "path": "/claims/1/status", "value": "UNKNOWN"},
+      {"op": "set", "path": "/mncs/status", "value": "UNKNOWN"}
+    ]},
+    {"id": "assurance-fresh-evidence", "kind": "assurance", "expected": "PASS", "mutations": []},
+    {"id": "assurance-contract-material-change-partial", "kind": "assurance", "expected": "PASS", "mutations": [
+      {"op": "append", "path": "/material_changes", "value": {"change_id": "change.contract-v2", "dimension": "contract", "old_identity": "contract.example-v1", "new_identity": "contract.example-v2", "material": true, "rationale": "Malformed-input behavior changed.", "affected_claim_ids": ["claim.system"]}},
+      {"op": "set", "path": "/evidence_impact/affected_claim_ids", "value": ["claim.system"]},
+      {"op": "set", "path": "/evidence_impact/invalidated_evidence_ids", "value": ["evidence.system-v1"]},
+      {"op": "set", "path": "/evidence_impact/required_new_evidence_ids", "value": ["evidence.system-v2"]},
+      {"op": "set", "path": "/revalidation/mode", "value": "partial"},
+      {"op": "set", "path": "/revalidation/scope_claim_ids", "value": ["claim.system"]},
+      {"op": "set", "path": "/revalidation/covered_change_ids", "value": ["change.contract-v2"]},
+      {"op": "set", "path": "/revalidation/retained_evidence_ids", "value": ["evidence.component-v1", "evidence.shared-v1"]},
+      {"op": "set", "path": "/revalidation/new_evidence_ids", "value": ["evidence.system-v2"]},
+      {"op": "set", "path": "/revalidation/performed_at", "value": "2026-07-28T00:00:00Z"}
+    ]},
+    {"id": "assurance-editorial-change", "kind": "assurance", "expected": "PASS", "mutations": [
+      {"op": "append", "path": "/material_changes", "value": {"change_id": "change.editorial-v1", "dimension": "contract", "old_identity": "contract.example-v1", "new_identity": "contract.example-v1", "material": false, "rationale": "Spelling-only edit.", "affected_claim_ids": []}}
+    ]},
+    {"id": "assurance-insufficient-partial-revalidation", "kind": "assurance", "expected": "UNKNOWN", "mutations": [
+      {"op": "append", "path": "/material_changes", "value": {"change_id": "change.environment-v2", "dimension": "environment", "old_identity": "environment.example-v1", "new_identity": "environment.example-v2", "material": true, "rationale": "Runtime environment changed.", "affected_claim_ids": ["claim.system"]}},
+      {"op": "set", "path": "/evidence_impact/affected_claim_ids", "value": ["claim.system"]},
+      {"op": "set", "path": "/evidence_impact/required_new_evidence_ids", "value": ["evidence.environment-v2"]},
+      {"op": "set", "path": "/revalidation/mode", "value": "partial"},
+      {"op": "set", "path": "/revalidation/status", "value": "UNKNOWN"},
+      {"op": "set", "path": "/claims/0/status", "value": "PASS"},
+      {"op": "set", "path": "/mncs/status", "value": "UNKNOWN"}
+    ]},
+    {"id": "assurance-supersession", "kind": "assurance", "expected": "PASS", "mutations": [
+      {"op": "set", "path": "/lifecycle/supersession", "value": {"prior_assurance_case_id": "assurance.example-v0", "reason": "New contract identity.", "effective_at": "2026-07-28T00:00:00Z", "historical_use_allowed": true}}
+    ]},
+    {"id": "assurance-retired-root", "kind": "assurance", "expected": "FAIL", "mutations": [
+      {"op": "set", "path": "/claims/0/retired", "value": true},
+      {"op": "set", "path": "/claims/0/status", "value": "FAIL"},
+      {"op": "set", "path": "/mncs/status", "value": "FAIL"},
+      {"op": "set", "path": "/lifecycle/retirement", "value": {"claim_id": "claim.system", "reason": "End of support.", "effective_at": "2026-07-28T00:00:00Z", "affected_claim_ids": ["claim.system"], "replacement_claim_id": null}}
+    ]},
+    {"id": "assurance-valid-replacement", "kind": "assurance", "expected": "PASS", "mutations": [
+      {"op": "set", "path": "/lifecycle/replacement", "value": {"old_artifact_id": "artifact.component-v1", "new_artifact_id": "artifact.system-v1", "old_claim_id": "claim.component", "new_claim_id": "claim.system", "compatibility_evidence_ids": ["evidence.compatibility-v1"], "status": "PASS", "effective_at": "2026-07-28T00:00:00Z"}}
+    ]},
+    {"id": "assurance-invalid-rollback-binding", "kind": "assurance", "expected": "FAIL", "issue_codes": ["MNCS-03-ROLLBACK-BINDING"], "mutations": [
+      {"op": "set", "path": "/lifecycle/rollback", "value": {"active_release_id": "release.wrong-v1", "artifact_id": "artifact.system-v1", "procedure_id": "procedure.rollback-v1", "environment_id": "environment.example-v1", "evidence_id": "evidence.rollback-v1", "test_status": "PASS", "tested_at": "2026-07-28T00:00:00Z"}},
+      {"op": "set", "path": "/mncs/status", "value": "FAIL"}
+    ]},
+    {"id": "assurance-separate-results", "kind": "assurance", "expected": "PASS", "mutations": []},
+    {"id": "assurance-attempted-result-collapse", "kind": "assurance", "expected": "INVALID", "issue_codes": ["MNCS-03-DISPLAY-LABEL-MISMATCH"], "mutations": [
+      {"op": "set", "path": "/display_label", "value": "MNCDS-D4 / MNCS-L2"}
+    ]},
+    {"id": "assurance-operational-review-required", "kind": "assurance", "expected": "PASS", "mutations": []},
+    {"id": "assurance-downgrade-attempt", "kind": "assurance", "expected": "INVALID", "issue_codes": ["MNCS-03-DOWNGRADE"], "mutations": [
+      {"op": "set", "path": "/migration/downgrade_detected", "value": true}
+    ]},
+    {"id": "assurance-material-identity-unchanged", "kind": "assurance", "expected": "INVALID", "issue_codes": ["MNCS-03-MATERIAL-IDENTITY-UNCHANGED"], "mutations": [
+      {"op": "append", "path": "/material_changes", "value": {"change_id": "change.bad-identity", "dimension": "artifact", "old_identity": "artifact.same", "new_identity": "artifact.same", "material": true, "rationale": "Material bytes changed.", "affected_claim_ids": ["claim.system"]}},
+      {"op": "set", "path": "/evidence_impact/affected_claim_ids", "value": ["claim.system"]}
+    ]},
+    {"id": "assurance-unknown-version", "kind": "assurance", "expected": "UNSUPPORTED", "issue_codes": ["UNSUPPORTED-VERSION"], "mutations": [
+      {"op": "set", "path": "/schema_version", "value": "0.4"},
+      {"op": "set", "path": "/mncs_version", "value": "0.4"}
+    ]},
+    {"id": "threat-pass", "kind": "threat", "expected": "PASS", "mutations": []},
+    {"id": "threat-invalid-identity", "kind": "threat", "expected": "INVALID", "issue_codes": ["SCHEMA"], "mutations": [
+      {"op": "set", "path": "/threat_id", "value": "-invalid"}
+    ]},
+    {"id": "threat-boundary-no-mitigation-unknown", "kind": "threat", "expected": "UNKNOWN", "mutations": [
+      {"op": "set", "path": "/mitigations", "value": []},
+      {"op": "set", "path": "/status", "value": "UNKNOWN"}
+    ]},
+    {"id": "threat-fail", "kind": "threat", "expected": "FAIL", "mutations": [
+      {"op": "set", "path": "/mitigations/0/status", "value": "FAIL"},
+      {"op": "set", "path": "/status", "value": "FAIL"}
+    ]},
+    {"id": "threat-unknown", "kind": "threat", "expected": "UNKNOWN", "mutations": [
+      {"op": "set", "path": "/mitigations/0/status", "value": "UNKNOWN"},
+      {"op": "set", "path": "/status", "value": "UNKNOWN"}
+    ]},
+    {"id": "threat-unknown-version", "kind": "threat", "expected": "UNSUPPORTED", "issue_codes": ["UNSUPPORTED-VERSION"], "mutations": [
+      {"op": "set", "path": "/schema_version", "value": "0.4"},
+      {"op": "set", "path": "/mncs_version", "value": "0.4"}
+    ]},
+    {"id": "measurement-pass", "kind": "measurement", "expected": "PASS", "mutations": []},
+    {"id": "measurement-invalid-identity", "kind": "measurement", "expected": "INVALID", "issue_codes": ["SCHEMA"], "mutations": [
+      {"op": "set", "path": "/profile_id", "value": "-invalid"}
+    ]},
+    {"id": "measurement-boundary-minimum-samples", "kind": "measurement", "expected": "PASS", "mutations": [
+      {"op": "set", "path": "/sample_count", "value": 2},
+      {"op": "set", "path": "/repetitions", "value": 2}
+    ]},
+    {"id": "measurement-best-run-fail", "kind": "measurement", "expected": "FAIL", "issue_codes": ["MNCS-03-MEASUREMENT-BEST-RUN"], "mutations": [
+      {"op": "set", "path": "/reporting_mode", "value": "best_run_only"},
+      {"op": "set", "path": "/status", "value": "FAIL"}
+    ]},
+    {"id": "measurement-stale-unknown", "kind": "measurement", "expected": "UNKNOWN", "at": "2028-01-01T00:00:00Z", "mutations": [
+      {"op": "set", "path": "/status", "value": "UNKNOWN"}
+    ]},
+    {"id": "measurement-unknown-version", "kind": "measurement", "expected": "UNSUPPORTED", "issue_codes": ["UNSUPPORTED-VERSION"], "mutations": [
+      {"op": "set", "path": "/schema_version", "value": "0.4"},
+      {"op": "set", "path": "/mncs_version", "value": "0.4"}
+    ]},
+    {"id": "mncds-d1-pass", "kind": "mncds", "expected": "PASS", "mutations": [
+      {"op": "set", "path": "/profile", "value": "MNCDS-D1"}
+    ]},
+    {"id": "mncds-d2-pass", "kind": "mncds", "expected": "PASS", "mutations": [
+      {"op": "set", "path": "/profile", "value": "MNCDS-D2"}
+    ]},
+    {"id": "mncds-d3-external-unknown", "kind": "mncds", "expected": "UNKNOWN", "issue_codes": ["protected-evidence-unknown"], "mutations": [
+      {"op": "set", "path": "/profile", "value": "MNCDS-D3"}
+    ]},
+    {"id": "mncds-d4-external-unknown", "kind": "mncds", "expected": "UNKNOWN", "issue_codes": ["protected-evidence-unknown"], "mutations": []},
+    {"id": "mncds-authority-overlap", "kind": "mncds", "expected": "FAIL", "issue_codes": ["authority-overlap-undisclosed"], "mutations": [
+      {"op": "set", "path": "/roles/2/authority_id", "value": "authority.generator"}
+    ]},
+    {"id": "mncds-forbidden-generator-permission", "kind": "mncds", "expected": "FAIL", "issue_codes": ["generator-authority-violation"], "mutations": [
+      {"op": "set", "path": "/generator/permissions/modify_evaluators", "value": true}
+    ]},
+    {"id": "mncds-holdout-contamination", "kind": "mncds", "expected": "FAIL", "issue_codes": ["holdout-contaminated"], "mutations": [
+      {"op": "set", "path": "/partitions/holdout_contaminated", "value": true}
+    ]},
+    {"id": "mncds-post-hoc-selection", "kind": "mncds", "expected": "FAIL", "issue_codes": ["selection-rule-post-hoc"], "mutations": [
+      {"op": "set", "path": "/selection/rule_recorded_before_final_evaluation", "value": false}
+    ]},
+    {"id": "mncds-evaluator-mutation", "kind": "mncds", "expected": "FAIL", "issue_codes": ["generator-authority-violation"], "mutations": [
+      {"op": "set", "path": "/generator/permissions/modify_evaluators", "value": true}
+    ]},
+    {"id": "mncds-threshold-mutation", "kind": "mncds", "expected": "FAIL", "issue_codes": ["generator-authority-violation"], "mutations": [
+      {"op": "set", "path": "/generator/permissions/modify_thresholds", "value": true}
+    ]},
+    {"id": "mncds-lineage-cycle", "kind": "mncds", "expected": "INVALID", "issue_codes": ["lineage-cycle"], "mutations": [
+      {"op": "set", "path": "/candidates/0/parent_ids", "value": ["candidate.epoch-two"]}
+    ]},
+    {"id": "mncds-missing-parent", "kind": "mncds", "expected": "INVALID", "issue_codes": ["unknown-parent"], "mutations": [
+      {"op": "set", "path": "/candidates/1/parent_ids", "value": ["candidate.missing"]}
+    ]},
+    {"id": "mncds-duplicate-identity", "kind": "mncds", "expected": "INVALID", "issue_codes": ["duplicate-id"], "mutations": [
+      {"op": "set", "path": "/candidates/1/candidate_id", "value": "candidate.epoch-one"}
+    ]},
+    {"id": "mncds-selected-candidate-missing", "kind": "mncds", "expected": "FAIL", "issue_codes": ["selected-candidate-missing"], "mutations": [
+      {"op": "set", "path": "/selection/selected_candidate_id", "value": "candidate.missing"}
+    ]},
+    {"id": "mncds-selected-disposition", "kind": "mncds", "expected": "FAIL", "issue_codes": ["selection-disposition-mismatch"], "mutations": [
+      {"op": "set", "path": "/candidates/1/disposition", "value": "retained"}
+    ]},
+    {"id": "mncds-rejected-candidate-retention", "kind": "mncds", "expected": "FAIL", "issue_codes": ["material-candidate-not-retained"], "mutations": [
+      {"op": "set", "path": "/candidates/0/retained", "value": false},
+      {"op": "set", "path": "/candidates/0/disposition", "value": "rejected"}
+    ]},
+    {"id": "mncds-unknown-promotion", "kind": "mncds", "expected": "FAIL", "issue_codes": ["unknown-promoted"], "mutations": [
+      {"op": "set", "path": "/candidates/1/evaluator_results/0/status", "value": "UNKNOWN"}
+    ]},
+    {"id": "mncds-reproducibility-none", "kind": "mncds", "expected": "FAIL", "issue_codes": ["d2-reproducibility-missing"], "mutations": [
+      {"op": "set", "path": "/reproducibility/class", "value": "NONE"}
+    ]},
+    {"id": "mncds-failed-regeneration", "kind": "mncds", "expected": "FAIL", "issue_codes": ["regeneration-drill-failed"], "mutations": [
+      {"op": "set", "path": "/release_controls/regeneration_or_replacement/status", "value": "FAIL"}
+    ]},
+    {"id": "mncds-untested-rollback", "kind": "mncds", "expected": "UNKNOWN", "issue_codes": ["rollback-not-tested"], "mutations": [
+      {"op": "set", "path": "/release_controls/rollback/test_status", "value": "UNKNOWN"}
+    ]},
+    {"id": "mncds-retirement", "kind": "mncds", "expected": "FAIL", "issue_codes": ["selected-candidate-retired"], "mutations": [
+      {"op": "set", "path": "/release_controls/retirement/retired", "value": true},
+      {"op": "set", "path": "/release_controls/retirement/retired_at", "value": "2026-07-28T00:00:00Z"},
+      {"op": "set", "path": "/release_controls/retirement/reason", "value": "End of support."}
+    ]},
+    {"id": "mncds-binding-mismatch", "kind": "mncds", "expected": "FAIL", "issue_codes": ["mncs-binding-mismatch"], "mutations": [
+      {"op": "set", "path": "/mncs_binding/contract_id", "value": "contract.wrong"}
+    ]},
+    {"id": "mncds-recursive-epoch-cycle", "kind": "mncds", "expected": "FAIL", "issue_codes": ["epoch-cycle"], "mutations": [
+      {"op": "set", "path": "/epochs/0/parent_epoch_id", "value": "epoch.two"}
+    ]},
+    {"id": "mncds-protected-evidence-reuse", "kind": "mncds", "expected": "UNKNOWN", "issue_codes": ["protected-evidence-unknown"], "mutations": [
+      {"op": "append", "path": "/protected_evidence/0/reuse_claim_ids", "value": "result.future"}
+    ]},
+    {"id": "mncds-unknown-version", "kind": "mncds", "expected": "UNSUPPORTED", "issue_codes": ["unsupported-version"], "mutations": [
+      {"op": "set", "path": "/mncds_version", "value": "0.2"}
+    ]}
+  ]
+}

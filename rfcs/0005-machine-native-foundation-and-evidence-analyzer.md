@@ -383,32 +383,47 @@ FAIL or UNKNOWN results.
 
 Before this RFC can be accepted:
 
-1. all three schemas must self-validate under JSON Schema Draft 2020-12;
+1. all four MNCS 0.3 schemas and the MNCDS aggregate schema must self-validate
+   under JSON Schema Draft 2020-12;
 2. positive and negative fixtures must test status, identity, and non-collapse semantics;
 3. at least one independent implementation must consume each schema used normatively;
-4. the Clang provider corpus must contain valid, violating, unsupported, crash, timeout,
-   aliasing, indirect-call, macro, mutation, and naive-false-PASS cases;
+4. any promoted analyzer profile must contain valid, violating, unsupported, crash,
+   timeout, aliasing, indirect-call, macro, mutation, and naive-false-PASS cases;
 5. analyzer comparisons must report true positives, false positives, false negatives,
    incorrect PASS, UNKNOWN, crashes, timeouts, runtime, memory, determinism, and diagnostic
    utility;
-6. the epoch-one Joern baseline must be frozen and identified;
-7. an epoch-two analyzer or harness must receive new identities and use a fresh protected
-   holdout;
+6. the epoch-one analyzer and corpus baseline must be frozen and identified;
+7. an epoch-two analyzer or harness must receive new identities and use fresh final
+   inputs; external protected custody remains a distinct external-evidence gate;
 8. disagreements must become regression fixtures or remain UNKNOWN;
 9. the study must produce an MNCDS record and an MNCS bundle for any selected candidate;
 10. security and privacy review must find no unresolved claim-broadening defect; and
 11. governance-required independent approvals must be recorded.
 
-## Unresolved questions
+## Bounded or deferred questions
 
-- Which contract fields should become mandatory in a future MNCS version?
-- Which criticality-to-assurance mappings have enough evidence for a normative profile?
-- How should correlated dependency failures be normalized across implementations?
-- What evidence freshness defaults are reasonable across domains?
-- Which C semantics can the first analyzer soundly classify rather than preserve as
-  UNKNOWN?
-- What independent implementation should consume the new schemas?
-- What evidence threshold should distinguish baseline evaluator independence from a future
-  higher-assurance profile?
-- How should proprietary million-candidate histories be committed without disclosing
-  candidate bodies?
+- Mandatory portable contract dimensions are selected in the RC; domain-specific
+  fields remain extensions.
+- Criticality-to-assurance mappings and default freshness durations remain identified
+  external policy.
+- Correlated groups have a portable core representation; universal failure-source
+  taxonomies are deferred.
+- Analyzer language semantics remain optional profiles and preserve unsupported cases
+  as UNKNOWN.
+- The Rust consumer supplies local implementation/executable diversity; operator and
+  organizational independence remain external.
+- Higher independence profiles, privacy proofs, and proprietary million-candidate
+  commitments remain optional post-release research.
+
+## Release-candidate decision record
+
+The repository's 0.3-rc.1 implementation selects the smallest interoperable core
+supported by current evidence: contract adequacy, an assurance/dependency/lifecycle
+case, threat records, and measurement profiles. Language profiles, MNEA, Provider
+Protocol implementations, and Waves One through Five remain experimental and
+non-normative. Detailed alternatives and obligations are in
+`spec/MNCS-v0.3-MNCDS-v0.1-decisions.md`; the self-contained proposed text is
+`spec/MNCS-v0.3-rc.1.md`.
+
+This implementation does not change the RFC from Draft or assert independent review,
+protected custody, governance approval, or final release.

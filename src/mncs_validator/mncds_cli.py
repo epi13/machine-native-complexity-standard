@@ -12,8 +12,8 @@ from pathlib import Path
 from .errors import MncsError
 from .mncds import validate_development_record
 
-MNCDS_VERSION = "0.1-draft"
-MNCDS_SCHEMA_VERSION = "0.1"
+MNCDS_VERSION = "0.1-rc.1"
+MNCDS_SCHEMA_VERSION = "0.1-rc.1"
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -45,13 +45,15 @@ def run(args: argparse.Namespace) -> int:
         if args.json:
             print(json.dumps(report.as_dict(), indent=2, sort_keys=True))
         else:
-            print(report.computed_status if report.valid else "INVALID")
+            print(report.category)
             for issue in report.issues:
                 suffix = f" [{issue.path}]" if issue.path else ""
                 print(f"{issue.code}: {issue.message}{suffix}")
             for warning in report.warnings:
                 suffix = f" [{warning.path}]" if warning.path else ""
                 print(f"warning {warning.code}: {warning.message}{suffix}")
+        if not report.supported:
+            return 4
         if not report.valid:
             return 1
         return 3 if args.require_pass and report.computed_status != "PASS" else 0
@@ -61,12 +63,13 @@ def run(args: argparse.Namespace) -> int:
             "package": "mncs-validator",
             "mncds_version": MNCDS_VERSION,
             "schema_version": MNCDS_SCHEMA_VERSION,
-            "status": "experimental",
+            "status": "release_candidate",
+            "supported_versions": ["0.1-draft", "0.1-rc.1"],
         }
         if args.json:
             print(json.dumps(result, indent=2, sort_keys=True))
         else:
-            print(f"mncds {MNCDS_VERSION} (schema {MNCDS_SCHEMA_VERSION}; experimental)")
+            print(f"mncds {MNCDS_VERSION} (schema {MNCDS_SCHEMA_VERSION}; release candidate)")
         return 0
 
     raise AssertionError(f"unhandled command: {args.command}")

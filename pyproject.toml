@@ -4,15 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mncs-validator"
-version = "0.2.0"
-description = "Offline validators for MNCS evidence and experimental MNCDS development records"
+version = "0.3.0rc1"
+description = "Offline validators for MNCS evidence and MNCS/MNCDS release-candidate records"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
 authors = [{name = "MNCS Contributors"}]
 keywords = ["generated-code", "software-standards", "static-analysis", "machine-native-development"]
 classifiers = [
-  "Development Status :: 3 - Alpha",
+  "Development Status :: 4 - Beta",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -53,6 +53,21 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 "mncs_validator.resources.schemas" = ["*.json"]
+
+[tool.setuptools.data-files]
+"share/mncs-validator/conformance/release-candidate" = [
+  "conformance/release-candidate/corpus.json",
+  "conformance/release-candidate/suite-index.json",
+]
+"share/mncs-validator/examples/release-candidate-0.3" = [
+  "examples/release-candidate-0.3/contract-profile.json",
+  "examples/release-candidate-0.3/assurance-case.json",
+  "examples/release-candidate-0.3/threat-record.json",
+  "examples/release-candidate-0.3/measurement-profile.json",
+]
+"share/mncs-validator/examples/mncds-0.1-rc" = [
+  "examples/mncds-0.1-rc/development-record.json",
+]
 
 [tool.ruff]
 target-version = "py311"

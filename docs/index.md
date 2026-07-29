@@ -8,6 +8,11 @@ MNCDS is the experimental companion specification for controlling how those
 implementations are generated, evaluated, selected, released, regenerated, replaced, and
 retired.
 
+MNCS 0.3-rc.1 and MNCDS 0.1-rc.1 are now implemented release-candidate
+proposals with versioned schemas, Python and independent Rust consumers, a shared
+golden corpus, migration rules, and a controlled two-epoch study. Their RFCs remain
+Draft and external/governance gates remain open.
+
 **Human readability is relocated, not eliminated.** Readable control moves to the
 contract, reference behavior, limits, policy, evidence, provenance, development record,
 regeneration, and rollback. Complexity is acceptable only for a predeclared measurable
@@ -34,6 +39,8 @@ neither changes MNCS 0.2 or promotes MNCDS.
 
 - [Experimental language evidence profiles](language-evidence-profiles.md)
 - [Post-Wave-Five local evidence roadmap](post-wave-five-roadmap.md)
+- [MNCS 0.3 / MNCDS 0.1 release candidate](release-candidate.md)
+- [Release gap matrix](release-gap-matrix.md)
 - [RAVEL recursive inference and training research](ravel.md)
 - [dSense Desk Pet case study](dsense-desk-pet.md)
 - [Remote Water Resilience Controller case study](remote-water-control.md)

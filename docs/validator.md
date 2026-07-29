@@ -22,6 +22,12 @@ The `mncs-validator` package exposes two separate offline command families.
 The independent `mncs-rs` binary supports the interoperable validation subset and shares
 the versioned golden corpus.
 
+For 0.3-rc.1, `mncs validate-record` validates contract, assurance, threat, and
+measurement records. `mncs corpus release-candidate` runs the combined golden corpus,
+and `mncs migration-inspect` reports exact-version dispatch without rewriting a claim.
+The separate Rust `mncs-rc-consumer` reads the same corpus directly and does not invoke
+Python.
+
 ## MNCDS validator
 
 `mncds` validates development-process records. It checks:
@@ -39,8 +45,9 @@ the versioned golden corpus.
 - agreement between MNCDS and MNCS candidate, contract, and environment identities; and
 - D4 rollback and regeneration-drill outcomes.
 
-The MNCDS validator is experimental. A second independent implementation must agree on
-the versioned MNCDS corpus before RFC 0004 can satisfy its acceptance gate.
+The validator dispatches both frozen `0.1-draft` and `0.1-rc.1` records. The new
+independent Rust consumer agrees on the RC golden vectors. RFC approval, external
+operation, and organizational independence remain separate acceptance gates.
 
 ## Safety and exit behavior
 
@@ -53,5 +60,7 @@ Use `--json` for automation.
 Validation returns 0 for a structurally valid PASS, FAIL, or UNKNOWN unless
 `--require-pass` is supplied. Exit 1 means invalid evidence or record semantics, exit 2
 means operational error, and exit 3 means valid but non-PASS for the requested operation.
+Exit 4 means a well-formed dispatch request names an unsupported schema/specification
+version.
 Legacy MNCS 0.1 certification requires `--allow-legacy` and remains visibly
 reduced-assurance. MNCDS has no legacy certification override.

@@ -1,0 +1,292 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schema/0.3-rc.1/mncs-assurance-case.schema.json",
+  "title": "MNCS 0.3-rc.1 controlled system assurance case",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "mncs_version", "assurance_case_id", "subject_kind",
+    "subject_id", "root_claim_id", "release_id", "contract_profile_id",
+    "contract_profile_status", "criticality",
+    "applicability_policy_id", "trust_policy_id", "claims", "dependencies",
+    "correlated_failure_groups", "mncs", "mncds", "freshness",
+    "material_changes", "evidence_impact", "revalidation", "lifecycle",
+    "threat_record_ids", "measurement_profile_ids", "operational_disposition",
+    "migration", "unresolved_unknowns", "limitations", "extensions"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.3-rc.1"},
+    "mncs_version": {"const": "0.3-rc.1"},
+    "assurance_case_id": {"$ref": "#/$defs/id"},
+    "subject_kind": {"enum": ["component", "system"]},
+    "subject_id": {"$ref": "#/$defs/id"},
+    "root_claim_id": {"$ref": "#/$defs/id"},
+    "release_id": {"$ref": "#/$defs/id"},
+    "contract_profile_id": {"$ref": "#/$defs/id"},
+    "contract_profile_status": {"$ref": "#/$defs/status"},
+    "criticality": {"enum": ["low", "moderate", "high", "critical"]},
+    "applicability_policy_id": {"$ref": "#/$defs/id"},
+    "trust_policy_id": {"$ref": "#/$defs/id"},
+    "claims": {
+      "type": "array", "minItems": 1,
+      "items": {"$ref": "#/$defs/claim"}
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/dependency"}
+    },
+    "correlated_failure_groups": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/correlation"}
+    },
+    "mncs": {"$ref": "#/$defs/mncsResult"},
+    "mncds": {
+      "oneOf": [{"type": "null"}, {"$ref": "#/$defs/mncdsResult"}]
+    },
+    "display_label": {
+      "type": ["string", "null"],
+      "pattern": "^MNCDS-D[1-4] / MNCS-L[1-5]$"
+    },
+    "freshness": {"$ref": "#/$defs/freshness"},
+    "material_changes": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/materialChange"}
+    },
+    "evidence_impact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["assessment_id", "affected_claim_ids", "retained_evidence_ids", "invalidated_evidence_ids", "required_new_evidence_ids", "status"],
+      "properties": {
+        "assessment_id": {"$ref": "#/$defs/id"},
+        "affected_claim_ids": {"$ref": "#/$defs/ids"},
+        "retained_evidence_ids": {"$ref": "#/$defs/ids"},
+        "invalidated_evidence_ids": {"$ref": "#/$defs/ids"},
+        "required_new_evidence_ids": {"$ref": "#/$defs/ids"},
+        "status": {"$ref": "#/$defs/status"}
+      }
+    },
+    "revalidation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["revalidation_id", "mode", "scope_claim_ids", "covered_change_ids", "retained_evidence_ids", "new_evidence_ids", "status", "performed_at"],
+      "properties": {
+        "revalidation_id": {"$ref": "#/$defs/id"},
+        "mode": {"enum": ["none", "partial", "full"]},
+        "scope_claim_ids": {"$ref": "#/$defs/ids"},
+        "covered_change_ids": {"$ref": "#/$defs/ids"},
+        "retained_evidence_ids": {"$ref": "#/$defs/ids"},
+        "new_evidence_ids": {"$ref": "#/$defs/ids"},
+        "status": {"$ref": "#/$defs/status"},
+        "performed_at": {"oneOf": [{"type": "null"}, {"type": "string", "format": "date-time"}]}
+      }
+    },
+    "lifecycle": {
+      "type": "object", "additionalProperties": false,
+      "required": ["supersession", "replacement", "rollback", "retirement"],
+      "properties": {
+        "supersession": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/supersession"}]},
+        "replacement": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/replacement"}]},
+        "rollback": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/rollback"}]},
+        "retirement": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/retirement"}]}
+      }
+    },
+    "threat_record_ids": {"$ref": "#/$defs/ids"},
+    "measurement_profile_ids": {"$ref": "#/$defs/ids"},
+    "operational_disposition": {
+      "type": "object", "additionalProperties": false,
+      "required": ["decision", "policy_id", "authority_id", "decided_at", "rationale"],
+      "properties": {
+        "decision": {"enum": ["accepted", "rejected", "review_required"]},
+        "policy_id": {"$ref": "#/$defs/id"},
+        "authority_id": {"$ref": "#/$defs/id"},
+        "decided_at": {"type": "string", "format": "date-time"},
+        "rationale": {"$ref": "#/$defs/text"}
+      }
+    },
+    "migration": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_family", "source_version", "source_identity", "mode", "downgrade_detected", "historical_facts_status"],
+      "properties": {
+        "source_family": {"enum": ["none", "MNCS", "MNCDS"]},
+        "source_version": {"type": ["string", "null"], "minLength": 1},
+        "source_identity": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/id"}]},
+        "mode": {"enum": ["native", "wrapped", "reevaluated"]},
+        "downgrade_detected": {"type": "boolean"},
+        "historical_facts_status": {"$ref": "#/$defs/status"}
+      }
+    },
+    "unresolved_unknowns": {"$ref": "#/$defs/texts"},
+    "limitations": {"$ref": "#/$defs/texts"},
+    "extensions": {"$ref": "#/$defs/extensions"}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "status": {"enum": ["PASS", "FAIL", "UNKNOWN"]},
+    "text": {"type": "string", "minLength": 1},
+    "texts": {"type": "array", "items": {"$ref": "#/$defs/text"}},
+    "ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "freshness": {
+      "type": "object", "additionalProperties": false,
+      "required": ["evaluated_at", "valid_until", "policy_id", "status", "revalidation_triggers"],
+      "properties": {
+        "evaluated_at": {"type": "string", "format": "date-time"},
+        "valid_until": {"oneOf": [{"type": "null"}, {"type": "string", "format": "date-time"}]},
+        "policy_id": {"$ref": "#/$defs/id"},
+        "status": {"$ref": "#/$defs/status"},
+        "revalidation_triggers": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/text"}}
+      }
+    },
+    "claim": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "claim_id", "subject_id", "contract_id", "environment_id", "mncs_version",
+        "level", "base_status", "status", "result_id", "scope_id", "evidence_ids", "mncds", "freshness",
+        "retired", "issues", "limitations"
+      ],
+      "properties": {
+        "claim_id": {"$ref": "#/$defs/id"},
+        "subject_id": {"$ref": "#/$defs/id"},
+        "contract_id": {"$ref": "#/$defs/id"},
+        "environment_id": {"$ref": "#/$defs/id"},
+        "mncs_version": {"enum": ["0.1", "0.1.1", "0.2", "0.3-rc.1"]},
+        "level": {"enum": ["MNCS-L1", "MNCS-L2", "MNCS-L3", "MNCS-L4", "MNCS-L5"]},
+        "base_status": {"$ref": "#/$defs/status"},
+        "status": {"$ref": "#/$defs/status"},
+        "result_id": {"$ref": "#/$defs/id"},
+        "scope_id": {"$ref": "#/$defs/id"},
+        "evidence_ids": {"$ref": "#/$defs/ids"},
+        "mncds": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/mncdsResult"}
+          ]
+        },
+        "freshness": {"$ref": "#/$defs/freshness"},
+        "retired": {"type": "boolean"},
+        "issues": {"$ref": "#/$defs/texts"},
+        "limitations": {"$ref": "#/$defs/texts"}
+      }
+    },
+    "dependency": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "dependency_id", "source_claim_id", "target_claim_id", "relation",
+        "required", "interface_compatibility", "environment_compatibility",
+        "shared_evidence_ids", "correlated_failure_group_ids", "invalidation_triggers"
+      ],
+      "properties": {
+        "dependency_id": {"$ref": "#/$defs/id"},
+        "source_claim_id": {"$ref": "#/$defs/id"},
+        "target_claim_id": {"$ref": "#/$defs/id"},
+        "relation": {"enum": ["runtime", "build", "service", "data", "evaluator", "evidence", "interface", "policy", "toolchain"]},
+        "required": {"type": "boolean"},
+        "interface_compatibility": {"$ref": "#/$defs/status"},
+        "environment_compatibility": {"$ref": "#/$defs/status"},
+        "shared_evidence_ids": {"$ref": "#/$defs/ids"},
+        "correlated_failure_group_ids": {"$ref": "#/$defs/ids"},
+        "invalidation_triggers": {"$ref": "#/$defs/texts"}
+      }
+    },
+    "correlation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["group_id", "common_failure_source", "claim_ids", "evidence_ids", "status"],
+      "properties": {
+        "group_id": {"$ref": "#/$defs/id"},
+        "common_failure_source": {"$ref": "#/$defs/text"},
+        "claim_ids": {"$ref": "#/$defs/ids"},
+        "evidence_ids": {"$ref": "#/$defs/ids"},
+        "status": {"$ref": "#/$defs/status"}
+      }
+    },
+    "mncsResult": {
+      "type": "object", "additionalProperties": false,
+      "required": ["version", "level", "status", "result_id", "scope_id", "issues", "limitations"],
+      "properties": {
+        "version": {"const": "0.3-rc.1"},
+        "level": {"enum": ["MNCS-L1", "MNCS-L2", "MNCS-L3", "MNCS-L4", "MNCS-L5"]},
+        "status": {"$ref": "#/$defs/status"},
+        "result_id": {"$ref": "#/$defs/id"},
+        "scope_id": {"$ref": "#/$defs/id"},
+        "issues": {"$ref": "#/$defs/texts"},
+        "limitations": {"$ref": "#/$defs/texts"}
+      }
+    },
+    "mncdsResult": {
+      "type": "object", "additionalProperties": false,
+      "required": ["version", "profile", "status", "result_id", "scope_id", "issues", "limitations"],
+      "properties": {
+        "version": {"enum": ["0.1-draft", "0.1-rc.1"]},
+        "profile": {"enum": ["MNCDS-D1", "MNCDS-D2", "MNCDS-D3", "MNCDS-D4"]},
+        "status": {"$ref": "#/$defs/status"},
+        "result_id": {"$ref": "#/$defs/id"},
+        "scope_id": {"$ref": "#/$defs/id"},
+        "issues": {"$ref": "#/$defs/texts"},
+        "limitations": {"$ref": "#/$defs/texts"}
+      }
+    },
+    "materialChange": {
+      "type": "object", "additionalProperties": false,
+      "required": ["change_id", "dimension", "old_identity", "new_identity", "material", "rationale", "affected_claim_ids"],
+      "properties": {
+        "change_id": {"$ref": "#/$defs/id"},
+        "dimension": {"enum": ["artifact", "source", "toolchain", "environment", "policy", "contract", "provider", "evaluator", "dependency", "operational", "evidence_custody"]},
+        "old_identity": {"$ref": "#/$defs/id"},
+        "new_identity": {"$ref": "#/$defs/id"},
+        "material": {"type": "boolean"},
+        "rationale": {"$ref": "#/$defs/text"},
+        "affected_claim_ids": {"$ref": "#/$defs/ids"}
+      }
+    },
+    "supersession": {
+      "type": "object", "additionalProperties": false,
+      "required": ["prior_assurance_case_id", "reason", "effective_at", "historical_use_allowed"],
+      "properties": {
+        "prior_assurance_case_id": {"$ref": "#/$defs/id"},
+        "reason": {"$ref": "#/$defs/text"},
+        "effective_at": {"type": "string", "format": "date-time"},
+        "historical_use_allowed": {"type": "boolean"}
+      }
+    },
+    "replacement": {
+      "type": "object", "additionalProperties": false,
+      "required": ["old_artifact_id", "new_artifact_id", "old_claim_id", "new_claim_id", "compatibility_evidence_ids", "status", "effective_at"],
+      "properties": {
+        "old_artifact_id": {"$ref": "#/$defs/id"},
+        "new_artifact_id": {"$ref": "#/$defs/id"},
+        "old_claim_id": {"$ref": "#/$defs/id"},
+        "new_claim_id": {"$ref": "#/$defs/id"},
+        "compatibility_evidence_ids": {"$ref": "#/$defs/ids"},
+        "status": {"$ref": "#/$defs/status"},
+        "effective_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "rollback": {
+      "type": "object", "additionalProperties": false,
+      "required": ["active_release_id", "artifact_id", "procedure_id", "environment_id", "evidence_id", "test_status", "tested_at"],
+      "properties": {
+        "active_release_id": {"$ref": "#/$defs/id"},
+        "artifact_id": {"$ref": "#/$defs/id"},
+        "procedure_id": {"$ref": "#/$defs/id"},
+        "environment_id": {"$ref": "#/$defs/id"},
+        "evidence_id": {"$ref": "#/$defs/id"},
+        "test_status": {"$ref": "#/$defs/status"},
+        "tested_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "retirement": {
+      "type": "object", "additionalProperties": false,
+      "required": ["claim_id", "reason", "effective_at", "affected_claim_ids", "replacement_claim_id"],
+      "properties": {
+        "claim_id": {"$ref": "#/$defs/id"},
+        "reason": {"$ref": "#/$defs/text"},
+        "effective_at": {"type": "string", "format": "date-time"},
+        "affected_claim_ids": {"$ref": "#/$defs/ids"},
+        "replacement_claim_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/id"}]}
+      }
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {"pattern": "^[a-z][a-z0-9.-]*:[A-Za-z0-9][A-Za-z0-9._-]*$"},
+      "additionalProperties": true
+    }
+  }
+}

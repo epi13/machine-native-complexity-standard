@@ -1,0 +1,386 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schema/mncds/0.1-rc.1/mncds-development-record.schema.json",
+  "title": "MNCDS 0.1-rc.1 development record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "mncds_version", "record_id", "profile", "epoch_id",
+    "created_at", "supersedes_record_id", "charter", "baseline", "environment_lock",
+    "roles", "authority_overlaps", "generator", "partitions", "protected_evidence",
+    "evaluators", "candidates", "candidate_aggregates", "selection",
+    "reproducibility", "epochs", "mncs_binding", "release_controls", "extensions"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1-rc.1"},
+    "mncds_version": {"const": "0.1-rc.1"},
+    "record_id": {"$ref": "#/$defs/id"},
+    "profile": {"enum": ["MNCDS-D1", "MNCDS-D2", "MNCDS-D3", "MNCDS-D4"]},
+    "epoch_id": {"$ref": "#/$defs/id"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "supersedes_record_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/id"}]},
+    "charter": {"$ref": "#/$defs/charter"},
+    "baseline": {"$ref": "#/$defs/baseline"},
+    "environment_lock": {"$ref": "#/$defs/environment"},
+    "roles": {"type": "array", "minItems": 6, "items": {"$ref": "#/$defs/role"}},
+    "authority_overlaps": {"type": "array", "items": {"$ref": "#/$defs/overlap"}},
+    "generator": {"$ref": "#/$defs/generator"},
+    "partitions": {"$ref": "#/$defs/partitions"},
+    "protected_evidence": {"type": "array", "items": {"$ref": "#/$defs/protectedEvidence"}},
+    "evaluators": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evaluator"}},
+    "candidates": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/candidate"}},
+    "candidate_aggregates": {"type": "array", "items": {"$ref": "#/$defs/candidateAggregate"}},
+    "selection": {"$ref": "#/$defs/selection"},
+    "reproducibility": {"$ref": "#/$defs/reproducibility"},
+    "epochs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/epoch"}},
+    "mncs_binding": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/mncsBinding"}]},
+    "release_controls": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/releaseControls"}]},
+    "extensions": {"$ref": "#/$defs/extensions"}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "status": {"enum": ["PASS", "FAIL", "UNKNOWN"]},
+    "text": {"type": "string", "minLength": 1},
+    "texts": {"type": "array", "items": {"$ref": "#/$defs/text"}},
+    "ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "charter": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "charter_id", "problem_statement", "intended_use", "exclusions", "contract_id",
+        "baseline_id", "environment_id", "threat_model_id", "objective",
+        "selection_policy_id", "planned_mncs_level", "hard_rejection_gates",
+        "release_owner_id", "rollback_owner_id", "retirement_owner_id"
+      ],
+      "properties": {
+        "charter_id": {"$ref": "#/$defs/id"},
+        "problem_statement": {"$ref": "#/$defs/text"},
+        "intended_use": {"$ref": "#/$defs/text"},
+        "exclusions": {"$ref": "#/$defs/texts"},
+        "contract_id": {"$ref": "#/$defs/id"},
+        "baseline_id": {"$ref": "#/$defs/id"},
+        "environment_id": {"$ref": "#/$defs/id"},
+        "threat_model_id": {"$ref": "#/$defs/id"},
+        "objective": {
+          "type": "object", "additionalProperties": false,
+          "required": ["objective_id", "metric", "unit", "direction", "minimum_useful_benefit", "operational_rationale"],
+          "properties": {
+            "objective_id": {"$ref": "#/$defs/id"},
+            "metric": {"$ref": "#/$defs/text"},
+            "unit": {"$ref": "#/$defs/text"},
+            "direction": {"enum": ["minimize", "maximize"]},
+            "minimum_useful_benefit": {"type": "number"},
+            "operational_rationale": {"$ref": "#/$defs/text"}
+          }
+        },
+        "selection_policy_id": {"$ref": "#/$defs/id"},
+        "planned_mncs_level": {"enum": [null, "MNCS-L1", "MNCS-L2", "MNCS-L3", "MNCS-L4", "MNCS-L5"]},
+        "hard_rejection_gates": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "release_owner_id": {"$ref": "#/$defs/id"},
+        "rollback_owner_id": {"$ref": "#/$defs/id"},
+        "retirement_owner_id": {"$ref": "#/$defs/id"}
+      }
+    },
+    "baseline": {
+      "type": "object", "additionalProperties": false,
+      "required": ["baseline_id", "artifact_id", "source_id", "build_id", "dependency_ids", "environment_id", "evaluator_ids", "results", "captured_at", "immutable"],
+      "properties": {
+        "baseline_id": {"$ref": "#/$defs/id"},
+        "artifact_id": {"$ref": "#/$defs/id"},
+        "source_id": {"$ref": "#/$defs/id"},
+        "build_id": {"$ref": "#/$defs/id"},
+        "dependency_ids": {"$ref": "#/$defs/ids"},
+        "environment_id": {"$ref": "#/$defs/id"},
+        "evaluator_ids": {"$ref": "#/$defs/ids"},
+        "results": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/result"}},
+        "captured_at": {"type": "string", "format": "date-time"},
+        "immutable": {"const": true}
+      }
+    },
+    "environment": {
+      "type": "object", "additionalProperties": false,
+      "required": ["environment_id", "toolchain_id", "dependency_ids", "hardware_id", "configuration_id", "permitted_variance", "locked"],
+      "properties": {
+        "environment_id": {"$ref": "#/$defs/id"},
+        "toolchain_id": {"$ref": "#/$defs/id"},
+        "dependency_ids": {"$ref": "#/$defs/ids"},
+        "hardware_id": {"$ref": "#/$defs/id"},
+        "configuration_id": {"$ref": "#/$defs/id"},
+        "permitted_variance": {"$ref": "#/$defs/texts"},
+        "locked": {"type": "boolean"}
+      }
+    },
+    "role": {
+      "type": "object", "additionalProperties": false,
+      "required": ["role", "authority_id", "executable_id"],
+      "properties": {
+        "role": {"enum": ["contract_authority", "generator_authority", "evaluator_authority", "selection_authority", "release_authority", "independent_reviewer"]},
+        "authority_id": {"$ref": "#/$defs/id"},
+        "executable_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/id"}]}
+      }
+    },
+    "overlap": {
+      "type": "object", "additionalProperties": false,
+      "required": ["authority_id", "roles", "scope", "rationale", "risk", "recusal_or_control"],
+      "properties": {
+        "authority_id": {"$ref": "#/$defs/id"},
+        "roles": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}},
+        "scope": {"$ref": "#/$defs/text"},
+        "rationale": {"$ref": "#/$defs/text"},
+        "risk": {"$ref": "#/$defs/text"},
+        "recusal_or_control": {"$ref": "#/$defs/text"}
+      }
+    },
+    "generator": {
+      "type": "object", "additionalProperties": false,
+      "required": ["generator_id", "configuration_id", "authority_id", "executable_id", "permissions", "resource_limits"],
+      "properties": {
+        "generator_id": {"$ref": "#/$defs/id"},
+        "configuration_id": {"$ref": "#/$defs/id"},
+        "authority_id": {"$ref": "#/$defs/id"},
+        "executable_id": {"$ref": "#/$defs/id"},
+        "permissions": {
+          "type": "object", "additionalProperties": false,
+          "required": ["modify_contract", "modify_baseline", "modify_evaluators", "modify_selection_policy", "modify_thresholds", "access_protected_holdout", "network_access", "filesystem_scope", "process_scope", "tool_ids", "mutation_scope"],
+          "properties": {
+            "modify_contract": {"type": "boolean"},
+            "modify_baseline": {"type": "boolean"},
+            "modify_evaluators": {"type": "boolean"},
+            "modify_selection_policy": {"type": "boolean"},
+            "modify_thresholds": {"type": "boolean"},
+            "access_protected_holdout": {"type": "boolean"},
+            "network_access": {"type": "boolean"},
+            "filesystem_scope": {"$ref": "#/$defs/texts"},
+            "process_scope": {"$ref": "#/$defs/texts"},
+            "tool_ids": {"$ref": "#/$defs/ids"},
+            "mutation_scope": {"$ref": "#/$defs/texts"}
+          }
+        },
+        "resource_limits": {
+          "type": "object", "additionalProperties": false,
+          "required": ["max_candidates", "max_wall_seconds", "max_memory_bytes", "max_processes"],
+          "properties": {
+            "max_candidates": {"type": "integer", "minimum": 1},
+            "max_wall_seconds": {"type": "number", "exclusiveMinimum": 0},
+            "max_memory_bytes": {"type": "integer", "minimum": 1},
+            "max_processes": {"type": "integer", "minimum": 1}
+          }
+        }
+      }
+    },
+    "partitions": {
+      "type": "object", "additionalProperties": false,
+      "required": ["development_id", "selection_id", "final_evaluation_id", "holdout_contaminated", "access_policy_ids"],
+      "properties": {
+        "development_id": {"$ref": "#/$defs/id"},
+        "selection_id": {"$ref": "#/$defs/id"},
+        "final_evaluation_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/id"}]},
+        "holdout_contaminated": {"type": "boolean"},
+        "access_policy_ids": {"$ref": "#/$defs/ids"}
+      }
+    },
+    "protectedEvidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["evidence_id", "partition_id", "commitment_id", "custodian_id", "custody_class", "disclosed_at", "generator_access", "reuse_claim_ids", "contaminated", "status"],
+      "properties": {
+        "evidence_id": {"$ref": "#/$defs/id"},
+        "partition_id": {"$ref": "#/$defs/id"},
+        "commitment_id": {"$ref": "#/$defs/id"},
+        "custodian_id": {"$ref": "#/$defs/id"},
+        "custody_class": {"enum": ["developer_withheld", "independent_operator", "organizationally_independent"]},
+        "disclosed_at": {"oneOf": [{"type": "null"}, {"type": "string", "format": "date-time"}]},
+        "generator_access": {"type": "boolean"},
+        "reuse_claim_ids": {"$ref": "#/$defs/ids"},
+        "contaminated": {"type": "boolean"},
+        "status": {"$ref": "#/$defs/status"}
+      }
+    },
+    "evaluator": {
+      "type": "object", "additionalProperties": false,
+      "required": ["evaluator_id", "purpose", "authority_id", "executable_id", "configuration_id", "environment_id", "independent", "operator_independence", "organizational_independence", "regression_corpus_id"],
+      "properties": {
+        "evaluator_id": {"$ref": "#/$defs/id"},
+        "purpose": {"enum": ["development", "selection", "holdout", "independent"]},
+        "authority_id": {"$ref": "#/$defs/id"},
+        "executable_id": {"$ref": "#/$defs/id"},
+        "configuration_id": {"$ref": "#/$defs/id"},
+        "environment_id": {"$ref": "#/$defs/id"},
+        "independent": {"type": "boolean"},
+        "operator_independence": {"$ref": "#/$defs/status"},
+        "organizational_independence": {"$ref": "#/$defs/status"},
+        "regression_corpus_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/id"}]}
+      }
+    },
+    "result": {
+      "type": "object", "additionalProperties": false,
+      "required": ["evaluator_id", "gate_id", "partition_id", "required", "status", "evidence_id"],
+      "properties": {
+        "evaluator_id": {"$ref": "#/$defs/id"},
+        "gate_id": {"$ref": "#/$defs/id"},
+        "partition_id": {"$ref": "#/$defs/id"},
+        "required": {"type": "boolean"},
+        "status": {"$ref": "#/$defs/status"},
+        "evidence_id": {"$ref": "#/$defs/id"}
+      }
+    },
+    "candidate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["candidate_id", "parent_ids", "epoch_id", "generator_id", "generation_sequence", "materially_evaluated", "retained", "build_status", "disposition", "objective_value", "evaluator_results"],
+      "properties": {
+        "candidate_id": {"$ref": "#/$defs/id"},
+        "parent_ids": {"$ref": "#/$defs/ids"},
+        "epoch_id": {"$ref": "#/$defs/id"},
+        "generator_id": {"$ref": "#/$defs/id"},
+        "generation_sequence": {"type": "integer", "minimum": 0},
+        "materially_evaluated": {"type": "boolean"},
+        "retained": {"type": "boolean"},
+        "build_status": {"$ref": "#/$defs/status"},
+        "disposition": {"enum": ["rejected", "retained", "promoted", "selected"]},
+        "objective_value": {"type": ["number", "null"]},
+        "evaluator_results": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/result"}}
+      }
+    },
+    "candidateAggregate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["aggregate_id", "predeclared_rule_id", "count", "reason_class", "generator_id", "configuration_id", "sequence_start", "sequence_end", "digest"],
+      "properties": {
+        "aggregate_id": {"$ref": "#/$defs/id"},
+        "predeclared_rule_id": {"$ref": "#/$defs/id"},
+        "count": {"type": "integer", "minimum": 1},
+        "reason_class": {"$ref": "#/$defs/text"},
+        "generator_id": {"$ref": "#/$defs/id"},
+        "configuration_id": {"$ref": "#/$defs/id"},
+        "sequence_start": {"type": "integer", "minimum": 0},
+        "sequence_end": {"type": "integer", "minimum": 0},
+        "digest": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "selection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["policy_id", "selection_epoch_id", "selected_candidate_id", "rule_recorded_before_final_evaluation", "unknown_policy", "minimum_useful_benefit_met", "hard_gates_passed", "rationale", "human_review"],
+      "properties": {
+        "policy_id": {"$ref": "#/$defs/id"},
+        "selection_epoch_id": {"$ref": "#/$defs/id"},
+        "selected_candidate_id": {"$ref": "#/$defs/id"},
+        "rule_recorded_before_final_evaluation": {"type": "boolean"},
+        "unknown_policy": {"enum": ["reject", "human_review"]},
+        "minimum_useful_benefit_met": {"type": "boolean"},
+        "hard_gates_passed": {"type": "boolean"},
+        "rationale": {"$ref": "#/$defs/text"},
+        "human_review": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object", "additionalProperties": false,
+              "required": ["reviewer_id", "decision", "rationale"],
+              "properties": {
+                "reviewer_id": {"$ref": "#/$defs/id"},
+                "decision": {"enum": ["accept_with_unknown", "reject"]},
+                "rationale": {"$ref": "#/$defs/text"}
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reproducibility": {
+      "type": "object", "additionalProperties": false,
+      "required": ["class", "seeds_preserved", "protocol", "measurement_repetitions", "comparison_statistic", "acceptance_bounds", "failure_treatment"],
+      "properties": {
+        "class": {"enum": ["EXACT", "SEEDED", "STATISTICAL", "DISTRIBUTIONAL", "NONE"]},
+        "seeds_preserved": {"type": "boolean"},
+        "protocol": {"$ref": "#/$defs/text"},
+        "measurement_repetitions": {"type": "integer", "minimum": 1},
+        "comparison_statistic": {"$ref": "#/$defs/text"},
+        "acceptance_bounds": {"$ref": "#/$defs/text"},
+        "failure_treatment": {"$ref": "#/$defs/text"}
+      }
+    },
+    "epoch": {
+      "type": "object", "additionalProperties": false,
+      "required": ["epoch_id", "parent_epoch_id", "toolchain_id", "corpus_id", "objective_id", "contract_id", "threshold_policy_id", "development_partition_id", "final_partition_id", "change_evidence_ids", "regression_fixture_ids"],
+      "properties": {
+        "epoch_id": {"$ref": "#/$defs/id"},
+        "parent_epoch_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/id"}]},
+        "toolchain_id": {"$ref": "#/$defs/id"},
+        "corpus_id": {"$ref": "#/$defs/id"},
+        "objective_id": {"$ref": "#/$defs/id"},
+        "contract_id": {"$ref": "#/$defs/id"},
+        "threshold_policy_id": {"$ref": "#/$defs/id"},
+        "development_partition_id": {"$ref": "#/$defs/id"},
+        "final_partition_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/id"}]},
+        "change_evidence_ids": {"$ref": "#/$defs/ids"},
+        "regression_fixture_ids": {"$ref": "#/$defs/ids"}
+      }
+    },
+    "mncsBinding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["result_or_package_id", "mncs_version", "candidate_id", "contract_id", "environment_id", "status"],
+      "properties": {
+        "result_or_package_id": {"$ref": "#/$defs/id"},
+        "mncs_version": {"enum": ["0.1", "0.1.1", "0.2", "0.3-rc.1"]},
+        "candidate_id": {"$ref": "#/$defs/id"},
+        "contract_id": {"$ref": "#/$defs/id"},
+        "environment_id": {"$ref": "#/$defs/id"},
+        "status": {"$ref": "#/$defs/status"}
+      }
+    },
+    "releaseControls": {
+      "type": "object", "additionalProperties": false,
+      "required": ["release_artifact_id", "release_environment_id", "release_authority_id", "build_procedure_id", "package_procedure_id", "monitoring", "rollback", "regeneration_or_replacement", "retirement"],
+      "properties": {
+        "release_artifact_id": {"$ref": "#/$defs/id"},
+        "release_environment_id": {"$ref": "#/$defs/id"},
+        "release_authority_id": {"$ref": "#/$defs/id"},
+        "build_procedure_id": {"$ref": "#/$defs/id"},
+        "package_procedure_id": {"$ref": "#/$defs/id"},
+        "monitoring": {
+          "type": "object", "additionalProperties": false,
+          "required": ["signal_ids", "threshold_policy_id", "status"],
+          "properties": {
+            "signal_ids": {"$ref": "#/$defs/ids"},
+            "threshold_policy_id": {"$ref": "#/$defs/id"},
+            "status": {"$ref": "#/$defs/status"}
+          }
+        },
+        "rollback": {
+          "type": "object", "additionalProperties": false,
+          "required": ["artifact_id", "procedure_id", "test_status", "evidence_id"],
+          "properties": {
+            "artifact_id": {"$ref": "#/$defs/id"},
+            "procedure_id": {"$ref": "#/$defs/id"},
+            "test_status": {"$ref": "#/$defs/status"},
+            "evidence_id": {"$ref": "#/$defs/id"}
+          }
+        },
+        "regeneration_or_replacement": {
+          "type": "object", "additionalProperties": false,
+          "required": ["procedure_id", "performed_at", "status", "evidence_id", "replacement_candidate_id"],
+          "properties": {
+            "procedure_id": {"$ref": "#/$defs/id"},
+            "performed_at": {"type": "string", "format": "date-time"},
+            "status": {"$ref": "#/$defs/status"},
+            "evidence_id": {"$ref": "#/$defs/id"},
+            "replacement_candidate_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/id"}]}
+          }
+        },
+        "retirement": {
+          "type": "object", "additionalProperties": false,
+          "required": ["trigger_ids", "retired", "retired_at", "reason", "replacement_candidate_id"],
+          "properties": {
+            "trigger_ids": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/id"}},
+            "retired": {"type": "boolean"},
+            "retired_at": {"oneOf": [{"type": "null"}, {"type": "string", "format": "date-time"}]},
+            "reason": {"type": ["string", "null"], "minLength": 1},
+            "replacement_candidate_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/id"}]}
+          }
+        }
+      }
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {"pattern": "^[a-z][a-z0-9.-]*:[A-Za-z0-9][A-Za-z0-9._-]*$"},
+      "additionalProperties": true
+    }
+  }
+}

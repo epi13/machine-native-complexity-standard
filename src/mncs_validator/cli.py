@@ -7,10 +7,12 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from . import __version__
+from .assurance import validate_rc_file
 from .attestation import (
     attest,
     generate_key,
@@ -25,6 +27,7 @@ from .errors import MncsError
 from .hashing import hash_path, sha256_bytes
 from .package import inspect_package, pack, unpack, verify_package
 from .provider import inspect_provider, run_descriptor, verify_result
+from .rc_corpus import default_corpus_path, run_corpus
 from .reporting import (
     manifest_summary,
     render_comparison,
@@ -38,6 +41,16 @@ from .validation import compare_manifests, load_json_object, validate_bundle, va
 CURRENT_SCHEMA_VERSION = "0.2"
 SUPPORTED_SCHEMA_VERSIONS = ("0.1", "0.1.1", "0.2")
 NORMATIVE_STANDARD_FAMILY = "MNCS 0.2"
+RELEASE_CANDIDATE_FAMILIES = ("MNCS 0.3-rc.1", "MNCDS 0.1-rc.1")
+
+
+def _parse_evaluation_time(value: str | None) -> datetime:
+    if value is None:
+        return datetime.now(UTC)
+    parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        raise ValueError("--at must include an RFC 3339 UTC offset")
+    return parsed
 
 
 def _json_option(parser: argparse.ArgumentParser) -> None:
@@ -211,6 +224,42 @@ def build_parser() -> argparse.ArgumentParser:
     schema = subparsers.add_parser("schema", help="print a bundled JSON Schema")
     schema.add_argument("name", choices=sorted(SCHEMA_NAMES))
     _json_option(schema)
+
+    validate_record = subparsers.add_parser(
+        "validate-record",
+        help="validate an MNCS 0.3 release-candidate record offline",
+    )
+    validate_record.add_argument(
+        "kind",
+        choices=("contract", "assurance", "threat", "measurement"),
+    )
+    validate_record.add_argument("record", type=Path)
+    validate_record.add_argument(
+        "--at",
+        help="evaluate freshness at an RFC 3339 timestamp; defaults to current time",
+    )
+    validate_record.add_argument("--require-pass", action="store_true")
+    _json_option(validate_record)
+
+    migration = subparsers.add_parser(
+        "migration-inspect",
+        help="inspect version dispatch without upgrading or rewriting a record",
+    )
+    migration.add_argument("record", type=Path)
+    _json_option(migration)
+
+    corpus = subparsers.add_parser("corpus", help="run an offline conformance corpus")
+    corpus_commands = corpus.add_subparsers(dest="corpus_command", required=True)
+    rc_corpus = corpus_commands.add_parser(
+        "release-candidate",
+        help="run the MNCS 0.3 and MNCDS 0.1 release-candidate corpus",
+    )
+    rc_corpus.add_argument(
+        "--corpus",
+        type=Path,
+        default=default_corpus_path(),
+    )
+    _json_option(rc_corpus)
 
     version = subparsers.add_parser("version", help="print validator version")
     _json_option(version)
@@ -496,6 +545,50 @@ def run(args: argparse.Namespace) -> int:
         schema = load_schema(args.name)
         _write_json(schema)
         return 0
+    if command == "validate-record":
+        _require_file(args.record)
+        at = _parse_evaluation_time(args.at)
+        report = validate_rc_file(args.record, args.kind, at=at)
+        _write_json(report.as_dict()) if args.json else print(report.category)
+        if not report.supported:
+            return 4
+        if not report.valid:
+            return 1
+        return 3 if args.require_pass and report.computed_status != "PASS" else 0
+    if command == "migration-inspect":
+        _require_file(args.record)
+        value = load_json_object(args.record)
+        schema_version = value.get("schema_version")
+        mncs_version = value.get("mncs_version")
+        mncds_version = value.get("mncds_version")
+        if mncds_version is not None:
+            supported = mncds_version in {"0.1-draft", "0.1-rc.1"}
+            family = "MNCDS"
+            version_value = mncds_version
+        else:
+            supported = schema_version in {"0.1", "0.1.1", "0.2", "0.3-rc.1"}
+            family = "MNCS"
+            version_value = mncs_version or schema_version
+        result = {
+            "family": family,
+            "version": version_value,
+            "schema_version": schema_version,
+            "supported": supported,
+            "automatic_upgrade": False,
+            "new_identity_required_for_material_change": True,
+            "historical_claim_preserved": True,
+        }
+        _write_json(result) if args.json else print(json.dumps(result, sort_keys=True))
+        return 0 if supported else 4
+    if command == "corpus":
+        if args.corpus_command != "release-candidate":
+            raise AssertionError(f"unhandled corpus command: {args.corpus_command}")
+        rc_summary, results = run_corpus(args.corpus)
+        result = {"summary": rc_summary.as_dict(), "results": results}
+        _write_json(result) if args.json else print(
+            json.dumps(rc_summary.as_dict(), sort_keys=True)
+        )
+        return 0 if rc_summary.mismatched == 0 else 1
     if command == "version":
         version_result: dict[str, Any] = {
             "package": "mncs-validator",
@@ -503,6 +596,8 @@ def run(args: argparse.Namespace) -> int:
             "current_schema_version": CURRENT_SCHEMA_VERSION,
             "supported_schema_versions": list(SUPPORTED_SCHEMA_VERSIONS),
             "normative_standard_family": NORMATIVE_STANDARD_FAMILY,
+            "release_candidate_families": list(RELEASE_CANDIDATE_FAMILIES),
+            "record_schema_versions": ["0.3-rc.1"],
         }
         _write_json(version_result) if args.json else print(
             f"mncs-validator {__version__} "
@@ -517,6 +612,6 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         return run(build_parser().parse_args(argv))
-    except (MncsError, FileNotFoundError, PermissionError) as exc:
+    except (MncsError, FileNotFoundError, PermissionError, ValueError) as exc:
         print(f"mncs: error: {exc}", file=sys.stderr)
         return 2
