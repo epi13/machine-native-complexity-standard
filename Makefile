@@ -1,4 +1,4 @@
-.PHONY: format lint type test build examples corpus mncds-corpus interoperability docs edgestream-smoke edgestream-evidence remote-water-smoke remote-water-test remote-water-study edgestream-water-integration cacheforge-smoke cacheforge-test cacheforge-study cacheforge-epoch2 ravel-test ravel-training-check ravel-unified-check dsense-check dsense-avr-compile language-profile-schema language-provider-corpus multilingual-stream cacheforge-language-profile multilingual-wave-one go-profile go-provider-corpus go-gateway composed-gateway multilingual-wave-two composed-wave-three multilingual-wave-three composed-wave-four multilingual-wave-four composed-wave-five multilingual-wave-five check
+.PHONY: format lint type test build examples corpus mncds-corpus interoperability release-candidate-schema release-candidate-corpus release-candidate-independent recursive-study release-candidate-check docs edgestream-smoke edgestream-evidence remote-water-smoke remote-water-test remote-water-study edgestream-water-integration cacheforge-smoke cacheforge-test cacheforge-study cacheforge-epoch2 ravel-test ravel-training-check ravel-unified-check dsense-check dsense-avr-compile language-profile-schema language-provider-corpus multilingual-stream cacheforge-language-profile multilingual-wave-one go-profile go-provider-corpus go-gateway composed-gateway multilingual-wave-two composed-wave-three multilingual-wave-three composed-wave-four multilingual-wave-four composed-wave-five multilingual-wave-five check
 
 WAVE_THREE_OUTPUT ?= evidence/actual
 WAVE_FOUR_OUTPUT ?= evidence/actual
@@ -25,6 +25,17 @@ mncds-corpus:
 	PYTHONPATH=src python scripts/run-mncds-corpus
 interoperability:
 	PYTHONPATH=src ./scripts/run-interoperability
+release-candidate-schema:
+	PYTHONPATH=src python -c "from mncs_validator.schemas import load_schema; [load_schema(name) for name in ('contract-profile-0.3','assurance-case-0.3','threat-record-0.3','measurement-profile-0.3','mncds-development-record-0.1')]"
+release-candidate-corpus:
+	PYTHONPATH=src ./scripts/run-release-candidate-corpus
+release-candidate-independent:
+	cargo test --manifest-path independent/rc-consumer/Cargo.toml
+	cargo clippy --manifest-path independent/rc-consumer/Cargo.toml --all-targets -- -D warnings
+	PYTHONPATH=src ./scripts/compare-release-candidate-consumers
+recursive-study:
+	PYTHONPATH=src python studies/recursive-analyzer/run_study.py >/dev/null
+release-candidate-check: release-candidate-schema release-candidate-corpus release-candidate-independent recursive-study
 docs:
 	./scripts/build-docs
 edgestream-smoke:
@@ -98,4 +109,4 @@ composed-wave-five:
 multilingual-wave-five:
 	PYTHONPATH=src ./scripts/verify-wave-five
 	$(MAKE) composed-wave-five WAVE_FIVE_OUTPUT=$(WAVE_FIVE_OUTPUT)
-check: lint type test build examples corpus mncds-corpus interoperability docs
+check: lint type test build examples corpus mncds-corpus interoperability release-candidate-check docs
