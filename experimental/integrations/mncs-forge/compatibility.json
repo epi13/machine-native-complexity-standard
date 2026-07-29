@@ -1,7 +1,7 @@
 {
   "record_type": "experimental-non-normative-integration",
   "forge": {
-    "commit": "9f8340020d2d26080314a8f37b1ca6e7f0ffa13a",
+    "commit": "5079c97a1e20fe5dfa3592a8b7597cae6785c2c6",
     "repository": "https://github.com/epi13/mncs-forge-mcp",
     "version": "0.1.0a1"
   },
