@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schema/experimental/0.5/mncs-reproduction-cohort.schema.json",
+  "title": "Experimental MNCS portable reproduction cohort",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "cohort_id",
+    "plan_id",
+    "bundle_id",
+    "manifest_identity",
+    "candidate_freeze_identity",
+    "source_records",
+    "status",
+    "evidence_class",
+    "public_reproduction_status",
+    "independent_evaluation_status",
+    "findings",
+    "summary",
+    "formal_mncs_status",
+    "formal_mncds_status",
+    "promotion_authorized",
+    "evaluator_identity",
+    "extensions"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.5-experimental"},
+    "cohort_id": {"type": "string", "minLength": 1},
+    "plan_id": {"type": "string", "minLength": 1},
+    "bundle_id": {"type": "string", "minLength": 1},
+    "manifest_identity": {"$ref": "#/$defs/identity"},
+    "candidate_freeze_identity": {"$ref": "#/$defs/identity"},
+    "source_records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "record_id", "raw_artifact_identity"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "record_id": {"type": "string", "minLength": 1},
+          "raw_artifact_identity": {"$ref": "#/$defs/identity"}
+        }
+      }
+    },
+    "status": {"$ref": "#/$defs/status"},
+    "evidence_class": {
+      "enum": [
+        "NO_EVIDENCE",
+        "SINGLE_HOST",
+        "OPERATOR_CONTROLLED_CROSS_HOST",
+        "MULTI_OPERATOR_PUBLIC_REPRODUCTION",
+        "INDEPENDENT_EXTERNAL_REPRODUCTION"
+      ]
+    },
+    "public_reproduction_status": {"$ref": "#/$defs/status"},
+    "independent_evaluation_status": {"$ref": "#/$defs/status"},
+    "findings": {"type": "array", "items": {"type": "string"}},
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "machine_count",
+        "operator_count",
+        "os_families",
+        "distributions",
+        "architectures",
+        "semantic_output_digests",
+        "required_machine_labels",
+        "missing_machine_labels",
+        "result_status",
+        "gate_status"
+      ],
+      "properties": {
+        "machine_count": {"type": "integer", "minimum": 0},
+        "operator_count": {"type": "integer", "minimum": 0},
+        "os_families": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "distributions": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "architectures": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "semantic_output_digests": {
+          "type": "array",
+          "maxItems": 1,
+          "items": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "required_machine_labels": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "missing_machine_labels": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "result_status": {"$ref": "#/$defs/status"},
+        "gate_status": {"$ref": "#/$defs/status"}
+      }
+    },
+    "formal_mncs_status": {"$ref": "#/$defs/status"},
+    "formal_mncds_status": {"$ref": "#/$defs/status"},
+    "promotion_authorized": {"type": "boolean"},
+    "evaluator_identity": {"$ref": "#/$defs/identity"},
+    "extensions": {"type": "object"}
+  },
+  "$defs": {
+    "identity": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "status": {"enum": ["PASS", "FAIL", "UNKNOWN"]}
+  }
+}

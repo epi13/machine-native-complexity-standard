@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schema/experimental/0.5/mncs-host-execution-record.schema.json",
+  "title": "Experimental MNCS portable host execution record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_id",
+    "bundle_id",
+    "manifest_identity",
+    "transport_archive_identity",
+    "candidate_freeze_identity",
+    "machine_label",
+    "operator_id",
+    "operator_controlled",
+    "evidence_class",
+    "started_at_unix",
+    "finished_at_unix",
+    "environment",
+    "capabilities",
+    "gates",
+    "semantic_output_digest",
+    "raw_artifact_identity",
+    "result",
+    "findings",
+    "independent_evaluation_status",
+    "protected_holdout_status",
+    "extensions"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.5-experimental"},
+    "record_id": {"type": "string", "minLength": 1},
+    "bundle_id": {"type": "string", "minLength": 1},
+    "manifest_identity": {"$ref": "#/$defs/identity"},
+    "transport_archive_identity": {
+      "oneOf": [
+        {"$ref": "#/$defs/identity"},
+        {"type": "null"}
+      ]
+    },
+    "candidate_freeze_identity": {"$ref": "#/$defs/identity"},
+    "machine_label": {"type": "string", "minLength": 1},
+    "operator_id": {"type": "string", "minLength": 1},
+    "operator_controlled": {"type": "boolean"},
+    "evidence_class": {"enum": ["OPERATOR_CONTROLLED", "EXTERNAL_PUBLIC", "INDEPENDENT_EXTERNAL"]},
+    "started_at_unix": {"type": "number", "minimum": 0},
+    "finished_at_unix": {"type": "number", "minimum": 0},
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "os_family",
+        "os_release",
+        "distribution",
+        "architecture",
+        "python_version",
+        "python_implementation",
+        "cpu_count",
+        "machine_fingerprint"
+      ],
+      "properties": {
+        "os_family": {"type": "string", "minLength": 1},
+        "os_release": {"type": "string", "minLength": 1},
+        "distribution": {"type": "string", "minLength": 1},
+        "architecture": {"type": "string", "minLength": 1},
+        "python_version": {"type": "string", "minLength": 1},
+        "python_implementation": {"type": "string", "minLength": 1},
+        "cpu_count": {"type": ["integer", "null"], "minimum": 1},
+        "machine_fingerprint": {"$ref": "#/$defs/identity"}
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/capability"},
+      "minProperties": 3
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/status"},
+      "required": [
+        "bundle_integrity",
+        "deterministic_vectors",
+        "checkpoint_resume",
+        "corruption_rejection",
+        "offline_capability"
+      ]
+    },
+    "semantic_output_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "raw_artifact_identity": {"$ref": "#/$defs/identity"},
+    "result": {"$ref": "#/$defs/status"},
+    "findings": {"type": "array", "items": {"type": "string"}},
+    "independent_evaluation_status": {"$ref": "#/$defs/status"},
+    "protected_holdout_status": {"$ref": "#/$defs/status"},
+    "extensions": {"type": "object"}
+  },
+  "$defs": {
+    "identity": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "status": {"enum": ["PASS", "FAIL", "UNKNOWN"]},
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "executable", "version"],
+      "properties": {
+        "status": {"$ref": "#/$defs/status"},
+        "executable": {"type": ["string", "null"]},
+        "version": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

@@ -22,40 +22,53 @@ Checkpoints bind the system contract, C header, binding specification, binding g
 
 ## Wave Four evidence custody
 
-Wave Four adds records that can be supplied by actors outside the development process. A protected evidence record binds:
-
-- preregistration and candidate-freeze identities;
-- protected corpus identity;
-- custodian and evaluator identities and organizations;
-- raw and normalized result identities;
-- attestation identity;
-- preregistration, freeze, disclosure, and evaluation timestamps;
-- explicit confirmation that the corpus is not embedded publicly and was unavailable to development participants before disclosure.
+Wave Four adds records that can be supplied by actors outside the development process. A protected evidence record binds preregistration and candidate-freeze identities, protected corpus identity, actor identities, raw and normalized result identities, attestation identity, disclosure chronology, and confirmation that the corpus was unavailable to development participants before disclosure.
 
 The reference verifier rejects self-custody, self-evaluation, invalid timestamp order, missing identities, and attempts to relabel public development evidence. Software can check record consistency, but organizational independence remains an externally attested fact.
 
 ## Cross-host agreement
 
-Cross-host reconciliation requires at least two distinct environments. The reconciler compares:
-
-- system contract and evidence epoch;
-- component, binding, generator, and tool identities;
-- all required build, recovery, replacement, and mutation gates;
-- semantic output digests.
-
-An identity or semantic mismatch is `FAIL`. An unavailable required gate is `UNKNOWN`. Agreement becomes `PASS` only when all required host records pass under the same frozen identities. Synthetic fixtures test the reconciler but are not reproduction evidence.
+Wave Four cross-host reconciliation compares system contract, evidence epoch, component, binding, generator, tool, recovery, mutation, and semantic-output identities. An identity or semantic mismatch is `FAIL`. An unavailable required gate is `UNKNOWN`. Synthetic fixtures test the reconciler but are not reproduction evidence.
 
 ## Service boundary
 
-Wave Four adds a bounded Go HTTP service on `127.0.0.1` with an ephemeral port. The service uses exact `V1` JSON messages, a 1,024-byte body limit, a bounded integer domain, strict unknown-field rejection, caller cancellation, bounded shutdown, and identity-bound restart policy. Tests cover valid execution, malformed JSON, unknown fields, wrong method, version mismatch, oversized body, cancellation, shutdown, and restart.
+Wave Four adds a bounded Go HTTP service on `127.0.0.1` with an ephemeral port. It uses exact `V1` JSON messages, a 1,024-byte body limit, a bounded integer domain, strict unknown-field rejection, caller cancellation, bounded shutdown, and identity-bound restart policy.
 
 Loopback tests establish only the declared local transport contract. Production networking, reverse proxies, orchestration, kernel variance, and service-manager behavior outside the simulated restart remain `UNKNOWN`.
 
+## Wave Five portable evaluator
+
+Wave Five freezes a small evaluator bundle that can be copied unchanged to physical machines. The bundle uses Python 3.9 or later and the standard library only. Its deterministic ZIP uses stored entries and fixed metadata so the archive, manifest, evaluator, workload, and candidate-freeze identities can be checked before execution.
+
+Each host record retains:
+
+- the frozen bundle and manifest identities;
+- the transport archive identity when supplied;
+- machine label and hashed machine fingerprint;
+- operator identity and evidence class;
+- OS family, distribution, architecture, Python runtime, and CPU count;
+- optional Go, Rust, and C compiler observations;
+- bundle integrity, deterministic vectors, checkpoint resume, corruption rejection, and offline-capability gates;
+- semantic and raw-artifact identities;
+- explicit protected-holdout and independent-evaluation statuses.
+
+The portable contract is narrower than the full C11/Go/Rust epoch. It checks deterministic behavioral and recovery semantics plus bundle portability; it does not replace compiler, race, mutation, FFI, or subprocess evidence.
+
+## Operator-controlled physical cohort
+
+The preregistered Wave Five physical cohort contains:
+
+- `windows-a` and `windows-b`;
+- `fedora-a` and `fedora-b`;
+- `pios-arm`.
+
+A cohort PASS requires all five records, one frozen bundle and candidate identity, one semantic output digest, all required gates PASS, at least two OS families, three distribution classes, and two normalized architectures.
+
+When one project operator runs all five machines, the evidence class is `OPERATOR_CONTROLLED_CROSS_HOST`. This can set public reproduction to PASS and is materially stronger than a single development machine. It cannot set independent evaluation or protected holdout to PASS because machine diversity is not actor or custody independence.
+
 ## Separate claim readiness
 
-Wave Four never combines implementation and lifecycle claims into one score.
-
-MNCS readiness requires the development epoch, cross-host agreement, protected holdout, independent evaluation, and service boundary to pass. MNCDS-D4 readiness additionally requires deterministic regeneration, a witnessed replacement drill, release controls, monitoring, retirement controls, and an independent witness. Release authorization is a separate required result.
+MNCS readiness requires the development epoch, public reproduction, protected holdout, independent evaluation, and all required boundaries to pass. MNCDS-D4 readiness additionally requires deterministic regeneration, a witnessed replacement drill, release controls, monitoring, retirement controls, and an independent witness. Release authorization remains separate.
 
 A failure in either claim family produces a failed readiness disposition. Missing external evidence leaves the corresponding formal result `UNKNOWN` and the workflow disposition `REVIEW_REQUIRED`. Promotion is permitted only when both formal results and release authorization are PASS.
 
@@ -63,7 +76,7 @@ A failure in either claim family produces a failed readiness disposition. Missin
 
 The Wave Four release policy defines immediate rollback for identity mismatch or fallback failure, bounded thresholds for protocol rejection, timeout, and memory growth, and a readable rollback target. Retirement triggers include incompatible boundaries, unsupported toolchains, unresolved identity mismatches, repeated rollback thresholds, expired evidence policy, or acceptance of a replacement under a new identity.
 
-These policies are design evidence. They remain `UNKNOWN` as operational D4 evidence until exercised in a controlled release environment and independently witnessed.
+These policies remain `UNKNOWN` as operational D4 evidence until exercised in a controlled release environment and independently witnessed.
 
 ## Reproduction
 
@@ -72,6 +85,8 @@ make composed-wave-three
 make multilingual-wave-three
 make composed-wave-four
 make multilingual-wave-four
+make composed-wave-five
+make multilingual-wave-five
 ```
 
-Wave Four requires Go 1.23.x and Python 3.11 or later for its local checks. Cross-host reconciliation consumes the separate Wave Three Ubuntu and macOS artifacts. Protected evaluation requires a custody record and corpus supplied after candidate freeze by external actors.
+Wave Five builds a portable artifact and runs reference smoke tests on hosted Windows, Ubuntu, and macOS runners. The physical Windows, Fedora, and Pi OS records must be collected separately using the exact checked-in archive identity. Protected evaluation still requires a corpus and custody record supplied after candidate freeze by external actors.

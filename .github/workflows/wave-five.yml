@@ -1,0 +1,103 @@
+name: Wave Five Portable Reproduction
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  bundle-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+      - uses: actions/setup-python@v6.2.0
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -e '.[dev]'
+      - name: Build and verify portable evaluator
+        run: make multilingual-wave-five WAVE_FIVE_OUTPUT=evidence/actual
+      - name: Validate Wave Five packaged schemas
+        run: |
+          mncs schema portable-evaluation-bundle >/dev/null
+          mncs schema host-execution-record >/dev/null
+          mncs schema reproduction-cohort >/dev/null
+      - name: Check Wave Five tree cleanliness
+        run: git diff --check -- case-studies/composed-gateway/wave-five schemas src tests scripts docs README.md Makefile
+      - uses: actions/upload-artifact@v7.0.1
+        with:
+          name: wave-five-portable-evaluator
+          path: |
+            case-studies/composed-gateway/wave-five/dist/mncs-wave-five-portable-evaluator.zip
+            case-studies/composed-gateway/wave-five/dist/mncs-wave-five-portable-evaluator.zip.sha256
+            case-studies/composed-gateway/wave-five/dist/manifest.json
+            case-studies/composed-gateway/wave-five/dist/bundle-lock.json
+          retention-days: 90
+
+  portable-smoke:
+    needs: bundle-build
+    name: Portable evaluator (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v6.0.2
+      - uses: actions/setup-python@v6.2.0
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -e '.[dev]'
+      - uses: actions/download-artifact@v8
+        with:
+          name: wave-five-portable-evaluator
+          path: wave-five-dist
+      - name: Run unchanged portable evaluator
+        run: >-
+          python case-studies/composed-gateway/wave-five/tools/run_ci_bundle.py
+          --archive wave-five-dist/mncs-wave-five-portable-evaluator.zip
+          --lock wave-five-dist/bundle-lock.json
+          --machine-label ci-${{ runner.os }}
+          --operator-id operator:github-actions
+          --output wave-five-host/host-record.json
+      - uses: actions/upload-artifact@v7.0.1
+        with:
+          name: wave-five-host-${{ runner.os }}
+          path: wave-five-host/host-record.json
+          retention-days: 90
+
+  hosted-cohort:
+    needs: portable-smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+      - uses: actions/setup-python@v6.2.0
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -e '.[dev]'
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: wave-five-host-*
+          path: wave-five-hosts
+      - name: Reconcile hosted portable records
+        shell: bash
+        run: |
+          mapfile -t records < <(find wave-five-hosts -type f -name host-record.json -print | sort)
+          test "${#records[@]}" -eq 3
+          PYTHONPATH=src python case-studies/composed-gateway/wave-five/tools/reconcile_cohort.py \
+            "${records[@]}" \
+            --plan case-studies/composed-gateway/wave-five/ci-machine-plan.json \
+            --output case-studies/composed-gateway/wave-five/evidence/ci-cohort.json
+      - name: Validate hosted cohort
+        run: python -c "import json; from jsonschema import Draft202012Validator; s=json.load(open('schemas/mncs-reproduction-cohort.schema.json')); r=json.load(open('case-studies/composed-gateway/wave-five/evidence/ci-cohort.json')); assert not list(Draft202012Validator(s).iter_errors(r))"
+      - uses: actions/upload-artifact@v7.0.1
+        with:
+          name: wave-five-ci-cohort
+          path: case-studies/composed-gateway/wave-five/evidence/ci-cohort.json
+          retention-days: 90
