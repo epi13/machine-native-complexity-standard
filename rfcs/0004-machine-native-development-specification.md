@@ -206,9 +206,12 @@ The repository now contains an executable evidence baseline:
 3. **Reject UNKNOWN promotion:** implemented in unit tests and corpus.
 4. **D2 reproducible generation and repeated measurement:** implemented with seeded reproducibility and repeated-measurement checks.
 5. **D3 protected holdout and independent evaluator:** implemented in the cumulative reference record and tests.
-6. **Recursive harness improvement:** normative epoch rules implemented; a full two-epoch Joern study remains required.
+6. **Recursive harness improvement:** completed by the frozen two-epoch analyzer study
+   with retained disagreements, fresh developer-withheld final inputs, resource
+   measurements, and an explicit non-promotion boundary.
 7. **D4 rollback, regeneration, monitoring, and retirement:** implemented in the reference record and rejection tests.
-8. **Independent validator agreement:** versioned corpus format implemented; a second implementation remains required.
+8. **Independent validator agreement:** the independent Rust consumer reads the
+   combined release-candidate corpus directly and agrees with Python on every vector.
 
 Relevant artifacts include:
 
@@ -236,14 +239,14 @@ The initial 0.1-draft implementation resolves the prior questions as follows:
 
 Detailed semantics are in `spec/MNCDS-v0.1-records-and-decisions.md`.
 
-## Remaining research questions
+## Deferred non-core research questions
 
-- Which independent implementation should become the second MNCDS corpus consumer?
-- Which issue classes are stable enough for cross-implementation normalization?
-- What aggregate structure best preserves million-candidate search history while protecting proprietary candidate bodies?
-- Which privacy-preserving proof systems are practical for restricted prompts, datasets, and model configurations?
-- What evidence threshold should define a future higher-assurance evaluator-independence profile?
-- What two-epoch real-world workload should become the canonical recursive-improvement demonstration after the Joern case study?
+- What optional aggregate commitments best preserve million-candidate search history
+  while protecting proprietary candidate bodies?
+- Which privacy-preserving proof systems are practical for restricted prompts,
+  datasets, and model configurations?
+- What externally evidenced threshold should define a future higher-assurance
+  organizational-independence profile?
 
 ## Acceptance gate
 
@@ -254,3 +257,15 @@ RFC 0004 MUST remain Draft until:
 - a reproducible two-epoch recursive harness study is complete;
 - security and privacy review identifies no unresolved claim-broadening issue;
 - the independent approvals required by governance are recorded.
+
+## Release-candidate decision record
+
+The repository's 0.1-rc.1 implementation resolves the internally decidable questions
+in `spec/MNCS-v0.3-MNCDS-v0.1-decisions.md` and provides a self-contained proposed
+specification in `spec/MNCDS-v0.1-rc.1.md`. The aggregate record remains the portable
+interoperability unit. Draft records remain valid as draft artifacts and are not
+upgraded by changing a version string.
+
+This implementation work does not change this RFC's Draft status. Implementation
+agreement, a recursive study, internal review, and local readiness cannot supply the
+required non-conflicted approvals or organizational independence.
