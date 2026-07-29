@@ -1,9 +1,11 @@
-# MNCDS 0.1 draft specification
+# MNCDS 0.1 specifications
 
 The proposed normative text is maintained in two linked modules:
 
 - [`spec/MNCDS-v0.1-draft.md`](https://github.com/epi13/machine-native-complexity-standard/blob/main/spec/MNCDS-v0.1-draft.md) — lifecycle and cumulative profile requirements;
 - [`spec/MNCDS-v0.1-records-and-decisions.md`](https://github.com/epi13/machine-native-complexity-standard/blob/main/spec/MNCDS-v0.1-records-and-decisions.md) — aggregate record, stochastic reproducibility, evaluator independence, candidate-retention, privacy-extension, and result-separation semantics.
+- `spec/MNCDS-v0.1-rc.1.md` — complete release-candidate text and migration
+  rules; the historical draft is preserved.
 
 MNCDS defines cumulative development-process profiles for controlled generation,
 reproducible experimentation, independent selection, and operational regeneration. It
@@ -18,7 +20,9 @@ The machine-readable implementation currently consists of:
 - the offline `mncds validate` command;
 - the cumulative D4 example;
 - unit tests and the deterministic MNCDS conformance corpus.
+- `schemas/mncds-development-record-0.1.schema.json`, the combined RC corpus,
+  and independent Rust consumer.
 
-MNCDS remains Draft under RFC 0004. The implementation makes the proposal testable but
+MNCDS 0.1-rc.1 remains under Draft RFC 0004. The implementation makes the proposal testable but
 does not bypass the repository's review, independent-approval, or interoperability
 requirements.

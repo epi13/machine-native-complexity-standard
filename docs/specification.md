@@ -18,3 +18,7 @@ specification is licensed Apache-2.0.
 
 MNCS remains experimental. A validator PASS is scoped to the declared contract and
 environment and is not accredited certification.
+
+MNCS 0.3-rc.1 is a separate release-candidate proposal under Draft RFC 0005. It
+does not overwrite this frozen 0.2 specification. A 0.2 claim remains 0.2 unless it is
+reevaluated under the 0.3 rules and receives the required new identities.

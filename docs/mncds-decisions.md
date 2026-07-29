@@ -98,14 +98,15 @@ A future summary command may display both, but it must preserve two independent 
 issue sets, versions, identities, and scopes. It must not collapse them into a single
 boolean or imply that one result establishes the other.
 
-## Remaining research questions
+## Deferred non-core research questions
 
 The following questions still require evidence rather than an editorial decision:
 
-- What independent implementation should become the second MNCDS corpus consumer?
-- Which additional issue codes are stable enough for cross-implementation normalization?
 - What aggregation structure best preserves million-candidate search history without
   exposing proprietary candidate bodies?
 - Which privacy-preserving proof systems are practical for restricted prompts, datasets,
   and model configurations?
 - What evidence threshold should define a higher-assurance evaluator-independence profile?
+
+The independent consumer and normalized RC issue set are now implemented in Rust. That
+local fact does not establish independent operation or organizational independence.

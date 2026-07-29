@@ -169,4 +169,3 @@ Draft records remain valid as drafts. Migration is optional, creates a new ident
 and starts at the oldest reliable baseline. Missing history remains `UNKNOWN`. Changing
 a version string is not migration. Exact versions dispatch; unknown versions are
 `UNSUPPORTED`.
-
