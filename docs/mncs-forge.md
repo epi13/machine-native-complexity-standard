@@ -46,8 +46,10 @@ inspection, the MNCS/MNCDS release-candidate check, the release-candidate corpus
 Python/Rust consumer comparison, the recursive analyzer study, full core `make check`,
 and RAVEL 0.4 as an optional case-study regression check rather than a release gate.
 
-Each workflow uses `scripts/forge_workflow.py`, which executes a fixed argv array without
-a shell, captures bounded output, records command/environment/executable/output
+Each configured workflow enters through `scripts/forge_workflow_hardened.py`. That
+policy-bound entrypoint loads the committed environment allowlist and output cap, then
+calls the fixed-argv implementation in `scripts/forge_workflow.py`. The implementation
+uses no shell, captures bounded output, records command/environment/executable/output
 identities, and distinguishes PASS, FAIL, UNKNOWN, timeout, crash, output limit, and
 unsupported executable. Wrapper PASS means only that the declared development command
 completed successfully; its conformance status remains UNKNOWN.
@@ -132,4 +134,6 @@ repair feedback for the same development epoch. The development MCP inventory do
 expose the final-evaluation tool; use a separately configured evaluator session.
 
 See the [post-Wave-Five roadmap](post-wave-five-roadmap.md) for physical-machine,
-external-actor, and governance gaps that Forge cannot resolve locally.
+external-actor, and governance gaps that Forge cannot resolve locally. The
+[Codex implementation next steps](codex-next-steps.md) provide bounded acceptance
+criteria for the larger Forge, MNCDS, empirical-study, and release-preparation work.
