@@ -8,7 +8,7 @@
     "version": "0.1.0a2"
   },
   "mncs": {
-    "base_commit": "202c13fad2ca613a3d4ad9340d384b2a079beadf",
+    "base_commit": "82ed50b1bf3393300d596b38972a195c4da7ff4c",
     "provider_protocol": "0.1",
     "repository": "https://github.com/epi13/machine-native-complexity-standard"
   },
