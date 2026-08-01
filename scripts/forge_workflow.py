@@ -59,7 +59,7 @@ WORKFLOWS = {
     ),
     "python-rust-comparison": Workflow(
         (
-            ".venv/bin/python",
+            "python",
             "scripts/compare-release-candidate-consumers",
             "--json",
         ),
