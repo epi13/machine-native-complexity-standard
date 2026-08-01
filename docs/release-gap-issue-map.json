@@ -1,0 +1,72 @@
+{
+  "schema_version": "0.1",
+  "matrix_version": "0.1",
+  "matrix_sha256": "f9c2dfac7254e23a85636991aeac81b13b7d221e6ba575357cf2f7bdceae6bf5",
+  "repository": "epi13/machine-native-complexity-standard",
+  "observed_at": "2026-08-01T15:21:00Z",
+  "mappings": [
+    {
+      "requirement_ids": ["MNCS-03-RESULTS"],
+      "gap_key": "mncs-rfc-0005-approval",
+      "issue_number": 34,
+      "issue_url": "https://github.com/epi13/machine-native-complexity-standard/issues/34",
+      "title": "Obtain governance approval for RFC 0005 and the MNCS 0.3 result model",
+      "state": "OPEN",
+      "observed_at": "2026-08-01T15:19:35Z"
+    },
+    {
+      "requirement_ids": ["MNCS-03-CONTRACT"],
+      "gap_key": "mncs-contract-domain-review",
+      "issue_number": 35,
+      "issue_url": "https://github.com/epi13/machine-native-complexity-standard/issues/35",
+      "title": "Record an independent contract-domain review for MNCS 0.3",
+      "state": "OPEN",
+      "observed_at": "2026-08-01T15:19:51Z"
+    },
+    {
+      "requirement_ids": [
+        "MNCS-03-IDENTITY-TRUST-PACKAGE",
+        "MNCS-03-FRESHNESS",
+        "MNCS-03-CHANGE-REVALIDATION"
+      ],
+      "gap_key": "rust-rc-general-coverage",
+      "issue_number": 36,
+      "issue_url": "https://github.com/epi13/machine-native-complexity-standard/issues/36",
+      "title": "Broaden the Rust RC consumer for package inheritance, RFC 3339 offsets, and graph closure",
+      "state": "OPEN",
+      "observed_at": "2026-08-01T15:20:11Z"
+    },
+    {
+      "requirement_ids": [
+        "MNCDS-01-AUTHORITY",
+        "MNCDS-01-PARTITIONS-CUSTODY",
+        "MNCDS-01-D1-D4",
+        "MNCDS-01-RECURSIVE-EPOCHS"
+      ],
+      "gap_key": "mncds-external-evaluation-custody",
+      "issue_number": 37,
+      "issue_url": "https://github.com/epi13/machine-native-complexity-standard/issues/37",
+      "title": "Obtain externally controlled MNCDS evaluation and protected evidence custody",
+      "state": "OPEN",
+      "observed_at": "2026-08-01T15:20:28Z"
+    },
+    {
+      "requirement_ids": ["RC-SECURITY-PRIVACY"],
+      "gap_key": "rc-external-security-privacy-review",
+      "issue_number": 38,
+      "issue_url": "https://github.com/epi13/machine-native-complexity-standard/issues/38",
+      "title": "Complete external security and privacy review of the release candidates",
+      "state": "OPEN",
+      "observed_at": "2026-08-01T15:20:45Z"
+    },
+    {
+      "requirement_ids": ["RC-GOVERNANCE-AUTHORIZATION"],
+      "gap_key": "bootstrap-release-authorities",
+      "issue_number": 39,
+      "issue_url": "https://github.com/epi13/machine-native-complexity-standard/issues/39",
+      "title": "Establish bootstrap maintainership, review, signing, and release authorities",
+      "state": "OPEN",
+      "observed_at": "2026-08-01T15:20:59Z"
+    }
+  ]
+}

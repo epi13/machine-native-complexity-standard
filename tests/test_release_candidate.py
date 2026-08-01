@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import subprocess
+import sys
 from pathlib import Path
 
 from mncs_validator.assurance import validate_rc_value
@@ -104,3 +106,14 @@ def test_gap_matrix_has_no_unfinished_local_release_blocker() -> None:
     for requirement in matrix["requirements"]:
         assert required_fields <= set(requirement)
         assert requirement["locally_executable_remaining"] is False
+
+
+def test_release_gap_issue_mapping_is_complete_and_offline() -> None:
+    process = subprocess.run(
+        [sys.executable, str(ROOT / "scripts/validate_release_gap_issue_map.py")],
+        check=False,
+        capture_output=True,
+        text=True,
+        timeout=10,
+    )
+    assert process.returncode == 0, process.stdout + process.stderr
