@@ -24,6 +24,7 @@ evaluators = [
   "case-studies/edgestream/tools/study_evaluation.py",
   "case-studies/edgestream/tools/harness_regression.py",
   "experimental/integrations/mncs-forge/providers/project_provider.py",
+  "experimental/integrations/mncs-forge/providers/project_provider_hardened.py",
 ]
 acceptance_policies = ["case-studies/edgestream/preregistration.json"]
 development_evidence = [
@@ -75,7 +76,10 @@ id = "mncs-project-micro-verifiers"
 name = "MNCS project bounded micro-verifiers"
 identity = "mncs-project-micro-verifiers-v0.1"
 version = "0.1"
-command = ["experimental/integrations/mncs-forge/providers/project_provider.py"]
+command = [
+  ".venv/bin/python",
+  "experimental/integrations/mncs-forge/providers/project_provider_hardened.py",
+]
 transport = "stdio-jsonl"
 required = true
 capabilities = [
@@ -106,7 +110,10 @@ limitations = [
 name = "mncs-project-structural-verifiers"
 category = "bounded_structural_analysis"
 mode = "development"
-command = ["experimental/integrations/mncs-forge/providers/project_provider.py"]
+command = [
+  ".venv/bin/python",
+  "experimental/integrations/mncs-forge/providers/project_provider_hardened.py",
+]
 provider_protocol = true
 provider_id = "mncs-project-micro-verifiers"
 subject = "project"
@@ -116,7 +123,10 @@ disclosure = "compact"
 name = "mncs-project-evidence-verifiers"
 category = "evidence_derivation"
 mode = "development"
-command = ["experimental/integrations/mncs-forge/providers/project_provider.py"]
+command = [
+  ".venv/bin/python",
+  "experimental/integrations/mncs-forge/providers/project_provider_hardened.py",
+]
 provider_protocol = true
 provider_id = "mncs-project-micro-verifiers"
 subject = "project"
@@ -126,7 +136,10 @@ disclosure = "compact"
 name = "mncs-project-inspection-verifiers"
 category = "inspection"
 mode = "development"
-command = ["experimental/integrations/mncs-forge/providers/project_provider.py"]
+command = [
+  ".venv/bin/python",
+  "experimental/integrations/mncs-forge/providers/project_provider_hardened.py",
+]
 provider_protocol = true
 provider_id = "mncs-project-micro-verifiers"
 subject = "project"
@@ -222,7 +235,7 @@ parameter_keys = ["record_path", "kind", "expected_schema_version", "evaluation_
 name = "tooling-inspect"
 category = "inspection"
 mode = "development"
-command = [".venv/bin/python", "scripts/forge_workflow.py", "tooling-inspect"]
+command = [".venv/bin/python", "scripts/forge_workflow_hardened.py", "tooling-inspect"]
 provider_protocol = false
 subject = "project"
 disclosure = "compact"
@@ -231,7 +244,11 @@ disclosure = "compact"
 name = "release-candidate-check"
 category = "evidence_derivation"
 mode = "development"
-command = [".venv/bin/python", "scripts/forge_workflow.py", "release-candidate-check"]
+command = [
+  ".venv/bin/python",
+  "scripts/forge_workflow_hardened.py",
+  "release-candidate-check",
+]
 provider_protocol = false
 subject = "project"
 disclosure = "compact"
@@ -240,7 +257,11 @@ disclosure = "compact"
 name = "release-candidate-corpus"
 category = "evidence_derivation"
 mode = "development"
-command = [".venv/bin/python", "scripts/forge_workflow.py", "release-candidate-corpus"]
+command = [
+  ".venv/bin/python",
+  "scripts/forge_workflow_hardened.py",
+  "release-candidate-corpus",
+]
 provider_protocol = false
 subject = "project"
 disclosure = "compact"
@@ -249,7 +270,11 @@ disclosure = "compact"
 name = "python-rust-comparison"
 category = "evidence_derivation"
 mode = "development"
-command = [".venv/bin/python", "scripts/forge_workflow.py", "python-rust-comparison"]
+command = [
+  ".venv/bin/python",
+  "scripts/forge_workflow_hardened.py",
+  "python-rust-comparison",
+]
 provider_protocol = false
 subject = "project"
 disclosure = "compact"
@@ -258,7 +283,11 @@ disclosure = "compact"
 name = "recursive-analyzer-study"
 category = "evidence_derivation"
 mode = "development"
-command = [".venv/bin/python", "scripts/forge_workflow.py", "recursive-analyzer-study"]
+command = [
+  ".venv/bin/python",
+  "scripts/forge_workflow_hardened.py",
+  "recursive-analyzer-study",
+]
 provider_protocol = false
 subject = "project"
 disclosure = "compact"
@@ -267,7 +296,7 @@ disclosure = "compact"
 name = "core-check"
 category = "build"
 mode = "development"
-command = [".venv/bin/python", "scripts/forge_workflow.py", "core-check"]
+command = [".venv/bin/python", "scripts/forge_workflow_hardened.py", "core-check"]
 provider_protocol = false
 subject = "project"
 disclosure = "compact"
@@ -276,7 +305,7 @@ disclosure = "compact"
 name = "ravel-0.4-check"
 category = "inspection"
 mode = "development"
-command = [".venv/bin/python", "scripts/forge_workflow.py", "ravel-0.4-check"]
+command = [".venv/bin/python", "scripts/forge_workflow_hardened.py", "ravel-0.4-check"]
 provider_protocol = false
 subject = "project"
 disclosure = "compact"
