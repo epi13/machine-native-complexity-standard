@@ -34,12 +34,9 @@ def evidence_change_impact(request: dict[str, Any]) -> dict[str, object]:
             limitations=["dependency_paths must be a non-empty bounded list"],
         )
     try:
-        changed_paths = [
-            base.safe_relative_path(item, must_exist=False)[0] for item in changed
-        ]
+        changed_paths = [base.safe_relative_path(item, must_exist=False)[0] for item in changed]
         dependency_paths = [
-            base.safe_relative_path(item, must_exist=False)[0]
-            for item in dependency_values
+            base.safe_relative_path(item, must_exist=False)[0] for item in dependency_values
         ]
     except base.ProviderInputError as exc:
         return base.response(
