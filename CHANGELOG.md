@@ -13,6 +13,10 @@ validator and explicit version identifiers for the standard.
   governance material, and a reproducible two-epoch study.
 - Keep final release, external security/privacy acceptance, independent operation,
   protected custody, and governance approval explicitly open.
+- Correct the reference validator's material-change implementation to include every
+  required transitive upstream claim in graph-impact and revalidation scope. This
+  aligns implementation behavior with existing 0.3-rc.1 sections 7–8 and does not
+  change normative text or RC identifiers.
 
 ## 0.2.0 — 2026-07-25
 

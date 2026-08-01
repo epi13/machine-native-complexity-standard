@@ -13,7 +13,7 @@ security and privacy acceptance is **OPEN**. This review cannot satisfy that gat
 | Canonicalization ambiguity | Inherited 0.2 | RFC 8785 and deterministic packages | existing canonicalization corpus | Numeric edge cases | partial | inherited external gate | required |
 | Stale evidence and replay | Freshness | Explicit time/status/triggers | stale/fresh cases | Clock/revocation policy | partial | external policy review | required |
 | Superseded evidence reuse | Lifecycle | Supersession, retirement, impact, revalidation | supersession/retirement cases | Cross-package history discovery | partial | external policy review | required |
-| Dependency omission | Composition | Explicit graph and required propagation | dependency/reference cases | Producer can omit a real dependency | residual high | contract/reviewer gate | required |
+| Dependency omission | Composition and revalidation | Explicit graph, required propagation, and required upstream material-impact closure | dependency/reference and transitive-impact cases | Producer can omit a real undeclared dependency | residual high | contract/reviewer gate | required |
 | Correlated failure concealment | Composition | Shared evidence and correlation groups | correlated/shared-evidence cases | Undeclared common cause | residual moderate | reviewer gate | required |
 | False independence | MNCDS roles | Separate implementation/operator/organization facts | Rust report and D3/D4 UNKNOWN | False declarations need audit | residual moderate | external evidence gate | required |
 | False protected custody | MNCDS partitions | Custody class, access, contamination | protected-evidence cases and study | Off-record access | residual moderate | external evidence gate | required |
@@ -33,4 +33,9 @@ security and privacy acceptance is **OPEN**. This review cannot satisfy that gat
 No confirmed path traversal, implicit network access, implicit provider execution, or
 candidate execution was found in new ordinary validation paths. Confirmed logic
 defects found during review—UNKNOWN overwriting FAIL and incomplete root-MNCDS
-binding—were corrected and covered by corpus agreement.
+binding—were corrected and covered by corpus agreement. This controlled iteration also
+confirmed that the Python validator trusted only directly declared material-change
+claims and did not compute required upstream graph-impact closure. The implementation
+now computes that closure and rejects incomplete partial-revalidation scope. This is
+an implementation correction to existing MNCS 0.3-rc.1 sections 7–8; normative text
+and RC identifiers are unchanged.

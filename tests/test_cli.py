@@ -91,7 +91,7 @@ def test_release_candidate_record_and_corpus_commands(capsys: object) -> None:
     assert json.loads(capsys.readouterr().out)["category"] == "PASS"  # type: ignore[attr-defined]
     assert main(["corpus", "release-candidate", "--json"]) == 0
     value = json.loads(capsys.readouterr().out)  # type: ignore[attr-defined]
-    assert value["summary"]["total"] == 72
+    assert value["summary"]["total"] == 74
     assert value["summary"]["mismatched"] == 0
 
 

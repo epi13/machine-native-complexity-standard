@@ -95,6 +95,30 @@
       {"op": "set", "path": "/revalidation/new_evidence_ids", "value": ["evidence.system-v2"]},
       {"op": "set", "path": "/revalidation/performed_at", "value": "2026-07-28T00:00:00Z"}
     ]},
+    {"id": "assurance-required-transitive-impact", "kind": "assurance", "expected": "PASS", "mutations": [
+      {"op": "append", "path": "/material_changes", "value": {"change_id": "change.component-v2", "dimension": "artifact", "old_identity": "artifact.component-v1", "new_identity": "artifact.component-v2", "material": true, "rationale": "Required component changed.", "affected_claim_ids": ["claim.component"]}},
+      {"op": "set", "path": "/evidence_impact/affected_claim_ids", "value": ["claim.component", "claim.system"]},
+      {"op": "set", "path": "/evidence_impact/invalidated_evidence_ids", "value": ["evidence.component-v1"]},
+      {"op": "set", "path": "/evidence_impact/required_new_evidence_ids", "value": ["evidence.component-v2"]},
+      {"op": "set", "path": "/revalidation/mode", "value": "partial"},
+      {"op": "set", "path": "/revalidation/scope_claim_ids", "value": ["claim.component", "claim.system"]},
+      {"op": "set", "path": "/revalidation/covered_change_ids", "value": ["change.component-v2"]},
+      {"op": "set", "path": "/revalidation/retained_evidence_ids", "value": ["evidence.system-v1", "evidence.shared-v1"]},
+      {"op": "set", "path": "/revalidation/new_evidence_ids", "value": ["evidence.component-v2"]},
+      {"op": "set", "path": "/revalidation/performed_at", "value": "2026-07-28T00:00:00Z"}
+    ]},
+    {"id": "assurance-incomplete-transitive-impact", "kind": "assurance", "expected": "INVALID", "issue_codes": ["MNCS-03-IMPACT-SCOPE-INCOMPLETE", "MNCS-03-REVALIDATION-RESULT-MISMATCH"], "mutations": [
+      {"op": "append", "path": "/material_changes", "value": {"change_id": "change.component-v2", "dimension": "artifact", "old_identity": "artifact.component-v1", "new_identity": "artifact.component-v2", "material": true, "rationale": "Required component changed.", "affected_claim_ids": ["claim.component"]}},
+      {"op": "set", "path": "/evidence_impact/affected_claim_ids", "value": ["claim.component"]},
+      {"op": "set", "path": "/evidence_impact/invalidated_evidence_ids", "value": ["evidence.component-v1"]},
+      {"op": "set", "path": "/evidence_impact/required_new_evidence_ids", "value": ["evidence.component-v2"]},
+      {"op": "set", "path": "/revalidation/mode", "value": "partial"},
+      {"op": "set", "path": "/revalidation/scope_claim_ids", "value": ["claim.component"]},
+      {"op": "set", "path": "/revalidation/covered_change_ids", "value": ["change.component-v2"]},
+      {"op": "set", "path": "/revalidation/retained_evidence_ids", "value": ["evidence.system-v1", "evidence.shared-v1"]},
+      {"op": "set", "path": "/revalidation/new_evidence_ids", "value": ["evidence.component-v2"]},
+      {"op": "set", "path": "/revalidation/performed_at", "value": "2026-07-28T00:00:00Z"}
+    ]},
     {"id": "assurance-editorial-change", "kind": "assurance", "expected": "PASS", "mutations": [
       {"op": "append", "path": "/material_changes", "value": {"change_id": "change.editorial-v1", "dimension": "contract", "old_identity": "contract.example-v1", "new_identity": "contract.example-v1", "material": false, "rationale": "Spelling-only edit.", "affected_claim_ids": []}}
     ]},
