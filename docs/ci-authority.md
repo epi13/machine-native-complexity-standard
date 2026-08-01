@@ -19,9 +19,11 @@ promotion.
 - documentation build; and
 - `git diff --check`.
 
-The canonical local entry point is `make core-check`. `make check` remains a
-compatibility alias for the same core authority surface. Expensive cross-language
-checks run once rather than once per Python version.
+The canonical local entry point is `make core-check`, declared in `GNUmakefile`.
+The historical root `Makefile` remains byte-identical because RAVEL 0.5 binds it
+as frozen source authority. Its legacy `make check` target runs the complete
+unfiltered local test surface; `core-check` excludes experimental pytest tests.
+Expensive cross-language checks run once rather than once per Python version.
 
 Core pytest invocations exclude tests marked `experimental`. Forge integration and
 case-study preregistration tests retain that marker and run in their experimental

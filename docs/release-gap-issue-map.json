@@ -30,9 +30,9 @@
       "gap_key": "rust-rc-general-coverage",
       "issue_number": 36,
       "issue_url": "https://github.com/epi13/machine-native-complexity-standard/issues/36",
-      "title": "Broaden the Rust RC consumer for package inheritance, RFC 3339 offsets, and graph closure",
+      "title": "Implement inherited package and attestation validation in the Rust RC consumer",
       "state": "OPEN",
-      "observed_at": "2026-08-01T15:20:11Z"
+      "observed_at": "2026-08-01T16:02:53Z"
     },
     {
       "requirement_ids": [

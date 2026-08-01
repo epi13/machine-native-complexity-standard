@@ -852,11 +852,13 @@ fn validate_mncds(value: &Value) -> Outcome {
                 outcome
                     .issue_codes
                     .insert("protected-evidence-failed".to_owned());
-            } else if evidence_status == "UNKNOWN" && computed == "PASS" {
-                computed = "UNKNOWN";
+            } else if evidence_status == "UNKNOWN" {
                 outcome
                     .issue_codes
                     .insert("protected-evidence-unknown".to_owned());
+                if computed == "PASS" {
+                    computed = "UNKNOWN";
+                }
             }
         }
     }
@@ -879,9 +881,11 @@ fn validate_mncds(value: &Value) -> Outcome {
             if control == "FAIL" {
                 computed = "FAIL";
                 outcome.issue_codes.insert(code.to_owned());
-            } else if control == "UNKNOWN" && computed == "PASS" {
-                computed = "UNKNOWN";
+            } else if control == "UNKNOWN" {
                 outcome.issue_codes.insert(code.to_owned());
+                if computed == "PASS" {
+                    computed = "UNKNOWN";
+                }
             }
         }
         if value

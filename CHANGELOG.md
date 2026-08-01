@@ -25,6 +25,9 @@ validator and explicit version identifiers for the standard.
   distinct development, selection, retention, planning, and future-final
   partitions. No 0.6 implementation or evaluation is claimed, and frozen 0.4/0.5
   sources, evidence, dispositions, and promotion boundaries remain unchanged.
+- Correct the Rust consumer's limitation reporting so every concurrent required
+  `UNKNOWN` condition retains its issue code even after another uncertainty has
+  already lowered the aggregate. Result precedence and normative text are unchanged.
 
 ## 0.2.0 — 2026-07-25
 

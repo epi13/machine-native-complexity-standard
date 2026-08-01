@@ -99,6 +99,19 @@ def test_general_mncds_and_conformance_commands_preserve_boundaries() -> None:
     assert "general MNCS 0.2 package archive validation" in result["unsupported_rules"]
 
 
+def test_mncds_reports_each_required_unknown_limitation(tmp_path: Path) -> None:
+    value = json.loads(
+        (ROOT / "examples/mncds-0.1-rc/development-record.json").read_text(encoding="utf-8")
+    )
+    value["release_controls"]["rollback"]["test_status"] = "UNKNOWN"
+    path = tmp_path / "mncds-multiple-unknowns.json"
+    path.write_text(json.dumps(value, sort_keys=True), encoding="utf-8")
+    status, result = run_consumer("validate-mncds", "--input", str(path), "--json")
+    assert status == 0
+    assert result["category"] == "UNKNOWN"
+    assert {"protected-evidence-unknown", "rollback-not-tested"} <= set(result["issue_codes"])
+
+
 def test_independently_constructed_bounded_graph_fixtures_compare_exactly(
     tmp_path: Path,
 ) -> None:
