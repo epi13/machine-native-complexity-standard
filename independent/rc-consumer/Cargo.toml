@@ -6,9 +6,15 @@ license = "Apache-2.0"
 description = "Independent offline consumer for the MNCS/MNCDS release-candidate corpus"
 
 [dependencies]
+base64 = "0.22.1"
+ed25519-dalek = "3.0.0"
+hex = "0.4.3"
 serde = { version = "1.0.228", features = ["derive"] }
+serde_jcs = "0.2.0"
 serde_json = "1.0.151"
+sha2 = "0.10.9"
 time = { version = "0.3.44", features = ["parsing"] }
+zip = { version = "7.2.0", default-features = false }
 
 [lints.rust]
 unsafe_code = "forbid"

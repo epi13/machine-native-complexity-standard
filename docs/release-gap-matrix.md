@@ -7,7 +7,7 @@ implementation work from evidence that code cannot manufacture.
 | Area | Local state | Remaining gate | Classification |
 | --- | --- | --- | --- |
 | MNCS results, contracts, composition, lifecycle, migration | Implemented in schemas, Python, Rust, and corpus | RFC 0005 review and approval | `GOVERNANCE_BLOCKER` |
-| Inherited identity, package, trust, and attestation rules | Python and existing independent Rust coverage retained | Independent review of inheritance into 0.3 | `INDEPENDENT_IMPLEMENTATION_BLOCKER` |
+| Inherited identity, package, trust, and attestation rules | Python and embedded Rust RC consumer coverage, including cross-consumer positive and negative tests | No current local implementation gap | none |
 | MNCS freshness and graph-impact generality | Python and Rust cover RFC 3339 offsets and required transitive closure; original 72 vectors retained and 74/74 expanded agreement | No current local implementation gap | none |
 | MNCDS aggregate, D1-D4, authority, ledger, selection, lifecycle | Implemented in schema, Python, Rust, and corpus | RFC 0004 review and approval | `GOVERNANCE_BLOCKER` |
 | Independent operator and organizational independence | Explicitly `UNKNOWN` | Evidence from an external actor | `EXTERNAL_EVIDENCE_BLOCKER` |

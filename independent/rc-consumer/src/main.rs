@@ -1,13 +1,15 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use mncs_rc_consumer::{
-    default_corpus_from_manifest, run_corpus, validate_mncds_value, validate_record_value,
+    canonical, default_corpus_from_manifest, package, run_corpus, trust, validate_mncds_value,
+    validate_record_value,
 };
 use serde_json::{Value, json};
 use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
+use time::{OffsetDateTime, format_description::well_known::Rfc3339};
 
 const MAX_INPUT_BYTES: u64 = 4 * 1024 * 1024;
 
@@ -57,6 +59,10 @@ fn conformance(path: &Path) -> ExitCode {
                     "organizational_independence": "UNKNOWN"
                 },
                 "supported_schemas": [
+                    "mncs-package-index / 0.2",
+                    "mncs-attestation-envelope / 0.2",
+                    "mncs-attestation-statement / 0.2",
+                    "mncs-trust-policy / 0.2",
                     "mncs-contract-profile-0.3 / 0.3-rc.1",
                     "mncs-assurance-case-0.3 / 0.3-rc.1",
                     "mncs-threat-record-0.3 / 0.3-rc.1",
@@ -76,11 +82,12 @@ fn conformance(path: &Path) -> ExitCode {
                     "required transitive material-change graph impact",
                     "partial and full revalidation coverage",
                     "release-candidate lifecycle subset",
-                    "MNCDS authority, protected-evidence, lineage, selection, and result rules"
+                    "MNCDS authority, protected-evidence, lineage, selection, and result rules",
+                    "bounded mncs-zip-0.1 structure, canonical index, and member identity validation",
+                    "DSSE PAE and Ed25519 signature verification",
+                    "trust domain, role, scope, threshold, validity, expiration, and revocation policy"
                 ],
                 "unsupported_rules": [
-                    "general MNCS 0.2 package archive validation",
-                    "general DSSE/Ed25519 trust-policy validation",
                     "network-fetched or executable evidence",
                     "schemas or record families not listed above"
                 ],
@@ -100,6 +107,143 @@ fn conformance(path: &Path) -> ExitCode {
         Err(error) => emit(
             &json!({"category": "IMPLEMENTATION_ERROR", "error": error}),
             2,
+        ),
+    }
+}
+
+fn validate_package(args: &[String]) -> ExitCode {
+    let Some(input) = flag(args, "--input") else {
+        return emit(
+            &json!({"category": "IMPLEMENTATION_ERROR", "error": "--input is required"}),
+            2,
+        );
+    };
+    match package::verify(Path::new(&input)) {
+        Ok(report) => {
+            let category = if report.valid { "PASS" } else { "INVALID" };
+            emit(
+                &json!({
+                    "command": "validate-package",
+                    "input": input,
+                    "category": category,
+                    "issue_codes": report.issues,
+                    "report": report,
+                    "limitations": [
+                        "archive members are inspected without extraction or execution",
+                        "package validity does not establish evidence truth or conformance"
+                    ]
+                }),
+                u8::from(category == "INVALID"),
+            )
+        }
+        Err(error) => emit(
+            &json!({
+                "command": "validate-package",
+                "input": input,
+                "category": "INVALID",
+                "issue_codes": ["package-invalid"],
+                "error": error
+            }),
+            1,
+        ),
+    }
+}
+
+fn validate_attestation(args: &[String]) -> ExitCode {
+    let Some(envelope_path) = flag(args, "--envelope") else {
+        return emit(
+            &json!({"category": "IMPLEMENTATION_ERROR", "error": "--envelope is required"}),
+            2,
+        );
+    };
+    let Some(policy_path) = flag(args, "--policy") else {
+        return emit(
+            &json!({"category": "IMPLEMENTATION_ERROR", "error": "--policy is required"}),
+            2,
+        );
+    };
+    let Some(at) = flag(args, "--at") else {
+        return emit(
+            &json!({
+                "category": "IMPLEMENTATION_ERROR",
+                "error": "--at is required for deterministic trust evaluation"
+            }),
+            2,
+        );
+    };
+    let moment = match OffsetDateTime::parse(&at, &Rfc3339) {
+        Ok(value) => value,
+        Err(error) => {
+            return emit(
+                &json!({
+                    "category": "INVALID",
+                    "issue_codes": ["evaluation-time-invalid"],
+                    "error": error.to_string()
+                }),
+                1,
+            );
+        }
+    };
+    let envelope = canonical::read_json(Path::new(&envelope_path), MAX_INPUT_BYTES);
+    let policy = canonical::read_json(Path::new(&policy_path), MAX_INPUT_BYTES);
+    let (envelope, policy) = match (envelope, policy) {
+        (Ok(envelope), Ok(policy)) => (envelope, policy),
+        (Err(error), _) | (_, Err(error)) => {
+            return emit(
+                &json!({
+                    "category": "INVALID",
+                    "issue_codes": ["attestation-input-invalid"],
+                    "error": error
+                }),
+                1,
+            );
+        }
+    };
+    match trust::evaluate(
+        &envelope,
+        &policy,
+        flag(args, "--subject").as_deref(),
+        flag(args, "--contract").as_deref(),
+        flag(args, "--environment").as_deref(),
+        moment,
+    ) {
+        Ok(evaluation) => {
+            let category = if !evaluation.verification.payload_valid
+                || !evaluation.verification.cryptographically_valid
+            {
+                "INVALID"
+            } else if !evaluation.trusted {
+                "FAIL"
+            } else if evaluation.certified {
+                "PASS"
+            } else {
+                "UNKNOWN"
+            };
+            emit(
+                &json!({
+                    "command": "validate-attestation",
+                    "envelope": envelope_path,
+                    "policy": policy_path,
+                    "category": category,
+                    "issue_codes": evaluation.reasons,
+                    "evaluation": evaluation,
+                    "evaluation_time": at,
+                    "limitations": [
+                        "verification and policy evaluation are offline",
+                        "cryptographic validity does not create independent custody or certification authority"
+                    ]
+                }),
+                u8::from(category == "INVALID"),
+            )
+        }
+        Err(error) => emit(
+            &json!({
+                "command": "validate-attestation",
+                "category": "INVALID",
+                "issue_codes": ["trust-policy-invalid"],
+                "error": error
+            }),
+            1,
         ),
     }
 }
@@ -208,6 +352,8 @@ fn legacy_corpus(path: &Path) -> ExitCode {
 fn main() -> ExitCode {
     let args: Vec<String> = env::args().skip(1).collect();
     match args.first().map(String::as_str) {
+        Some("validate-package") => validate_package(&args[1..]),
+        Some("validate-attestation") => validate_attestation(&args[1..]),
         Some("validate-record") => validate_record(&args[1..]),
         Some("validate-mncds") => validate_mncds(&args[1..]),
         Some("conformance") => {
