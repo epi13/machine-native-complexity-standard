@@ -28,7 +28,7 @@ jobs:
           mncs schema reproduction-cohort >/dev/null
       - name: Check Wave Five tree cleanliness
         run: git diff --check -- case-studies/composed-gateway/wave-five schemas src tests scripts docs README.md Makefile
-      - uses: actions/upload-artifact@v7.0.1
+      - uses: actions/upload-artifact@v7
         with:
           name: wave-five-portable-evaluator
           path: |
@@ -65,7 +65,7 @@ jobs:
           --machine-label ci-${{ runner.os }}
           --operator-id operator:github-actions
           --output wave-five-host/host-record.json
-      - uses: actions/upload-artifact@v7.0.1
+      - uses: actions/upload-artifact@v7
         with:
           name: wave-five-host-${{ runner.os }}
           path: wave-five-host/host-record.json
@@ -96,7 +96,7 @@ jobs:
             --output case-studies/composed-gateway/wave-five/evidence/ci-cohort.json
       - name: Validate hosted cohort
         run: python -c "import json; from jsonschema import Draft202012Validator; s=json.load(open('schemas/mncs-reproduction-cohort.schema.json')); r=json.load(open('case-studies/composed-gateway/wave-five/evidence/ci-cohort.json')); assert not list(Draft202012Validator(s).iter_errors(r))"
-      - uses: actions/upload-artifact@v7.0.1
+      - uses: actions/upload-artifact@v7
         with:
           name: wave-five-ci-cohort
           path: case-studies/composed-gateway/wave-five/evidence/ci-cohort.json

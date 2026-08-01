@@ -36,7 +36,7 @@ jobs:
           printf '{"evaluation_epoch":"%s","commit_sha":"%s","evaluator_sha":"sha256:%s"}\n' \
             '${{ inputs.evaluation_epoch }}' "$GITHUB_SHA" "$(sha256sum "$evaluator" | cut -d' ' -f1)" \
             > frozen-evaluator.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: frozen-remote-water-evaluator-${{ github.sha }}
           path: frozen-evaluator.json
@@ -95,7 +95,7 @@ jobs:
         env:
           EVALUATION_EPOCH: ${{ inputs.evaluation_epoch }}
           DECLARED_ARCHITECTURE: ${{ matrix.architecture }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: protected-remote-water-${{ matrix.architecture }}-${{ github.sha }}
@@ -123,7 +123,7 @@ jobs:
           python case-studies/remote-water-control/tools/compare_cross_host_results.py \
             --input protected-hosts \
             --output cross-host-summary.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: protected-remote-water-cross-host-${{ github.sha }}
           path: cross-host-summary.json
