@@ -6,9 +6,9 @@
 | MNCDS 0.1 specification | `spec/MNCDS-v0.1-rc.1.md` | reviewable | approval OPEN |
 | Architecture decisions | `spec/MNCS-v0.3-MNCDS-v0.1-decisions.md` | resolved locally | RFC approval OPEN |
 | Normative schemas | `schemas/*-0.3.schema.json`, `schemas/mncds-development-record-0.1.schema.json` | self-validating | freeze review OPEN |
-| Python consumer | `src/mncs_validator/assurance.py`, `mncds.py` | corpus agreement | external operation OPEN |
-| Rust consumer | `independent/rc-consumer` | 72/72 agreement | operator/organization UNKNOWN |
-| Golden corpus | `conformance/release-candidate/corpus.json` | 72/72 both consumers | independent freeze OPEN |
+| Python consumer | `src/mncs_validator/assurance/`, `mncds.py` | modular semantic implementation; corpus agreement | external operation OPEN |
+| Rust consumer | `independent/rc-consumer` | original 72 vectors retained; 74/74 expanded agreement | operator/organization UNKNOWN |
+| Golden corpus | `conformance/release-candidate/corpus.json` | 74/74 both consumers, including transitive impact | independent freeze OPEN |
 | Two-epoch study | `studies/recursive-analyzer` | internal selection PASS; MNCS UNKNOWN | custody/independence UNKNOWN |
 | Migration model | `docs/migration-0.2-to-0.3-mncds-0.1.md` | implemented | compatibility review OPEN |
 | Security/privacy review | `docs/release-candidate-security-privacy-review.md` | internal complete | external acceptance OPEN |

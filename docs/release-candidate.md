@@ -34,6 +34,11 @@ mncds validate examples/mncds-0.1-rc/development-record.json --json
 mncs migration-inspect examples/minimal/manifest.json --json
 mncs corpus release-candidate --json
 PYTHONPATH=src ./scripts/compare-release-candidate-consumers --json
+cargo run --manifest-path independent/rc-consumer/Cargo.toml -- conformance --json
+cargo run --manifest-path independent/rc-consumer/Cargo.toml -- \
+  validate-record --kind assurance \
+  --input examples/release-candidate-0.3/assurance-case.json \
+  --at 2026-08-01T00:00:00Z --json
 make release-candidate-check
 ```
 
@@ -43,9 +48,14 @@ evidence binary. Provider execution remains an explicit separate command.
 
 ## Evidence boundary
 
-The Python and independent Rust consumers agree on all 72 golden vectors. This proves
+The Python and separate Rust consumers retain agreement on the original 72 golden
+vectors and agree on two added transitive graph-impact vectors (74/74 total). The Rust
+CLI also validates arbitrary bounded contract, assurance, threat, measurement, and
+MNCDS records in its declared subset, including RFC 3339 numeric offsets. This proves
 separate source and executable decision paths for the tested subset. It does not prove
-independent operation or organizational independence.
+independent operation or organizational independence. General inherited MNCS 0.2
+package and DSSE/trust-policy validation remain explicitly unsupported by this
+embedded consumer.
 
 The two-epoch study reduces final incorrect PASS from 3 to 0 and false negatives from
 2 to 0 without false-positive, crash, or timeout regression. Its final partition was

@@ -3,8 +3,9 @@
 - RFC 0004 and RFC 0005 remain Draft; neither specification is Accepted or Final.
 - The internal security/privacy review has no external acceptance.
 - The Rust consumer is independent source and executable code and agrees on every
-  golden vector, but it is a bounded subset rather than a claim over every possible
-  record.
+  golden vector, including added transitive-impact cases, but it is a bounded subset
+  rather than a claim over every possible record. General inherited package archive
+  and DSSE/trust-policy validation remain explicitly unsupported.
 - No independent operator or organizational independence is established.
 - The recursive study used developer-controlled withheld evidence, not external
   protected custody.

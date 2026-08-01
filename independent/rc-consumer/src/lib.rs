@@ -6,6 +6,7 @@ use serde_json::Value;
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::path::{Path, PathBuf};
+use time::{OffsetDateTime, format_description::well_known::Rfc3339};
 
 #[derive(Clone, Debug, Serialize)]
 pub struct Outcome {
@@ -25,6 +26,10 @@ impl Outcome {
         self.issue_codes.insert(code.to_owned());
         self
     }
+}
+
+fn rfc3339(value: &str) -> Option<OffsetDateTime> {
+    OffsetDateTime::parse(value, &Rfc3339).ok()
 }
 
 #[derive(Debug, Serialize)]
@@ -86,10 +91,10 @@ fn freshness_status(value: Option<&Value>, at: &str) -> &'static str {
     let valid_until = value
         .and_then(|item| item.get("valid_until"))
         .and_then(Value::as_str);
-    if valid_until.is_some_and(|limit| at > limit) {
-        aggregate([declared, "UNKNOWN"])
-    } else {
-        declared
+    match (rfc3339(at), valid_until.map(rfc3339)) {
+        (Some(moment), Some(Some(limit))) if moment > limit => aggregate([declared, "UNKNOWN"]),
+        (Some(_), Some(Some(_)) | None) => declared,
+        _ => "UNKNOWN",
     }
 }
 
@@ -277,6 +282,105 @@ fn dependency_cycle(value: &Value, claim_ids: &BTreeSet<&str>) -> bool {
         .any(|node| visit_dependency(node, &edges, &mut visiting, &mut visited))
 }
 
+fn string_set(value: Option<&Value>) -> BTreeSet<String> {
+    array(value)
+        .iter()
+        .filter_map(Value::as_str)
+        .map(str::to_owned)
+        .collect()
+}
+
+fn graph_impact_closure(value: &Value, direct: &BTreeSet<String>) -> BTreeSet<String> {
+    let mut upstream: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
+    for dependency in array(value.get("dependencies")) {
+        if dependency.get("required").and_then(Value::as_bool) != Some(true) {
+            continue;
+        }
+        if let (Some(source), Some(target)) = (
+            object_id(dependency, "source_claim_id"),
+            object_id(dependency, "target_claim_id"),
+        ) {
+            upstream
+                .entry(target.to_owned())
+                .or_default()
+                .insert(source.to_owned());
+        }
+    }
+    let mut affected = direct.clone();
+    let mut frontier: Vec<String> = direct.iter().cloned().collect();
+    while let Some(target) = frontier.pop() {
+        for source in upstream.get(&target).into_iter().flatten() {
+            if affected.insert(source.clone()) {
+                frontier.push(source.clone());
+            }
+        }
+    }
+    affected
+}
+
+fn derive_revalidation(
+    value: &Value,
+    claim_ids: &BTreeSet<&str>,
+) -> (&'static str, BTreeSet<String>, BTreeSet<String>) {
+    let material: Vec<&Value> = array(value.get("material_changes"))
+        .iter()
+        .filter(|change| change.get("material").and_then(Value::as_bool) == Some(true))
+        .collect();
+    let direct: BTreeSet<String> = material
+        .iter()
+        .flat_map(|change| array(change.get("affected_claim_ids")))
+        .filter_map(Value::as_str)
+        .map(str::to_owned)
+        .collect();
+    let affected = graph_impact_closure(value, &direct);
+    let Some(revalidation) = value.get("revalidation").and_then(Value::as_object) else {
+        return ("UNKNOWN", direct, affected);
+    };
+    let Some(impact) = value.get("evidence_impact").and_then(Value::as_object) else {
+        return ("UNKNOWN", direct, affected);
+    };
+    let impact_status = status(impact.get("status"));
+    if material.is_empty() {
+        return (
+            aggregate([impact_status, status(revalidation.get("status"))]),
+            direct,
+            affected,
+        );
+    }
+    let mode = revalidation.get("mode").and_then(Value::as_str);
+    if mode == Some("none") {
+        return (aggregate([impact_status, "UNKNOWN"]), direct, affected);
+    }
+    let scope = string_set(revalidation.get("scope_claim_ids"));
+    let covered = string_set(revalidation.get("covered_change_ids"));
+    let material_ids: BTreeSet<String> = material
+        .iter()
+        .filter_map(|change| object_id(change, "change_id"))
+        .map(str::to_owned)
+        .collect();
+    let invalidated = string_set(impact.get("invalidated_evidence_ids"));
+    let retained = string_set(revalidation.get("retained_evidence_ids"));
+    let required_new = string_set(impact.get("required_new_evidence_ids"));
+    let new = string_set(revalidation.get("new_evidence_ids"));
+    let known_claims: BTreeSet<String> = claim_ids.iter().map(|id| (*id).to_owned()).collect();
+    let mut sufficient = affected.is_subset(&scope)
+        && material_ids.is_subset(&covered)
+        && invalidated.is_disjoint(&retained)
+        && required_new.is_subset(&new)
+        && affected.is_subset(&known_claims);
+    if mode == Some("full") {
+        sufficient = sufficient && known_claims.is_subset(&scope);
+    }
+    let result = if impact_status == "FAIL" {
+        "FAIL"
+    } else if sufficient && impact_status == "PASS" {
+        "PASS"
+    } else {
+        "UNKNOWN"
+    };
+    (result, direct, affected)
+}
+
 fn derive_claim<'a>(
     id: &'a str,
     claims: &BTreeMap<&'a str, &'a Value>,
@@ -388,8 +492,36 @@ fn validate_assurance(value: &Value, at: &str) -> Outcome {
     }) {
         return Outcome::new("INVALID").issue("MNCS-03-MATERIAL-IDENTITY-UNCHANGED");
     }
-    if !array(value.get("material_changes")).is_empty() {
-        root_status = aggregate([root_status, status(value.pointer("/revalidation/status"))]);
+    let (revalidation_status, direct_impact, affected) = derive_revalidation(value, &ids);
+    let declared_revalidation = status(value.pointer("/revalidation/status"));
+    let declared_impact = string_set(value.pointer("/evidence_impact/affected_claim_ids"));
+    let known_claims: BTreeSet<String> = ids.iter().map(|id| (*id).to_owned()).collect();
+    let mut revalidation_issues = Outcome::new("INVALID");
+    if declared_revalidation != revalidation_status {
+        revalidation_issues
+            .issue_codes
+            .insert("MNCS-03-REVALIDATION-RESULT-MISMATCH".to_owned());
+    }
+    if !affected.is_subset(&declared_impact) {
+        revalidation_issues
+            .issue_codes
+            .insert("MNCS-03-IMPACT-SCOPE-INCOMPLETE".to_owned());
+    }
+    if !direct_impact.is_subset(&known_claims) {
+        revalidation_issues
+            .issue_codes
+            .insert("MNCS-03-CHANGE-CLAIM-MISSING".to_owned());
+    }
+    if !affected.is_empty() {
+        root_status = aggregate([root_status, revalidation_status]);
+    }
+    if !revalidation_issues.issue_codes.is_empty() {
+        if status(value.pointer("/mncs/status")) != root_status {
+            revalidation_issues
+                .issue_codes
+                .insert("MNCS-03-ASSURANCE-RESULT-MISMATCH".to_owned());
+        }
+        return revalidation_issues;
     }
     if value
         .pointer("/migration/downgrade_detected")
@@ -825,6 +957,24 @@ fn load_json(path: &Path) -> Result<Value, String> {
         .map_err(|error| error.to_string())
 }
 
+/// Validate one user-supplied RC record inside the declared Rust subset.
+#[must_use]
+pub fn validate_record_value(kind: &str, value: &Value, at: &str) -> Outcome {
+    match kind {
+        "contract" => validate_contract(value),
+        "assurance" => validate_assurance(value, at),
+        "threat" => validate_threat(value),
+        "measurement" => validate_measurement(value, at),
+        _ => Outcome::new("UNSUPPORTED").issue("unsupported-kind"),
+    }
+}
+
+/// Validate one user-supplied MNCDS aggregate inside the declared Rust subset.
+#[must_use]
+pub fn validate_mncds_value(value: &Value) -> Outcome {
+    validate_mncds(value)
+}
+
 /// Run a corpus directly from its JSON manifest.
 ///
 /// # Errors
@@ -864,13 +1014,10 @@ pub fn run_corpus(path: &Path) -> Result<RunResult, String> {
             apply_mutation(&mut value, mutation)?;
         }
         let at = case.get("at").and_then(Value::as_str).unwrap_or(default_at);
-        let outcome = match kind {
-            "contract" => validate_contract(&value),
-            "assurance" => validate_assurance(&value, at),
-            "threat" => validate_threat(&value),
-            "measurement" => validate_measurement(&value, at),
-            "mncds" => validate_mncds(&value),
-            _ => Outcome::new("UNSUPPORTED").issue("unsupported-kind"),
+        let outcome = if kind == "mncds" {
+            validate_mncds_value(&value)
+        } else {
+            validate_record_value(kind, &value, at)
         };
         *categories.entry(outcome.category.clone()).or_insert(0) += 1;
         let classification = if outcome.category == "UNSUPPORTED" && expected != "UNSUPPORTED" {

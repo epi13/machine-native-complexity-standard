@@ -9,7 +9,7 @@ import subprocess
 from pathlib import Path
 from typing import Any, cast
 
-from mncs_validator.rc_corpus import run_corpus
+from mncs_validator.rc_corpus import load_cases, run_corpus
 
 
 def main() -> int:
@@ -23,6 +23,10 @@ def main() -> int:
     args = parser.parse_args()
 
     python_summary, python_results = run_corpus(args.corpus)
+    _, cases = load_cases(args.corpus)
+    required_codes = {
+        cast(str, case["id"]): set(cast(list[str], case.get("issue_codes", []))) for case in cases
+    }
     process = subprocess.run(
         [
             "cargo",
@@ -47,18 +51,27 @@ def main() -> int:
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 2
     rust = cast(dict[str, Any], json.loads(process.stdout))
-    rust_results = {
-        item["id"]: item for item in cast(list[dict[str, Any]], rust["results"])
-    }
+    rust_results = {item["id"]: item for item in cast(list[dict[str, Any]], rust["results"])}
     disagreements = []
     for python in python_results:
         other = rust_results.get(python["id"])
-        if other is None or other["actual"] != python["actual"]:
+        required = required_codes[cast(str, python["id"])]
+        python_codes = set(cast(list[str], python["issue_codes"]))
+        rust_codes = set() if other is None else set(cast(list[str], other.get("issue_codes", [])))
+        if (
+            other is None
+            or other["actual"] != python["actual"]
+            or not required <= python_codes
+            or not required <= rust_codes
+        ):
             disagreements.append(
                 {
                     "id": python["id"],
                     "python": python["actual"],
                     "rust": None if other is None else other["actual"],
+                    "required_issue_codes": sorted(required),
+                    "python_issue_codes": sorted(python_codes),
+                    "rust_issue_codes": sorted(rust_codes),
                 }
             )
     payload = {
@@ -68,6 +81,7 @@ def main() -> int:
         "agreement": len(python_results) - len(disagreements),
         "disagreement": len(disagreements),
         "disagreements": disagreements,
+        "issue_code_comparison": "exact required corpus issue-code subset",
         "independent_implementation": True,
         "independent_executable": True,
         "independent_operator": "UNKNOWN",

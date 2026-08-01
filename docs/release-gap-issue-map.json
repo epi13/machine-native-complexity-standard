@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1",
   "matrix_version": "0.1",
-  "matrix_sha256": "f9c2dfac7254e23a85636991aeac81b13b7d221e6ba575357cf2f7bdceae6bf5",
+  "matrix_sha256": "e577706a3d517fbb14da4afdc570aaacb030861cc23425f3dc1e109111eab1fa",
   "repository": "epi13/machine-native-complexity-standard",
   "observed_at": "2026-08-01T15:21:00Z",
   "mappings": [
@@ -25,9 +25,7 @@
     },
     {
       "requirement_ids": [
-        "MNCS-03-IDENTITY-TRUST-PACKAGE",
-        "MNCS-03-FRESHNESS",
-        "MNCS-03-CHANGE-REVALIDATION"
+        "MNCS-03-IDENTITY-TRUST-PACKAGE"
       ],
       "gap_key": "rust-rc-general-coverage",
       "issue_number": 36,

@@ -116,7 +116,7 @@
       "implementation_status": "IMPLEMENTED",
       "schema_status": "COVERED",
       "python_validation_status": "COVERED",
-      "independent_consumer_status": "PARTIAL",
+      "independent_consumer_status": "COVERED",
       "positive_fixture_status": "COVERED",
       "negative_fixture_status": "COVERED",
       "interoperability_status": "COVERED",
@@ -125,10 +125,10 @@
       "security_review_status": "COVERED",
       "governance_status": "GOVERNANCE_REQUIRED",
       "evidence_identity": "release-candidate-corpus:assurance-stale-evidence",
-      "blocking_issues": ["The Rust consumer supports canonical UTC corpus timestamps; broader RFC 3339 offset handling remains outside its declared subset"],
-      "gap_class": "INDEPENDENT_IMPLEMENTATION_BLOCKER",
+      "blocking_issues": [],
+      "gap_class": null,
       "locally_executable_remaining": false,
-      "external_actor_required": true
+      "external_actor_required": false
     },
     {
       "requirement_id": "MNCS-03-CHANGE-REVALIDATION",
@@ -137,7 +137,7 @@
       "implementation_status": "IMPLEMENTED",
       "schema_status": "COVERED",
       "python_validation_status": "COVERED",
-      "independent_consumer_status": "PARTIAL",
+      "independent_consumer_status": "COVERED",
       "positive_fixture_status": "COVERED",
       "negative_fixture_status": "COVERED",
       "interoperability_status": "COVERED",
@@ -146,10 +146,10 @@
       "security_review_status": "COVERED",
       "governance_status": "GOVERNANCE_REQUIRED",
       "evidence_identity": "release-candidate-corpus:assurance-*-revalidation",
-      "blocking_issues": ["Rust consumer covers corpus decisions but not every possible graph-impact closure"],
-      "gap_class": "INDEPENDENT_IMPLEMENTATION_BLOCKER",
+      "blocking_issues": [],
+      "gap_class": null,
       "locally_executable_remaining": false,
-      "external_actor_required": true
+      "external_actor_required": false
     },
     {
       "requirement_id": "MNCS-03-LIFECYCLE",
