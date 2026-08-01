@@ -61,7 +61,7 @@ or offline MNCS/MNCDS validation and cannot create independent or protected evid
 - [Multilingual Stream](case-studies/multilingual-stream/README.md) — shared C11/Rust contract.
 - [Go Gateway](case-studies/go-gateway/README.md) — bounded concurrency and cancellation.
 - [Composed Gateway](case-studies/composed-gateway/README.md) — C11 FFI, generated Go bindings, Go orchestration, Rust authority, recovery, measurement, custody, claim readiness, and portable physical-host reproduction.
-- [Remote Water Control](case-studies/remote-water-control/README.md), [RAVEL](case-studies/ravel/README.md), and [dSense](case-studies/dsense-desk-pet/README.md) — additional bounded studies.
+- [Remote Water Control](case-studies/remote-water-control/README.md), [RAVEL 0.1–0.5](case-studies/ravel/README.md), and [dSense](case-studies/dsense-desk-pet/README.md) — additional bounded studies with explicit non-promotion boundaries.
 
 ## Current claim boundary
 
