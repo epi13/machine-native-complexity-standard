@@ -68,14 +68,14 @@ def test_seed_candidate_is_deterministic_and_marked_as_development() -> None:
 def test_seed_candidate_cli_check_is_read_only(tmp_path: Path) -> None:
     result = subprocess.run(
         [sys.executable, str(TOOL), "--check"],
-        cwd=ROOT,
+        cwd=tmp_path,
         check=True,
         capture_output=True,
         text=True,
     )
 
     assert result.stdout.startswith("ravel-0.6-candidate-001 sha256=")
-    assert not (tmp_path / "ravel_0_6.c").exists()
+    assert list(tmp_path.iterdir()) == []
 
 
 def test_seed_candidate_compiles(tmp_path: Path) -> None:
