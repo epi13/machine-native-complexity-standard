@@ -25,7 +25,7 @@ def test_rust_consumer_agrees_with_entire_release_candidate_corpus() -> None:
     )
     assert process.returncode == 0, process.stderr
     result = json.loads(process.stdout)
-    assert result["summary"]["agreement"] == 72
+    assert result["summary"]["agreement"] == 74
     assert result["summary"]["disagreement"] == 0
     assert result["summary"]["unsupported"] == 0
     assert result["operator_independence"] == "UNKNOWN"

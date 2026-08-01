@@ -13,6 +13,8 @@ from typing import Any
 import pytest
 from jsonschema import Draft202012Validator
 
+pytestmark = pytest.mark.experimental
+
 ROOT = Path(__file__).resolve().parents[1]
 INTEGRATION = ROOT / "experimental" / "integrations" / "mncs-forge"
 PROVIDER = INTEGRATION / "providers" / "project_provider.py"

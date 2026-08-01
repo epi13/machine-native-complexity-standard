@@ -23,6 +23,11 @@ The canonical local entry point is `make core-check`. `make check` remains a
 compatibility alias for the same core authority surface. Expensive cross-language
 checks run once rather than once per Python version.
 
+Core pytest invocations exclude tests marked `experimental`. Forge integration and
+case-study preregistration tests retain that marker and run in their experimental
+workflows. An unfiltered local `pytest` still runs both groups for complete developer
+verification.
+
 The dedicated `Documentation` workflow additionally controls Pages deployment, and
 the tag-only `Release` workflow packages artifacts. Neither workflow supplies the
 OPEN governance or signing authority.
@@ -31,9 +36,10 @@ OPEN governance or signing authority.
 
 `Experimental Laboratories` contains multilingual profiles, the Go gateway,
 composed-system waves, cross-host reconciliation, historical pre-0.4 RAVEL
-reproduction, and dSense. Specialized RAVEL 0.4, RAVEL 0.5, CacheForge, EdgeStream,
-remote-water, and Wave Five workflows remain separate because their identities,
-artifact exchange, and historical/evaluation boundaries are clearer that way.
+reproduction, RAVEL 0.6 preregistration identity checks, and dSense. Specialized
+RAVEL 0.4, RAVEL 0.5, CacheForge, EdgeStream, remote-water, and Wave Five workflows
+remain separate because their identities, artifact exchange, and
+historical/evaluation boundaries are clearer that way.
 
 Experimental failures stay visible. They are not relabeled with universal
 `continue-on-error`; repository branch-protection policy chooses required checks.

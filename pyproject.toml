@@ -97,3 +97,6 @@ packages = ["mncs_validator", "mncs_provider_sdk"]
 [tool.pytest.ini_options]
 addopts = "-q"
 testpaths = ["tests"]
+markers = [
+  "experimental: non-release-critical laboratory and integration checks",
+]

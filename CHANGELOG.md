@@ -21,6 +21,10 @@ validator and explicit version identifiers for the standard.
   Provider Protocol micro-verifiers with explicit project-level capability policy.
   These local development results do not establish conformance, independence,
   protected custody, governance approval, certification, or promotion.
+- Preregister a clean RAVEL 0.6 retention-constrained adaptation epoch with
+  distinct development, selection, retention, planning, and future-final
+  partitions. No 0.6 implementation or evaluation is claimed, and frozen 0.4/0.5
+  sources, evidence, dispositions, and promotion boundaries remain unchanged.
 
 ## 0.2.0 — 2026-07-25
 
