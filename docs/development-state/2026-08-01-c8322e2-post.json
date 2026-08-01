@@ -1,0 +1,407 @@
+{
+  "schema_version": "0.1",
+  "evidence_class": "operator-controlled-development",
+  "normative": false,
+  "repository": "epi13/machine-native-complexity-standard",
+  "starting_commit": "3e22016cc171cca9bd48f4231b8118287cf8bece",
+  "evaluated_commit": "c8322e21ded45114b2278791b2ee7b804d3fe1c2",
+  "branch": "codex/core-hardening-ravel-0.6",
+  "working_tree_at_evaluation": "clean",
+  "observed_at": "2026-08-01T16:18:38Z",
+  "host": {
+    "kernel": "Linux 7.1.3-200.fc44.x86_64",
+    "architecture": "x86_64",
+    "python": "3.14.6",
+    "pip": "26.1.2",
+    "ruff": "0.15.22",
+    "mypy": "1.20.2",
+    "pytest": "8.4.2",
+    "hypothesis": "6.164.0",
+    "cargo": "1.97.1",
+    "rustc": "1.97.1",
+    "gcc": "16.1.1",
+    "clang": "22.1.8",
+    "joern": "4.0.583"
+  },
+  "executable_identities": {
+    "python": "sha256:7af874aca05879e1823cd820913b42fb8d8b994738a05ec39ce4256d85b03861",
+    "make": "sha256:25544ed459e6f5c79daf61383d7ef1c83cd9e77f2dfbe2bdbeaa8defec9d0bc9",
+    "cargo": "sha256:00d6728a93c0daac76d2d9f1508bb8982f04eb05921f51edcbff77fba7ce6935",
+    "mncs-forge": "sha256:d6c3aed27c803e0346dfb006b4eea1a3600a2112c83d80a2970b68ecbc0f387e"
+  },
+  "github_ci": {
+    "baseline_commit": "3e22016cc171cca9bd48f4231b8118287cf8bece",
+    "baseline_overall": "FAIL",
+    "baseline_failure": "CI quality (3.13) failed Ruff formatting on three frozen RAVEL 0.5 Python tools; other quality matrix jobs were cancelled",
+    "evaluated_commit_pushed": false,
+    "evaluated_commit_runs": [],
+    "evaluated_commit_state": "UNKNOWN",
+    "query_exit_status": 0,
+    "query_output_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "limitation": "No GitHub Actions run exists for the unpushed evaluated commit. Local PASS results are not current GitHub CI."
+  },
+  "final_commands": [
+    {
+      "command": ".venv/bin/python -m pip install -e '.[dev]'",
+      "environment_key_names": [],
+      "exit_status": 0,
+      "duration_seconds": 1.97,
+      "classification": "PASS",
+      "output_sha256": "a444e0bad22e212fad81711a489c5dd83d3a69f817e62617699327fe8b449c21",
+      "output_bytes": 7154,
+      "limitations": [
+        "package index and cached wheel provenance were not independently attested"
+      ]
+    },
+    {
+      "command": ".venv/bin/ruff format --check .",
+      "environment_key_names": [],
+      "exit_status": 0,
+      "duration_seconds": 0.01,
+      "classification": "PASS",
+      "output_sha256": "8a4cbf9cb9852ee75469cf488f568ef21fa82e13b6f180d7de060b5c5963a232"
+    },
+    {
+      "command": ".venv/bin/ruff check .",
+      "environment_key_names": [],
+      "exit_status": 0,
+      "duration_seconds": 0.01,
+      "classification": "PASS",
+      "output_sha256": "d862b0e84b59a5f25cc2d4bdfd1cfb629280d599a317b05d3201f66a7c02a1fb"
+    },
+    {
+      "command": ".venv/bin/mypy src",
+      "environment_key_names": [],
+      "exit_status": 0,
+      "duration_seconds": 0.14,
+      "classification": "PASS",
+      "output_sha256": "ad8c2376abbf9048ac553e4fabfa3cc5a4de7da1f484c3cc19150548e0fd8f5e"
+    },
+    {
+      "command": ".venv/bin/pytest",
+      "environment_key_names": [],
+      "exit_status": 0,
+      "duration_seconds": 46.27,
+      "classification": "PASS",
+      "output_sha256": "d7287d1e8339cdfbec622c534c339a56126d486191e0318bd8021c6cfa1f8f16",
+      "excerpt": "167 passed"
+    },
+    {
+      "command": "PATH=\"$PWD/.venv/bin:$PATH\" make core-check",
+      "environment_key_names": [
+        "PATH"
+      ],
+      "exit_status": 0,
+      "duration_seconds": 67.75,
+      "classification": "PASS",
+      "output_sha256": "d6e22c3f354a1b4ac77f88747a15574252c5408f1ea52595763a63ba4e0ebbf7",
+      "output_bytes": 110176,
+      "excerpt": "Core tests, build, examples, corpora, interoperability, Rust comparison, recursive study, and docs passed."
+    },
+    {
+      "command": "PATH=\"$PWD/.venv/bin:$PATH\" make release-candidate-check",
+      "environment_key_names": [
+        "PATH"
+      ],
+      "exit_status": 0,
+      "duration_seconds": 9.53,
+      "classification": "PASS",
+      "output_sha256": "2191154bb461b44bec51131e9b382072dce23cbc9512b1cc158ed99040c02582",
+      "excerpt": "Python/Rust category and required issue-code agreement 74/74."
+    },
+    {
+      "command": "cargo fmt --manifest-path independent/rc-consumer/Cargo.toml -- --check",
+      "environment_key_names": [],
+      "exit_status": 0,
+      "duration_seconds": 0.07,
+      "classification": "PASS",
+      "output_sha256": "96b81307438a153010690d242effa5c2d225a5ec34a56ca4e91c8b373c5df1b0"
+    },
+    {
+      "command": "cargo test --manifest-path independent/rc-consumer/Cargo.toml",
+      "environment_key_names": [],
+      "exit_status": 0,
+      "duration_seconds": 0.51,
+      "classification": "PASS",
+      "output_sha256": "1dd4f7c972f3cb165d9d690b9e5c831162b29efe19e3421b284810f8245d5572"
+    },
+    {
+      "command": "cargo clippy --manifest-path independent/rc-consumer/Cargo.toml --all-targets -- -D warnings",
+      "environment_key_names": [],
+      "exit_status": 0,
+      "duration_seconds": 0.71,
+      "classification": "PASS",
+      "output_sha256": "ef842502bc0e003505899d510c817c798561191dafae36f03317e6403f10c5ed"
+    },
+    {
+      "command": "PATH=\"$PWD/.venv/bin:$PATH\" make ravel-0.5-check",
+      "environment_key_names": [
+        "PATH"
+      ],
+      "exit_status": 0,
+      "duration_seconds": 31.42,
+      "classification": "PASS",
+      "output_sha256": "9ce38e9cebd27123c62918f2f455843caaa2f70c69bb469257a77a3770b8a981",
+      "excerpt": "manifest_match=true and assurance_match=true"
+    },
+    {
+      "command": "PATH=\"$PWD/.venv/bin:$PATH\" make ravel-0.5-negative-test",
+      "environment_key_names": [
+        "PATH"
+      ],
+      "exit_status": 0,
+      "duration_seconds": 0.38,
+      "classification": "PASS",
+      "output_sha256": "67bcf8b347f6b450d31231de25ecdd4618e6ef5750bf41a6cf1c047cc9c8aa78"
+    },
+    {
+      "command": "PATH=\"$PWD/.venv/bin:$PATH\" make ravel-0.5-manifest-negative-test",
+      "environment_key_names": [
+        "PATH"
+      ],
+      "exit_status": 0,
+      "duration_seconds": 0.08,
+      "classification": "PASS",
+      "output_sha256": "aee614465d494063314f8840630690cdc884906450ad1f623708fcac731470c3"
+    },
+    {
+      "command": "PATH=\"$PWD/.venv/bin:$PATH\" make ravel-0.5-sanitizers",
+      "environment_key_names": [
+        "PATH",
+        "ASAN_OPTIONS",
+        "UBSAN_OPTIONS"
+      ],
+      "exit_status": 0,
+      "duration_seconds": 149.47,
+      "classification": "PASS",
+      "output_sha256": "006fc297ed0a9f3de11f73a33777ffbe0fd3bfe56213c74a15bb80381503d376"
+    },
+    {
+      "command": "PATH=\"$PWD/.venv/bin:$PATH\" make forge-integration-test",
+      "environment_key_names": [
+        "PATH"
+      ],
+      "exit_status": 0,
+      "duration_seconds": 2.93,
+      "classification": "PASS",
+      "output_sha256": "b478f24d2cea7fb81e2aa7ef0b1e721c13468525e14df504decc0fbb4e952f77",
+      "excerpt": "14 passed"
+    },
+    {
+      "command": "PATH=\"$PWD/.venv/bin:$PATH\" make ravel-0.6-preregistration-check",
+      "environment_key_names": [
+        "PATH"
+      ],
+      "exit_status": 0,
+      "duration_seconds": 0.5,
+      "classification": "PASS",
+      "output_sha256": "3006042c78fc4a6e68f7203e86704569b2a2912479fb1107c43522eb146cf084",
+      "excerpt": "7 passed"
+    },
+    {
+      "command": ".venv/bin/python scripts/validate_release_gap_issue_map.py",
+      "environment_key_names": [],
+      "exit_status": 0,
+      "duration_seconds": 0.03,
+      "classification": "PASS",
+      "output_sha256": "099dfe7873bd817939f602c788e02695db582f91742b79955d63ff10c2e0319f"
+    },
+    {
+      "command": "git diff --check",
+      "environment_key_names": [],
+      "exit_status": 0,
+      "duration_seconds": 0.0,
+      "classification": "PASS",
+      "output_sha256": "2cc871b93e059373f267162a715ced2d6178a0f9538497d0e1a17b44092595ea"
+    }
+  ],
+  "preserved_nonzero_observations": [
+    {
+      "command": "make core-check",
+      "exit_status": 2,
+      "classification": "ENVIRONMENT_ERROR",
+      "output_sha256": "a1bce9ee10284a016f47943fe6dea0c2d53f4fdac319f78929629df7733da0bb",
+      "finding": "The unactivated host pytest lacked Hypothesis. The isolated venv was refreshed and PATH was made explicit."
+    },
+    {
+      "command": "PATH=\"$PWD/.venv/bin:$PATH\" make core-check",
+      "exit_status": 2,
+      "classification": "IMPLEMENTATION_DEFECT",
+      "output_sha256": "ce7dd486d27f319f204f610f13e428be80e16696351507b29719314712f89ded",
+      "finding": "Rust returned the correct UNKNOWN category but omitted rollback-not-tested after another required uncertainty. The issue-visibility defect was fixed and regression tested."
+    },
+    {
+      "command": "PATH=\"$PWD/.venv/bin:$PATH\" make core-check",
+      "exit_status": 2,
+      "classification": "FORMAT_FAILURE",
+      "output_sha256": "94a61ef0210f47e3d5fb8a04219da8877b2aeaffec3b195605914821af917c6f",
+      "finding": "Ruff detected the new regression test needed formatting; it was formatted before the final rerun."
+    },
+    {
+      "command": "/usr/bin/time PATH=... make <target>",
+      "exit_status": 127,
+      "classification": "COMMAND_WRAPPER_ERROR",
+      "output_sha256": "c9085b67d7b18d0d6f82f954f571cbe291131e2a6809bcaa1620251ae6f319e1",
+      "finding": "The time utility treated an environment assignment as an executable. The commands were rerun with PATH assigned before time."
+    }
+  ],
+  "release_gap_issues": [
+    {
+      "number": 34,
+      "title": "Obtain governance approval for RFC 0005 and the MNCS 0.3 result model",
+      "state": "OPEN",
+      "external_actor_required": true
+    },
+    {
+      "number": 35,
+      "title": "Record an independent contract-domain review for MNCS 0.3",
+      "state": "OPEN",
+      "external_actor_required": true
+    },
+    {
+      "number": 36,
+      "title": "Implement inherited package and attestation validation in the Rust RC consumer",
+      "state": "OPEN",
+      "external_actor_required": false
+    },
+    {
+      "number": 37,
+      "title": "Obtain externally controlled MNCDS evaluation and protected evidence custody",
+      "state": "OPEN",
+      "external_actor_required": true
+    },
+    {
+      "number": 38,
+      "title": "Complete external security and privacy review of the release candidates",
+      "state": "OPEN",
+      "external_actor_required": true
+    },
+    {
+      "number": 39,
+      "title": "Establish bootstrap maintainership, review, signing, and release authorities",
+      "state": "OPEN",
+      "external_actor_required": true
+    }
+  ],
+  "release_gap_change": {
+    "newly_covered_requirements": [
+      "MNCS-03-FRESHNESS",
+      "MNCS-03-CHANGE-REVALIDATION"
+    ],
+    "remaining_rust_local_gap": "MNCS-03-IDENTITY-TRUST-PACKAGE",
+    "mapping_status": "PASS",
+    "mapping_live_network_required_in_ci": false
+  },
+  "rust_consumer": {
+    "corpus_agreement": "74/74",
+    "supported": [
+      "exact schema/version dispatch",
+      "contract adequacy subset",
+      "FAIL > UNKNOWN > PASS",
+      "claim identity and reference integrity",
+      "cycle rejection",
+      "required and optional dependency handling",
+      "correlated-group propagation",
+      "RFC 3339 timestamps with UTC or numeric offsets",
+      "freshness",
+      "required transitive material-change graph impact",
+      "partial and full revalidation coverage",
+      "release-candidate lifecycle subset",
+      "MNCDS authority, protected-evidence, lineage, selection, and result rules"
+    ],
+    "unsupported": [
+      "general MNCS 0.2 package archive validation",
+      "general DSSE/Ed25519 trust-policy validation",
+      "network-fetched or executable evidence",
+      "schemas or record families not explicitly listed"
+    ],
+    "independent_operation": "UNKNOWN",
+    "organizational_independence": "UNKNOWN"
+  },
+  "forge": {
+    "config_validate": "PASS",
+    "provider_probe": "PASS",
+    "required_capability_blocked": false,
+    "blocker_status": "PASS",
+    "required_capabilities": [
+      "evidence-change-impact",
+      "artifact-manifest-identity",
+      "mncs-assurance-graph-impact",
+      "mncs-record-dispatch"
+    ],
+    "representative_verifier_results": [
+      {
+        "verifier": "evidence.change-impact",
+        "status": "PASS",
+        "output_identity": "forge-json-sha256-v1:72ef72c7aa336066ef6d897a1fd0dd00a227d8c4b8b54d5238202b1dedad5e3b"
+      },
+      {
+        "verifier": "artifact.manifest-identity",
+        "status": "PASS",
+        "output_identity": "forge-json-sha256-v1:cf7c1244a052c382d8738f84963247f48810181f3c1aee62295531f0cbddd219"
+      },
+      {
+        "verifier": "mncs.assurance-graph-impact",
+        "status": "PASS",
+        "output_identity": "forge-json-sha256-v1:1b53f23afe3dadd856756bd4508149704244bdb192a0fc4eff96b8654b39d5db"
+      },
+      {
+        "verifier": "mncs.record-dispatch",
+        "status": "PASS",
+        "output_identity": "forge-json-sha256-v1:6577773678d40dddb722a58825b1da15701dfd676188f3fa6fb5557be1a0f207"
+      }
+    ],
+    "limitations": [
+      "Probe PASS establishes current capability availability only.",
+      "Verifier records are operator-controlled development evidence.",
+      "Forge remains experimental, provider-neutral, non-normative, and project-level in capability enforcement."
+    ]
+  },
+  "ravel": {
+    "ravel_0_4_frozen_identity_status": "PRESERVED",
+    "ravel_0_5_frozen_identity_status": "PRESERVED",
+    "ravel_0_5_manifest_sha256": "18006006db509269ee374a39133bb25d8452edc0fe0103a43fa92c5660fd89d0",
+    "ravel_0_5_source_digest": "201e0373cc8d8f2fb26f284f44b0f87a5751a047d91556213b7aa7bf07e26fa4",
+    "ravel_0_5_execution_integrity": "PASS",
+    "ravel_0_5_development_result": "FAIL",
+    "ravel_0_5_formal_mncs_status": "UNKNOWN",
+    "ravel_0_5_formal_mncds_status": "UNKNOWN",
+    "ravel_0_5_promotion_authorized": false,
+    "ravel_0_6_status": "PREREGISTERED_BEFORE_IMPLEMENTATION",
+    "ravel_0_6_candidate_implementation": "NOT_IMPLEMENTED",
+    "ravel_0_6_development_evaluation": "UNKNOWN",
+    "ravel_0_6_final_evaluation": "UNKNOWN",
+    "ravel_0_6_protected_custody": "UNKNOWN",
+    "ravel_0_6_independent_evaluation": "UNKNOWN",
+    "ravel_0_6_formal_mncs_status": "UNKNOWN",
+    "ravel_0_6_formal_mncds_status": "UNKNOWN",
+    "ravel_0_6_promotion_authorized": false
+  },
+  "joern": {
+    "python_baseline_snapshot": ".joern-analysis/core-hardening-baseline.json",
+    "python_post_snapshot": ".joern-analysis/core-hardening-post.json",
+    "python_post_status": "PASS",
+    "snapshot_comparison_status": "PASS",
+    "snapshot_comparison_warnings": [],
+    "graph_findings": [
+      "graph_impact_closure is an explicit method whose frontier admits only required dependencies and adds unseen upstream source claims",
+      "derive_revalidation separately controls affected-scope sufficiency, full-scope coverage, change coverage, invalidated evidence exclusion, and required-new-evidence inclusion",
+      "validate_assurance_value consumes the affected closure and rejects incomplete declared impact"
+    ],
+    "rust_baseline": "UNSUPPORTED",
+    "rust_post": "UNSUPPORTED",
+    "rust_limitation": "The installed Joern bridge rejected language=rust before and after the narrow Rust issue-code edit. No Rust CPG conclusion is claimed.",
+    "general_limitations": [
+      "Python frontend emits iteratorNonEmptyOrException UNKNOWN nodes.",
+      "The initial whole-repository snapshot exceeded its 240-second bound; focused Python snapshots completed."
+    ]
+  },
+  "remaining_external_or_governance_blockers": [
+    "RFC/result-model and final release governance approval",
+    "independent contract-domain review",
+    "externally controlled MNCDS evaluation and protected custody",
+    "external security/privacy review",
+    "bootstrap maintainer, reviewer, signer, and release authority"
+  ],
+  "claim_boundary": "This is operator-controlled development evidence. Workflow success is not MNCS or MNCDS conformance success. It is not independent evaluation, protected custody, witnessing, governance approval, certification, or promotion."
+}
