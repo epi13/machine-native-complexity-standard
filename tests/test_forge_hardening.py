@@ -109,5 +109,6 @@ def test_forge_config_uses_hardened_entrypoints() -> None:
     ]
     assert bounded_workflows
     assert all(
-        "forge_workflow_hardened.py" in item["command"] for item in bounded_workflows
+        any(argument.endswith("forge_workflow_hardened.py") for argument in item["command"])
+        for item in bounded_workflows
     )
