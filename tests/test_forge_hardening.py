@@ -31,9 +31,7 @@ def request(changed_paths: list[str], dependency_paths: list[str]) -> dict[str, 
             "changed_paths": changed_paths,
         },
         "extensions": {
-            "mncs_forge": {
-                "question_parameters": {"dependency_paths": dependency_paths}
-            }
+            "mncs_forge": {"question_parameters": {"dependency_paths": dependency_paths}}
         },
     }
 
@@ -110,4 +108,6 @@ def test_forge_config_uses_hardened_entrypoints() -> None:
         }
     ]
     assert bounded_workflows
-    assert all("forge_workflow_hardened.py" in item["command"] for item in bounded_workflows)
+    assert all(
+        "forge_workflow_hardened.py" in item["command"] for item in bounded_workflows
+    )
