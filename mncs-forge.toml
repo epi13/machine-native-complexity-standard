@@ -1,6 +1,8 @@
-# Non-normative project integration for the separate MNCS Forge repository.
+# Non-normative project development control plane for the separate MNCS Forge repository.
 version = 1
-environment_allowlist = ["PATH", "LANG", "LC_ALL", "CC", "CFLAGS"]
+environment_allowlist = [
+  "PATH", "LANG", "LC_ALL", "CC", "CFLAGS", "RUSTFLAGS", "CARGO_HOME", "RUSTUP_HOME"
+]
 required_capabilities = [
   "evidence-change-impact",
   "artifact-manifest-identity",
@@ -9,8 +11,8 @@ required_capabilities = [
 ]
 
 [project]
-name = "MNCS project experimental Forge integration"
-identity = "mncs-project-forge-integration-v2"
+name = "MNCS provider-neutral development control plane"
+identity = "mncs-forge-development-v3"
 root = "."
 
 [paths]
@@ -35,7 +37,7 @@ protected = []
 outputs = [".mncs-forge/outputs"]
 
 [limits]
-timeout_seconds = 120
+timeout_seconds = 3600
 output_bytes = 1048576
 
 [verifier_limits]
@@ -215,6 +217,69 @@ cost = "low"
 uncertainty_classes = ["schema-confusion", "downgrade"]
 tags = ["dispatch", "schema"]
 parameter_keys = ["record_path", "kind", "expected_schema_version", "evaluation_time"]
+
+[[workflows]]
+name = "tooling-inspect"
+category = "inspection"
+mode = "development"
+command = [".venv/bin/python", "scripts/forge_workflow.py", "tooling-inspect"]
+provider_protocol = false
+subject = "project"
+disclosure = "compact"
+
+[[workflows]]
+name = "release-candidate-check"
+category = "evidence_derivation"
+mode = "development"
+command = [".venv/bin/python", "scripts/forge_workflow.py", "release-candidate-check"]
+provider_protocol = false
+subject = "project"
+disclosure = "compact"
+
+[[workflows]]
+name = "release-candidate-corpus"
+category = "evidence_derivation"
+mode = "development"
+command = [".venv/bin/python", "scripts/forge_workflow.py", "release-candidate-corpus"]
+provider_protocol = false
+subject = "project"
+disclosure = "compact"
+
+[[workflows]]
+name = "python-rust-comparison"
+category = "evidence_derivation"
+mode = "development"
+command = [".venv/bin/python", "scripts/forge_workflow.py", "python-rust-comparison"]
+provider_protocol = false
+subject = "project"
+disclosure = "compact"
+
+[[workflows]]
+name = "recursive-analyzer-study"
+category = "evidence_derivation"
+mode = "development"
+command = [".venv/bin/python", "scripts/forge_workflow.py", "recursive-analyzer-study"]
+provider_protocol = false
+subject = "project"
+disclosure = "compact"
+
+[[workflows]]
+name = "core-check"
+category = "build"
+mode = "development"
+command = [".venv/bin/python", "scripts/forge_workflow.py", "core-check"]
+provider_protocol = false
+subject = "project"
+disclosure = "compact"
+
+[[workflows]]
+name = "ravel-0.4-check"
+category = "inspection"
+mode = "development"
+command = [".venv/bin/python", "scripts/forge_workflow.py", "ravel-0.4-check"]
+provider_protocol = false
+subject = "project"
+disclosure = "compact"
 
 [[workflows]]
 name = "edgestream-read-only-inspect"

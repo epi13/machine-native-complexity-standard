@@ -28,6 +28,9 @@ validator and explicit version identifiers for the standard.
 - Correct the Rust consumer's limitation reporting so every concurrent required
   `UNKNOWN` condition retains its issue code even after another uncertainty has
   already lowered the aggregate. Result precedence and normative text are unchanged.
+- Make the non-normative Forge integration the default Codex development control plane,
+  add bounded project workflows, and demote Joern to an explicitly configured optional
+  legacy provider without changing any MNCS/MNCDS claim result.
 
 ## 0.2.0 — 2026-07-25
 

@@ -34,3 +34,9 @@ cannot prove semantic independence.
 Forge currently enforces `required_capabilities` at project level. This configuration
 does not claim unsupported per-workflow enforcement. Compiler/platform capabilities
 remain optional until a normal supported development environment can guarantee them.
+
+The project development configuration is kept at repository root because Forge requires
+project paths to be relative without `..` traversal. It retains the EdgeStream read-only
+compatibility workflows and adds bounded project workflows. The compatibility record pins
+the exact implementation commits used for local validation. Historical EdgeStream and
+Joern evidence is unchanged.
