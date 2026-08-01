@@ -88,8 +88,16 @@ static void seed_adaptation_expert(Model *m, uint16_t id,
 }
 """
 
-OLD_PLANNER_LOOP = "for (uint32_t k = 0; k < 1u; ++k) {"
-NEW_PLANNER_LOOP = "for (uint32_t k = 0; k < TRANSITION_TOP_K; ++k) {"
+OLD_PLANNER_CONTEXT = """\
+        for (uint16_t action = 0; action < ACTIONS; ++action) {
+            int supported = 0;
+            for (uint32_t k = 0; k < 1u; ++k) {
+"""
+NEW_PLANNER_CONTEXT = """\
+        for (uint16_t action = 0; action < ACTIONS; ++action) {
+            int supported = 0;
+            for (uint32_t k = 0; k < TRANSITION_TOP_K; ++k) {
+"""
 
 SOURCE_MARKER = " * It emits observations and integrity facts, never development verdicts.\n"
 CANDIDATE_MARKER = (
@@ -121,7 +129,7 @@ def build_candidate_source(source_bytes: bytes) -> str:
     source = source_bytes.decode("utf-8")
     replacements = (
         (OLD_SEED_FUNCTION, NEW_SEED_FUNCTION, "adaptation support reset"),
-        (OLD_PLANNER_LOOP, NEW_PLANNER_LOOP, "top-two transition traversal"),
+        (OLD_PLANNER_CONTEXT, NEW_PLANNER_CONTEXT, "top-two transition traversal"),
         (SOURCE_MARKER, CANDIDATE_MARKER, "candidate provenance marker"),
     )
     for old, new, name in replacements:
