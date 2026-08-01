@@ -13,6 +13,9 @@ validator and explicit version identifiers for the standard.
   governance material, and a reproducible two-epoch study.
 - Keep final release, external security/privacy acceptance, independent operation,
   protected custody, and governance approval explicitly open.
+- Make the non-normative Forge integration the default Codex development control plane,
+  add bounded project workflows, and demote Joern to an explicitly configured optional
+  legacy provider without changing any MNCS/MNCDS claim result.
 
 ## 0.2.0 — 2026-07-25
 

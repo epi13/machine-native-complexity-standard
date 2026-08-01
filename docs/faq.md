@@ -13,6 +13,9 @@ generator technique.
 
 No. Joern is one optional structural provider.
 
+Forge can discover and probe an explicitly configured Joern Provider Protocol adapter,
+but neither Forge nor source reading supplies Joern-equivalent graph analysis.
+
 ## Is L5 proof that software is safe?
 
 No. It is a stronger, bounded evidence and lifecycle claim, not a warranty.

@@ -42,6 +42,7 @@ nav:
   - Reproducible packages: reproducible-packages.md
   - Provider Protocol: provider-protocol.md
   - MNCS Forge MCP integration: mncs-forge.md
+  - Forge and provider transition: provider-transition.md
   - Rust interoperability: rust-interoperability.md
   - Conformance corpus: conformance-corpus.md
   - Validator: validator.md
