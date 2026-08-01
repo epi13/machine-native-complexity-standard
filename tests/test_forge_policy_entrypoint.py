@@ -11,8 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_hardened_entrypoint_passes_configured_output_cap(
-    monkeypatch: Any,
-    capsys: Any,
+    monkeypatch: Any, capsys: Any
 ) -> None:
     sys.path.insert(0, str(ROOT / "scripts"))
     try:
@@ -24,21 +23,14 @@ def test_hardened_entrypoint_passes_configured_output_cap(
         captured: dict[str, object] = {}
 
         def fake_run_workflow(
-            name: str,
-            workflow: object,
-            *,
-            output_cap: int,
+            name: str, workflow: object, *, output_cap: int
         ) -> dict[str, object]:
-            captured.update(
-                {"name": name, "workflow": workflow, "output_cap": output_cap}
-            )
+            captured.update({"name": name, "workflow": workflow, "output_cap": output_cap})
             return {"status": "PASS"}
 
         monkeypatch.setattr(forge_workflow, "run_workflow", fake_run_workflow)
         monkeypatch.setattr(
-            sys,
-            "argv",
-            ["forge_workflow_hardened.py", "tooling-inspect"],
+            sys, "argv", ["forge_workflow_hardened.py", "tooling-inspect"]
         )
         assert forge_workflow_hardened.main() == 0
     finally:
