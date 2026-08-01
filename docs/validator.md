@@ -27,9 +27,10 @@ measurement records. `mncs corpus release-candidate` runs the combined golden co
 and `mncs migration-inspect` reports exact-version dispatch without rewriting a claim.
 The separate Rust `mncs-rc-consumer` reads the same corpus directly and does not invoke
 Python. Its `validate-record`, `validate-mncds`, and `conformance` commands also expose
-a bounded machine-readable user-supplied-record interface. The conformance statement
-lists supported and unsupported rules; general package archive and DSSE/trust-policy
-validation remain outside this embedded consumer's declared subset.
+a bounded machine-readable user-supplied-record interface. Its `validate-package` and
+`validate-attestation` commands add bounded archive identity checks, DSSE PAE and
+Ed25519 verification, and deterministic offline trust-policy evaluation. The
+conformance statement lists the exact supported and unsupported rules.
 
 ## MNCDS validator
 

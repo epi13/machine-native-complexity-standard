@@ -4,8 +4,9 @@
 - The internal security/privacy review has no external acceptance.
 - The Rust consumer is independent source and executable code and agrees on every
   golden vector, including added transitive-impact cases, but it is a bounded subset
-  rather than a claim over every possible record. General inherited package archive
-  and DSSE/trust-policy validation remain explicitly unsupported.
+  rather than a claim over every possible record. Its inherited package,
+  DSSE/Ed25519, and offline trust-policy coverage is bounded and does not fetch or
+  execute evidence.
 - No independent operator or organizational independence is established.
 - The recursive study used developer-controlled withheld evidence, not external
   protected custody.

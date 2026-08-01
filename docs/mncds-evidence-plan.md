@@ -15,7 +15,7 @@ proof that the proposal is already accepted.
 | D3 protected holdout and independent evaluator | D3 profile test and D4 reference record | Implemented |
 | Recursive analyzer or harness improvement across epochs | `studies/recursive-analyzer` and RC development record | Internally reproducible; external custody UNKNOWN |
 | D4 rollback, regeneration drill, retirement | D4 reference record and rejection tests | Implemented |
-| Independent validator agreement | `independent/rc-consumer` and combined RC corpus | 72/72 local agreement; operator/organization UNKNOWN |
+| Independent validator agreement | `independent/rc-consumer` and combined RC corpus | 74/74 local agreement; operator/organization UNKNOWN |
 
 ## Deterministic corpus
 

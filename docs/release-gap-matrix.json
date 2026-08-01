@@ -53,7 +53,7 @@
       "implementation_status": "IMPLEMENTED",
       "schema_status": "COVERED",
       "python_validation_status": "COVERED",
-      "independent_consumer_status": "PARTIAL",
+      "independent_consumer_status": "COVERED",
       "positive_fixture_status": "COVERED",
       "negative_fixture_status": "COVERED",
       "interoperability_status": "COVERED",
@@ -62,10 +62,10 @@
       "security_review_status": "COVERED",
       "governance_status": "GOVERNANCE_REQUIRED",
       "evidence_identity": "mncs-conformance-corpus:canonical-package-attestation",
-      "blocking_issues": ["Rust 0.3 consumer relies on the already independent 0.2 Rust coverage for inherited package and attestation rules"],
-      "gap_class": "INDEPENDENT_IMPLEMENTATION_BLOCKER",
+      "blocking_issues": [],
+      "gap_class": null,
       "locally_executable_remaining": false,
-      "external_actor_required": true
+      "external_actor_required": false
     },
     {
       "requirement_id": "MNCS-03-COMPOSITION",

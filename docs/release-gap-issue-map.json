@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1",
   "matrix_version": "0.1",
-  "matrix_sha256": "e577706a3d517fbb14da4afdc570aaacb030861cc23425f3dc1e109111eab1fa",
+  "matrix_sha256": "49dadad6a762f02b87495319997e42e54b5c84dcf5ffd43d10c0a178585c8cb8",
   "repository": "epi13/machine-native-complexity-standard",
   "observed_at": "2026-08-01T15:21:00Z",
   "mappings": [
@@ -22,17 +22,6 @@
       "title": "Record an independent contract-domain review for MNCS 0.3",
       "state": "OPEN",
       "observed_at": "2026-08-01T15:19:51Z"
-    },
-    {
-      "requirement_ids": [
-        "MNCS-03-IDENTITY-TRUST-PACKAGE"
-      ],
-      "gap_key": "rust-rc-general-coverage",
-      "issue_number": 36,
-      "issue_url": "https://github.com/epi13/machine-native-complexity-standard/issues/36",
-      "title": "Implement inherited package and attestation validation in the Rust RC consumer",
-      "state": "OPEN",
-      "observed_at": "2026-08-01T16:02:53Z"
     },
     {
       "requirement_ids": [

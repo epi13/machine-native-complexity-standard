@@ -8,6 +8,12 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use time::{OffsetDateTime, format_description::well_known::Rfc3339};
 
+pub mod attestation;
+pub mod canonical;
+mod json;
+pub mod package;
+pub mod trust;
+
 #[derive(Clone, Debug, Serialize)]
 pub struct Outcome {
     pub category: String,

@@ -39,6 +39,11 @@ cargo run --manifest-path independent/rc-consumer/Cargo.toml -- \
   validate-record --kind assurance \
   --input examples/release-candidate-0.3/assurance-case.json \
   --at 2026-08-01T00:00:00Z --json
+cargo run --manifest-path independent/rc-consumer/Cargo.toml -- \
+  validate-package --input bundle.mncs --json
+cargo run --manifest-path independent/rc-consumer/Cargo.toml -- \
+  validate-attestation --envelope attestation.json --policy trust-policy.json \
+  --at 2026-08-01T00:00:00Z --json
 make release-candidate-check
 ```
 
@@ -51,11 +56,12 @@ evidence binary. Provider execution remains an explicit separate command.
 The Python and separate Rust consumers retain agreement on the original 72 golden
 vectors and agree on two added transitive graph-impact vectors (74/74 total). The Rust
 CLI also validates arbitrary bounded contract, assurance, threat, measurement, and
-MNCDS records in its declared subset, including RFC 3339 numeric offsets. This proves
-separate source and executable decision paths for the tested subset. It does not prove
-independent operation or organizational independence. General inherited MNCS 0.2
-package and DSSE/trust-policy validation remain explicitly unsupported by this
-embedded consumer.
+MNCDS records in its declared subset, including RFC 3339 numeric offsets. It also
+performs bounded `mncs-zip-0.1` package validation, DSSE PAE and Ed25519 verification,
+and deterministic offline trust-policy evaluation. Cross-consumer tests cover valid,
+tampered, unsafe-path, symlink, binding, signature, expiration, and revocation cases.
+This proves separate source and executable decision paths for the tested subset. It
+does not prove independent operation or organizational independence.
 
 The two-epoch study reduces final incorrect PASS from 3 to 0 and false negatives from
 2 to 0 without false-positive, crash, or timeout regression. Its final partition was
