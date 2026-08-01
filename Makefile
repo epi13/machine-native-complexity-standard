@@ -1,4 +1,4 @@
-.PHONY: format lint type test build examples corpus mncds-corpus interoperability release-candidate-schema release-candidate-corpus release-candidate-independent recursive-study release-candidate-check docs edgestream-smoke edgestream-evidence remote-water-smoke remote-water-test remote-water-study edgestream-water-integration cacheforge-smoke cacheforge-test cacheforge-study cacheforge-epoch2 ravel-test ravel-training-check ravel-unified-check dsense-check dsense-avr-compile language-profile-schema language-provider-corpus multilingual-stream cacheforge-language-profile multilingual-wave-one go-profile go-provider-corpus go-gateway composed-gateway multilingual-wave-two composed-wave-three multilingual-wave-three composed-wave-four multilingual-wave-four composed-wave-five multilingual-wave-five check
+.PHONY: format lint type test build examples corpus mncds-corpus interoperability release-candidate-schema release-candidate-corpus release-candidate-independent recursive-study release-candidate-check docs edgestream-smoke edgestream-evidence remote-water-smoke remote-water-test remote-water-study edgestream-water-integration cacheforge-smoke cacheforge-test cacheforge-study cacheforge-epoch2 ravel-test ravel-training-check ravel-unified-check ravel-0.4-check ravel-0.4-compiler-matrix ravel-0.4-sanitizers dsense-check dsense-avr-compile language-profile-schema language-provider-corpus multilingual-stream cacheforge-language-profile multilingual-wave-one go-profile go-provider-corpus go-gateway composed-gateway multilingual-wave-two composed-wave-three multilingual-wave-three composed-wave-four multilingual-wave-four composed-wave-five multilingual-wave-five check
 
 WAVE_THREE_OUTPUT ?= evidence/actual
 WAVE_FOUR_OUTPUT ?= evidence/actual
@@ -64,6 +64,12 @@ ravel-training-check:
 	$(MAKE) -C case-studies/ravel training-check
 ravel-unified-check:
 	$(MAKE) -C case-studies/ravel unified-check
+ravel-0.4-check:
+	$(MAKE) -C case-studies/ravel 0.4-check
+ravel-0.4-compiler-matrix:
+	$(MAKE) -C case-studies/ravel 0.4-compiler-matrix
+ravel-0.4-sanitizers:
+	$(MAKE) -C case-studies/ravel 0.4-sanitizers
 dsense-check:
 	$(MAKE) -C case-studies/dsense-desk-pet check
 dsense-avr-compile:
