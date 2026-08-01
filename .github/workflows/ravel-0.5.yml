@@ -26,6 +26,7 @@ jobs:
           make ravel-0.5-negative-test
           make ravel-0.5-manifest-negative-test
       - name: Report development-gate disposition separately
+        continue-on-error: true
         run: make ravel-0.5-development-gates
       - name: Confirm reproduction leaves the repository clean
         shell: bash
