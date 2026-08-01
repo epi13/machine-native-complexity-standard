@@ -31,29 +31,57 @@ dominates `UNKNOWN`, and `UNKNOWN` dominates `PASS`; absent or unsupported evide
 remains `UNKNOWN`. MNCS implementation and MNCDS development-process results remain
 separate.
 
-## EdgeStream read-only example
+## Project-owned bounded capabilities
 
 The repository-root `mncs-forge.toml` declares the current
 EdgeStream candidate, generated output, contract, reference, evaluators,
 preregistration/acceptance policy, development evidence, and MNCDS record. Its protected
 path list is empty because the case study has no protected holdout. It does not rewrite
-or promote historical evidence.
+or promote historical evidence. It also declares four required project capabilities:
+
+- bounded change/dependency-envelope intersection;
+- ordered artifact/manifest identity;
+- same-Python-family assurance graph-impact closure; and
+- exact public-validator record dispatch.
+
+Their project-owned registry, schema, fixtures, and Provider Protocol 0.1 command are
+under `experimental/integrations/mncs-forge/`. The provider accepts one bounded JSON
+Lines request, emits one response, uses no shell, and accepts no caller command,
+environment, or working directory. The graph-impact result is same-implementation-family
+development evidence, not independent verification. Manifest identity does not establish
+truth or adequacy, and path separation does not establish semantic independence.
+
+Forge enforces `required_capabilities` at project level in the installed version. The
+configuration uses only that supported authority and does not claim per-workflow
+capability policy. Provider discovery is non-executing; only an explicit probe can
+satisfy the required-capability policy.
 
 After installing the separate repository:
 
 ```bash
 /path/to/mncs-forge-mcp/scripts/install-codex-mcp.sh \
   "$PWD/mncs-forge.toml"
+mncs-forge --config "$PWD/mncs-forge.toml" config validate
 mncs-forge --config "$PWD/mncs-forge.toml" inspect
+mncs-forge --config "$PWD/mncs-forge.toml" providers list
+mncs-forge --config "$PWD/mncs-forge.toml" providers probe \
+  mncs-project-micro-verifiers
+mncs-forge --config "$PWD/mncs-forge.toml" providers blockers
+mncs-forge --config "$PWD/mncs-forge.toml" verifier list
 mncs-forge --config "$PWD/mncs-forge.toml" status
 mncs-forge --config "$PWD/mncs-forge.toml" blockers promotion
 mncs-forge --config "$PWD/mncs-forge.toml" check development \
   edgestream-read-only-inspect
 ```
 
-The inspection workflow only confirms that expected visible files exist. It is not proof
-of schema validity, correctness, independence, or custody. A future controlled epoch
-would begin with explicit identities:
+The inspection workflow only confirms that expected visible files exist. A successful
+provider probe establishes capability availability, not an analysis result or
+conformance. Explicit verifier runs create operator-controlled development ledger
+records and can return narrow `PASS`, `FAIL`, or `UNKNOWN` results; they are not proof of
+global correctness, independence, or custody. Run the project integration tests with
+`make forge-integration-test`.
+
+A future controlled epoch would begin with explicit identities:
 
 ```bash
 mncs-forge --config "$PWD/mncs-forge.toml" epoch begin \

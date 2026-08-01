@@ -17,6 +17,10 @@ validator and explicit version identifiers for the standard.
   required transitive upstream claim in graph-impact and revalidation scope. This
   aligns implementation behavior with existing 0.3-rc.1 sections 7–8 and does not
   change normative text or RC identifiers.
+- Add a non-normative project-owned Forge capability registry and four bounded
+  Provider Protocol micro-verifiers with explicit project-level capability policy.
+  These local development results do not establish conformance, independence,
+  protected custody, governance approval, certification, or promotion.
 
 ## 0.2.0 — 2026-07-25
 
