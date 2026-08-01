@@ -25,6 +25,11 @@ validator and explicit version identifiers for the standard.
   distinct development, selection, retention, planning, and future-final
   partitions. No 0.6 implementation or evaluation is claimed, and frozen 0.4/0.5
   sources, evidence, dispositions, and promotion boundaries remain unchanged.
+- Add a SHA-256-bound RAVEL 0.6 candidate-001 derivation that preserves frozen
+  0.5 authority while correcting top-two planning traversal and adaptation-birth
+  support provenance. Add strict derivation/compilation tests and a bounded Codex
+  implementation queue; no 0.6 selection, evaluation, conformance, or promotion
+  claim is made.
 - Correct the Rust consumer's limitation reporting so every concurrent required
   `UNKNOWN` condition retains its issue code even after another uncertainty has
   already lowered the aggregate. Result precedence and normative text are unchanged.
