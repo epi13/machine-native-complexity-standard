@@ -9,7 +9,7 @@ MNCS is an open experimental standard for accepting generated or machine-optimiz
 The repository now contains implementation-ready proposals for MNCS 0.3-rc.1 and
 MNCDS 0.1-rc.1. They add contract adequacy, dependency/composition graphs,
 freshness and material-change invalidation, partial revalidation, lifecycle records,
-an offline MNCDS aggregate, a 72-case golden corpus, independent Python/Rust
+an offline MNCDS aggregate, a 74-case golden corpus, independent Python/Rust
 agreement, and a reproducible two-epoch improvement study.
 
 Both RFC 0004 and RFC 0005 remain Draft. Independent operation, organizational
@@ -76,7 +76,10 @@ the same project operator controls the machines.
 Formal MNCS and MNCDS statuses remain `UNKNOWN`, promotion is prohibited, and full MNCDS-D4 is unclaimed. The repository can validate externally supplied evidence; it cannot self-create independence or protected custody.
 
 The [post-Wave-Five roadmap](docs/post-wave-five-roadmap.md) separates the remaining
-local, physical-machine, Arduino, external-actor, and governance work.
+local, physical-machine, Arduino, external-actor, and governance work. The
+[Codex implementation next steps](docs/codex-next-steps.md) turn the larger remaining
+engineering findings into bounded follow-on tasks with acceptance criteria and explicit
+external-actor limits.
 
 ## Repository map
 
