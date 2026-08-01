@@ -20,7 +20,7 @@ case-studies/ravel/ravel
 case-studies/ravel/ravel_train
 case-studies/ravel/ravel_unified_bin
 case-studies/ravel/ravel_0_4_bin
-case-studies/ravel/ravel_0_4_*
+case-studies/ravel/ravel_0_5_bin
 case-studies/ravel/ravel-0.4-checkpoint.bin
 case-studies/ravel/*-actual.json
 case-studies/ravel/diagnostics/
