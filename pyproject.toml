@@ -39,6 +39,8 @@ dev = [
 [project.scripts]
 mncs = "mncs_validator.cli:main"
 mncds = "mncs_validator.mncds_cli:main"
+mncs-test-evidence = "mncs_validator.execution_assurance_cli:mncs_main"
+mncds-test-evidence = "mncs_validator.execution_assurance_cli:mncds_main"
 
 [project.urls]
 Homepage = "https://github.com/epi13/machine-native-complexity-standard"

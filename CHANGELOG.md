@@ -39,6 +39,10 @@ validator and explicit version identifiers for the standard.
 - Correct release-candidate corpus and hardened Forge-entrypoint documentation, document
   the existing validator version-reporting contract, and add a Codex-ready implementation
   roadmap for larger Forge, MNCDS, empirical-study, external-review, and governance work.
+- Add an experimental shared execution-assurance companion record, offline validator,
+  MNCS/MNCDS combined test-evidence commands, adversarial regression coverage, draft RFC,
+  and Codex implementation queue. A functional test PASS no longer implies execution
+  assurance PASS; missing isolation or attestation remains UNKNOWN.
 
 ## 0.2.0 — 2026-07-25
 
