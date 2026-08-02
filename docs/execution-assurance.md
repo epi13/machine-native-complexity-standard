@@ -127,5 +127,5 @@ Achieving that target requires later runner, TPM, confidential-computing, or ext
 work. The current implementation validates those claims when evidence is supplied; it does not
 manufacture them.
 
-See [Execution-assurance implementation next steps](execution-assurance-next-steps.md) and
-[RFC 0008](../rfcs/0008-execution-assurance.md).
+See [Execution-assurance implementation next steps](execution-assurance-next-steps.md). The
+normative proposal is tracked as RFC 0008 under the repository's `rfcs/` directory.
