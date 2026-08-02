@@ -16,6 +16,7 @@ nav:
   - Quickstart: quickstart.md
   - Conformance: conformance.md
   - Machine-native development: mncds.md
+  - Recursive architecture research: recursive-architecture-research.md
   - Execution assurance: execution-assurance.md
   - Execution-assurance next steps: execution-assurance-next-steps.md
   - Language evidence profiles: language-evidence-profiles.md
