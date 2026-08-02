@@ -15,6 +15,7 @@ from .assurance.status import Status
 from .errors import MncsError
 from .execution_assurance import (
     ExecutionAssuranceReport,
+    SubjectKind,
     parse_evaluation_time,
     validate_execution_assurance_file,
 )
@@ -120,7 +121,9 @@ def _validate_assurance_only(args: argparse.Namespace, family: Family) -> int:
         raise FileNotFoundError(subject)
     if not args.assurance.is_file():
         raise FileNotFoundError(args.assurance)
-    expected_kind = args.kind if family == "MNCS" else "development-record"
+    expected_kind: SubjectKind = (
+        cast(SubjectKind, args.kind) if family == "MNCS" else "development-record"
+    )
     report = validate_execution_assurance_file(
         args.assurance,
         subject_path=subject,
@@ -144,7 +147,7 @@ def _mncs_subject(args: argparse.Namespace) -> tuple[dict[str, Any], Status]:
 
 def _mncds_subject(args: argparse.Namespace) -> tuple[dict[str, Any], Status]:
     report: MncdsValidationReport = validate_development_record(args.subject)
-    return report.as_dict(), cast(Status, report.computed_status)
+    return report.as_dict(), report.computed_status
 
 
 def _validate_combined(args: argparse.Namespace, family: Family) -> int:
@@ -153,9 +156,10 @@ def _validate_combined(args: argparse.Namespace, family: Family) -> int:
     if not args.assurance.is_file():
         raise FileNotFoundError(args.assurance)
 
+    expected_kind: SubjectKind
     if family == "MNCS":
         subject, subject_status = _mncs_subject(args)
-        expected_kind = args.kind
+        expected_kind = cast(SubjectKind, args.kind)
     else:
         subject, subject_status = _mncds_subject(args)
         expected_kind = "development-record"
