@@ -31,6 +31,9 @@ validator and explicit version identifiers for the standard.
 - Make the non-normative Forge integration the default Codex development control plane,
   add bounded project workflows, and demote Joern to an explicitly configured optional
   legacy provider without changing any MNCS/MNCDS claim result.
+- Correct release-candidate corpus and hardened Forge-entrypoint documentation, document
+  the existing validator version-reporting contract, and add a Codex-ready implementation
+  roadmap for larger Forge, MNCDS, empirical-study, external-review, and governance work.
 
 ## 0.2.0 — 2026-07-25
 
