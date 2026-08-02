@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schema/experimental/0.1/mncs-execution-assurance.schema.json",
+  "title": "MNCS/MNCDS execution assurance record 0.1",
+  "description": "Companion evidence that keeps a functional test result separate from execution isolation, integrity, attestation, and custody assurance.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_type",
+    "record_id",
+    "subject",
+    "test_result",
+    "execution",
+    "required_properties",
+    "declared_assurance_status",
+    "limitations",
+    "extensions"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1"},
+    "record_type": {"const": "mncs-execution-assurance"},
+    "record_id": {"$ref": "#/$defs/id"},
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["family", "kind", "record_id", "canonical_sha256", "candidate_id"],
+      "properties": {
+        "family": {"enum": ["MNCS", "MNCDS"]},
+        "kind": {"enum": ["contract", "assurance", "threat", "measurement", "development-record"]},
+        "record_id": {"$ref": "#/$defs/id"},
+        "canonical_sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/id"}]}
+      }
+    },
+    "test_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "result_identity", "summary"],
+      "properties": {
+        "status": {"$ref": "#/$defs/status"},
+        "result_identity": {"$ref": "#/$defs/sha256"},
+        "summary": {"$ref": "#/$defs/text"}
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "test_bundle_identity",
+        "policy_identity",
+        "runner_identity",
+        "environment_identity",
+        "challenge",
+        "properties",
+        "attestation"
+      ],
+      "properties": {
+        "test_bundle_identity": {"$ref": "#/$defs/sha256"},
+        "policy_identity": {"$ref": "#/$defs/sha256"},
+        "runner_identity": {"$ref": "#/$defs/id"},
+        "environment_identity": {"$ref": "#/$defs/id"},
+        "challenge": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["nonce", "issued_at", "expires_at"],
+          "properties": {
+            "nonce": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 256,
+              "pattern": "^[A-Za-z0-9._:-]+$"
+            },
+            "issued_at": {"type": "string", "format": "date-time"},
+            "expires_at": {"type": "string", "format": "date-time"}
+          }
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "command_bound",
+            "environment_bound",
+            "filesystem_isolation",
+            "network_isolation",
+            "process_isolation",
+            "resource_limits",
+            "test_integrity",
+            "result_integrity",
+            "host_root_resistance",
+            "protected_custody",
+            "independent_operation"
+          ],
+          "properties": {
+            "command_bound": {"$ref": "#/$defs/status"},
+            "environment_bound": {"$ref": "#/$defs/status"},
+            "filesystem_isolation": {"$ref": "#/$defs/status"},
+            "network_isolation": {"$ref": "#/$defs/status"},
+            "process_isolation": {"$ref": "#/$defs/status"},
+            "resource_limits": {"$ref": "#/$defs/status"},
+            "test_integrity": {"$ref": "#/$defs/status"},
+            "result_integrity": {"$ref": "#/$defs/status"},
+            "host_root_resistance": {"$ref": "#/$defs/status"},
+            "protected_custody": {"$ref": "#/$defs/status"},
+            "independent_operation": {"$ref": "#/$defs/status"}
+          }
+        },
+        "attestation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "identity", "signer_id", "verified", "fresh"],
+          "properties": {
+            "kind": {
+              "enum": [
+                "none",
+                "local-record",
+                "signed-local",
+                "platform-quote",
+                "confidential-vm",
+                "external-evaluator"
+              ]
+            },
+            "identity": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]},
+            "signer_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/id"}]},
+            "verified": {"type": "boolean"},
+            "fresh": {"type": "boolean"}
+          }
+        }
+      }
+    },
+    "required_properties": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "command_bound",
+          "environment_bound",
+          "filesystem_isolation",
+          "network_isolation",
+          "process_isolation",
+          "resource_limits",
+          "test_integrity",
+          "result_integrity",
+          "host_root_resistance",
+          "protected_custody",
+          "independent_operation"
+        ]
+      }
+    },
+    "declared_assurance_status": {"$ref": "#/$defs/status"},
+    "limitations": {"type": "array", "items": {"$ref": "#/$defs/text"}},
+    "extensions": {"$ref": "#/$defs/extensions"}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "status": {"enum": ["PASS", "FAIL", "UNKNOWN"]},
+    "text": {"type": "string", "minLength": 1},
+    "extensions": {
+      "type": "object",
+      "propertyNames": {"pattern": "^[a-z][a-z0-9.-]*:[A-Za-z0-9][A-Za-z0-9._-]*$"},
+      "additionalProperties": true
+    }
+  }
+}
