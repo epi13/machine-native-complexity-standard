@@ -108,7 +108,7 @@ def _parse_time(value: str) -> datetime:
 
 def _status(value: object) -> Status:
     if value in {"PASS", "FAIL", "UNKNOWN"}:
-        return cast(Status, value)
+        return value
     return "UNKNOWN"
 
 
