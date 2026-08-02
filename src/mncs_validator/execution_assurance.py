@@ -259,8 +259,7 @@ def validate_execution_assurance_value(
         report.warnings.append(
             ExecutionAssuranceIssue(
                 "unsupported-schema-version",
-                f"unsupported execution-assurance schema version: "
-                f"{value.get('schema_version')!r}",
+                f"unsupported execution-assurance schema version: {value.get('schema_version')!r}",
                 "$/schema_version",
             )
         )
