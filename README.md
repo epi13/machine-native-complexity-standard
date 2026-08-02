@@ -23,6 +23,32 @@ mncds validate examples/mncds-0.1-rc/development-record.json
 mncs corpus release-candidate --json
 ```
 
+## Execution assurance for test evidence
+
+The experimental execution-assurance companion record keeps a test result separate from the
+integrity, isolation, attestation, and custody of the environment that produced it. It binds the
+canonical MNCS or MNCDS subject identity to a test bundle, execution policy, runner, environment,
+fresh challenge, explicit assurance properties, and attestation class.
+
+A functional test `PASS` combined with missing or unsupported isolation remains `UNKNOWN` when a
+combined PASS is required. Local hashes or signatures cannot establish host-root resistance,
+protected custody, or organizational independence.
+
+```bash
+mncs-test-evidence validate measurement \
+  examples/release-candidate-0.3/measurement-profile.json \
+  execution-assurance.json --require-pass --json
+
+mncds-test-evidence validate \
+  examples/mncds-0.1-rc/development-record.json \
+  execution-assurance.json --require-pass --json
+```
+
+The validator remains offline and does not launch a sandbox. See
+[execution assurance](docs/execution-assurance.md), the
+[implementation next steps](docs/execution-assurance-next-steps.md), and
+[draft RFC 0008](rfcs/0008-execution-assurance.md).
+
 ## Experimental multilingual and composed evidence
 
 Wave One established non-normative C11, Rust, and Python language profiles. Wave Two added Go, native FFI and process boundaries, generated bindings, and composed-result propagation. Wave Three added identity-bound recovery, mutation, measurement, replacement, and hosted evidence jobs. Wave Four added evidence custody, cross-host reconciliation, claim readiness, and a bounded service boundary.
@@ -91,6 +117,6 @@ external-actor limits.
 - `experimental/language-evidence/` — profiles, providers, and fixtures.
 - `case-studies/` — bounded development studies and evidence epochs.
 - `docs/` — documentation.
-- `rfcs/` — governance proposals, including RFC 0006 and RFC 0007.
+- `rfcs/` — governance proposals, including RFC 0006, RFC 0007, and RFC 0008.
 
 Read `CONTRIBUTING.md`, `GOVERNANCE.md`, and the RFC process before proposing normative changes.
