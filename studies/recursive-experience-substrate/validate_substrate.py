@@ -147,7 +147,7 @@ def validate_profile(profile: dict[str, Any]) -> None:
     )
 
     memory_classes = set(_strings(profile.get("memory_classes"), "memory_classes", nonempty=True))
-    _require(REQUIRED_MEMORY_CLASSES <= memory_classes, "memory classes")
+    _require(memory_classes >= REQUIRED_MEMORY_CLASSES, "memory classes")
 
     vocabulary = _object(profile.get("record_vocabulary"), "record_vocabulary")
     _require(set(RECORD_ID_FIELDS) <= set(vocabulary), "record vocabulary")
@@ -160,7 +160,7 @@ def validate_profile(profile: dict[str, Any]) -> None:
         _require(len(fields) == len(set(fields)), f"duplicate record field: {record_type}")
 
     statuses = _status_sets(profile)
-    _require(REQUIRED_OUTCOMES <= statuses["episode_outcome_class"], "episode statuses")
+    _require(statuses["episode_outcome_class"] >= REQUIRED_OUTCOMES, "episode statuses")
     _require(
         {"open", "supported", "challenged", "rejected", "inconclusive"}
         <= statuses["hypothesis_disposition"],
@@ -183,10 +183,10 @@ def validate_profile(profile: dict[str, Any]) -> None:
     required_outcomes = set(
         _strings(profile.get("required_episode_outcomes"), "required_episode_outcomes")
     )
-    _require(REQUIRED_OUTCOMES <= required_outcomes, "required episode outcomes")
+    _require(required_outcomes >= REQUIRED_OUTCOMES, "required episode outcomes")
 
     credit_classes = set(_strings(profile.get("credit_classes"), "credit_classes", nonempty=True))
-    _require(REQUIRED_CREDIT_CLASSES <= credit_classes, "credit classes")
+    _require(credit_classes >= REQUIRED_CREDIT_CLASSES, "credit classes")
 
     diagnostics = _object(
         profile.get("diagnostic_requirements"),
@@ -227,7 +227,7 @@ def validate_profile(profile: dict[str, Any]) -> None:
     )
 
     controls = set(_strings(profile.get("required_controls"), "required_controls"))
-    _require(REQUIRED_CONTROLS <= controls, "required controls")
+    _require(controls >= REQUIRED_CONTROLS, "required controls")
 
     hard_gates = set(_strings(profile.get("hard_gates"), "hard_gates"))
     _require(
@@ -248,7 +248,7 @@ def validate_profile(profile: dict[str, Any]) -> None:
     negative_tests = set(
         _strings(profile.get("required_negative_tests"), "required_negative_tests")
     )
-    _require(REQUIRED_NEGATIVE_TESTS <= negative_tests, "required negative tests")
+    _require(negative_tests >= REQUIRED_NEGATIVE_TESTS, "required negative tests")
 
     claim = _object(profile.get("claim_boundary"), "claim_boundary")
     _require(claim.get("formal_mncs_status") == "UNKNOWN", "MNCS claim")
