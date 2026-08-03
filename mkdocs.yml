@@ -17,6 +17,7 @@ nav:
   - Conformance: conformance.md
   - Machine-native development: mncds.md
   - Recursive architecture research: recursive-architecture-research.md
+  - Recursive experience substrate: recursive-experience-substrate.md
   - Execution assurance: execution-assurance.md
   - Execution-assurance next steps: execution-assurance-next-steps.md
   - Language evidence profiles: language-evidence-profiles.md
