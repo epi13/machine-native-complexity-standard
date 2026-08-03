@@ -36,7 +36,7 @@ jobs:
           test -z "$status" || { printf '%s\n' "$status"; exit 1; }
       - name: Upload evidence and diagnostics on failure
         if: failure()
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7
         with:
           name: ravel-0.5-failure-${{ runner.arch }}
           path: |
@@ -69,7 +69,7 @@ jobs:
             CFLAGS="-std=c11 $RAVEL_OPT -Wall -Wextra -Werror -pedantic"
       - name: Upload diagnostics on failure
         if: failure()
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7
         with:
           name: ravel-0.5-${{ matrix.compiler }}-${{ matrix.optimization }}
           path: case-studies/ravel/diagnostics-0.5
@@ -84,7 +84,7 @@ jobs:
         run: make ravel-0.5-sanitizers
       - name: Upload sanitizer diagnostics on failure
         if: failure()
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7
         with:
           name: ravel-0.5-sanitizer-failure
           path: case-studies/ravel/diagnostics-0.5
@@ -105,7 +105,7 @@ jobs:
         run: uname -a
       - name: Upload architecture diagnostics on failure
         if: failure()
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7
         with:
           name: ravel-0.5-architecture-${{ runner.arch }}
           path: case-studies/ravel/diagnostics-0.5
