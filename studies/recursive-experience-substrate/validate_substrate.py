@@ -146,9 +146,7 @@ def validate_profile(profile: dict[str, Any]) -> None:
         "authority permission",
     )
 
-    memory_classes = set(
-        _strings(profile.get("memory_classes"), "memory_classes", nonempty=True)
-    )
+    memory_classes = set(_strings(profile.get("memory_classes"), "memory_classes", nonempty=True))
     _require(REQUIRED_MEMORY_CLASSES <= memory_classes, "memory classes")
 
     vocabulary = _object(profile.get("record_vocabulary"), "record_vocabulary")
@@ -174,13 +172,11 @@ def validate_profile(profile: dict[str, Any]) -> None:
         "principle maturity",
     )
     _require(
-        {"untested", "failed", "partial", "supported"}
-        <= statuses["transfer_status"],
+        {"untested", "failed", "partial", "supported"} <= statuses["transfer_status"],
         "transfer statuses",
     )
     _require(
-        {"untested", "restricted", "supported", "retired"}
-        <= statuses["strategy_reuse_status"],
+        {"untested", "restricted", "supported", "retired"} <= statuses["strategy_reuse_status"],
         "strategy reuse statuses",
     )
 
@@ -189,9 +185,7 @@ def validate_profile(profile: dict[str, Any]) -> None:
     )
     _require(REQUIRED_OUTCOMES <= required_outcomes, "required episode outcomes")
 
-    credit_classes = set(
-        _strings(profile.get("credit_classes"), "credit_classes", nonempty=True)
-    )
+    credit_classes = set(_strings(profile.get("credit_classes"), "credit_classes", nonempty=True))
     _require(REQUIRED_CREDIT_CLASSES <= credit_classes, "credit classes")
 
     diagnostics = _object(
@@ -203,10 +197,7 @@ def validate_profile(profile: dict[str, Any]) -> None:
         "probe identity",
     )
     _require(
-        diagnostics.get(
-            "counterfactual_or_control_required_for_supported_causal_claim"
-        )
-        is True,
+        diagnostics.get("counterfactual_or_control_required_for_supported_causal_claim") is True,
         "causal control requirement",
     )
     _require(
@@ -438,9 +429,7 @@ def _validate_attributions(
 ) -> dict[str, dict[str, Any]]:
     attributions = records["causal_attribution"]
     allowed_credit = set(_strings(profile.get("credit_classes"), "credit classes"))
-    attribution_by_id = {
-        str(record["attribution_id"]): record for record in attributions
-    }
+    attribution_by_id = {str(record["attribution_id"]): record for record in attributions}
 
     for attribution_id, attribution in attribution_by_id.items():
         _require(
@@ -449,8 +438,7 @@ def _validate_attributions(
         )
         _object(attribution.get("actual_effects"), f"actual effects: {attribution_id}")
         _require(
-            attribution.get("hypothesis_disposition")
-            in statuses["hypothesis_disposition"],
+            attribution.get("hypothesis_disposition") in statuses["hypothesis_disposition"],
             f"attribution disposition: {attribution_id}",
         )
         _strings(
@@ -610,9 +598,7 @@ def validate_records(profile: dict[str, Any], bundle: dict[str, Any]) -> None:
     _require(bool(rejected_hypotheses), "negative memory must retain rejected hypotheses")
 
     controls = set(_strings(bundle.get("controls_applied"), "controls applied"))
-    required_controls = set(
-        _strings(profile.get("required_controls"), "required controls")
-    )
+    required_controls = set(_strings(profile.get("required_controls"), "required controls"))
     _require(required_controls <= controls, "missing experience control")
 
 
@@ -635,20 +621,14 @@ def mutated_fixture(
     records = bundle_copy["records"]
 
     if mutation == "evaluator-authority-expansion":
-        profile_copy["immutable_authority"][
-            "experience_system_may_modify_evaluator"
-        ] = True
+        profile_copy["immutable_authority"]["experience_system_may_modify_evaluator"] = True
     elif mutation == "error-only-memory":
         records["experience_episode"] = [
-            item
-            for item in records["experience_episode"]
-            if item["outcome_class"] == "error"
+            item for item in records["experience_episode"] if item["outcome_class"] == "error"
         ]
     elif mutation == "deleted-failure-memory":
         records["experience_episode"] = [
-            item
-            for item in records["experience_episode"]
-            if item["outcome_class"] != "error"
+            item for item in records["experience_episode"] if item["outcome_class"] != "error"
         ]
     elif mutation == "post-hoc-hypothesis":
         records["causal_hypothesis"][0]["recorded_before_intervention"] = False
