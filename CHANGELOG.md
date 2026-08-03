@@ -43,6 +43,11 @@ validator and explicit version identifiers for the standard.
   MNCS/MNCDS combined test-evidence commands, adversarial regression coverage, draft RFC,
   and Codex implementation queue. A functional test PASS no longer implies execution
   assurance PASS; missing isolation or attestation remains UNKNOWN.
+- Define an additive post-RAVEL-0.6 recursive experience and causal-learning substrate
+  with episodes, competing hypotheses, interventions, attribution, learned principles,
+  strategy reuse, transfer gates, lineage-aware credit, an executable profile, linked
+  reference records, and fail-closed negative fixtures. Frozen RAVEL evidence and the
+  existing recursive-study preregistration remain unchanged.
 
 ## 0.2.0 — 2026-07-25
 
