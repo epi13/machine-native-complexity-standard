@@ -20,7 +20,7 @@ classifiers = [
   "Topic :: Software Development :: Quality Assurance",
 ]
 dependencies = [
-  "cryptography>=43,<47",
+  "cryptography>=43,<50",
   "jsonschema>=4.23,<5",
   "rfc8785>=0.1.4,<1",
 ]
