@@ -41,6 +41,24 @@ ambiguous-regime cases remain failures. The executable emits raw facts; the
 external evaluator alone derives gates, trial outcomes, aggregates, and the
 global result. Paired baseline and ablation outcomes remain mixed.
 
+RAVEL 0.6 is preregistered as a narrow retention-constrained adaptation epoch.
+It adds transactional candidate replacement, structured rejection reasons,
+mechanism/environment separation, append-only candidate lineage, and distinct
+development, selection, retention, planning, transfer, and future-final
+boundaries before any stronger policy-recursive claim is attempted.
+
+Two post-0.6 research tracks are now defined separately from the frozen mechanism
+studies:
+
+- [Recursive architecture research](recursive-architecture-research.md) compares
+  structural, candidate-lineage, policy-meta, and governed-portfolio recursion
+  against causal-feedback controls under equal budgets.
+- [Recursive experience and causal-learning substrate](recursive-experience-substrate.md)
+  defines episodes, competing hypotheses, interventions, causal attribution,
+  learned principles, strategy reuse, transfer gates, and lineage-aware credit so
+  recursive improvement is not reduced to feeding errors back into the next
+  candidate.
+
 `ARCHITECTURE_GAPS.md` in the case-study directory explains the actual blockers to a unified architecture and why modality adapters, use policy, evaluator authority, protected evidence, external effects, deployment, and promotion remain outside the recursive execution plane.
 
 These are repository-visible development observations, not claims of real-data,
