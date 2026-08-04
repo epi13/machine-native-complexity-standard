@@ -48,6 +48,9 @@ validator and explicit version identifiers for the standard.
   strategy reuse, transfer gates, lineage-aware credit, an executable profile, linked
   reference records, and fail-closed negative fixtures. Frozen RAVEL evidence and the
   existing recursive-study preregistration remain unchanged.
+- Document the non-normative network through which MNCS, MNCDS, MNCS Language, Forge,
+  RAVEL, independent actors, and governance can refine implementations and inform future
+  standard changes without allowing any tool or recursive loop to promote itself.
 
 ## 0.2.0 — 2026-07-25
 

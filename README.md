@@ -80,6 +80,21 @@ The separate [MNCS Forge MCP integration](docs/mncs-forge.md) is an optional,
 experimental, non-normative Codex control plane. It does not replace Provider Protocol
 or offline MNCS/MNCDS validation and cannot create independent or protected evidence.
 
+## Networked evolution model
+
+MNCS and MNCDS define versioned standards, identities, invariants, comparison rules, and
+development controls. MNCS Language and other implementations expose semantic and
+compiler structures. Forge runs bounded micro-verifiers and candidate checks. RAVEL and
+other mechanisms coordinate experiments across agents, machines, implementations, and
+trust boundaries. Independent evaluators and custodians challenge the resulting
+evidence. Promotion policy and governance alone decide whether a proposal is selected,
+standardized, released, rejected, or retained as `UNKNOWN`.
+
+The [networked standard evolution](docs/networked-standard-evolution.md) document
+separates implementation refinement from evolution of the standard itself. Evidence may
+inform an RFC, but no language, compiler, verifier, Forge workflow, RAVEL mechanism, or
+recursive loop can silently rewrite normative meaning or promote its own result.
+
 ## Research case studies
 
 - [EdgeStream](case-studies/edgestream/README.md) — C11 telemetry processing.

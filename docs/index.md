@@ -19,6 +19,7 @@ regeneration, and rollback. Complexity is acceptable only for a predeclared meas
 benefit.
 
 [Read the MNCS introduction](introduction.md), [review the broader foundation](foundational-model.md),
+[see how the project family supports networked standard evolution](networked-standard-evolution.md),
 [review MNCDS](mncds.md), or [validate an example](quickstart.md). MNCS and MNCDS are not
 accredited ISO, ANSI, IEEE, IETF, or similar standards.
 
@@ -37,6 +38,7 @@ assurance-case profiles, and a focused compiler-backed Machine-Native Evidence A
 RFC 0006 proposes the non-normative multilingual language-evidence layer. Both remain Draft;
 neither changes MNCS 0.2 or promotes MNCDS.
 
+- [Networked standard evolution](networked-standard-evolution.md)
 - [Experimental language evidence profiles](language-evidence-profiles.md)
 - [Post-Wave-Five local evidence roadmap](post-wave-five-roadmap.md)
 - [Codex implementation next steps](codex-next-steps.md)

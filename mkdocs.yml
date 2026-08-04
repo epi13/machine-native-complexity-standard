@@ -12,6 +12,7 @@ nav:
   - Home: index.md
   - Introduction: introduction.md
   - Foundation: foundational-model.md
+  - Networked standard evolution: networked-standard-evolution.md
   - Philosophy: philosophy.md
   - Quickstart: quickstart.md
   - Conformance: conformance.md
