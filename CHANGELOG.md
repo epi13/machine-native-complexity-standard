@@ -48,6 +48,9 @@ validator and explicit version identifiers for the standard.
   strategy reuse, transfer gates, lineage-aware credit, an executable profile, linked
   reference records, and fail-closed negative fixtures. Frozen RAVEL evidence and the
   existing recursive-study preregistration remain unchanged.
+- Document the non-normative network through which MNCS, MNCDS, MNCS Language, Forge,
+  RAVEL, independent actors, and governance can refine implementations and inform future
+  standard changes without allowing any tool or recursive loop to promote itself.
 
 ## 0.2.0 — 2026-07-25
 
@@ -79,7 +82,5 @@ validator and explicit version identifiers for the standard.
 
 ## 0.1.0 — 2026-07-25
 
-- Publish MNCS 0.1 as an initial experimental standard.
-- Define five cumulative conformance levels and evidence-weighted complexity.
-- Add six JSON Schemas, an offline validator, five complete examples, tests,
-  governance, RFC process, and documentation.
+- Publish the first experimental MNCS draft, schema, examples, validator, corpus,
+  comparison harness, and EdgeStream case study.
