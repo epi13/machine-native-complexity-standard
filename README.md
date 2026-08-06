@@ -95,6 +95,13 @@ separates implementation refinement from evolution of the standard itself. Evide
 inform an RFC, but no language, compiler, verifier, Forge workflow, RAVEL mechanism, or
 recursive loop can silently rewrite normative meaning or promote its own result.
 
+The experimental [intent-aware security verification](docs/intent-aware-security-verification.md)
+design note proposes invariant-driven security micro-verification that preserves useful
+non-orthodox implementation intent. Suspicious constructs request bounded evidence
+rather than automatic normalization; declared intent never waives a failed safety
+property, and missing exploit-chain evidence never converts a confirmed weakness into
+`PASS`.
+
 ## Research case studies
 
 - [EdgeStream](case-studies/edgestream/README.md) — C11 telemetry processing.
