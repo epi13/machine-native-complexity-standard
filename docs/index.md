@@ -40,6 +40,7 @@ neither changes MNCS 0.2 or promotes MNCDS.
 
 - [Networked standard evolution](networked-standard-evolution.md)
 - [Experimental language evidence profiles](language-evidence-profiles.md)
+- [Experimental execution-placement evidence](execution-placement-evidence.md)
 - [Post-Wave-Five local evidence roadmap](post-wave-five-roadmap.md)
 - [Codex implementation next steps](codex-next-steps.md)
 - [MNCS 0.3 / MNCDS 0.1 release candidate](release-candidate.md)

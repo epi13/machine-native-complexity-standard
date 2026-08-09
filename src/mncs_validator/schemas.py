@@ -52,6 +52,7 @@ SCHEMA_NAMES = {
     "claim-readiness": "mncs-claim-readiness.schema.json",
     "portable-evaluation-bundle": "mncs-portable-evaluation-bundle.schema.json",
     "host-execution-record": "mncs-host-execution-record.schema.json",
+    "execution-placement": "mncs-execution-placement-evidence.schema.json",
     "reproduction-cohort": "mncs-reproduction-cohort.schema.json",
     "execution-assurance-0.1": "mncs-execution-assurance-0.1.schema.json",
     "contract-profile-0.3": "mncs-contract-profile-0.3.schema.json",

@@ -26,6 +26,7 @@ from .canonical import canonical_sha256_file, canonicalize_file
 from .errors import MncsError
 from .hashing import hash_path, sha256_bytes
 from .package import inspect_package, pack, unpack, verify_package
+from .placement import validate_placement_file
 from .provider import inspect_provider, run_descriptor, verify_result
 from .rc_corpus import default_corpus_path, run_corpus
 from .reporting import (
@@ -240,6 +241,14 @@ def build_parser() -> argparse.ArgumentParser:
     )
     validate_record.add_argument("--require-pass", action="store_true")
     _json_option(validate_record)
+
+    validate_placement = subparsers.add_parser(
+        "validate-placement",
+        help="validate experimental execution-placement evidence without executing it",
+    )
+    validate_placement.add_argument("record", type=Path)
+    validate_placement.add_argument("--require-pass", action="store_true")
+    _json_option(validate_placement)
 
     migration = subparsers.add_parser(
         "migration-inspect",
@@ -549,6 +558,15 @@ def run(args: argparse.Namespace) -> int:
         _require_file(args.record)
         at = _parse_evaluation_time(args.at)
         report = validate_rc_file(args.record, args.kind, at=at)
+        _write_json(report.as_dict()) if args.json else print(report.category)
+        if not report.supported:
+            return 4
+        if not report.valid:
+            return 1
+        return 3 if args.require_pass and report.computed_status != "PASS" else 0
+    if command == "validate-placement":
+        _require_file(args.record)
+        report = validate_placement_file(args.record)
         _write_json(report.as_dict()) if args.json else print(report.category)
         if not report.supported:
             return 4

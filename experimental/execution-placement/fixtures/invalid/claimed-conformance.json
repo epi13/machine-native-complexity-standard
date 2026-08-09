@@ -1,0 +1,11 @@
+{
+  "schema_version": "0.1-experimental",
+  "profile": "execution-placement-evidence",
+  "record_id": "placement.claimed-conformance-v1",
+  "claim_boundary": {
+    "scope": "bounded-execution-placement",
+    "conformance_claim": "asserted",
+    "independence_claim": "not-asserted",
+    "limitations": ["This intentionally violates the placement-only claim boundary."]
+  }
+}

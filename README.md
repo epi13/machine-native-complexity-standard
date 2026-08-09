@@ -129,6 +129,14 @@ local, physical-machine, Arduino, external-actor, and governance work. The
 engineering findings into bounded follow-on tasks with acceptance criteria and explicit
 external-actor limits.
 
+## Experimental execution placement
+
+The [execution-placement evidence profile](docs/execution-placement-evidence.md) records
+requested policy, observed CPU/accelerator/sequential-offload placement, provider
+lifetime versus physical residency, probes, bounded fallback, and resource
+observations. It is experimental and non-normative: placement evidence is not
+correctness, conformance, independence, security, or promotion evidence.
+
 ## Repository map
 
 - `spec/` — frozen MNCS 0.2/MNCDS draft and the 0.3/0.1 release candidates.
@@ -137,6 +145,7 @@ external-actor limits.
 - `independent/rc-consumer/` — independent Rust release-candidate consumer.
 - `studies/recursive-analyzer/` — controlled two-epoch recursive study.
 - `experimental/language-evidence/` — profiles, providers, and fixtures.
+- `experimental/execution-placement/` — experimental resource-placement evidence fixtures.
 - `case-studies/` — bounded development studies and evidence epochs.
 - `docs/` — documentation.
 - `rfcs/` — governance proposals, including RFC 0006, RFC 0007, and RFC 0008.
