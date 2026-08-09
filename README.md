@@ -169,3 +169,12 @@ mncs validate-execution-receipt receipt.json --json
 - `rfcs/` — governance proposals, including RFC 0006, RFC 0007, and RFC 0008.
 
 Read `CONTRIBUTING.md`, `GOVERNANCE.md`, and the RFC process before proposing normative changes.
+
+## Dependency compatibility boundary
+
+The maintenance baseline uses Ruff 0.16.0 and the current compatible major versions
+of the GitHub Actions used by the workflows. The `cryptography` bound remains
+`>=43,<47`: cryptography 49 removes x86_64 macOS and 32-bit Windows support, while
+the repository's workflow and portability evidence still include macOS and Windows.
+That bound should be revisited only with an explicit supported-architecture decision
+and an installed-package matrix covering those platforms.

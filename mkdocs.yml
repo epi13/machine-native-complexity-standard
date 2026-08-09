@@ -55,6 +55,7 @@ nav:
   - Rust interoperability: rust-interoperability.md
   - Conformance corpus: conformance-corpus.md
   - Validator: validator.md
+  - Dependency maintenance: dependency-maintenance.md
   - Evidence bundles: evidence-bundles.md
   - Tool-neutral verification: tool-neutral-verification.md
   - Threat model: threat-model.md

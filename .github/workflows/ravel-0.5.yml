@@ -12,7 +12,7 @@ jobs:
   historical-and-canonical:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7
       - name: Preserve historical RAVEL evidence
         run: |
           make ravel-test
@@ -57,7 +57,7 @@ jobs:
         compiler: [gcc, clang]
         optimization: ["-O0", "-O3"]
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7
       - name: Reproduce with compiler and optimization variant
         env:
           CC: ${{ matrix.compiler }}
@@ -79,7 +79,7 @@ jobs:
   sanitizers:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7
       - name: Address and undefined-behavior sanitizers
         run: make ravel-0.5-sanitizers
       - name: Upload sanitizer diagnostics on failure
@@ -98,7 +98,7 @@ jobs:
         runner: [ubuntu-latest, ubuntu-24.04-arm]
     runs-on: ${{ matrix.runner }}
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7
       - name: Reproduce on native architecture
         run: make ravel-0.5-check
       - name: Record architecture

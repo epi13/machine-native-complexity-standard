@@ -5,6 +5,11 @@ validator and explicit version identifiers for the standard.
 
 ## 0.3.0rc1 — unreleased
 
+- Reconcile current GitHub Actions versions and Ruff 0.16.0 directly on current main;
+  retain the cryptography `<47` bound because the proposed 49 release removes
+  x86_64 macOS and 32-bit Windows support still represented by the repository's
+  portability contract.
+
 - Add the MNCS 0.3-rc.1 and MNCDS 0.1-rc.1 specifications without changing
   frozen historical claim semantics.
 - Add versioned contract, assurance/lifecycle, threat, measurement, and development

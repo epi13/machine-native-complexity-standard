@@ -34,7 +34,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@v7
         with:
           go-version: "1.23.x"
           cache: true
@@ -59,7 +59,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@v7
         with:
           go-version: "1.23.x"
           cache: false
@@ -71,7 +71,7 @@ jobs:
       - run: make multilingual-wave-three WAVE_THREE_OUTPUT=evidence/cross-host-${RUNNER_OS}
       - run: mncs schema composed-evidence-epoch >/dev/null
       - run: git diff --check
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: multilingual-wave-three-${{ runner.os }}
           path: case-studies/composed-gateway/wave-three/evidence/cross-host-${{ runner.os }}
@@ -86,7 +86,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@v7
         with:
           go-version: "1.23.x"
           cache: false
@@ -114,7 +114,7 @@ jobs:
       - run: make ravel-unified-check
       - name: Upload preserved mismatch evidence
         if: failure()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: ravel-unified-actual
           path: case-studies/ravel/unified-actual.json
