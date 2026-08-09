@@ -56,6 +56,9 @@ ledger, a crash-safe state watermark, and an exclusive lock with stale-lock reco
 Each entry binds its sequence, previous entry identity, challenge digest, receipt
 identity, scope, consumption time, and monotonic time watermark. Corrupt, truncated,
 future-version, missing-state, duplicate, or broken-chain data fails closed.
+Replay receipts carry the sequence and nonce digest needed to reconstruct the claimed
+store-entry identity during offline verification; a supplied store additionally checks
+that the entry is present and remains the current head.
 
 The persisted watermark is the maximum observed local verification time. If the wall
 clock moves backward after a later time has been observed, effective verification time

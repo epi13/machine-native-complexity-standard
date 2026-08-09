@@ -5,7 +5,7 @@
   "description": "Offline evidence that a scoped execution challenge was consumed once in a declared local replay store. It does not establish external custody, host-root resistance, independence, isolation, correctness, conformance, or promotion.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "record_type", "replay_id", "replay_identity", "challenge_identity", "receipt_identity", "scope", "consumed_at", "store_entry_identity", "previous_entry_identity", "store_head_identity", "time_watermark", "limitations", "extensions"],
+  "required": ["schema_version", "record_type", "replay_id", "replay_identity", "challenge_identity", "receipt_identity", "scope", "consumed_at", "store_sequence", "nonce_digest", "store_entry_identity", "previous_entry_identity", "store_head_identity", "time_watermark", "limitations", "extensions"],
   "properties": {
     "schema_version": {"const": "0.1-experimental"},
     "record_type": {"const": "mncs-replay-receipt"},
@@ -15,6 +15,8 @@
     "receipt_identity": {"$ref": "#/$defs/sha256"},
     "scope": {"$ref": "#/$defs/scope"},
     "consumed_at": {"type": "string", "format": "date-time"},
+    "store_sequence": {"type": "integer", "minimum": 1},
+    "nonce_digest": {"$ref": "#/$defs/sha256"},
     "store_entry_identity": {"$ref": "#/$defs/sha256"},
     "previous_entry_identity": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]},
     "store_head_identity": {"$ref": "#/$defs/sha256"},

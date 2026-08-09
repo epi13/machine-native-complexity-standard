@@ -629,6 +629,8 @@ class ReplayStore:
             "receipt_identity": receipt["receipt_identity"],
             "scope": deepcopy(challenge["scope"]),
             "consumed_at": entry["consumed_at"],
+            "store_sequence": entry["sequence"],
+            "nonce_digest": entry["nonce_digest"],
             "store_entry_identity": entry["entry_identity"],
             "previous_entry_identity": entry["previous_entry_identity"],
             "store_head_identity": entry["entry_identity"],
@@ -734,6 +736,37 @@ def verify_replay_receipt(
             "replay-head-mismatch",
             "portable replay receipt must identify its consumed entry as the store head",
             "$/store_head_identity",
+        )
+    expected_nonce_digest = sha256_bytes(cast(str, challenge["nonce"]).encode()).removeprefix(
+        "sha256:"
+    )
+    if replay_receipt["nonce_digest"] != expected_nonce_digest:
+        report.invalidate(
+            "replay-nonce-mismatch",
+            "replay receipt nonce digest does not match the challenge",
+            "$/nonce_digest",
+        )
+    entry_material = {
+        "schema_version": SCHEMA_VERSION,
+        "record_type": "mncs-replay-entry",
+        "sequence": replay_receipt["store_sequence"],
+        "entry_identity": "0" * 64,
+        "challenge_identity": replay_receipt["challenge_identity"],
+        "nonce_digest": replay_receipt["nonce_digest"],
+        "receipt_identity": replay_receipt["receipt_identity"],
+        "scope": replay_receipt["scope"],
+        "consumed_at": replay_receipt["consumed_at"],
+        "previous_entry_identity": replay_receipt["previous_entry_identity"],
+        "time_watermark": replay_receipt["time_watermark"],
+    }
+    if (
+        _identity_without(entry_material, "entry_identity")
+        != replay_receipt["store_entry_identity"]
+    ):
+        report.invalidate(
+            "replay-entry-identity-mismatch",
+            "replay receipt does not reconstruct its claimed store entry identity",
+            "$/store_entry_identity",
         )
     if store is not None and report.valid:
         try:

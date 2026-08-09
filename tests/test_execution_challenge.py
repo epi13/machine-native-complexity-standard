@@ -390,6 +390,12 @@ def test_offline_replay_receipt_does_not_require_mutation_or_external_authority(
     assert offline.valid
     assert "external custody" not in json.dumps(offline.replay_receipt).lower()
     assert any("local store" in limitation for limitation in consumed.replay_receipt["limitations"])
+    mutated = copy.deepcopy(consumed.replay_receipt)
+    mutated["store_sequence"] = 2
+    mutated["replay_identity"] = canonical_sha256(
+        {key: child for key, child in mutated.items() if key != "replay_identity"}
+    )
+    assert not verify_replay_receipt(mutated, challenge, receipt).valid
 
 
 def test_cli_issue_validate_consume_and_verify(tmp_path: Path, capsys: object) -> None:
