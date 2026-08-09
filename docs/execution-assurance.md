@@ -34,6 +34,15 @@ custody, independent operation, MNCS/MNCDS conformance, or promotion. Placement
 remains a separate optional evidence reference. See
 [experimental typed execution receipts](execution-receipts.md).
 
+## Challenge and replay relationship
+
+EA-NEXT-005 adds [experimental verifier-issued challenges and replay evidence](execution-challenges.md)
+around the receipt's existing nonce and validity-window fields. Challenge issuance binds
+the request scope before execution; explicit local consumption then prevents reuse in the
+declared replay-store boundary. This freshness result is separate from functional status
+and execution assurance. A fresh receipt can still have assurance `UNKNOWN` when
+isolation, custody, independence, or other required properties are absent.
+
 ## Immutable bundle relationship
 
 EA-NEXT-002 adds the experimental [immutable execution bundle](execution-bundles.md)

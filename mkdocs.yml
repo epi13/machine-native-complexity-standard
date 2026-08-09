@@ -25,6 +25,7 @@ nav:
   - Experimental execution-placement evidence: execution-placement-evidence.md
   - Experimental typed execution receipts: execution-receipts.md
   - Experimental immutable execution bundles: execution-bundles.md
+  - Experimental execution challenges and replay: execution-challenges.md
   - Composed systems: composed-systems.md
   - Post-Wave-Five roadmap: post-wave-five-roadmap.md
   - Codex implementation next steps: codex-next-steps.md

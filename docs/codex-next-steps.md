@@ -29,6 +29,10 @@ EA-NEXT-002 immutable execution bundles are now implemented as a separate
 non-normative package-integrity layer. Linux sandboxing, replay, attestations,
 external actors, and governance gates remain open or blocked as documented in the
 execution-assurance roadmap.
+EA-NEXT-005 verifier-issued challenges and bounded local replay tracking are now
+implemented experimentally. The freshness layer is scope-bound to receipts and bundles,
+persists a rollback-resistant local time watermark, and leaves stronger assurance
+properties `UNKNOWN` unless separately evidenced.
 
 ## Execution rules for Codex
 

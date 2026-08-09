@@ -51,6 +51,15 @@ record/knowledge interchange purpose and are not execution bundles. Neither bund
 integrity nor a receipt creates sandboxing, custody, independence, conformance, or
 promotion authority.
 
+EA-NEXT-005 adds a third bounded observation surface around those artifacts: a verifier
+issues a fresh scoped challenge, a runner binds its observations to the challenge, and
+an explicit local replay store records one consumption. Forge, MNEL, and future Fabric
+executors can transport the challenge and emit the receipt without sharing the replay
+store implementation. RAVEL may retain challenge/replay identities as immutable
+experience references, while Commons may transport them; neither becomes the issuer or
+authority merely by consuming or storing the records. Local replay evidence remains
+subject to the host trust boundary and cannot create independent custody.
+
 ## Network model
 
 The project family can be understood as an evidence and proposal network:
