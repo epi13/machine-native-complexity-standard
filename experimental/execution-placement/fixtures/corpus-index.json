@@ -1,0 +1,26 @@
+{
+  "schema_version": "0.1-experimental-corpus",
+  "seed": "valid/sequential-offload.json",
+  "cases": [
+    {"id": "cpu-only", "expected": "PASS"},
+    {"id": "full-accelerator", "expected": "PASS"},
+    {"id": "sequential-offload", "expected": "PASS"},
+    {"id": "auto-selects-sequential", "expected": "PASS"},
+    {"id": "auto-oom-recovery-to-cpu", "expected": "PASS"},
+    {"id": "optional-metrics-unknown-absent", "expected": "PASS"},
+    {"id": "accelerator-without-probe", "expected": "UNKNOWN"},
+    {"id": "sequential-without-witness", "expected": "UNKNOWN"},
+    {"id": "resource-cap-exact", "expected": "PASS"},
+    {"id": "resource-cap-exceeded", "expected": "FAIL"},
+    {"id": "partial-resource-observation", "expected": "UNKNOWN"},
+    {"id": "explicit-cpu-accelerator", "expected": "INVALID"},
+    {"id": "explicit-accelerator-cpu", "expected": "INVALID"},
+    {"id": "auto-undeclared-transition", "expected": "INVALID"},
+    {"id": "stale-environment", "expected": "INVALID"},
+    {"id": "runtime-identity-changed", "expected": "INVALID"},
+    {"id": "residency-confuses-offload", "expected": "INVALID"},
+    {"id": "reduced-precision-unprobed", "expected": "INVALID"},
+    {"id": "runtime-crash-during-transition", "expected": "FAIL"},
+    {"id": "conformance-or-independence-claim", "expected": "INVALID"}
+  ]
+}

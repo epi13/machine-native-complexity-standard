@@ -1,0 +1,106 @@
+{
+  "schema_version": "0.1-experimental",
+  "profile": "execution-placement-evidence",
+  "record_id": "placement.vision-sequential-v1",
+  "identities": {
+    "subject_id": "subject.vision-request-v1",
+    "artifact_id": "artifact.vision-model-v1",
+    "provider_id": "provider.local-vision-v1",
+    "executable_id": "executable.worker-v1",
+    "runtime_id": "runtime.accelerator-adapter-v1",
+    "environment_id": "environment.local-gpu-v1"
+  },
+  "identity_bindings": {
+    "subject": {"declared": "subject.vision-request-v1", "observed": "subject.vision-request-v1"},
+    "artifact": {"declared": "artifact.vision-model-v1", "observed": "artifact.vision-model-v1"},
+    "provider": {"declared": "provider.local-vision-v1", "observed": "provider.local-vision-v1"},
+    "executable": {"declared": "executable.worker-v1", "observed": "executable.worker-v1"},
+    "runtime": {"declared": "runtime.accelerator-adapter-v1", "observed": "runtime.accelerator-adapter-v1"},
+    "environment": {"declared": "environment.local-gpu-v1", "observed": "environment.local-gpu-v1"}
+  },
+  "references": {
+    "execution_assurance_id": "assurance.execution-local-v1",
+    "measurement_id": "measurement.vision-placement-v1",
+    "experiment_id": "experiment.offload-budget-v1"
+  },
+  "requested_policy": {
+    "mode": "sequential-offload",
+    "backend": "generic-accelerator-v1",
+    "allowed_transitions": [],
+    "limits": [
+      {"resource": "accelerator-memory", "value": 400000000, "unit": "bytes", "enforcement": "hard"},
+      {"resource": "host-memory", "value": 2000000000, "unit": "bytes", "enforcement": "hard"},
+      {"resource": "timeout", "value": 30, "unit": "seconds", "enforcement": "hard"}
+    ]
+  },
+  "capability_observations": {
+    "configured": "configured",
+    "discovered": "available",
+    "execution_probe": "PASS",
+    "backend": "generic-accelerator-v1"
+  },
+  "actual_execution": {
+    "status": "PASS",
+    "placement": "sequential-offload",
+    "backend": "generic-accelerator-v1",
+    "attempted_placements": ["sequential-offload"]
+  },
+  "residency": {
+    "provider_lifetime": "persistent-in-process",
+    "weight_placement": "host-ram",
+    "process_residency": "resident"
+  },
+  "resource_policy": {
+    "limits": [
+      {"resource": "accelerator-memory", "value": 400000000, "unit": "bytes", "enforcement": "hard"},
+      {"resource": "host-memory", "value": 2000000000, "unit": "bytes", "enforcement": "hard"},
+      {"resource": "timeout", "value": 30, "unit": "seconds", "enforcement": "hard"}
+    ]
+  },
+  "precision": {
+    "requested": "float32",
+    "effective": "float32",
+    "probe_required": false,
+    "probe_status": "PASS"
+  },
+  "fallback": {
+    "allowed_transitions": [],
+    "observed_transitions": [],
+    "transition_authorized": true,
+    "cause": null,
+    "transition_status": "PASS"
+  },
+  "measurements": [
+    {"metric": "peak-accelerator-allocated-bytes", "value": 300000000, "unit": "bytes", "source_id": "runtime.accelerator-adapter-v1", "source_kind": "runtime", "phase": "warm-execution"},
+    {"metric": "peak-accelerator-reserved-bytes", "value": 350000000, "unit": "bytes", "source_id": "runtime.accelerator-adapter-v1", "source_kind": "runtime", "phase": "warm-execution"},
+    {"metric": "process-rss-bytes", "value": 1200000000, "unit": "bytes", "source_id": "environment.local-gpu-v1", "source_kind": "host", "phase": "warm-execution"},
+    {"metric": "model-storage-bytes", "value": 1500000000, "unit": "bytes", "source_id": "provider.local-vision-v1", "source_kind": "provider", "phase": "cold-load"},
+    {"metric": "offload-count", "value": 12, "unit": "count", "source_id": "runtime.accelerator-adapter-v1", "source_kind": "runtime", "phase": "warm-execution"},
+    {"metric": "duration-seconds", "value": 2.5, "unit": "seconds", "source_id": "runtime.accelerator-adapter-v1", "source_kind": "runtime", "phase": "warm-execution"}
+  ],
+  "placement_evidence": [
+    {"evidence_id": "witness.accelerator-probe-v1", "kind": "execution-probe", "status": "PASS", "source_id": "runtime.accelerator-adapter-v1", "observed_placement": "sequential-offload"},
+    {"evidence_id": "witness.sequential-hooks-v1", "kind": "runtime-hook", "status": "PASS", "source_id": "provider.local-vision-v1", "observed_placement": "sequential-offload"}
+  ],
+  "results": {
+    "execution": "PASS",
+    "placement": "PASS",
+    "resource_policy": "PASS",
+    "status": "PASS"
+  },
+  "governing_results": {
+    "mncs": null,
+    "mncds": null
+  },
+  "claim_boundary": {
+    "scope": "bounded-execution-placement",
+    "conformance_claim": "not-asserted",
+    "independence_claim": "not-asserted",
+    "limitations": [
+      "This record describes one bounded execution observation and does not establish correctness or model quality.",
+      "Measurements are machine- and workload-scoped; unavailable observations remain UNKNOWN.",
+      "Placement evidence is separate from MNCS/MNCDS conformance and promotion authority."
+    ]
+  },
+  "extensions": {}
+}
