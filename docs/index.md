@@ -38,6 +38,7 @@ RFC 0006 proposes the non-normative multilingual language-evidence layer. Both r
 neither changes MNCS 0.2 or promotes MNCDS.
 
 - [Experimental language evidence profiles](language-evidence-profiles.md)
+- [Experimental execution-placement evidence](execution-placement-evidence.md)
 - [Post-Wave-Five local evidence roadmap](post-wave-five-roadmap.md)
 - [MNCS 0.3 / MNCDS 0.1 release candidate](release-candidate.md)
 - [Release gap matrix](release-gap-matrix.md)

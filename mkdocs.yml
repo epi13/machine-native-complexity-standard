@@ -17,6 +17,7 @@ nav:
   - Conformance: conformance.md
   - Machine-native development: mncds.md
   - Language evidence profiles: language-evidence-profiles.md
+  - Experimental execution-placement evidence: execution-placement-evidence.md
   - Composed systems: composed-systems.md
   - Post-Wave-Five roadmap: post-wave-five-roadmap.md
   - MNCS 0.3 / MNCDS 0.1 release candidate: release-candidate.md

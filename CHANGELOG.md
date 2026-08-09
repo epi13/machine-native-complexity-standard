@@ -31,6 +31,11 @@ validator and explicit version identifiers for the standard.
 - Make the non-normative Forge integration the default Codex development control plane,
   add bounded project workflows, and demote Joern to an explicitly configured optional
   legacy provider without changing any MNCS/MNCDS claim result.
+- Add the experimental, non-normative execution-placement evidence profile with
+  requested-versus-observed CPU/accelerator placement, residency distinction, real
+  probe requirements, bounded AUTO fallback, resource measurements, strict claim
+  boundaries, and an adversarial validation corpus. This does not change frozen
+  MNCS/MNCDS semantics or create conformance, independence, custody, or promotion.
 
 ## 0.2.0 — 2026-07-25
 
