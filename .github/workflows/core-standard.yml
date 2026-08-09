@@ -94,7 +94,7 @@ jobs:
           git clone https://github.com/epi13/mncs-validator-rs "$RUNNER_TEMP/mncs-validator-rs"
           git -C "$RUNNER_TEMP/mncs-validator-rs" checkout "$commit"
       - run: ./scripts/run-interoperability --rust-repository "$RUNNER_TEMP/mncs-validator-rs" --output interoperability-agreement.json
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: interoperability-agreement
           path: interoperability-agreement.json
