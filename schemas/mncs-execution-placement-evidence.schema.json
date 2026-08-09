@@ -1,0 +1,256 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schema/experimental/0.1/mncs-execution-placement-evidence.schema.json",
+  "title": "Experimental MNCS execution-placement evidence",
+  "description": "A non-normative bounded observation of requested and observed resource placement. It is not a correctness, conformance, independence, security, or promotion record.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "profile", "record_id", "identities", "identity_bindings",
+    "references", "requested_policy", "capability_observations", "actual_execution",
+    "residency", "resource_policy", "precision", "fallback", "measurements",
+    "placement_evidence", "results", "claim_boundary", "extensions"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1-experimental"},
+    "profile": {"const": "execution-placement-evidence"},
+    "record_id": {"$ref": "#/$defs/id"},
+    "identities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subject_id", "artifact_id", "provider_id", "executable_id", "runtime_id", "environment_id"],
+      "properties": {
+        "subject_id": {"$ref": "#/$defs/id"},
+        "artifact_id": {"$ref": "#/$defs/id"},
+        "provider_id": {"$ref": "#/$defs/id"},
+        "executable_id": {"$ref": "#/$defs/id"},
+        "runtime_id": {"$ref": "#/$defs/id"},
+        "environment_id": {"$ref": "#/$defs/id"}
+      }
+    },
+    "identity_bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subject", "artifact", "provider", "executable", "runtime", "environment"],
+      "properties": {
+        "subject": {"$ref": "#/$defs/identityBinding"},
+        "artifact": {"$ref": "#/$defs/identityBinding"},
+        "provider": {"$ref": "#/$defs/identityBinding"},
+        "executable": {"$ref": "#/$defs/identityBinding"},
+        "runtime": {"$ref": "#/$defs/identityBinding"},
+        "environment": {"$ref": "#/$defs/identityBinding"}
+      }
+    },
+    "references": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["execution_assurance_id", "measurement_id", "experiment_id"],
+      "properties": {
+        "execution_assurance_id": {"oneOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]},
+        "measurement_id": {"oneOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]},
+        "experiment_id": {"oneOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]}
+      }
+    },
+    "requested_policy": {"$ref": "#/$defs/requestedPolicy"},
+    "capability_observations": {"$ref": "#/$defs/capabilityObservations"},
+    "actual_execution": {"$ref": "#/$defs/actualExecution"},
+    "residency": {"$ref": "#/$defs/residency"},
+    "resource_policy": {"$ref": "#/$defs/resourcePolicy"},
+    "precision": {"$ref": "#/$defs/precision"},
+    "fallback": {"$ref": "#/$defs/fallback"},
+    "measurements": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {"$ref": "#/$defs/measurement"}
+    },
+    "placement_evidence": {
+      "type": "array",
+      "maxItems": 32,
+      "items": {"$ref": "#/$defs/placementEvidence"}
+    },
+    "results": {"$ref": "#/$defs/results"},
+    "governing_results": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mncs", "mncds"],
+      "properties": {
+        "mncs": {"oneOf": [{"$ref": "#/$defs/governingResult"}, {"type": "null"}]},
+        "mncds": {"oneOf": [{"$ref": "#/$defs/governingResult"}, {"type": "null"}]}
+      }
+    },
+    "claim_boundary": {"$ref": "#/$defs/claimBoundary"},
+    "extensions": {"$ref": "#/$defs/extensions"}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "status": {"enum": ["PASS", "FAIL", "UNKNOWN"]},
+    "text": {"type": "string", "minLength": 1, "maxLength": 4096},
+    "texts": {"type": "array", "maxItems": 64, "items": {"$ref": "#/$defs/text"}},
+    "identityBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["declared", "observed"],
+      "properties": {
+        "declared": {"$ref": "#/$defs/id"},
+        "observed": {"$ref": "#/$defs/id"}
+      }
+    },
+    "requestedPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "backend", "allowed_transitions", "limits"],
+      "properties": {
+        "mode": {"enum": ["auto", "cpu", "accelerator", "sequential-offload"]},
+        "backend": {"oneOf": [{"$ref": "#/$defs/text"}, {"type": "null"}]},
+        "allowed_transitions": {"$ref": "#/$defs/transitions"},
+        "limits": {"$ref": "#/$defs/limits"}
+      }
+    },
+    "capabilityObservations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["configured", "discovered", "execution_probe", "backend"],
+      "properties": {
+        "configured": {"enum": ["configured", "not-configured", "unknown"]},
+        "discovered": {"enum": ["available", "unavailable", "unknown"]},
+        "execution_probe": {"$ref": "#/$defs/status"},
+        "backend": {"oneOf": [{"$ref": "#/$defs/text"}, {"type": "null"}]}
+      }
+    },
+    "actualExecution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "placement", "backend", "attempted_placements"],
+      "properties": {
+        "status": {"$ref": "#/$defs/status"},
+        "placement": {"enum": ["cpu-only", "full-accelerator", "sequential-offload", "mixed", "unsupported", "indeterminate"]},
+        "backend": {"oneOf": [{"$ref": "#/$defs/text"}, {"type": "null"}]},
+        "attempted_placements": {"type": "array", "minItems": 1, "maxItems": 8, "items": {"enum": ["cpu-only", "full-accelerator", "sequential-offload", "mixed"]}}
+      }
+    },
+    "residency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider_lifetime", "weight_placement", "process_residency"],
+      "properties": {
+        "provider_lifetime": {"enum": ["persistent-in-process", "invocation-scoped", "unknown"]},
+        "weight_placement": {"enum": ["host-ram", "accelerator", "transient-accelerator", "mixed", "unknown"]},
+        "process_residency": {"enum": ["resident", "transient", "unknown"]}
+      }
+    },
+    "resourcePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["limits"],
+      "properties": {"limits": {"$ref": "#/$defs/limits"}}
+    },
+    "limits": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "items": {"$ref": "#/$defs/limit"}
+    },
+    "limit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resource", "value", "unit", "enforcement"],
+      "properties": {
+        "resource": {"enum": ["host-memory", "accelerator-memory", "accelerator-reserve", "workspace", "output", "timeout", "concurrency"]},
+        "value": {"type": "integer", "minimum": 0},
+        "unit": {"enum": ["bytes", "seconds", "count"]},
+        "enforcement": {"enum": ["hard", "advisory"]}
+      }
+    },
+    "precision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requested", "effective", "probe_required", "probe_status"],
+      "properties": {
+        "requested": {"enum": ["auto", "float32", "float16", "bfloat16", "int8", "unknown"]},
+        "effective": {"enum": ["float32", "float16", "bfloat16", "int8", "unknown"]},
+        "probe_required": {"type": "boolean"},
+        "probe_status": {"$ref": "#/$defs/status"}
+      }
+    },
+    "transitions": {
+      "type": "array",
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {"enum": ["full-accelerator->sequential-offload", "sequential-offload->cpu", "full-accelerator->cpu"]}
+    },
+    "fallback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_transitions", "observed_transitions", "transition_authorized", "cause", "transition_status"],
+      "properties": {
+        "allowed_transitions": {"$ref": "#/$defs/transitions"},
+        "observed_transitions": {"$ref": "#/$defs/transitions"},
+        "transition_authorized": {"type": "boolean"},
+        "cause": {"oneOf": [{"enum": ["budget-insufficient", "resource-exhaustion", "unsupported", "runtime-failure"]}, {"type": "null"}]},
+        "transition_status": {"$ref": "#/$defs/status"}
+      }
+    },
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["metric", "value", "unit", "source_id", "source_kind", "phase"],
+      "properties": {
+        "metric": {"enum": ["peak-accelerator-allocated-bytes", "peak-accelerator-reserved-bytes", "process-rss-bytes", "host-memory-peak-bytes", "model-storage-bytes", "workspace-peak-bytes", "transfer-bytes", "offload-count", "duration-seconds", "output-bytes", "maximum-concurrency"]},
+        "value": {"type": "number", "minimum": 0},
+        "unit": {"enum": ["bytes", "seconds", "count"]},
+        "source_id": {"$ref": "#/$defs/id"},
+        "source_kind": {"enum": ["runtime", "provider", "host", "measurement"]},
+        "phase": {"enum": ["cold-load", "warm-execution", "invocation", "end-to-end"]}
+      }
+    },
+    "placementEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_id", "kind", "status", "source_id", "observed_placement"],
+      "properties": {
+        "evidence_id": {"$ref": "#/$defs/id"},
+        "kind": {"enum": ["runtime-hook", "parameter-device-state", "execution-probe", "provider-witness", "runtime-measurement"]},
+        "status": {"$ref": "#/$defs/status"},
+        "source_id": {"$ref": "#/$defs/id"},
+        "observed_placement": {"enum": ["cpu-only", "full-accelerator", "sequential-offload", "mixed", "unsupported", "indeterminate"]}
+      }
+    },
+    "results": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["execution", "placement", "resource_policy", "status"],
+      "properties": {
+        "execution": {"$ref": "#/$defs/status"},
+        "placement": {"$ref": "#/$defs/status"},
+        "resource_policy": {"$ref": "#/$defs/status"},
+        "status": {"$ref": "#/$defs/status"}
+      }
+    },
+    "governingResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "record_id", "source_kind"],
+      "properties": {
+        "status": {"$ref": "#/$defs/status"},
+        "record_id": {"$ref": "#/$defs/id"},
+        "source_kind": {"enum": ["assurance-case", "development-record"]}
+      }
+    },
+    "claimBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "conformance_claim", "independence_claim", "limitations"],
+      "properties": {
+        "scope": {"const": "bounded-execution-placement"},
+        "conformance_claim": {"const": "not-asserted"},
+        "independence_claim": {"const": "not-asserted"},
+        "limitations": {"type": "array", "minItems": 1, "maxItems": 32, "items": {"$ref": "#/$defs/text"}}
+      }
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {"pattern": "^[a-z][a-z0-9.-]*:[A-Za-z0-9][A-Za-z0-9._-]*$"},
+      "additionalProperties": true
+    }
+  }
+}
