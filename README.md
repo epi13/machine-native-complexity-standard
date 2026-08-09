@@ -137,6 +137,16 @@ lifetime versus physical residency, probes, bounded fallback, and resource
 observations. It is experimental and non-normative: placement evidence is not
 correctness, conformance, independence, security, or promotion evidence.
 
+The [experimental typed execution receipt](docs/execution-receipts.md) is the
+runner-produced observation envelope for lifecycle, output, resource, enforcement,
+and optional placement facts. It records what happened and does not itself create
+execution assurance, conformance, sandbox, custody, independence, or promotion.
+
+```bash
+mncs schema execution-receipt-0.1-experimental --json
+mncs validate-execution-receipt receipt.json --json
+```
+
 ## Repository map
 
 - `spec/` — frozen MNCS 0.2/MNCDS draft and the 0.3/0.1 release candidates.
@@ -146,6 +156,7 @@ correctness, conformance, independence, security, or promotion evidence.
 - `studies/recursive-analyzer/` — controlled two-epoch recursive study.
 - `experimental/language-evidence/` — profiles, providers, and fixtures.
 - `experimental/execution-placement/` — experimental resource-placement evidence fixtures.
+- `experimental/execution-receipt/` — experimental immutable runner-receipt fixtures.
 - `case-studies/` — bounded development studies and evidence epochs.
 - `docs/` — documentation.
 - `rfcs/` — governance proposals, including RFC 0006, RFC 0007, and RFC 0008.

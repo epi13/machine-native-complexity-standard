@@ -19,6 +19,15 @@ The small consistency fixes accompanying this roadmap correct the public corpus 
 name the hardened Forge workflow entrypoint, document the existing version-reporting
 contract, and make this backlog visible from the documentation navigation.
 
+## Current execution-assurance reconciliation — 2026-08-08
+
+EA-NEXT-001 is now locally actionable and implemented as an experimental typed
+runner-receipt profile. It is deliberately additive to the execution-assurance and
+execution-placement profiles: receipts preserve lifecycle, output, resource, and
+enforcement observations, while separate validators interpret their sufficiency.
+EA-NEXT-002 onward, Linux sandboxing, external actors, and governance gates remain
+open or blocked as documented in the execution-assurance roadmap.
+
 ## Execution rules for Codex
 
 For every task below, Codex must:
