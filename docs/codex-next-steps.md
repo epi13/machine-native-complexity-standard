@@ -25,8 +25,10 @@ EA-NEXT-001 is now locally actionable and implemented as an experimental typed
 runner-receipt profile. It is deliberately additive to the execution-assurance and
 execution-placement profiles: receipts preserve lifecycle, output, resource, and
 enforcement observations, while separate validators interpret their sufficiency.
-EA-NEXT-002 onward, Linux sandboxing, external actors, and governance gates remain
-open or blocked as documented in the execution-assurance roadmap.
+EA-NEXT-002 immutable execution bundles are now implemented as a separate
+non-normative package-integrity layer. Linux sandboxing, replay, attestations,
+external actors, and governance gates remain open or blocked as documented in the
+execution-assurance roadmap.
 
 ## Execution rules for Codex
 

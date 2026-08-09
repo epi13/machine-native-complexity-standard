@@ -1,0 +1,26 @@
+{
+  "schema_version": "0.1-experimental",
+  "record_type": "mncs-execution-bundle",
+  "bundle_id": "bundle.generic-local-v1",
+  "bundle_identity": "e6157e9b3f0454ece2c5fa35166e31e3a942208f1c52f8b30f18b41cbf071c9a",
+  "bundle_format": "mncs-execution-bundle-zip-0.1",
+  "entries": [
+    {"path": "expected/output.json", "identity": "06ca31e9237ecc5742fc5b19f1e1f45158da35fdbb80d938f01ed50143e0a124", "size_bytes": 14, "role": "expected", "mode": "0644"},
+    {"path": "harness/run.py", "identity": "af8365fb8099b62f612444421abf01e703dec03285a62bbc501ae7e50cbfd7c0", "size_bytes": 36, "role": "harness", "mode": "0644"},
+    {"path": "input/vector.json", "identity": "b02210e510e5b9f7ac82f3a8b74ee0f1291d0412189a33b77393ee2073f6ba28", "size_bytes": 13, "role": "input", "mode": "0644"},
+    {"path": "policy/execution-policy.json", "identity": "67724764e2528d39bb51856d8ea8663c524818968823b86ad24caf8ffedb8a58", "size_bytes": 73, "role": "policy-reference", "mode": "0644"},
+    {"path": "runtime/requirements.json", "identity": "b1e9f4e57afe0eabb28645d5c07d70bed126b4907f69fd27c960bcbd101b557d", "size_bytes": 44, "role": "runtime-requirement", "mode": "0644"},
+    {"path": "tests/test.py", "identity": "ef0f55ba0b9aa83a6c3dfce2460071928c280b4ad64ffb4061e7537197a140d7", "size_bytes": 43, "role": "test", "mode": "0644"}
+  ],
+  "entrypoints": [
+    {"name": "harness", "path": "harness/run.py"},
+    {"name": "test", "path": "tests/test.py"}
+  ],
+  "runtime_requirements": [{"path": "runtime/requirements.json", "identity": "b1e9f4e57afe0eabb28645d5c07d70bed126b4907f69fd27c960bcbd101b557d"}],
+  "policy_references": [{"path": "policy/execution-policy.json", "identity": "67724764e2528d39bb51856d8ea8663c524818968823b86ad24caf8ffedb8a58"}],
+  "harness_identity": "85d694e959de34544c1242381886d33ad6575a4b14b9fab3174718e2644f71fa",
+  "input_snapshot_identity": "1a813b774d63f7cb6ae4d3ad3dad3233fdd38697a7a9ee6950b1fd7bd85eb27c",
+  "policy_identity": "5aa2673b319b89b61c9dc512dd710c52c531e9d8a65325b1f9b083c0f74e3cc5",
+  "limits": {"max_file_count": 32, "max_file_bytes": 65536, "max_total_bytes": 262144, "max_path_bytes": 512, "max_expansion_ratio": 100},
+  "extensions": {}
+}

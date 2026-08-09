@@ -54,10 +54,13 @@ Acceptance criteria:
 
 **Depends on:** EA-NEXT-001
 
+**Status: IMPLEMENTED in MNCS as `0.1-experimental`; this status is package-integrity
+evidence only and does not imply execution assurance or governance approval.**
+
 Package tests, harnesses, expected manifests, runtime requirements, and policy references in a
 content-addressed bundle. Bind every execution request to the bundle's canonical identity.
 
-Acceptance criteria:
+Acceptance criteria (historical rationale retained):
 
 - path traversal, symlink, duplicate-path, case-collision, oversized-file, and archive-expansion
   attacks are rejected;
@@ -65,6 +68,27 @@ Acceptance criteria:
 - mutable tags or branch names cannot serve as final identities;
 - old successful results cannot be reused against a different bundle; and
 - bundle verification remains offline.
+
+The implementation provides separate canonical manifest and exact ZIP transport
+identities, deterministic creation, bounded non-extracting verification, portable
+path/link/special-file rejection, and optional receipt-to-bundle binding. Wave Five
+is preserved as historical evidence rather than relabeled.
+
+## Dependency chain after EA-NEXT-002
+
+```text
+EA-NEXT-001 typed receipt       DONE
+          |
+EA-NEXT-002 immutable bundle    DONE
+          |
+          +---------------------+
+          |                     |
+          v                     v
+EA-NEXT-003 Linux runner   EA-NEXT-005 replay
+          |
+          v
+EA-NEXT-004 verity
+```
 
 ## EA-NEXT-003 — Implement the Linux isolation runner
 

@@ -142,6 +142,12 @@ runner-produced observation envelope for lifecycle, output, resource, enforcemen
 and optional placement facts. It records what happened and does not itself create
 execution assurance, conformance, sandbox, custody, independence, or promotion.
 
+The [experimental immutable execution bundle](docs/execution-bundles.md) freezes
+bounded test material beneath that receipt with separate canonical manifest and
+deterministic archive identities. It establishes package integrity only; it is not
+a sandbox, execution-assurance verdict, conformance result, custody record, or
+promotion authority.
+
 ```bash
 mncs schema execution-receipt-0.1-experimental --json
 mncs validate-execution-receipt receipt.json --json
@@ -157,6 +163,7 @@ mncs validate-execution-receipt receipt.json --json
 - `experimental/language-evidence/` — profiles, providers, and fixtures.
 - `experimental/execution-placement/` — experimental resource-placement evidence fixtures.
 - `experimental/execution-receipt/` — experimental immutable runner-receipt fixtures.
+- `experimental/execution-bundle/` — experimental immutable execution-bundle source and fixtures.
 - `case-studies/` — bounded development studies and evidence epochs.
 - `docs/` — documentation.
 - `rfcs/` — governance proposals, including RFC 0006, RFC 0007, and RFC 0008.

@@ -1,0 +1,27 @@
+{
+  "schema_version": "0.1-experimental",
+  "record_type": "mncs-execution-bundle-source",
+  "bundle_id": "bundle.generic-local-v1",
+  "entries": [
+    {"path": "tests/test.py", "source": "tests/test.py", "role": "test", "mode": "0644"},
+    {"path": "harness/run.py", "source": "harness/run.py", "role": "harness", "mode": "0644"},
+    {"path": "expected/output.json", "source": "expected/output.json", "role": "expected", "mode": "0644"},
+    {"path": "runtime/requirements.json", "source": "runtime/requirements.json", "role": "runtime-requirement", "mode": "0644"},
+    {"path": "policy/execution-policy.json", "source": "policy/execution-policy.json", "role": "policy-reference", "mode": "0644"},
+    {"path": "input/vector.json", "source": "input/vector.json", "role": "input", "mode": "0644"}
+  ],
+  "entrypoints": [
+    {"name": "test", "path": "tests/test.py"},
+    {"name": "harness", "path": "harness/run.py"}
+  ],
+  "runtime_requirements": ["runtime/requirements.json"],
+  "policy_references": ["policy/execution-policy.json"],
+  "limits": {
+    "max_file_count": 32,
+    "max_file_bytes": 65536,
+    "max_total_bytes": 262144,
+    "max_path_bytes": 512,
+    "max_expansion_ratio": 100
+  },
+  "extensions": {}
+}
