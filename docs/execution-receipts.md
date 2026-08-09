@@ -36,6 +36,15 @@ remaining separate from execution assurance. A receipt validator can resolve and
 check the reference when the placement record is supplied; an unresolved
 reference remains `UNKNOWN`.
 
+## Immutable bundle relationship
+
+EA-NEXT-002 provides the [experimental immutable execution bundle](execution-bundles.md)
+that the receipt's `bundle.test_bundle_identity` can bind to. Supplying `--bundle`
+to receipt validation verifies the archive first, then compares its logical bundle,
+harness, input, and policy identities with the receipt. The receipt does not need
+to embed raw test material, and bundle verification does not prove that a runner
+actually used the bundle; those are separate observation and assurance questions.
+
 ## Assurance relationship
 
 An existing execution-assurance record may add an `execution_receipt` reference.
@@ -78,6 +87,7 @@ mncs-test-evidence validate-assurance execution-assurance.json \
 - MNCS Commons and MNCS Language may supply compatible identities in future; this
   profile does not depend on either implementation.
 
-This iteration implements EA-NEXT-001 only. Immutable test bundles, Linux
-isolation, replay stores, signed attestations, measured platforms, and external
-custody remain later work and remain `UNKNOWN` when not supplied.
+EA-NEXT-001 remains the typed receipt layer. EA-NEXT-002 is now implemented as the
+immutable bundle layer. Linux isolation, replay stores, signed attestations,
+measured platforms, and external custody remain later work and remain `UNKNOWN`
+when not supplied.

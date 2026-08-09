@@ -34,6 +34,16 @@ custody, independent operation, MNCS/MNCDS conformance, or promotion. Placement
 remains a separate optional evidence reference. See
 [experimental typed execution receipts](execution-receipts.md).
 
+## Immutable bundle relationship
+
+EA-NEXT-002 adds the experimental [immutable execution bundle](execution-bundles.md)
+beneath the receipt. Bundle verification establishes only that a bounded manifest,
+content hashes, and deterministic transport agree. It does not establish that the
+runner used the bundle. A receipt supplied with `--bundle` binds the observed run to
+the verified logical bundle identity, harness/input identities, and policy identity;
+mismatches fail closed. Bundle integrity, execution integrity, execution assurance,
+and MNCS/MNCDS conformance remain separate layers.
+
 ## Companion record
 
 The experimental `mncs-execution-assurance` record binds:

@@ -24,6 +24,7 @@ from .attestation import (
 )
 from .canonical import canonical_sha256_file, canonicalize_file
 from .errors import MncsError
+from .execution_bundle import build_execution_bundle, verify_execution_bundle_archive
 from .execution_receipt import validate_execution_receipt_file
 from .hashing import hash_path, sha256_bytes
 from .package import inspect_package, pack, unpack, verify_package
@@ -257,8 +258,30 @@ def build_parser() -> argparse.ArgumentParser:
     )
     validate_receipt.add_argument("record", type=Path)
     validate_receipt.add_argument("--placement", type=Path)
+    validate_receipt.add_argument("--bundle", type=Path)
     validate_receipt.add_argument("--require-pass", action="store_true")
     _json_option(validate_receipt)
+
+    execution_bundle = subparsers.add_parser(
+        "bundle", help="create or verify an experimental immutable execution bundle"
+    )
+    execution_bundle_commands = execution_bundle.add_subparsers(
+        dest="execution_bundle_command", required=True
+    )
+    bundle_create = execution_bundle_commands.add_parser(
+        "create", help="create a deterministic execution-bundle ZIP"
+    )
+    bundle_create.add_argument("--manifest", required=True, type=Path)
+    bundle_create.add_argument("--source", required=True, type=Path)
+    bundle_create.add_argument("--output", required=True, type=Path)
+    _json_option(bundle_create)
+    bundle_verify = execution_bundle_commands.add_parser(
+        "verify", help="verify an execution-bundle ZIP without extracting it"
+    )
+    bundle_verify.add_argument("archive", type=Path)
+    bundle_verify.add_argument("--expected-bundle-identity")
+    bundle_verify.add_argument("--expected-archive-identity")
+    _json_option(bundle_verify)
 
     migration = subparsers.add_parser(
         "migration-inspect",
@@ -587,13 +610,31 @@ def run(args: argparse.Namespace) -> int:
         _require_file(args.record)
         if args.placement is not None:
             _require_file(args.placement)
-        report = validate_execution_receipt_file(args.record, placement_path=args.placement)
+        if args.bundle is not None:
+            _require_file(args.bundle)
+        report = validate_execution_receipt_file(
+            args.record, placement_path=args.placement, bundle_path=args.bundle
+        )
         _write_json(report.as_dict()) if args.json else print(report.category)
         if not report.supported:
             return 4
         if not report.valid:
             return 1
         return 3 if args.require_pass and report.validation_status != "PASS" else 0
+    if command == "bundle":
+        if args.execution_bundle_command == "create":
+            _require_file(args.manifest)
+            _require_directory(args.source)
+            report = build_execution_bundle(args.manifest, args.source, args.output)
+        else:
+            _require_file(args.archive)
+            report = verify_execution_bundle_archive(
+                args.archive,
+                expected_bundle_identity=args.expected_bundle_identity,
+                expected_archive_identity=args.expected_archive_identity,
+            )
+        _write_json(report.as_dict()) if args.json else print(report.category)
+        return 0 if report.valid else (4 if not report.supported else 1)
     if command == "migration-inspect":
         _require_file(args.record)
         value = load_json_object(args.record)

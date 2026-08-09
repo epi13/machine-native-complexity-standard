@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schema/experimental/0.1/mncs-execution-bundle.schema.json",
+  "title": "MNCS experimental immutable execution bundle 0.1",
+  "description": "A canonical manifest for bounded immutable test material. It establishes content and package integrity, not execution assurance or conformance.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "record_type", "bundle_id", "bundle_identity", "bundle_format", "entries", "entrypoints", "runtime_requirements", "policy_references", "harness_identity", "input_snapshot_identity", "policy_identity", "limits", "extensions"],
+  "properties": {
+    "schema_version": {"const": "0.1-experimental"},
+    "record_type": {"const": "mncs-execution-bundle"},
+    "bundle_id": {"$ref": "#/$defs/id"},
+    "bundle_identity": {"$ref": "#/$defs/sha256"},
+    "bundle_format": {"const": "mncs-execution-bundle-zip-0.1"},
+    "entries": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"$ref": "#/$defs/entry"}
+    },
+    "entrypoints": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "object", "additionalProperties": false, "required": ["name", "path"], "properties": {"name": {"$ref": "#/$defs/id"}, "path": {"$ref": "#/$defs/path"}}}
+    },
+    "runtime_requirements": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/reference"}},
+    "policy_references": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/reference"}},
+    "harness_identity": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]},
+    "input_snapshot_identity": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]},
+    "policy_identity": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]},
+    "limits": {"$ref": "#/$defs/limits"},
+    "extensions": {"$ref": "#/$defs/extensions"}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "path": {"type": "string", "minLength": 1, "maxLength": 512, "pattern": "^[^\\\\\\u0000]+$"},
+    "role": {"enum": ["test", "harness", "expected", "manifest", "fixture", "input", "runtime-requirement", "policy-reference", "support"]},
+    "entry": {"type": "object", "additionalProperties": false, "required": ["path", "identity", "size_bytes", "role", "mode"], "properties": {"path": {"$ref": "#/$defs/path"}, "identity": {"$ref": "#/$defs/sha256"}, "size_bytes": {"type": "integer", "minimum": 0}, "role": {"$ref": "#/$defs/role"}, "mode": {"enum": ["0644", "0755"]}}},
+    "reference": {"type": "object", "additionalProperties": false, "required": ["path", "identity"], "properties": {"path": {"$ref": "#/$defs/path"}, "identity": {"$ref": "#/$defs/sha256"}}},
+    "limits": {"type": "object", "additionalProperties": false, "required": ["max_file_count", "max_file_bytes", "max_total_bytes", "max_path_bytes", "max_expansion_ratio"], "properties": {"max_file_count": {"type": "integer", "minimum": 1}, "max_file_bytes": {"type": "integer", "minimum": 1}, "max_total_bytes": {"type": "integer", "minimum": 1}, "max_path_bytes": {"type": "integer", "minimum": 1}, "max_expansion_ratio": {"type": "integer", "minimum": 1}}},
+    "extensions": {"type": "object", "propertyNames": {"pattern": "^[a-z][a-z0-9.-]*:[A-Za-z0-9][A-Za-z0-9._-]*$"}, "additionalProperties": true}
+  }
+}

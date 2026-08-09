@@ -42,6 +42,15 @@ envelope, while execution assurance and placement validators remain separate
 interpreters. RAVEL may learn from receipt references as scoped experience, but
 cannot rewrite raw receipts or turn repetition into MNCS authority.
 
+EA-NEXT-002 supplies the immutable material below that envelope. An execution bundle
+has a canonical manifest/content identity and a separate deterministic archive
+identity. Forge, MNEL, GIMP Local MCP, and future Fabric executors may consume the
+verified material; the emitted receipt records whether the actual run binds to it.
+Commons Bundles use compatible bounded identity principles for a different
+record/knowledge interchange purpose and are not execution bundles. Neither bundle
+integrity nor a receipt creates sandboxing, custody, independence, conformance, or
+promotion authority.
+
 ## Network model
 
 The project family can be understood as an evidence and proposal network:

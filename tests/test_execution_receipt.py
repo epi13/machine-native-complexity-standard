@@ -9,8 +9,10 @@ from typing import Any
 from mncs_validator.canonical import canonical_sha256
 from mncs_validator.cli import main
 from mncs_validator.execution_assurance import validate_execution_assurance_value
+from mncs_validator.execution_bundle import build_execution_bundle
 from mncs_validator.execution_receipt import (
     validate_execution_receipt_binding,
+    validate_execution_receipt_file,
     validate_execution_receipt_value,
 )
 from mncs_validator.schemas import load_schema
@@ -326,3 +328,23 @@ def test_receipt_cli(tmp_path: Path, capsys: object) -> None:
     result = json.loads(capsys.readouterr().out)  # type: ignore[attr-defined]
     assert result["category"] == "PASS"
     assert result["execution_status"] == "PASS"
+
+
+def test_receipt_can_bind_to_a_verified_execution_bundle(tmp_path: Path) -> None:
+    bundle_root = ROOT / "experimental/execution-bundle/fixtures/source"
+    source_manifest = ROOT / "experimental/execution-bundle/fixtures/generic-source.json"
+    archive = tmp_path / "execution-bundle.zip"
+    bundle = build_execution_bundle(source_manifest, bundle_root, archive)
+    assert bundle.valid and bundle.manifest is not None
+    value = _receipt()
+    value["bundle"]["test_bundle_identity"] = bundle.bundle_identity
+    value["bundle"]["harness_identity"] = bundle.manifest["harness_identity"]
+    value["bundle"]["input_snapshot_identity"] = bundle.manifest["input_snapshot_identity"]
+    value["policy"]["execution_policy_identity"] = bundle.manifest["policy_identity"]
+    value["receipt_identity"] = canonical_sha256(
+        {key: child for key, child in value.items() if key != "receipt_identity"}
+    )
+    receipt_path = tmp_path / "receipt.json"
+    receipt_path.write_text(json.dumps(value), encoding="utf-8")
+    report = validate_execution_receipt_file(receipt_path, bundle_path=archive)
+    assert report.valid, report.as_dict()

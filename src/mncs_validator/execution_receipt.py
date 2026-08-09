@@ -398,13 +398,27 @@ def validate_execution_receipt_value(
 
 
 def validate_execution_receipt_file(
-    path: Path, *, placement_path: Path | None = None
+    path: Path, *, placement_path: Path | None = None, bundle_path: Path | None = None
 ) -> ExecutionReceiptReport:
     """Load and validate one bounded receipt JSON file."""
 
     value = load_json_object(path)
     placement = load_json_object(placement_path) if placement_path is not None else None
-    return validate_execution_receipt_value(value, target=str(path), placement_value=placement)
+    report = validate_execution_receipt_value(value, target=str(path), placement_value=placement)
+    if bundle_path is not None:
+        from .execution_bundle import bind_receipt_to_bundle, verify_execution_bundle_archive
+
+        bundle_report = verify_execution_bundle_archive(bundle_path)
+        if not bundle_report.valid:
+            report.invalidate(
+                "bundle-invalid",
+                "supplied execution bundle did not verify",
+                str(bundle_path),
+            )
+        binding = bind_receipt_to_bundle(value, bundle_report, target=f"{path}:bundle")
+        for issue in binding.issues:
+            report.invalidate(issue.code, issue.message, issue.path)
+    return report
 
 
 def validate_execution_receipt_binding(

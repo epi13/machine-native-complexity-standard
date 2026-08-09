@@ -48,6 +48,11 @@ validator and explicit version identifiers for the standard.
   optional placement linkage, assurance binding checks, CLI/API validation, and an
   adversarial corpus. This does not implement a sandbox or resolve external and
   governance blockers.
+- Implement EA-NEXT-002 as an experimental immutable execution-bundle profile with
+  canonical manifest identity, deterministic ZIP transport identity, bounded offline
+  verification, portable path/link/archive protections, deterministic builder,
+  receipt-to-bundle binding, CLI/API coverage, and adversarial fixtures. This does
+  not implement isolation, custody, independence, conformance, or promotion.
 - Define an additive post-RAVEL-0.6 recursive experience and causal-learning substrate
   with episodes, competing hypotheses, interventions, attribution, learned principles,
   strategy reuse, transfer gates, lineage-aware credit, an executable profile, linked

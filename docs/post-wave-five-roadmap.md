@@ -29,6 +29,7 @@ used instead. Historical roadmap text below is retained for provenance.
 | GIMP Local MCP | Local vision runtime demonstrates sequential offload, host-RAM weight storage, transient accelerator execution, reserve/cap planning, real probes, OOM recovery, and allocation/RSS/offload witnesses. | Treat as generic implementation evidence, not a machine-independent requirement or benchmark claim. |
 | Execution placement | New in this iteration as `0.1-experimental`, non-normative `execution-placement-evidence`. | Locally actionable in MNCS: schema, validator, CLI, fixtures, and documentation. |
 | Typed execution receipts | EA-NEXT-001 is implemented as `0.1-experimental`, non-normative `mncs-execution-receipt`; it records immutable runner observations and optionally links placement evidence. | Locally actionable follow-ons are immutable bundles, isolation runners, replay, attestations, and future adapter integration; none are claimed complete here. |
+| Immutable execution bundles | EA-NEXT-002 is implemented as `0.1-experimental`, non-normative `mncs-execution-bundle`; it binds deterministic manifest/content identity to a bounded ZIP transport and can be checked against receipt bundle identities. | Locally actionable follow-ons are the Linux isolation runner, replay, verity, and future Forge/Fabric adapters; bundle integrity is not execution assurance. |
 
 Old Forge tasks are therefore marked `DONE in sibling Forge`, `ACTIVE in sibling Forge`,
 or `NOT AN MNCS TASK` by the table above rather than left as stale local backlog. The
@@ -39,7 +40,8 @@ rewrite.
 
 - **DONE in MNCS:** release-candidate schemas and validator, Forge integration boundary,
   provider-neutral capability policy, RAVEL historical evidence preservation, the
-  experimental execution-placement profile, and EA-NEXT-001 typed execution receipts.
+  experimental execution-placement profile, EA-NEXT-001 typed execution receipts,
+  and EA-NEXT-002 immutable execution bundles.
 - **DONE or active in sibling Forge:** verifier consolidation, versioned records and
   migrations, lifecycle transitions, transactional ledger writes, application services,
   unified dispatch, and compatibility stabilization.
@@ -96,6 +98,9 @@ A PASS in one class does not imply PASS in another. Missing evidence remains
 
 The 42 top-level schemas match the 42 packaged schemas. The audit also exercised the
 MNCS corpus, the 11-case MNCDS corpus, and all current language-provider fixtures.
+That historical count remains unchanged; EA-NEXT-002 adds two later experimental
+execution-bundle schemas to the current registry/package resources without
+relabeling the Wave Five audit.
 
 ## Fedora-A Wave Five record
 
