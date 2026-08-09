@@ -30,6 +30,14 @@ records observations and does not implement a sandbox, signed attestation, immut
 test bundle, custody, independent evaluation, conformance, or promotion. Historical
 acceptance criteria below are retained; remaining EA-NEXT tasks are still open.
 
+EA-NEXT-005 is implemented as the experimental `mncs-execution-challenge` and
+`mncs-replay-receipt` profiles. Issuance uses a cryptographically secure nonce;
+challenge/receipt scope is checked exactly; explicit local consumption is single-use;
+the replay ledger is bounded, crash-safe, concurrency-serialized, and protected by a
+persisted monotonic time watermark; and replay receipts are verifiable offline. This
+remains local freshness evidence only and does not implement a sandbox, signed
+attestation, custody, independence, conformance, or promotion authority.
+
 ## EA-NEXT-001 — Add typed execution receipts
 
 **Depends on:** this companion-record foundation
@@ -127,6 +135,8 @@ Acceptance criteria:
 
 **Depends on:** EA-NEXT-001
 
+**Status: IMPLEMENTED experimentally and non-normatively.**
+
 Introduce a verifier-issued cryptographic nonce with an explicit validity window and a local or
 external replay store. Bind the nonce into every signed or quoted execution result.
 
@@ -137,6 +147,25 @@ Acceptance criteria:
 - restart and interrupted-write behavior are tested;
 - a challenge cannot be reused across subject, bundle, policy, or runner identities; and
 - offline verification can consume a supplied replay receipt without contacting a service.
+
+## Dependency chain after EA-NEXT-005
+
+```text
+EA-NEXT-001 typed receipt        DONE
+          |
+EA-NEXT-002 immutable bundle     DONE
+          |
+          +----------------------+
+          |                      |
+          v                      v
+EA-NEXT-003 Linux runner     EA-NEXT-005 replay DONE
+          |                      |
+          v                      v
+EA-NEXT-004 verity          EA-NEXT-006 signing
+```
+
+EA-NEXT-003 and EA-NEXT-004 remain separate security-sensitive work. EA-NEXT-006
+must not be inferred from local replay evidence.
 
 ## EA-NEXT-006 — Sign and verify execution attestations
 

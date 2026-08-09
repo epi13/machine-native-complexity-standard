@@ -61,6 +61,14 @@ SCHEMA_NAMES = {
     "execution-bundle": "mncs-execution-bundle-0.1.schema.json",
     "execution-bundle-source-0.1-experimental": "mncs-execution-bundle-source-0.1.schema.json",
     "execution-bundle-source": "mncs-execution-bundle-source-0.1.schema.json",
+    "execution-challenge-0.1-experimental": "mncs-execution-challenge-0.1.schema.json",
+    "execution-challenge": "mncs-execution-challenge-0.1.schema.json",
+    "execution-challenge-request-0.1-experimental": (
+        "mncs-execution-challenge-request-0.1.schema.json"
+    ),
+    "execution-challenge-request": "mncs-execution-challenge-request-0.1.schema.json",
+    "replay-receipt-0.1-experimental": "mncs-replay-receipt-0.1.schema.json",
+    "replay-receipt": "mncs-replay-receipt-0.1.schema.json",
     "contract-profile-0.3": "mncs-contract-profile-0.3.schema.json",
     "assurance-case-0.3": "mncs-assurance-case-0.3.schema.json",
     "threat-record-0.3": "mncs-threat-record-0.3.schema.json",

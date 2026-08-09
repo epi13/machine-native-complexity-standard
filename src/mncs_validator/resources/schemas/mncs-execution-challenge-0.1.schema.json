@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schema/experimental/0.1/mncs-execution-challenge.schema.json",
+  "title": "MNCS experimental verifier-issued execution challenge 0.1",
+  "description": "A scoped, single-use freshness challenge. It identifies an issuer but does not establish issuer authority, execution correctness, isolation, custody, independence, conformance, or promotion.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "record_type", "challenge_id", "challenge_identity", "issuer_identity", "issued_at", "expires_at", "nonce", "scope", "replay_policy", "claim_boundary", "extensions"],
+  "properties": {
+    "schema_version": {"const": "0.1-experimental"},
+    "record_type": {"const": "mncs-execution-challenge"},
+    "challenge_id": {"$ref": "#/$defs/id"},
+    "challenge_identity": {"$ref": "#/$defs/sha256"},
+    "issuer_identity": {"$ref": "#/$defs/id"},
+    "issued_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "nonce": {"type": "string", "pattern": "^[A-Za-z0-9_-]{43,128}$"},
+    "scope": {"$ref": "#/$defs/scope"},
+    "replay_policy": {"const": "single-use"},
+    "claim_boundary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["freshness", "authority", "isolation", "custody", "independence", "conformance", "promotion"],
+      "properties": {
+        "freshness": {"const": "local-replay-scope-only"},
+        "authority": {"const": "not-asserted"},
+        "isolation": {"const": "not-asserted"},
+        "custody": {"const": "not-asserted"},
+        "independence": {"const": "not-asserted"},
+        "conformance": {"const": "not-asserted"},
+        "promotion": {"const": "not-asserted"}
+      }
+    },
+    "extensions": {"$ref": "#/$defs/extensions"}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "scope": {
+      "type": "object", "additionalProperties": false,
+      "required": ["subject_identity", "candidate_id", "bundle_identity", "execution_policy_identity", "runner_identity"],
+      "properties": {
+        "subject_identity": {"$ref": "#/$defs/sha256"},
+        "candidate_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/id"}]},
+        "bundle_identity": {"$ref": "#/$defs/sha256"},
+        "execution_policy_identity": {"$ref": "#/$defs/sha256"},
+        "runner_identity": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/id"}]}
+      }
+    },
+    "extensions": {"type": "object", "propertyNames": {"pattern": "^[a-z][a-z0-9.-]*:[A-Za-z0-9][A-Za-z0-9._-]*$"}, "additionalProperties": true}
+  }
+}

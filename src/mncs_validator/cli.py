@@ -25,6 +25,12 @@ from .attestation import (
 from .canonical import canonical_sha256_file, canonicalize_file
 from .errors import MncsError
 from .execution_bundle import build_execution_bundle, verify_execution_bundle_archive
+from .execution_challenge import (
+    ReplayStore,
+    issue_execution_challenge,
+    validate_execution_challenge_file,
+    verify_replay_receipt,
+)
 from .execution_receipt import validate_execution_receipt_file
 from .hashing import hash_path, sha256_bytes
 from .package import inspect_package, pack, unpack, verify_package
@@ -259,6 +265,8 @@ def build_parser() -> argparse.ArgumentParser:
     validate_receipt.add_argument("record", type=Path)
     validate_receipt.add_argument("--placement", type=Path)
     validate_receipt.add_argument("--bundle", type=Path)
+    validate_receipt.add_argument("--challenge", type=Path)
+    validate_receipt.add_argument("--replay-receipt", type=Path)
     validate_receipt.add_argument("--require-pass", action="store_true")
     _json_option(validate_receipt)
 
@@ -282,6 +290,40 @@ def build_parser() -> argparse.ArgumentParser:
     bundle_verify.add_argument("--expected-bundle-identity")
     bundle_verify.add_argument("--expected-archive-identity")
     _json_option(bundle_verify)
+
+    challenge = subparsers.add_parser(
+        "challenge", help="issue or validate an experimental execution challenge"
+    )
+    challenge_commands = challenge.add_subparsers(dest="challenge_command", required=True)
+    challenge_issue = challenge_commands.add_parser("issue", help="issue a fresh scoped challenge")
+    challenge_issue.add_argument("request", type=Path)
+    challenge_issue.add_argument("--output", required=True, type=Path)
+    _json_option(challenge_issue)
+    challenge_validate = challenge_commands.add_parser(
+        "validate", help="validate a challenge without consuming it"
+    )
+    challenge_validate.add_argument("challenge", type=Path)
+    challenge_validate.add_argument("--at")
+    _json_option(challenge_validate)
+
+    replay = subparsers.add_parser(
+        "replay", help="consume or verify experimental execution replay evidence"
+    )
+    replay_commands = replay.add_subparsers(dest="replay_command", required=True)
+    replay_consume = replay_commands.add_parser(
+        "consume", help="consume a challenge once in a local store"
+    )
+    replay_consume.add_argument("challenge", type=Path)
+    replay_consume.add_argument("receipt", type=Path)
+    replay_consume.add_argument("--store", required=True, type=Path)
+    replay_consume.add_argument("--output", required=True, type=Path)
+    _json_option(replay_consume)
+    replay_verify = replay_commands.add_parser("verify", help="verify a replay receipt offline")
+    replay_verify.add_argument("replay_receipt", type=Path)
+    replay_verify.add_argument("--challenge", required=True, type=Path)
+    replay_verify.add_argument("--receipt", required=True, type=Path)
+    replay_verify.add_argument("--store", type=Path)
+    _json_option(replay_verify)
 
     migration = subparsers.add_parser(
         "migration-inspect",
@@ -612,8 +654,16 @@ def run(args: argparse.Namespace) -> int:
             _require_file(args.placement)
         if args.bundle is not None:
             _require_file(args.bundle)
+        if args.challenge is not None:
+            _require_file(args.challenge)
+        if args.replay_receipt is not None:
+            _require_file(args.replay_receipt)
         report = validate_execution_receipt_file(
-            args.record, placement_path=args.placement, bundle_path=args.bundle
+            args.record,
+            placement_path=args.placement,
+            bundle_path=args.bundle,
+            challenge_path=args.challenge,
+            replay_receipt_path=args.replay_receipt,
         )
         _write_json(report.as_dict()) if args.json else print(report.category)
         if not report.supported:
@@ -633,6 +683,60 @@ def run(args: argparse.Namespace) -> int:
                 expected_bundle_identity=args.expected_bundle_identity,
                 expected_archive_identity=args.expected_archive_identity,
             )
+        _write_json(report.as_dict()) if args.json else print(report.category)
+        return 0 if report.valid else (4 if not report.supported else 1)
+    if command == "challenge":
+        if args.challenge_command == "issue":
+            _require_file(args.request)
+            request = load_json_object(args.request)
+            report = issue_execution_challenge(request)
+            if report.valid and report.challenge is not None:
+                if args.output.exists():
+                    raise MncsError(f"refusing to overwrite challenge: {args.output}")
+                args.output.parent.mkdir(parents=True, exist_ok=True)
+                args.output.write_text(
+                    json.dumps(report.challenge, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+                )
+            _write_json(report.as_dict()) if args.json else print(report.category)
+            return 0 if report.valid else (4 if not report.supported else 1)
+        _require_file(args.challenge)
+        at = _parse_evaluation_time(args.at)
+        report = validate_execution_challenge_file(args.challenge, at=at)
+        _write_json(report.as_dict()) if args.json else print(report.category)
+        return 0 if report.valid else (4 if not report.supported else 1)
+    if command == "replay":
+        if args.replay_command == "consume":
+            _require_file(args.challenge)
+            _require_file(args.receipt)
+            challenge_value = load_json_object(args.challenge)
+            receipt_value = load_json_object(args.receipt)
+            report = ReplayStore(args.store).consume(
+                challenge_value, receipt_value, target=f"{args.challenge}:{args.receipt}"
+            )
+            if report.valid and report.replay_receipt is not None:
+                if args.output.exists():
+                    raise MncsError(f"refusing to overwrite replay receipt: {args.output}")
+                args.output.parent.mkdir(parents=True, exist_ok=True)
+                args.output.write_text(
+                    json.dumps(report.replay_receipt, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+            _write_json(report.as_dict()) if args.json else print(report.category)
+            return 0 if report.valid else (4 if not report.supported else 1)
+        _require_file(args.replay_receipt)
+        _require_file(args.challenge)
+        _require_file(args.receipt)
+        replay_value = load_json_object(args.replay_receipt)
+        challenge_value = load_json_object(args.challenge)
+        receipt_value = load_json_object(args.receipt)
+        store = ReplayStore(args.store) if args.store is not None else None
+        report = verify_replay_receipt(
+            replay_value,
+            challenge_value,
+            receipt_value,
+            store=store,
+            target=str(args.replay_receipt),
+        )
         _write_json(report.as_dict()) if args.json else print(report.category)
         return 0 if report.valid else (4 if not report.supported else 1)
     if command == "migration-inspect":

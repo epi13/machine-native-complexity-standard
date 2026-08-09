@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schema/experimental/0.1/mncs-execution-challenge-request.schema.json",
+  "title": "MNCS experimental execution challenge request 0.1",
+  "description": "Input to a verifier-controlled challenge issuer; it is not itself a challenge or an authority record.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "record_type", "request_id", "issuer_identity", "ttl_seconds", "scope", "replay_policy", "claim_boundary", "extensions"],
+  "properties": {
+    "schema_version": {"const": "0.1-experimental"},
+    "record_type": {"const": "mncs-execution-challenge-request"},
+    "request_id": {"$ref": "#/$defs/id"},
+    "issuer_identity": {"$ref": "#/$defs/id"},
+    "ttl_seconds": {"type": "number", "exclusiveMinimum": 0, "maximum": 604800},
+    "scope": {"$ref": "#/$defs/scope"},
+    "replay_policy": {"const": "single-use"},
+    "claim_boundary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["freshness", "authority", "isolation", "custody", "independence", "conformance", "promotion"],
+      "properties": {
+        "freshness": {"const": "local-replay-scope-only"},
+        "authority": {"const": "not-asserted"},
+        "isolation": {"const": "not-asserted"},
+        "custody": {"const": "not-asserted"},
+        "independence": {"const": "not-asserted"},
+        "conformance": {"const": "not-asserted"},
+        "promotion": {"const": "not-asserted"}
+      }
+    },
+    "extensions": {"$ref": "#/$defs/extensions"}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "scope": {
+      "type": "object", "additionalProperties": false,
+      "required": ["subject_identity", "candidate_id", "bundle_identity", "execution_policy_identity", "runner_identity"],
+      "properties": {
+        "subject_identity": {"$ref": "#/$defs/sha256"},
+        "candidate_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/id"}]},
+        "bundle_identity": {"$ref": "#/$defs/sha256"},
+        "execution_policy_identity": {"$ref": "#/$defs/sha256"},
+        "runner_identity": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/id"}]}
+      }
+    },
+    "extensions": {"type": "object", "propertyNames": {"pattern": "^[a-z][a-z0-9.-]*:[A-Za-z0-9][A-Za-z0-9._-]*$"}, "additionalProperties": true}
+  }
+}

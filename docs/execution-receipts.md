@@ -85,9 +85,25 @@ mncs-test-evidence validate-assurance execution-assurance.json \
 - RAVEL may retain receipt identities in episodes and causal attribution as
   immutable observations, but cannot edit or promote them.
 - MNCS Commons and MNCS Language may supply compatible identities in future; this
-  profile does not depend on either implementation.
+ profile does not depend on either implementation.
+
+## Challenge and replay relationship
+
+EA-NEXT-005 now supplies the verifier-issued challenge and explicit local replay layer
+around the receipt's existing `challenge.nonce`, `issued_at`, and `expires_at` fields.
+The challenge binds those observations to the subject, candidate, bundle, policy, and
+optional runner constraint before execution. `ReplayStore.consume` is the only mutating
+operation; it emits an offline `mncs-replay-receipt` after one successful consumption.
+Validation and replay verification remain non-mutating.
+
+The replay receipt proves only internally consistent, single-use consumption in the
+declared local store. A persisted watermark prevents a wall-clock rollback from making
+an observed expired result current, but a host administrator can still replace the
+store. Freshness does not establish isolation, correctness, custody, independence,
+conformance, or promotion. See [execution challenges and replay](execution-challenges.md).
 
 EA-NEXT-001 remains the typed receipt layer. EA-NEXT-002 is now implemented as the
-immutable bundle layer. Linux isolation, replay stores, signed attestations,
+immutable bundle layer. EA-NEXT-005 is implemented as the freshness layer. Linux isolation,
+signed attestations,
 measured platforms, and external custody remain later work and remain `UNKNOWN`
 when not supplied.

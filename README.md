@@ -148,9 +148,16 @@ deterministic archive identities. It establishes package integrity only; it is n
 a sandbox, execution-assurance verdict, conformance result, custody record, or
 promotion authority.
 
+The [experimental execution challenge and replay profile](docs/execution-challenges.md)
+adds verifier-issued, scope-bound nonces and explicit single-use consumption. Its local
+replay store detects reuse within its declared boundary and persists a monotonic time
+watermark; it does not establish correctness, isolation, custody, independence,
+conformance, or promotion.
+
 ```bash
 mncs schema execution-receipt-0.1-experimental --json
 mncs validate-execution-receipt receipt.json --json
+mncs challenge validate challenge.json --json
 ```
 
 ## Repository map
@@ -164,6 +171,7 @@ mncs validate-execution-receipt receipt.json --json
 - `experimental/execution-placement/` — experimental resource-placement evidence fixtures.
 - `experimental/execution-receipt/` — experimental immutable runner-receipt fixtures.
 - `experimental/execution-bundle/` — experimental immutable execution-bundle source and fixtures.
+- `experimental/execution-challenge/` — experimental challenge/replay request and adversarial fixtures.
 - `case-studies/` — bounded development studies and evidence epochs.
 - `docs/` — documentation.
 - `rfcs/` — governance proposals, including RFC 0006, RFC 0007, and RFC 0008.

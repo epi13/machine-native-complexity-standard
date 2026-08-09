@@ -53,6 +53,11 @@ validator and explicit version identifiers for the standard.
   verification, portable path/link/archive protections, deterministic builder,
   receipt-to-bundle binding, CLI/API coverage, and adversarial fixtures. This does
   not implement isolation, custody, independence, conformance, or promotion.
+- Implement EA-NEXT-005 as experimental verifier-issued execution challenges and
+  bounded local replay receipts with secure nonces, exact receipt scope binding,
+  single-use crash-safe ledger consumption, persisted wall-clock rollback protection,
+  offline replay verification, CLI/API paths, and adversarial fixtures. This does not
+  implement sandboxing, signing, custody, independence, conformance, or promotion.
 - Define an additive post-RAVEL-0.6 recursive experience and causal-learning substrate
   with episodes, competing hypotheses, interventions, attribution, learned principles,
   strategy reuse, transfer gates, lineage-aware credit, an executable profile, linked

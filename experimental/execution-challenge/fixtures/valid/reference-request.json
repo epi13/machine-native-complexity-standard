@@ -1,0 +1,25 @@
+{
+  "schema_version": "0.1-experimental",
+  "record_type": "mncs-execution-challenge-request",
+  "request_id": "request.generic-local-runner-v1",
+  "issuer_identity": "issuer.generic-verifier-v1",
+  "ttl_seconds": 60,
+  "scope": {
+    "subject_identity": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "candidate_id": "candidate.generic-v1",
+    "bundle_identity": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "execution_policy_identity": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "runner_identity": "runner.generic-local-v1"
+  },
+  "replay_policy": "single-use",
+  "claim_boundary": {
+    "freshness": "local-replay-scope-only",
+    "authority": "not-asserted",
+    "isolation": "not-asserted",
+    "custody": "not-asserted",
+    "independence": "not-asserted",
+    "conformance": "not-asserted",
+    "promotion": "not-asserted"
+  },
+  "extensions": {}
+}

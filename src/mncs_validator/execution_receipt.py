@@ -398,7 +398,12 @@ def validate_execution_receipt_value(
 
 
 def validate_execution_receipt_file(
-    path: Path, *, placement_path: Path | None = None, bundle_path: Path | None = None
+    path: Path,
+    *,
+    placement_path: Path | None = None,
+    bundle_path: Path | None = None,
+    challenge_path: Path | None = None,
+    replay_receipt_path: Path | None = None,
 ) -> ExecutionReceiptReport:
     """Load and validate one bounded receipt JSON file."""
 
@@ -418,6 +423,30 @@ def validate_execution_receipt_file(
         binding = bind_receipt_to_bundle(value, bundle_report, target=f"{path}:bundle")
         for issue in binding.issues:
             report.invalidate(issue.code, issue.message, issue.path)
+    if challenge_path is not None:
+        from .execution_challenge import bind_challenge_to_receipt
+
+        challenge = load_json_object(challenge_path)
+        challenge_binding = bind_challenge_to_receipt(challenge, value, target=f"{path}:challenge")
+        for challenge_issue in challenge_binding.issues:
+            report.invalidate(challenge_issue.code, challenge_issue.message, challenge_issue.path)
+    if replay_receipt_path is not None:
+        from .execution_challenge import verify_replay_receipt
+
+        replay = load_json_object(replay_receipt_path)
+        if challenge_path is None:
+            report.unknown(
+                "replay-challenge-missing",
+                "replay receipt cannot be checked without its challenge record",
+                str(replay_receipt_path),
+            )
+        else:
+            challenge = load_json_object(challenge_path)
+            replay_binding = verify_replay_receipt(
+                replay, challenge, value, target=f"{path}:replay"
+            )
+            for replay_issue in replay_binding.issues:
+                report.invalidate(replay_issue.code, replay_issue.message, replay_issue.path)
     return report
 
 
