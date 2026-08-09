@@ -149,6 +149,15 @@
       }
     },
     "declared_assurance_status": {"$ref": "#/$defs/status"},
+    "execution_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_id", "identity"],
+      "properties": {
+        "record_id": {"$ref": "#/$defs/id"},
+        "identity": {"$ref": "#/$defs/sha256"}
+      }
+    },
     "limitations": {"type": "array", "items": {"$ref": "#/$defs/text"}},
     "extensions": {"$ref": "#/$defs/extensions"}
   },

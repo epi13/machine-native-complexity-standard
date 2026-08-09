@@ -43,6 +43,11 @@ validator and explicit version identifiers for the standard.
   MNCS/MNCDS combined test-evidence commands, adversarial regression coverage, draft RFC,
   and Codex implementation queue. A functional test PASS no longer implies execution
   assurance PASS; missing isolation or attestation remains UNKNOWN.
+- Implement EA-NEXT-001 as an experimental typed runner execution receipt with
+  canonical identity, lifecycle/output/resource observations, enforcement facts,
+  optional placement linkage, assurance binding checks, CLI/API validation, and an
+  adversarial corpus. This does not implement a sandbox or resolve external and
+  governance blockers.
 - Define an additive post-RAVEL-0.6 recursive experience and causal-learning substrate
   with episodes, competing hypotheses, interventions, attribution, learned principles,
   strategy reuse, transfer gates, lineage-aware credit, an executable profile, linked

@@ -28,6 +28,7 @@ used instead. Historical roadmap text below is retained for provenance.
 | MNEL | Standalone sibling project has an executable learned-provider runtime with persistent admission, Rust-first hosting, identity-bound snapshots, resource ceilings, backend-neutral CPU/full-accelerator/sequential-offload placement, probes, precision checks, and bounded AUTO recovery. | Use its observations to shape a provider-neutral evidence vocabulary; MNEL cannot issue MNCS conformance. |
 | GIMP Local MCP | Local vision runtime demonstrates sequential offload, host-RAM weight storage, transient accelerator execution, reserve/cap planning, real probes, OOM recovery, and allocation/RSS/offload witnesses. | Treat as generic implementation evidence, not a machine-independent requirement or benchmark claim. |
 | Execution placement | New in this iteration as `0.1-experimental`, non-normative `execution-placement-evidence`. | Locally actionable in MNCS: schema, validator, CLI, fixtures, and documentation. |
+| Typed execution receipts | EA-NEXT-001 is implemented as `0.1-experimental`, non-normative `mncs-execution-receipt`; it records immutable runner observations and optionally links placement evidence. | Locally actionable follow-ons are immutable bundles, isolation runners, replay, attestations, and future adapter integration; none are claimed complete here. |
 
 Old Forge tasks are therefore marked `DONE in sibling Forge`, `ACTIVE in sibling Forge`,
 or `NOT AN MNCS TASK` by the table above rather than left as stale local backlog. The
@@ -37,8 +38,8 @@ rewrite.
 ### Current MNCS backlog disposition
 
 - **DONE in MNCS:** release-candidate schemas and validator, Forge integration boundary,
-  provider-neutral capability policy, RAVEL historical evidence preservation, and the
-  experimental execution-placement profile in this iteration.
+  provider-neutral capability policy, RAVEL historical evidence preservation, the
+  experimental execution-placement profile, and EA-NEXT-001 typed execution receipts.
 - **DONE or active in sibling Forge:** verifier consolidation, versioned records and
   migrations, lifecycle transitions, transactional ledger writes, application services,
   unified dispatch, and compatibility stabilization.

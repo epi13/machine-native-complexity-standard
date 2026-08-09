@@ -36,6 +36,12 @@ not automatically authorize a change to the standard.
 The boundaries are intentional. Components may exchange machine-readable artifacts, but
 an artifact does not inherit the authority of the component that consumes it.
 
+An experimental runner receipt is one such bounded artifact: Forge, MNEL, GIMP
+Local MCP, and future Fabric-style executors may emit the same immutable observation
+envelope, while execution assurance and placement validators remain separate
+interpreters. RAVEL may learn from receipt references as scoped experience, but
+cannot rewrite raw receipts or turn repetition into MNCS authority.
+
 ## Network model
 
 The project family can be understood as an evidence and proposal network:

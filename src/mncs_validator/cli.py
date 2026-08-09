@@ -24,6 +24,7 @@ from .attestation import (
 )
 from .canonical import canonical_sha256_file, canonicalize_file
 from .errors import MncsError
+from .execution_receipt import validate_execution_receipt_file
 from .hashing import hash_path, sha256_bytes
 from .package import inspect_package, pack, unpack, verify_package
 from .placement import validate_placement_file
@@ -249,6 +250,15 @@ def build_parser() -> argparse.ArgumentParser:
     validate_placement.add_argument("record", type=Path)
     validate_placement.add_argument("--require-pass", action="store_true")
     _json_option(validate_placement)
+
+    validate_receipt = subparsers.add_parser(
+        "validate-execution-receipt",
+        help="validate an experimental runner-produced execution receipt",
+    )
+    validate_receipt.add_argument("record", type=Path)
+    validate_receipt.add_argument("--placement", type=Path)
+    validate_receipt.add_argument("--require-pass", action="store_true")
+    _json_option(validate_receipt)
 
     migration = subparsers.add_parser(
         "migration-inspect",
@@ -573,6 +583,17 @@ def run(args: argparse.Namespace) -> int:
         if not report.valid:
             return 1
         return 3 if args.require_pass and report.computed_status != "PASS" else 0
+    if command == "validate-execution-receipt":
+        _require_file(args.record)
+        if args.placement is not None:
+            _require_file(args.placement)
+        report = validate_execution_receipt_file(args.record, placement_path=args.placement)
+        _write_json(report.as_dict()) if args.json else print(report.category)
+        if not report.supported:
+            return 4
+        if not report.valid:
+            return 1
+        return 3 if args.require_pass and report.validation_status != "PASS" else 0
     if command == "migration-inspect":
         _require_file(args.record)
         value = load_json_object(args.record)

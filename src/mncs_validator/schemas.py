@@ -55,6 +55,8 @@ SCHEMA_NAMES = {
     "execution-placement": "mncs-execution-placement-evidence.schema.json",
     "reproduction-cohort": "mncs-reproduction-cohort.schema.json",
     "execution-assurance-0.1": "mncs-execution-assurance-0.1.schema.json",
+    "execution-receipt-0.1-experimental": "mncs-execution-receipt-0.1.schema.json",
+    "execution-receipt": "mncs-execution-receipt-0.1.schema.json",
     "contract-profile-0.3": "mncs-contract-profile-0.3.schema.json",
     "assurance-case-0.3": "mncs-assurance-case-0.3.schema.json",
     "threat-record-0.3": "mncs-threat-record-0.3.schema.json",

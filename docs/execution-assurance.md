@@ -18,6 +18,22 @@ any required FAIL                                 = combined FAIL
 
 The normal `FAIL > UNKNOWN > PASS` lattice is retained. MNCS and MNCDS results remain separate.
 
+## Runner receipt linkage
+
+The experimental `mncs-execution-receipt` profile is the observation layer beneath
+this assurance record. A runner emits the immutable receipt with the effective
+subject, bundle, policy, runner, environment, challenge, lifecycle, result, output,
+resource, and raw enforcement facts. An assurance record may reference that receipt
+through `execution_receipt`; the binding checker then compares those facts and fails
+closed on substitution or an assurance property that the receipt reports as
+`not-enforced` or `unknown`.
+
+Receipt validation does not create assurance. A completed process or harness `PASS`
+does not establish filesystem isolation, sandboxing, host-root resistance, protected
+custody, independent operation, MNCS/MNCDS conformance, or promotion. Placement
+remains a separate optional evidence reference. See
+[experimental typed execution receipts](execution-receipts.md).
+
 ## Companion record
 
 The experimental `mncs-execution-assurance` record binds:

@@ -20,9 +20,22 @@ candidate semantics unless an approved RFC explicitly changes them.
   independence without the corresponding authority and custody facts.
 - Ordinary offline validation must never launch a provider or candidate.
 
+## Current implementation state — 2026-08-08
+
+EA-NEXT-001 is implemented in this repository as the non-normative
+`mncs-execution-receipt` `0.1-experimental` profile. The schema, canonical identity,
+offline validator, CLI/API path, optional execution-placement linkage, assurance
+binding checks, reference receipt, and adversarial corpus are present. The receipt
+records observations and does not implement a sandbox, signed attestation, immutable
+test bundle, custody, independent evaluation, conformance, or promotion. Historical
+acceptance criteria below are retained; remaining EA-NEXT tasks are still open.
+
 ## EA-NEXT-001 — Add typed execution receipts
 
 **Depends on:** this companion-record foundation
+
+**Status: IMPLEMENTED in MNCS as `0.1-experimental`; this status does not imply
+RFC approval or completion of any later assurance task.**
 
 Define a typed runner receipt used by local workflows, Provider Protocol integrations, portable
 host execution, and Forge adapters. The receipt must contain every identity represented by the

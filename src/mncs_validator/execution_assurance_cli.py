@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any, Literal, cast
 
 from .assurance import validate_rc_file
-from .assurance.status import Status
+from .assurance.status import Status, aggregate_status
 from .errors import MncsError
 from .execution_assurance import (
     ExecutionAssuranceReport,
@@ -19,7 +19,13 @@ from .execution_assurance import (
     parse_evaluation_time,
     validate_execution_assurance_file,
 )
+from .execution_receipt import (
+    ExecutionReceiptReport,
+    validate_execution_receipt_binding,
+    validate_execution_receipt_file,
+)
 from .mncds import MncdsValidationReport, validate_development_record
+from .validation import load_json_object
 
 Family = Literal["MNCS", "MNCDS"]
 MNCS_KINDS = ("contract", "assurance", "threat", "measurement")
@@ -32,6 +38,7 @@ def _json_option(parser: argparse.ArgumentParser) -> None:
 def _common_assurance_arguments(parser: argparse.ArgumentParser, *, mncs: bool) -> None:
     parser.add_argument("assurance", type=Path)
     parser.add_argument("--subject", type=Path)
+    parser.add_argument("--receipt", type=Path)
     if mncs:
         parser.add_argument("--kind", choices=MNCS_KINDS)
     parser.add_argument(
@@ -72,6 +79,7 @@ def build_parser(family: Family) -> argparse.ArgumentParser:
         validate.add_argument("kind", choices=MNCS_KINDS)
     validate.add_argument("subject", type=Path)
     validate.add_argument("assurance", type=Path)
+    validate.add_argument("--receipt", type=Path)
     validate.add_argument(
         "--at",
         help="evaluate record freshness at an RFC 3339 timestamp; defaults to current time",
@@ -131,9 +139,29 @@ def _validate_assurance_only(args: argparse.Namespace, family: Family) -> int:
         expected_kind=expected_kind,
         at=parse_evaluation_time(args.at),
     )
+    receipt: ExecutionReceiptReport | None = None
+    binding: ExecutionReceiptReport | None = None
+    category = report.category
+    if args.receipt is not None:
+        if not args.receipt.is_file():
+            raise FileNotFoundError(args.receipt)
+        receipt = validate_execution_receipt_file(args.receipt)
+        binding = validate_execution_receipt_binding(
+            load_json_object(args.assurance), load_json_object(args.receipt)
+        )
+        if not receipt.valid or not binding.valid:
+            category = "INVALID"
+        else:
+            category = aggregate_status(
+                [category, receipt.validation_status, binding.validation_status]
+            )
     value = report.as_dict()
+    if receipt is not None:
+        value["execution_receipt"] = receipt.as_dict()
+        value["execution_receipt_binding"] = binding.as_dict() if binding is not None else None
+        value["category"] = category
     _emit(value, as_json=args.json)
-    return _exit_code(report.category, require_pass=args.require_pass)
+    return _exit_code(category, require_pass=args.require_pass)
 
 
 def _mncs_subject(args: argparse.Namespace) -> tuple[dict[str, Any], Status]:
@@ -176,13 +204,31 @@ def _validate_combined(args: argparse.Namespace, family: Family) -> int:
         at=parse_evaluation_time(args.at),
     )
     category = _category(subject, assurance)
-    value = {
+    receipt: ExecutionReceiptReport | None = None
+    binding: ExecutionReceiptReport | None = None
+    if args.receipt is not None:
+        if not args.receipt.is_file():
+            raise FileNotFoundError(args.receipt)
+        receipt = validate_execution_receipt_file(args.receipt)
+        binding = validate_execution_receipt_binding(
+            load_json_object(args.assurance), load_json_object(args.receipt)
+        )
+        if not receipt.valid or not binding.valid:
+            category = "INVALID"
+        else:
+            category = aggregate_status(
+                [category, receipt.validation_status, binding.validation_status]
+            )
+    value: dict[str, Any] = {
         "family": family,
         "subject": subject,
         "execution_assurance": assurance.as_dict(),
         "combined_status": assurance.combined_status,
         "category": category,
     }
+    if receipt is not None:
+        value["execution_receipt"] = receipt.as_dict()
+        value["execution_receipt_binding"] = binding.as_dict() if binding is not None else None
     _emit(value, as_json=args.json)
     return _exit_code(category, require_pass=args.require_pass)
 
