@@ -13,6 +13,47 @@ MNCS 0.2 remains the current specification. MNCDS 0.1-draft and RFCs 0004 throug
 remain Draft. Nothing in this roadmap promotes a case study, RFC, MNCS, or MNCDS
 claim.
 
+## Current project-family reconciliation — 2026-08-08
+
+This section is the current successor to older informal Codex next-step notes. The
+named `docs/codex-next-steps.md`, `docs/networked-standard-evolution.md`, and
+execution-assurance note paths are not present in this checkout; the existing roadmap,
+release-candidate documents, Forge integration guide, and sibling repositories were
+used instead. Historical roadmap text below is retained for provenance.
+
+| Area | Current disposition | MNCS actionability |
+|---|---|---|
+| MNCS Forge | Consolidated micro-verifiers, versioned records/migrations, lifecycle state machine, transactional storage, application-service decomposition, unified CLI/MCP dispatch, and Python compatibility-boundary work are implemented or actively advanced in the sibling Forge repository. | Do not duplicate Forge here. A future small placement micro-verifier should consume this profile through the public interface. |
+| RAVEL | Standalone sibling project now owns adaptive evidence selection, memory, causal attribution, and learning. Its authority model keeps raw evidence immutable, failures retained, confidence separate from status, and promotion governed outside RAVEL. | Reference RAVEL as an advisory consumer; retain historical in-repository RAVEL evidence and do not migrate or relabel it. |
+| MNEL | Standalone sibling project has an executable learned-provider runtime with persistent admission, Rust-first hosting, identity-bound snapshots, resource ceilings, backend-neutral CPU/full-accelerator/sequential-offload placement, probes, precision checks, and bounded AUTO recovery. | Use its observations to shape a provider-neutral evidence vocabulary; MNEL cannot issue MNCS conformance. |
+| GIMP Local MCP | Local vision runtime demonstrates sequential offload, host-RAM weight storage, transient accelerator execution, reserve/cap planning, real probes, OOM recovery, and allocation/RSS/offload witnesses. | Treat as generic implementation evidence, not a machine-independent requirement or benchmark claim. |
+| Execution placement | New in this iteration as `0.1-experimental`, non-normative `execution-placement-evidence`. | Locally actionable in MNCS: schema, validator, CLI, fixtures, and documentation. |
+
+Old Forge tasks are therefore marked `DONE in sibling Forge`, `ACTIVE in sibling Forge`,
+or `NOT AN MNCS TASK` by the table above rather than left as stale local backlog. The
+remaining local follow-on is a small Forge/public-interface hook, not a cross-repository
+rewrite.
+
+### Current MNCS backlog disposition
+
+- **DONE in MNCS:** release-candidate schemas and validator, Forge integration boundary,
+  provider-neutral capability policy, RAVEL historical evidence preservation, and the
+  experimental execution-placement profile in this iteration.
+- **DONE or active in sibling Forge:** verifier consolidation, versioned records and
+  migrations, lifecycle transitions, transactional ledger writes, application services,
+  unified dispatch, and compatibility stabilization.
+- **STILL OPEN locally:** optional placement-evidence micro-verifier hook; generic
+  integration examples from a future Fabric-style executor; and later placement
+  comparison research.
+- **SUPERSEDED:** old local Forge implementation tasks that assumed a monolithic
+  coordinator or pre-state-machine dispatch surface.
+- **EXTERNAL / GOVERNANCE BLOCKED:** independent evaluation, protected custody,
+  external security/privacy review, governance approval, certification, release and
+  signing authority, and promotion. Code in this repository does not resolve these.
+- **FUTURE RESEARCH:** heterogeneous NPU placement, distributed execution,
+  energy/power evidence, deterministic cross-machine placement studies, and provider
+  isolation/sandbox evidence.
+
 ## Evidence classes
 
 The next work must preserve these distinctions:
