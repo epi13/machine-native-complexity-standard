@@ -12,14 +12,20 @@ nav:
   - Home: index.md
   - Introduction: introduction.md
   - Foundation: foundational-model.md
+  - Networked standard evolution: networked-standard-evolution.md
   - Philosophy: philosophy.md
   - Quickstart: quickstart.md
   - Conformance: conformance.md
   - Machine-native development: mncds.md
+  - Recursive architecture research: recursive-architecture-research.md
+  - Recursive experience substrate: recursive-experience-substrate.md
+  - Execution assurance: execution-assurance.md
+  - Execution-assurance next steps: execution-assurance-next-steps.md
   - Language evidence profiles: language-evidence-profiles.md
   - Experimental execution-placement evidence: execution-placement-evidence.md
   - Composed systems: composed-systems.md
   - Post-Wave-Five roadmap: post-wave-five-roadmap.md
+  - Codex implementation next steps: codex-next-steps.md
   - MNCS 0.3 / MNCDS 0.1 release candidate: release-candidate.md
   - Release gap matrix: release-gap-matrix.md
   - RC migration and negotiation: migration-0.2-to-0.3-mncds-0.1.md

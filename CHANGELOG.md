@@ -25,17 +25,32 @@ validator and explicit version identifiers for the standard.
   distinct development, selection, retention, planning, and future-final
   partitions. No 0.6 implementation or evaluation is claimed, and frozen 0.4/0.5
   sources, evidence, dispositions, and promotion boundaries remain unchanged.
+- Add a SHA-256-bound RAVEL 0.6 candidate-001 derivation that preserves frozen
+  0.5 authority while correcting top-two planning traversal and adaptation-birth
+  support provenance. Add strict derivation/compilation tests and a bounded Codex
+  implementation queue; no 0.6 selection, evaluation, conformance, or promotion
+  claim is made.
 - Correct the Rust consumer's limitation reporting so every concurrent required
   `UNKNOWN` condition retains its issue code even after another uncertainty has
   already lowered the aggregate. Result precedence and normative text are unchanged.
 - Make the non-normative Forge integration the default Codex development control plane,
   add bounded project workflows, and demote Joern to an explicitly configured optional
   legacy provider without changing any MNCS/MNCDS claim result.
-- Add the experimental, non-normative execution-placement evidence profile with
-  requested-versus-observed CPU/accelerator placement, residency distinction, real
-  probe requirements, bounded AUTO fallback, resource measurements, strict claim
-  boundaries, and an adversarial validation corpus. This does not change frozen
-  MNCS/MNCDS semantics or create conformance, independence, custody, or promotion.
+- Correct release-candidate corpus and hardened Forge-entrypoint documentation, document
+  the existing validator version-reporting contract, and add a Codex-ready implementation
+  roadmap for larger Forge, MNCDS, empirical-study, external-review, and governance work.
+- Add an experimental shared execution-assurance companion record, offline validator,
+  MNCS/MNCDS combined test-evidence commands, adversarial regression coverage, draft RFC,
+  and Codex implementation queue. A functional test PASS no longer implies execution
+  assurance PASS; missing isolation or attestation remains UNKNOWN.
+- Define an additive post-RAVEL-0.6 recursive experience and causal-learning substrate
+  with episodes, competing hypotheses, interventions, attribution, learned principles,
+  strategy reuse, transfer gates, lineage-aware credit, an executable profile, linked
+  reference records, and fail-closed negative fixtures. Frozen RAVEL evidence and the
+  existing recursive-study preregistration remain unchanged.
+- Document the non-normative network through which MNCS, MNCDS, MNCS Language, Forge,
+  RAVEL, independent actors, and governance can refine implementations and inform future
+  standard changes without allowing any tool or recursive loop to promote itself.
 
 ## 0.2.0 — 2026-07-25
 

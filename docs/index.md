@@ -10,8 +10,8 @@ retired.
 
 MNCS 0.3-rc.1 and MNCDS 0.1-rc.1 are now implemented release-candidate
 proposals with versioned schemas, Python and independent Rust consumers, a shared
-golden corpus, migration rules, and a controlled two-epoch study. Their RFCs remain
-Draft and external/governance gates remain open.
+74-case golden corpus, migration rules, and a controlled two-epoch study. Their RFCs
+remain Draft and external/governance gates remain open.
 
 **Human readability is relocated, not eliminated.** Readable control moves to the
 contract, reference behavior, limits, policy, evidence, provenance, development record,
@@ -19,6 +19,7 @@ regeneration, and rollback. Complexity is acceptable only for a predeclared meas
 benefit.
 
 [Read the MNCS introduction](introduction.md), [review the broader foundation](foundational-model.md),
+[see how the project family supports networked standard evolution](networked-standard-evolution.md),
 [review MNCDS](mncds.md), or [validate an example](quickstart.md). MNCS and MNCDS are not
 accredited ISO, ANSI, IEEE, IETF, or similar standards.
 
@@ -37,9 +38,11 @@ assurance-case profiles, and a focused compiler-backed Machine-Native Evidence A
 RFC 0006 proposes the non-normative multilingual language-evidence layer. Both remain Draft;
 neither changes MNCS 0.2 or promotes MNCDS.
 
+- [Networked standard evolution](networked-standard-evolution.md)
 - [Experimental language evidence profiles](language-evidence-profiles.md)
 - [Experimental execution-placement evidence](execution-placement-evidence.md)
 - [Post-Wave-Five local evidence roadmap](post-wave-five-roadmap.md)
+- [Codex implementation next steps](codex-next-steps.md)
 - [MNCS 0.3 / MNCDS 0.1 release candidate](release-candidate.md)
 - [Release gap matrix](release-gap-matrix.md)
 - [RAVEL recursive inference and training research](ravel.md)

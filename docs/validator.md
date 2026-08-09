@@ -32,6 +32,29 @@ a bounded machine-readable user-supplied-record interface. Its `validate-package
 Ed25519 verification, and deterministic offline trust-policy evaluation. The
 conformance statement lists the exact supported and unsupported rules.
 
+## Version reporting
+
+`mncs version --json` separates the validator package version from the current normative
+standard family, supported historical manifest schemas, and release-candidate record
+families. These values are not interchangeable:
+
+```json
+{
+  "current_schema_version": "0.2",
+  "normative_standard_family": "MNCS 0.2",
+  "package": "mncs-validator",
+  "package_version": "0.3.0rc1",
+  "record_schema_versions": ["0.3-rc.1"],
+  "release_candidate_families": ["MNCS 0.3-rc.1", "MNCDS 0.1-rc.1"],
+  "supported_schema_versions": ["0.1", "0.1.1", "0.2"]
+}
+```
+
+The deterministic `.mncs` archive format is separately identified as
+`mncs-zip-0.1`; it is a package-format identifier, not an MNCS standard or manifest
+schema version. A future release-metadata task will make these repeated values
+machine-validated across CLI output and documentation.
+
 ## MNCDS validator
 
 `mncds` validates development-process records. It checks:

@@ -46,8 +46,10 @@ inspection, the MNCS/MNCDS release-candidate check, the release-candidate corpus
 Python/Rust consumer comparison, the recursive analyzer study, full core `make check`,
 and RAVEL 0.4 as an optional case-study regression check rather than a release gate.
 
-Each workflow uses `scripts/forge_workflow.py`, which executes a fixed argv array without
-a shell, captures bounded output, records command/environment/executable/output
+Each configured workflow enters through `scripts/forge_workflow_hardened.py`. That
+policy-bound entrypoint loads the committed environment allowlist and output cap, then
+calls the fixed-argv implementation in `scripts/forge_workflow.py`. The implementation
+uses no shell, captures bounded output, records command/environment/executable/output
 identities, and distinguishes PASS, FAIL, UNKNOWN, timeout, crash, output limit, and
 unsupported executable. Wrapper PASS means only that the declared development command
 completed successfully; its conformance status remains UNKNOWN.
@@ -92,6 +94,36 @@ configuration uses only that supported authority and does not claim per-workflow
 capability policy. Provider discovery is non-executing; only an explicit probe can
 satisfy the required-capability policy.
 
+## Intent-aware security micro-verification
+
+The experimental [intent-aware security verification](intent-aware-security-verification.md)
+design note proposes a future Forge workflow for security hardening without forcing
+machine-optimized or less orthodox implementations back into conventional forms.
+
+Under that model, an unusual construct is a routing signal. Forge would associate the
+construct with a bounded intentional-deviation record, identify the invariants required
+for acceptability, dispatch the relevant local, boundary, compiler, and composition
+verifiers, and preserve the resulting evidence and limitations.
+
+A declaration that code is intentional is not a waiver. A confirmed invariant violation
+remains a weakness even when no complete attack chain is currently known. Conversely, a
+generic warning against computed dispatch, raw pointers, deliberate modulo arithmetic,
+inline assembly, or another unusual construct does not establish failure by itself.
+Unsupported semantic, compiler, or provider capability remains `UNKNOWN`.
+
+Any implementation of this workflow must preserve these separations:
+
+- suspicion from confirmed invariant violation;
+- local weakness from current exploit-chain reachability;
+- development disposition from MNCS or MNCDS result;
+- provider evidence from independent evaluation;
+- declared intent from verified safety; and
+- recursive implementation refinement from normative standard evolution.
+
+The current Forge integration does not yet implement intentional-deviation records,
+security finding composition, or attack-graph authority. The design note identifies a
+staged prototype path and must not be cited as an existing security capability.
+
 After installing the separate repository, start a new Codex session so the MCP tool
 inventory and configuration are reloaded:
 
@@ -132,4 +164,6 @@ repair feedback for the same development epoch. The development MCP inventory do
 expose the final-evaluation tool; use a separately configured evaluator session.
 
 See the [post-Wave-Five roadmap](post-wave-five-roadmap.md) for physical-machine,
-external-actor, and governance gaps that Forge cannot resolve locally.
+external-actor, and governance gaps that Forge cannot resolve locally. The
+[Codex implementation next steps](codex-next-steps.md) provide bounded acceptance
+criteria for the larger Forge, MNCDS, empirical-study, and release-preparation work.

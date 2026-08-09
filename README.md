@@ -9,7 +9,7 @@ MNCS is an open experimental standard for accepting generated or machine-optimiz
 The repository now contains implementation-ready proposals for MNCS 0.3-rc.1 and
 MNCDS 0.1-rc.1. They add contract adequacy, dependency/composition graphs,
 freshness and material-change invalidation, partial revalidation, lifecycle records,
-an offline MNCDS aggregate, a 72-case golden corpus, independent Python/Rust
+an offline MNCDS aggregate, a 74-case golden corpus, independent Python/Rust
 agreement, and a reproducible two-epoch improvement study.
 
 Both RFC 0004 and RFC 0005 remain Draft. Independent operation, organizational
@@ -22,6 +22,32 @@ mncs validate-record assurance examples/release-candidate-0.3/assurance-case.jso
 mncds validate examples/mncds-0.1-rc/development-record.json
 mncs corpus release-candidate --json
 ```
+
+## Execution assurance for test evidence
+
+The experimental execution-assurance companion record keeps a test result separate from the
+integrity, isolation, attestation, and custody of the environment that produced it. It binds the
+canonical MNCS or MNCDS subject identity to a test bundle, execution policy, runner, environment,
+fresh challenge, explicit assurance properties, and attestation class.
+
+A functional test `PASS` combined with missing or unsupported isolation remains `UNKNOWN` when a
+combined PASS is required. Local hashes or signatures cannot establish host-root resistance,
+protected custody, or organizational independence.
+
+```bash
+mncs-test-evidence validate measurement \
+  examples/release-candidate-0.3/measurement-profile.json \
+  execution-assurance.json --require-pass --json
+
+mncds-test-evidence validate \
+  examples/mncds-0.1-rc/development-record.json \
+  execution-assurance.json --require-pass --json
+```
+
+The validator remains offline and does not launch a sandbox. See
+[execution assurance](docs/execution-assurance.md), the
+[implementation next steps](docs/execution-assurance-next-steps.md), and
+[draft RFC 0008](rfcs/0008-execution-assurance.md).
 
 ## Experimental multilingual and composed evidence
 
@@ -54,6 +80,28 @@ The separate [MNCS Forge MCP integration](docs/mncs-forge.md) is an optional,
 experimental, non-normative Codex control plane. It does not replace Provider Protocol
 or offline MNCS/MNCDS validation and cannot create independent or protected evidence.
 
+## Networked evolution model
+
+MNCS and MNCDS define versioned standards, identities, invariants, comparison rules, and
+development controls. MNCS Language and other implementations expose semantic and
+compiler structures. Forge runs bounded micro-verifiers and candidate checks. RAVEL and
+other mechanisms coordinate experiments across agents, machines, implementations, and
+trust boundaries. Independent evaluators and custodians challenge the resulting
+evidence. Promotion policy and governance alone decide whether a proposal is selected,
+standardized, released, rejected, or retained as `UNKNOWN`.
+
+The [networked standard evolution](docs/networked-standard-evolution.md) document
+separates implementation refinement from evolution of the standard itself. Evidence may
+inform an RFC, but no language, compiler, verifier, Forge workflow, RAVEL mechanism, or
+recursive loop can silently rewrite normative meaning or promote its own result.
+
+The experimental [intent-aware security verification](docs/intent-aware-security-verification.md)
+design note proposes invariant-driven security micro-verification that preserves useful
+non-orthodox implementation intent. Suspicious constructs request bounded evidence
+rather than automatic normalization; declared intent never waives a failed safety
+property, and missing exploit-chain evidence never converts a confirmed weakness into
+`PASS`.
+
 ## Research case studies
 
 - [EdgeStream](case-studies/edgestream/README.md) — C11 telemetry processing.
@@ -61,7 +109,7 @@ or offline MNCS/MNCDS validation and cannot create independent or protected evid
 - [Multilingual Stream](case-studies/multilingual-stream/README.md) — shared C11/Rust contract.
 - [Go Gateway](case-studies/go-gateway/README.md) — bounded concurrency and cancellation.
 - [Composed Gateway](case-studies/composed-gateway/README.md) — C11 FFI, generated Go bindings, Go orchestration, Rust authority, recovery, measurement, custody, claim readiness, and portable physical-host reproduction.
-- [Remote Water Control](case-studies/remote-water-control/README.md), [RAVEL 0.1–0.5](case-studies/ravel/README.md), and [dSense](case-studies/dsense-desk-pet/README.md) — additional bounded studies with explicit non-promotion boundaries.
+- [Remote Water Control](case-studies/remote-water-control/README.md), [RAVEL 0.1–0.6](case-studies/ravel/README.md), and [dSense](case-studies/dsense-desk-pet/README.md) — additional bounded studies with explicit non-promotion boundaries.
 
 ## Current claim boundary
 
@@ -76,7 +124,10 @@ the same project operator controls the machines.
 Formal MNCS and MNCDS statuses remain `UNKNOWN`, promotion is prohibited, and full MNCDS-D4 is unclaimed. The repository can validate externally supplied evidence; it cannot self-create independence or protected custody.
 
 The [post-Wave-Five roadmap](docs/post-wave-five-roadmap.md) separates the remaining
-local, physical-machine, Arduino, external-actor, and governance work.
+local, physical-machine, Arduino, external-actor, and governance work. The
+[Codex implementation next steps](docs/codex-next-steps.md) turn the larger remaining
+engineering findings into bounded follow-on tasks with acceptance criteria and explicit
+external-actor limits.
 
 ## Experimental execution placement
 
@@ -97,6 +148,6 @@ correctness, conformance, independence, security, or promotion evidence.
 - `experimental/execution-placement/` — experimental resource-placement evidence fixtures.
 - `case-studies/` — bounded development studies and evidence epochs.
 - `docs/` — documentation.
-- `rfcs/` — governance proposals, including RFC 0006 and RFC 0007.
+- `rfcs/` — governance proposals, including RFC 0006, RFC 0007, and RFC 0008.
 
 Read `CONTRIBUTING.md`, `GOVERNANCE.md`, and the RFC process before proposing normative changes.
