@@ -2,6 +2,8 @@
 
 Language evidence profiles are a replaceable, versioned description of evidence collection. They
 are not a new MNCS level, not an MNCDS profile, and not a certification of a programming language.
+The empirical profiles, providers, fixtures, and cross-language implementations are maintained
+in the [mncs-reference-studies repository](https://github.com/epi13/mncs-reference-studies).
 
 ## Why C11 remains the anchor
 

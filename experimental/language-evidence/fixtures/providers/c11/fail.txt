@@ -1,1 +1,0 @@
-char *f(char *d,const char *s){return strcpy(d,s);}

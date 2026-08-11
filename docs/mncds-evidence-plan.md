@@ -13,7 +13,7 @@ proof that the proposal is already accepted.
 | Reject omitted or promoted UNKNOWN | Unit tests and `invalid/unknown-promoted` corpus case | Implemented |
 | D2 reproducible generation and repeated measurement | Seeded profile test and D4 reference record | Implemented |
 | D3 protected holdout and independent evaluator | D3 profile test and D4 reference record | Implemented |
-| Recursive analyzer or harness improvement across epochs | `studies/recursive-analyzer` and RC development record | Internally reproducible; external custody UNKNOWN |
+| Recursive analyzer or harness improvement across epochs | [mncs-reference-studies recursive analyzer](https://github.com/epi13/mncs-reference-studies/tree/main/studies/recursive-analyzer) and RC development record | Internally reproducible; external custody UNKNOWN |
 | D4 rollback, regeneration drill, retirement | D4 reference record and rejection tests | Implemented |
 | Independent validator agreement | `independent/rc-consumer` and combined RC corpus | 74/74 local agreement; operator/organization UNKNOWN |
 

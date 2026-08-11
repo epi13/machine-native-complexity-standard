@@ -1,3 +1,0 @@
-package fixture
-// MNCS_DEFECT_MISSING_CANCEL
-func defective() {}

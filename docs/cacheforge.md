@@ -74,6 +74,6 @@ server, model continuous batching, or establish production isolation. Protected 
 independent evaluator custody, cross-host reproduction, and a real serving-system adapter
 remain outstanding.
 
-See the [executable CacheForge study](https://github.com/epi13/machine-native-complexity-standard/tree/main/case-studies/cacheforge)
+See the [executable CacheForge study](https://github.com/epi13/mncs-reference-studies/tree/main/case-studies/cacheforge)
 for the contract, preregistrations, generated candidate, tests, external bundle schema,
 identity-bound summary, and complete scenario evidence.

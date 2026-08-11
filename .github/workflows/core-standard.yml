@@ -23,7 +23,6 @@ jobs:
       - run: ruff check .
       - run: mypy src
       - run: python scripts/validate_release_gap_issue_map.py
-      - run: make recursive-experience-substrate-check
       - run: git diff --check
 
   python:

@@ -12,8 +12,8 @@ schemas, conformance gates, or governance require an RFC. A pull request should:
 4. pass `make check`; and
 5. disclose relevant conflicts of interest or vendor dependencies.
 
-Use the repository Forge configuration as the default interface for declared project
-checks. A graph-sensitive contribution must identify an appropriate declared structural,
+Use the repository's ordinary offline checks for standards contributions. Empirical
+study Forge workflows are maintained in `mncs-reference-studies`. A graph-sensitive contribution must identify an appropriate declared structural,
 control-flow, or data-flow provider and preserve comparable before/after evidence when
 such a comparison is claimed. Joern is optional. Source reading, grep, and line counts do
 not replace unavailable structural evidence; missing capability remains `UNKNOWN` or a

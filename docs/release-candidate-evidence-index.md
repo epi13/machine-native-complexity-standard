@@ -9,7 +9,7 @@
 | Python consumer | `src/mncs_validator/assurance/`, `mncds.py` | modular semantic implementation; corpus agreement | external operation OPEN |
 | Rust consumer | `independent/rc-consumer` | 74/74 corpus agreement plus bounded package, DSSE/Ed25519, and trust-policy cross-checks | operator/organization UNKNOWN |
 | Golden corpus | `conformance/release-candidate/corpus.json` | 74/74 both consumers, including transitive impact | independent freeze OPEN |
-| Two-epoch study | `studies/recursive-analyzer` | internal selection PASS; MNCS UNKNOWN | custody/independence UNKNOWN |
+| Two-epoch study | [mncs-reference-studies recursive analyzer](https://github.com/epi13/mncs-reference-studies/tree/main/studies/recursive-analyzer) | internal selection PASS; MNCS UNKNOWN | custody/independence UNKNOWN |
 | Migration model | `docs/migration-0.2-to-0.3-mncds-0.1.md` | implemented | compatibility review OPEN |
 | Security/privacy review | `docs/release-candidate-security-privacy-review.md` | internal complete | external acceptance OPEN |
 | Gap matrix | `docs/release-gap-matrix.json` | machine-readable | blockers explicit |
