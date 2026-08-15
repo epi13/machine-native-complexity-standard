@@ -111,12 +111,11 @@ property, and missing exploit-chain evidence never converts a confirmed weakness
 
 ## Research case studies
 
-- [EdgeStream](case-studies/edgestream/README.md) — C11 telemetry processing.
-- [CacheForge](case-studies/cacheforge/README.md) — Python AI/ML cache planning.
-- [Multilingual Stream](case-studies/multilingual-stream/README.md) — shared C11/Rust contract.
-- [Go Gateway](case-studies/go-gateway/README.md) — bounded concurrency and cancellation.
-- [Composed Gateway](case-studies/composed-gateway/README.md) — C11 FFI, generated Go bindings, Go orchestration, Rust authority, recovery, measurement, custody, claim readiness, and portable physical-host reproduction.
-- [Remote Water Control](case-studies/remote-water-control/README.md), [RAVEL 0.1–0.6](case-studies/ravel/README.md), and [dSense](case-studies/dsense-desk-pet/README.md) — additional bounded studies with explicit non-promotion boundaries.
+Historical MNCS case studies and recursive research studies are now maintained in
+the dedicated [mncs-reference-studies repository](https://github.com/epi13/mncs-reference-studies).
+This repository retains the standard, conformance, and normative-example material;
+the reference-studies repository is authoritative for empirical implementations and
+evidence.
 
 ## Current claim boundary
 
@@ -173,13 +172,13 @@ mncs challenge validate challenge.json --json
 - `schemas/` — normative and experimental MNCS schemas, plus consumed copies of MNCDS record schemas used by the local consumer.
 - `conformance/release-candidate/` — shared MNCS golden vectors, including interoperability cases that mention MNCDS companion objects.
 - `independent/rc-consumer/` — independent Rust release-candidate consumer.
-- `studies/recursive-analyzer/` — controlled two-epoch recursive study.
-- `experimental/language-evidence/` — profiles, providers, and fixtures.
+- `references/` — links and provenance pointers to empirical work.
 - `experimental/execution-placement/` — experimental resource-placement evidence fixtures.
 - `experimental/execution-receipt/` — experimental immutable runner-receipt fixtures.
 - `experimental/execution-bundle/` — experimental immutable execution-bundle source and fixtures.
 - `experimental/execution-challenge/` — experimental challenge/replay request and adversarial fixtures.
-- `case-studies/` — bounded development studies and evidence epochs.
+- Empirical study implementations and evidence live in
+  `mncs-reference-studies`; this repository does not duplicate those bodies.
 - `docs/` — documentation.
 - `rfcs/` — governance proposals, including RFC 0006, RFC 0007, and RFC 0008.
 

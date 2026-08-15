@@ -2,9 +2,10 @@
 
 ## MNCS Forge
 
-- Use the separately installed MNCS Forge MCP server as the default development and
-  evidence-control interface when the validated `mncs-forge.toml` declares the project
-  authority and workflow.
+- The empirical Forge project configuration and study providers live in the dedicated
+  `mncs-reference-studies` repository. Use that configuration for empirical study work.
+  This standards repository has no Forge configuration that ordinary core validation
+  depends on.
 - Forge is an optional, experimental, non-normative development control plane. It does
   not replace MNCS/MNCDS validation and is not required for conformance.
 - Candidate generation and writes must stay within declared candidate/generated paths.

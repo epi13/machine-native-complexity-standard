@@ -112,16 +112,6 @@ def test_release_candidate_rejects_timezone_less_freshness_time(capsys: object) 
     assert "must include an RFC 3339 UTC offset" in capsys.readouterr().err  # type: ignore[attr-defined]
 
 
-def test_migration_inspection_never_upgrades(capsys: object) -> None:
-    manifest = ROOT / "case-studies/edgestream/manifest.json"
-    assert main(["migration-inspect", str(manifest), "--json"]) == 0
-    value = json.loads(capsys.readouterr().out)  # type: ignore[attr-defined]
-    assert value["family"] == "MNCS"
-    assert value["version"] == "0.2"
-    assert value["automatic_upgrade"] is False
-    assert value["historical_claim_preserved"] is True
-
-
 def test_mncds_cli_reports_rc_and_preserves_unknown(capsys: object) -> None:
     assert mncds_main(["version", "--json"]) == 0
     version = json.loads(capsys.readouterr().out)  # type: ignore[attr-defined]

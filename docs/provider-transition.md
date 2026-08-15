@@ -11,8 +11,10 @@ EdgeStream evidence and environment records, the GraphFlow study, the MNEA epoch
 baseline, RFC history, fixtures, and compatibility statements. Do not regenerate or
 rewrite those artifacts solely because the default interface changed.
 
-No analysis provider is enabled in `mncs-forge.toml`. An explicit Joern Provider Protocol
-adapter may be added as an optional provider. The adapter, not the Joern CLI by itself,
+No analysis provider is enabled in the standards repository. The empirical Forge
+configuration and project-owned Provider Protocol adapter are maintained in
+`mncs-reference-studies`. An explicit Joern Provider Protocol adapter may be added as
+an optional provider. The adapter, not the Joern CLI by itself,
 must emit recognized Provider Protocol 0.1 capabilities and analysis responses. Another
 provider may declare the same, narrower, broader, or different capabilities, together
 with supported and unsupported constructs, assumptions, bounds, and limitations.

@@ -48,9 +48,8 @@ neither changes MNCS 0.2 or promotes MNCDS.
 - [Codex implementation next steps](codex-next-steps.md)
 - [MNCS 0.3 / MNCDS 0.1 release candidate](release-candidate.md)
 - [Release gap matrix](release-gap-matrix.md)
-- [RAVEL recursive inference and training research](ravel.md)
-- [dSense Desk Pet case study](dsense-desk-pet.md)
-- [Remote Water Resilience Controller case study](remote-water-control.md)
+- Historical empirical case studies and recursive research studies are maintained in
+  the [mncs-reference-studies repository](https://github.com/epi13/mncs-reference-studies).
 - [Machine-native complexity foundation](foundational-model.md)
 - [Machine-Native Evidence Analyzer](machine-native-evidence-analyzer.md)
 - [Machine-native development](mncds.md)

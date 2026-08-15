@@ -19,38 +19,31 @@ promotion.
 - documentation build; and
 - `git diff --check`.
 
-The canonical local entry point is `make core-check`, declared in `GNUmakefile`.
-The historical root `Makefile` remains byte-identical because RAVEL 0.5 binds it
-as frozen source authority. Its legacy `make check` target runs the complete
-unfiltered local test surface; `core-check` excludes experimental pytest tests.
-Expensive cross-language checks run once rather than once per Python version.
+The canonical local entry point is `make check`. It covers only standards and
+conformance validation; empirical study checks are owned by the
+[mncs-reference-studies repository](https://github.com/epi13/mncs-reference-studies).
 
-Core pytest invocations exclude tests marked `experimental`. Forge integration and
-case-study preregistration tests retain that marker and run in their experimental
-workflows. An unfiltered local `pytest` still runs both groups for complete developer
-verification.
+Core pytest invocations cover the standards test surface. Empirical regression tests
+and study-specific preregistration checks run from the reference-studies repository.
 
 The dedicated `Documentation` workflow additionally controls Pages deployment, and
 the tag-only `Release` workflow packages artifacts. Neither workflow supplies the
 OPEN governance or signing authority.
 
-## Experimental workflows
+## Empirical-study workflows
 
-`Experimental Laboratories` contains multilingual profiles, the Go gateway,
-composed-system waves, cross-host reconciliation, historical pre-0.4 RAVEL
-reproduction, RAVEL 0.6 preregistration identity checks, and dSense. Specialized
-RAVEL 0.4, RAVEL 0.5, CacheForge, EdgeStream, remote-water, and Wave Five workflows
-remain separate because their identities, artifact exchange, and
-historical/evaluation boundaries are clearer that way.
+Empirical workflows, path filters, artifacts, and study-specific environments are
+maintained in the [mncs-reference-studies repository](https://github.com/epi13/mncs-reference-studies).
+The standards repository does not require a sibling checkout for ordinary `make check`.
 
 Experimental failures stay visible. They are not relabeled with universal
 `continue-on-error`; repository branch-protection policy chooses required checks.
 The laboratory workflow has no restrictive path filter, so changes to core code or
 shared schemas still trigger compatibility checks.
 
-RAVEL 0.5 reproduction success does not change its frozen development result
-`FAIL`, formal MNCS and MNCDS statuses `UNKNOWN`, or unauthorized promotion state.
-Expected negative fixtures and mutation tests must continue to reject their inputs.
+Historical study results remain frozen and their negative fixtures and mutation tests
+remain authoritative in the reference-studies repository. Migration does not change
+their result labels or promotion boundaries.
 
 ## Frozen sources and formatting
 
