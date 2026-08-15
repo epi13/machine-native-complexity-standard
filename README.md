@@ -1,16 +1,23 @@
 # Machine-Native Complexity Standard
 
-MNCS is an open experimental standard for accepting generated or machine-optimized implementations through bounded evidence. MNCDS is its separate development-process specification. Neither is accredited certification.
+MNCS is an open experimental standard for accepting generated or machine-optimized implementations through bounded evidence. It is not accredited certification.
+
+Development-process guidance is maintained separately by the
+[Machine-Native Complexity Development Specification (MNCDS)](https://github.com/epi13/machine-native-complexity-development-specification).
+MNCS can consume an MNCDS result as a companion object; it does not embed or
+own the development specification.
 
 > **Human readability is relocated, not eliminated.**
 
 ## Release-candidate foundation
 
-The repository now contains implementation-ready proposals for MNCS 0.3-rc.1 and
-MNCDS 0.1-rc.1. They add contract adequacy, dependency/composition graphs,
-freshness and material-change invalidation, partial revalidation, lifecycle records,
-an offline MNCDS aggregate, a 74-case golden corpus, independent Python/Rust
-agreement, and a reproducible two-epoch improvement study.
+The repository now contains an implementation-ready proposal for MNCS 0.3-rc.1.
+It adds contract adequacy, dependency/composition graphs, freshness and
+material-change invalidation, partial revalidation, lifecycle records, a
+74-case golden corpus, independent Python/Rust agreement, and a reproducible
+two-epoch improvement study. MNCDS 0.1-rc.1 is published from the MNCDS
+repository; this tree still includes a consumer that can validate a supplied
+MNCDS development record.
 
 Both RFC 0004 and RFC 0005 remain Draft. Independent operation, organizational
 independence, externally protected custody, security/privacy acceptance, governance
@@ -162,9 +169,9 @@ mncs challenge validate challenge.json --json
 
 ## Repository map
 
-- `spec/` — frozen MNCS 0.2/MNCDS draft and the 0.3/0.1 release candidates.
-- `schemas/` — normative and experimental schemas.
-- `conformance/release-candidate/` — shared MNCS/MNCDS golden vectors.
+- `spec/` — frozen MNCS 0.2 and the 0.3 release candidate. MNCDS spec text now lives in the MNCDS repository.
+- `schemas/` — normative and experimental MNCS schemas, plus consumed copies of MNCDS record schemas used by the local consumer.
+- `conformance/release-candidate/` — shared MNCS golden vectors, including interoperability cases that mention MNCDS companion objects.
 - `independent/rc-consumer/` — independent Rust release-candidate consumer.
 - `studies/recursive-analyzer/` — controlled two-epoch recursive study.
 - `experimental/language-evidence/` — profiles, providers, and fixtures.

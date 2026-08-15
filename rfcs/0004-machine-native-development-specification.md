@@ -1,5 +1,11 @@
 # RFC 0004: Machine-Native Complexity Development Specification
 
+> **Canonical specification home.** After this RFC, MNCDS became an independent
+> repository:
+> https://github.com/epi13/machine-native-complexity-development-specification
+> This historical RFC remains in MNCS for provenance. Subsequent MNCDS
+> evolution is governed there.
+
 - Status: Draft
 - Authors: Alexander Collamore
 - Created: 2026-07-26
