@@ -20,7 +20,8 @@ benefit.
 
 [Read the MNCS introduction](introduction.md), [review the broader foundation](foundational-model.md),
 [see how the project family supports networked standard evolution](networked-standard-evolution.md),
-[review MNCDS](mncds.md), or [validate an example](quickstart.md). MNCS and MNCDS are not
+[review the MNCDS companion](https://github.com/epi13/machine-native-complexity-development-specification),
+or [validate an example](quickstart.md). MNCS and MNCDS are not
 accredited ISO, ANSI, IEEE, IETF, or similar standards.
 
 MNCS 0.2 derives acceptance from content-addressed observations and adds portable

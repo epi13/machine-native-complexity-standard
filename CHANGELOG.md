@@ -5,6 +5,10 @@ validator and explicit version identifiers for the standard.
 
 ## 0.3.0rc1 — unreleased
 
+- Relocate canonical MNCDS specification text to
+  `machine-native-complexity-development-specification`. This repository keeps
+  consumed schemas, examples, and an `mncds` consumer so existing validation
+  commands continue to work.
 - Reconcile current GitHub Actions versions and Ruff 0.16.0 directly on current main;
   retain the cryptography `<47` bound because the proposed 49 release removes
   x86_64 macOS and 32-bit Windows support still represented by the repository's
