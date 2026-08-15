@@ -1,5 +1,9 @@
 # CacheForge LLM KV-cache case study
 
+The executable study now lives in
+[mncs-reference-studies](https://github.com/epi13/mncs-reference-studies/tree/main/case-studies/cacheforge).
+This page remains as a short orientation note.
+
 CacheForge applies the machine-native complexity model to an AI/ML infrastructure problem:
 LLM KV-cache allocation, prefix reuse, and eviction under bounded memory pressure.
 
