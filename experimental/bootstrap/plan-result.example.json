@@ -1,0 +1,65 @@
+{
+  "schema": "mncs.bootstrap.result/0.1-experimental",
+  "operation": "plan",
+  "status": "ready",
+  "target": "local",
+  "observed_platform": {
+    "family": "linux",
+    "architecture": "x86_64"
+  },
+  "blockers": [],
+  "warnings": [],
+  "required_authority": [
+    "network.acquire",
+    "host.files.write",
+    "host.service.manage"
+  ],
+  "plan": {
+    "id": "sha256:example-plan-id",
+    "actions": [
+      {
+        "id": "acquire-fabric",
+        "component": "fabric",
+        "kind": "acquire",
+        "requires": ["network.acquire"],
+        "reversible": true
+      },
+      {
+        "id": "install-fabric",
+        "component": "fabric",
+        "kind": "install",
+        "after": ["acquire-fabric"],
+        "requires": ["host.files.write"],
+        "reversible": true
+      },
+      {
+        "id": "verify-fabric-worker",
+        "component": "fabric",
+        "kind": "verify",
+        "after": ["install-fabric"],
+        "required": true
+      },
+      {
+        "id": "register-fabric-worker",
+        "component": "fabric",
+        "kind": "capability-register",
+        "after": ["verify-fabric-worker"],
+        "capability": "fabric.worker"
+      }
+    ]
+  },
+  "capability_delta_if_successful": {
+    "add": ["fabric.worker"],
+    "remove": []
+  },
+  "next_actions": [
+    "authorize-plan",
+    "apply"
+  ],
+  "artifacts": {
+    "observed_state": "sha256:example-observed-state-id",
+    "desired_state": "sha256:example-desired-state-id",
+    "catalog": "sha256:example-catalog-id",
+    "plan": "sha256:example-plan-id"
+  }
+}
