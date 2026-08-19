@@ -1,0 +1,96 @@
+{
+  "schema": "mncs.bootstrap.catalog/0.1-experimental",
+  "catalog_id": "mncs-main-example",
+  "components": [
+    {
+      "id": "fabric",
+      "display_name": "MNCS Fabric",
+      "authority": "epi13/mncs-fabric",
+      "acquisition": [
+        {
+          "type": "git",
+          "repository": "epi13/mncs-fabric"
+        }
+      ],
+      "platforms": {
+        "linux/x86_64": "supported",
+        "windows/x86_64": "supported",
+        "darwin/*": "unverified"
+      },
+      "depends_on": [
+        "python"
+      ],
+      "verification": [
+        {
+          "id": "component-self-check",
+          "required": true
+        },
+        {
+          "id": "worker-service-health",
+          "required": true,
+          "when_role": "fabric-worker"
+        }
+      ],
+      "capabilities": [
+        "fabric.worker",
+        "fabric.controller"
+      ]
+    },
+    {
+      "id": "harness",
+      "display_name": "MNCS Harness",
+      "authority": "epi13/mncs-harness",
+      "acquisition": [
+        {
+          "type": "git",
+          "repository": "epi13/mncs-harness"
+        }
+      ],
+      "platforms": {
+        "linux/x86_64": "supported",
+        "windows/x86_64": "supported",
+        "darwin/*": "unverified"
+      },
+      "depends_on": [],
+      "verification": [
+        {
+          "id": "harness-self-check",
+          "required": true
+        }
+      ],
+      "capabilities": [
+        "harness.route"
+      ]
+    },
+    {
+      "id": "forge",
+      "display_name": "MNCS Forge",
+      "authority": "epi13/mncs-forge-mcp",
+      "acquisition": [
+        {
+          "type": "git",
+          "repository": "epi13/mncs-forge-mcp"
+        }
+      ],
+      "platforms": {
+        "linux/x86_64": "supported",
+        "windows/x86_64": "supported",
+        "darwin/*": "unverified"
+      },
+      "depends_on": [],
+      "verification": [
+        {
+          "id": "forge-self-check",
+          "required": true
+        }
+      ],
+      "capabilities": [
+        "forge.control"
+      ]
+    }
+  ],
+  "notes": [
+    "Illustrative only; support states and dependency details are not normative or release claims.",
+    "Darwin/macOS remains explicitly unverified until suitable Apple hardware is available for implementation and testing."
+  ]
+}
