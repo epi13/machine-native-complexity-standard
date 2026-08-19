@@ -1,0 +1,32 @@
+{
+  "schema": "mncs.bootstrap.desired-state/0.1-experimental",
+  "target": "local",
+  "role": "fabric-worker",
+  "components": {
+    "fabric": {
+      "state": "present",
+      "channel": "stable"
+    },
+    "harness": {
+      "state": "present"
+    },
+    "forge": {
+      "state": "absent"
+    }
+  },
+  "requires_capabilities": [
+    "fabric.worker"
+  ],
+  "policy": {
+    "network": "acquisition-only",
+    "privilege": "bounded-helper",
+    "allow_persistent_services": true,
+    "allow_firewall_changes": false,
+    "allow_unverified_sources": false,
+    "secrets": "references-only"
+  },
+  "verification": {
+    "required": true,
+    "register_capabilities_only_after_pass": true
+  }
+}
