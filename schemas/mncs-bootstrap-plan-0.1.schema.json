@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schema/bootstrap/0.1/mncs-bootstrap-plan-0.1.schema.json",
+  "title": "MNCS bootstrap plan (operational, non-normative)",
+  "description": "Desired versus observed MNCS family state and the actions that would converge them. A plan is not a conformance result.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "disclaimer",
+    "profile",
+    "components",
+    "actions",
+    "summary",
+    "outcome"
+  ],
+  "properties": {
+    "schema_version": {"const": "mncs-bootstrap-plan.v0.1"},
+    "disclaimer": {"type": "string", "minLength": 1},
+    "profile": {"type": ["string", "null"]},
+    "workspace": {"type": ["string", "null"]},
+    "ref": {"type": ["string", "null"]},
+    "network": {"type": "boolean"},
+    "allow_services": {"type": "boolean"},
+    "components": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "actions": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/action"}
+    },
+    "blocked": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/blocked"}
+    },
+    "warnings": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["healthy", "install", "configure", "skip", "blocked"],
+      "properties": {
+        "healthy": {"type": "integer", "minimum": 0},
+        "install": {"type": "integer", "minimum": 0},
+        "configure": {"type": "integer", "minimum": 0},
+        "skip": {"type": "integer", "minimum": 0},
+        "blocked": {"type": "integer", "minimum": 0}
+      }
+    },
+    "outcome": {
+      "type": "string",
+      "enum": ["unchanged", "changes_required", "blocked", "unsupported"]
+    }
+  },
+  "$defs": {
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "component", "kind", "status", "summary"],
+      "properties": {
+        "id": {"type": "string"},
+        "component": {"type": "string"},
+        "kind": {
+          "type": "string",
+          "enum": [
+            "skip",
+            "clone",
+            "create_venv",
+            "pip_install",
+            "cargo_build",
+            "configure",
+            "enable_service",
+            "health_check",
+            "operator"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["planned", "skipped", "blocked", "required_operator"]
+        },
+        "summary": {"type": "string"},
+        "detail": {"type": "string"},
+        "privilege": {"type": "string", "enum": ["user", "administrator", "none"]},
+        "network": {"type": "boolean"},
+        "destructive": {"type": "boolean"}
+      }
+    },
+    "blocked": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["component", "reason"],
+      "properties": {
+        "component": {"type": "string"},
+        "reason": {"type": "string"},
+        "code": {
+          "type": "string",
+          "enum": [
+            "unsupported-platform",
+            "missing-dependency",
+            "missing-tool",
+            "privilege-required",
+            "network-required",
+            "operator-required",
+            "conflict",
+            "unknown"
+          ]
+        }
+      }
+    }
+  }
+}

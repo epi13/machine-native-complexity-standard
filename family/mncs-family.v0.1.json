@@ -1,0 +1,851 @@
+{
+  "schema_version": "mncs-family-registry.v0.1",
+  "registry_id": "mncs-family",
+  "name": "MNCS family",
+  "description": "Discovery and bootstrap map for the Machine-Native Complexity Standard and the independently owned projects that implement, evaluate, execute, record, and research machine-native computing. Component repositories remain authoritative for their own contracts.",
+  "authority": {
+    "kind": "discovery-and-bootstrap",
+    "does_not_create": [
+      "conformance",
+      "certification",
+      "independent evidence",
+      "protected custody",
+      "governance approval",
+      "PASS",
+      "promotion authority"
+    ],
+    "note": "A successful bootstrap means software was installed and verified against this operational contract. It does not change MNCS or MNCDS claim status."
+  },
+  "compatibility": {
+    "state": "UNKNOWN",
+    "note": "No published compatible-set matrix yet. Refs default to each repository's main branch unless an explicit --ref is supplied. Treat cross-component version compatibility as UNKNOWN."
+  },
+  "profiles": {
+    "core": {
+      "display_name": "Core",
+      "description": "MNCS standard, Python validator, and optional independent Rust validator.",
+      "components": ["mncs"],
+      "optional_components": ["mncs-validator-rs"]
+    },
+    "developer": {
+      "display_name": "Developer",
+      "description": "Core plus the common development stack: MNCDS, Fabric, Harness, Forge, Commons, and Control MCP.",
+      "components": [
+        "mncs",
+        "mncds",
+        "mncs-fabric",
+        "mncs-commons",
+        "mncs-harness",
+        "mncs-forge",
+        "mncs-control"
+      ],
+      "optional_components": ["mncs-validator-rs"]
+    },
+    "worker": {
+      "display_name": "Fabric worker",
+      "description": "Fabric worker checkout and preflight. Enrollment, certificates, and controller rendezvous remain operator-mediated Fabric operations.",
+      "components": ["mncs-fabric"]
+    },
+    "research": {
+      "display_name": "Research",
+      "description": "Developer stack plus language, studies, experimental learning, RAVEL, Atlas, lineage, and rights/provenance research.",
+      "components": [
+        "mncs",
+        "mncds",
+        "mncs-fabric",
+        "mncs-commons",
+        "mncs-harness",
+        "mncs-forge",
+        "mncs-control",
+        "mncs-language",
+        "mncs-reference-studies",
+        "mnel",
+        "ravel",
+        "mncs-atlas",
+        "mncs-lineage",
+        "mncs-rights-provenance"
+      ],
+      "optional_components": ["mncs-validator-rs"]
+    },
+    "full": {
+      "display_name": "Full",
+      "description": "Every registered family component that this host can support.",
+      "components": [
+        "mncs",
+        "mncds",
+        "mncs-validator-rs",
+        "mncs-fabric",
+        "mncs-commons",
+        "mncs-harness",
+        "mncs-forge",
+        "mncs-control",
+        "mncs-language",
+        "mncs-reference-studies",
+        "mnel",
+        "ravel",
+        "mncs-atlas",
+        "mncs-lineage",
+        "mncs-rights-provenance"
+      ]
+    }
+  },
+  "components": [
+    {
+      "id": "mncs",
+      "display_name": "Machine-Native Complexity Standard",
+      "repository": {
+        "owner": "epi13",
+        "name": "machine-native-complexity-standard",
+        "url": "https://github.com/epi13/machine-native-complexity-standard"
+      },
+      "purpose": "Normative implementation-evidence standard, schemas, conformance corpus, and offline Python validator.",
+      "category": "standard",
+      "authority_class": "normative-standard",
+      "normative": true,
+      "role": "standard",
+      "optional": false,
+      "audiences": ["user", "developer", "researcher"],
+      "foundational": true,
+      "platforms": ["linux", "windows", "linux-arm"],
+      "architectures": ["x86_64", "amd64", "aarch64", "arm64"],
+      "unsupported_platforms": ["macos"],
+      "dependencies": [],
+      "conflicts": [],
+      "runtime_requirements": ["python>=3.11"],
+      "build_requirements": [],
+      "install_strategy": "python-source-venv",
+      "automation": "automated",
+      "source": {"kind": "git", "default_ref": "main", "ref_policy": "explicit-or-default-branch"},
+      "package": {"ecosystem": "python", "name": "mncs-validator", "published": false},
+      "binaries": [{"name": "mncs", "entry": "mncs_validator.cli:main"}, {"name": "mncds", "entry": "mncs_validator.mncds_cli:main"}],
+      "mcp": [],
+      "services": [],
+      "config_locations": [],
+      "health_checks": [
+        {"id": "mncs-version", "kind": "cli-json", "binary": "mncs", "argv": ["version", "--json"]}
+      ],
+      "update_strategy": "git-pull-and-reinstall",
+      "relationships": [
+        {"id": "mncds", "kind": "consumes", "note": "May validate a supplied MNCDS development record; does not own MNCDS."}
+      ],
+      "documentation": {
+        "readme": "https://github.com/epi13/machine-native-complexity-standard/blob/main/README.md",
+        "docs": "https://epi13.github.io/machine-native-complexity-standard/",
+        "agents": "https://github.com/epi13/machine-native-complexity-standard/blob/main/AGENTS.md"
+      },
+      "maturity": "release-candidate"
+    },
+    {
+      "id": "mncds",
+      "display_name": "Machine-Native Complexity Development Specification",
+      "repository": {
+        "owner": "epi13",
+        "name": "machine-native-complexity-development-specification",
+        "url": "https://github.com/epi13/machine-native-complexity-development-specification"
+      },
+      "purpose": "Independently versioned development-process specification and MNCDS-owned validator.",
+      "category": "specification",
+      "authority_class": "development-specification",
+      "normative": true,
+      "role": "standard",
+      "optional": false,
+      "audiences": ["developer", "researcher"],
+      "foundational": true,
+      "platforms": ["linux", "windows", "linux-arm"],
+      "architectures": ["x86_64", "amd64", "aarch64", "arm64"],
+      "unsupported_platforms": ["macos"],
+      "dependencies": [],
+      "conflicts": [],
+      "runtime_requirements": ["python>=3.11"],
+      "build_requirements": [],
+      "install_strategy": "python-source-venv",
+      "automation": "automated",
+      "source": {"kind": "git", "default_ref": "main", "ref_policy": "explicit-or-default-branch"},
+      "package": {"ecosystem": "python", "name": "mncds-validator", "published": false},
+      "binaries": [{"name": "mncds", "entry": "mncds_validator.cli:main", "conflict_note": "The MNCS package also exposes an mncds consumer. Prefer the MNCDS-owned validator when both are installed."}],
+      "mcp": [],
+      "services": [],
+      "config_locations": [],
+      "health_checks": [
+        {"id": "mncds-version", "kind": "cli-json", "binary": "mncds", "argv": ["version", "--json"]}
+      ],
+      "update_strategy": "git-pull-and-reinstall",
+      "relationships": [
+        {"id": "mncs", "kind": "validates", "note": "May require an MNCS binding only when a record declares one."}
+      ],
+      "documentation": {
+        "readme": "https://github.com/epi13/machine-native-complexity-development-specification/blob/main/README.md"
+      },
+      "maturity": "release-candidate"
+    },
+    {
+      "id": "mncs-validator-rs",
+      "display_name": "MNCS Rust validator",
+      "repository": {
+        "owner": "epi13",
+        "name": "mncs-validator-rs",
+        "url": "https://github.com/epi13/mncs-validator-rs"
+      },
+      "purpose": "Independent offline Rust validator for supported MNCS 0.2 subsets.",
+      "category": "validator",
+      "authority_class": "independent-validator",
+      "normative": false,
+      "role": "development",
+      "optional": true,
+      "audiences": ["developer", "researcher"],
+      "foundational": false,
+      "platforms": ["linux", "windows", "linux-arm"],
+      "architectures": ["x86_64", "amd64", "aarch64", "arm64"],
+      "unsupported_platforms": ["macos"],
+      "dependencies": [],
+      "conflicts": [],
+      "runtime_requirements": [],
+      "build_requirements": ["rustc", "cargo"],
+      "install_strategy": "cargo-source",
+      "automation": "automated",
+      "source": {"kind": "git", "default_ref": "main", "ref_policy": "explicit-or-default-branch"},
+      "package": {"ecosystem": "cargo", "name": "mncs-validator-rs", "published": false},
+      "binaries": [{"name": "mncs-rs", "entry": "mncs-rs"}],
+      "mcp": [],
+      "services": [],
+      "config_locations": [],
+      "health_checks": [
+        {"id": "mncs-rs-binary", "kind": "binary", "binary": "mncs-rs"}
+      ],
+      "update_strategy": "git-pull-and-reinstall",
+      "relationships": [
+        {"id": "mncs", "kind": "validates", "note": "Independent consumer of MNCS schemas and corpus; does not wrap the Python validator."}
+      ],
+      "documentation": {
+        "readme": "https://github.com/epi13/mncs-validator-rs/blob/main/README.md"
+      },
+      "maturity": "experimental"
+    },
+    {
+      "id": "mncs-language",
+      "display_name": "MNCS Language",
+      "repository": {
+        "owner": "epi13",
+        "name": "mncs-language",
+        "url": "https://github.com/epi13/mncs-language"
+      },
+      "purpose": "Research compiler and semantic model for a verification-native language built on MNCS principles.",
+      "category": "language",
+      "authority_class": "language-research",
+      "normative": false,
+      "role": "research",
+      "optional": true,
+      "audiences": ["researcher", "developer"],
+      "foundational": false,
+      "platforms": ["linux", "windows", "linux-arm"],
+      "architectures": ["x86_64", "amd64", "aarch64", "arm64"],
+      "unsupported_platforms": ["macos"],
+      "dependencies": [],
+      "conflicts": [],
+      "runtime_requirements": [],
+      "build_requirements": ["rustc", "cargo"],
+      "install_strategy": "cargo-source",
+      "automation": "automated",
+      "source": {"kind": "git", "default_ref": "main", "ref_policy": "explicit-or-default-branch"},
+      "package": {"ecosystem": "cargo", "name": "mncs-cli", "published": false},
+      "binaries": [
+        {
+          "name": "mncs",
+          "entry": "mncs-cli",
+          "conflict_note": "The language crate currently builds a binary named mncs, which conflicts with the MNCS validator CLI. Bootstrap builds the crate but does not install that binary onto PATH."
+        }
+      ],
+      "mcp": [],
+      "services": [],
+      "config_locations": [],
+      "health_checks": [
+        {"id": "language-checkout", "kind": "path-exists", "path": "Cargo.toml"}
+      ],
+      "update_strategy": "git-pull",
+      "relationships": [
+        {"id": "mncs", "kind": "consumes", "note": "Language research consumes MNCS evidence concepts; it does not rewrite the standard."},
+        {"id": "mncs-forge", "kind": "evaluates", "note": "Forge may persist language-owned observations without issuing assurance verdicts."}
+      ],
+      "documentation": {
+        "readme": "https://github.com/epi13/mncs-language/blob/main/README.md"
+      },
+      "install_notes": "Do not cargo-install the language CLI onto PATH; its binary name collides with mncs-validator.",
+      "maturity": "research"
+    },
+    {
+      "id": "mncs-fabric",
+      "display_name": "MNCS Fabric",
+      "repository": {
+        "owner": "epi13",
+        "name": "mncs-fabric",
+        "url": "https://github.com/epi13/mncs-fabric"
+      },
+      "purpose": "Operator-controlled persistent execution fabric: fleet, workers, capability observations, and exact-target dispatch.",
+      "category": "runtime",
+      "authority_class": "execution-substrate",
+      "normative": false,
+      "role": "runtime",
+      "optional": false,
+      "audiences": ["developer", "worker"],
+      "foundational": true,
+      "platforms": ["linux", "windows", "linux-arm"],
+      "architectures": ["x86_64", "amd64", "aarch64", "arm64"],
+      "unsupported_platforms": ["macos"],
+      "dependencies": [],
+      "conflicts": [],
+      "runtime_requirements": ["python>=3.11"],
+      "build_requirements": [],
+      "install_strategy": "python-source-venv",
+      "automation": "assisted",
+      "source": {"kind": "git", "default_ref": "main", "ref_policy": "explicit-or-default-branch"},
+      "package": {"ecosystem": "python", "name": "mncs-fabric", "published": false},
+      "binaries": [{"name": "mncs-fabric", "entry": "mncs_fabric.cli:main"}],
+      "mcp": [],
+      "services": [
+        {
+          "id": "mncs-fabric-controller",
+          "kind": "systemd-user",
+          "unit": "mncs-fabric-controller.service",
+          "privilege": "user",
+          "installer": "deploy/systemd/install-or-update-controller.sh"
+        },
+        {
+          "id": "mncs-fabric-worker",
+          "kind": "systemd-user",
+          "unit": "mncs-fabric-worker-rendezvous@.service",
+          "privilege": "user",
+          "installer": "deploy/systemd/WORKER_INSTALL.md"
+        }
+      ],
+      "config_locations": [
+        {"kind": "config", "path": "~/.config/mncs-fabric/", "platform": "linux"},
+        {"kind": "state", "path": "~/.local/state/mncs-fabric/", "platform": "linux"},
+        {"kind": "socket", "path": "~/.local/state/mncs-fabric/controller.sock", "platform": "linux"}
+      ],
+      "health_checks": [
+        {"id": "fabric-cli", "kind": "binary", "binary": "mncs-fabric"},
+        {"id": "fabric-controller-unit", "kind": "user-unit", "unit": "mncs-fabric-controller.service"},
+        {"id": "fabric-controller-socket", "kind": "socket", "path": "~/.local/state/mncs-fabric/controller.sock"}
+      ],
+      "update_strategy": "git-pull-and-reinstall",
+      "relationships": [
+        {"id": "mncs-harness", "kind": "exposes", "note": "Harness consumes a running controller; it must not start Fabric."},
+        {"id": "mncs", "kind": "records", "note": "Execution receipts are operational, not MNCS conformance."}
+      ],
+      "documentation": {
+        "readme": "https://github.com/epi13/mncs-fabric/blob/main/README.md"
+      },
+      "install_notes": "Package install is automated. Controller/worker units, enrollment, TLS material, and rendezvous remain operator-mediated. Bootstrap will not create a shadow controller or invent credentials.",
+      "maturity": "alpha"
+    },
+    {
+      "id": "mncs-commons",
+      "display_name": "MNCS Commons",
+      "repository": {
+        "owner": "epi13",
+        "name": "MNCS-Commons",
+        "url": "https://github.com/epi13/MNCS-Commons"
+      },
+      "purpose": "Structured, provenance-aware coordination records. Commons has no execution authority.",
+      "category": "coordination",
+      "authority_class": "shared-records",
+      "normative": false,
+      "role": "runtime",
+      "optional": false,
+      "audiences": ["developer", "researcher"],
+      "foundational": true,
+      "platforms": ["linux", "windows", "linux-arm"],
+      "architectures": ["x86_64", "amd64", "aarch64", "arm64"],
+      "unsupported_platforms": ["macos"],
+      "dependencies": [],
+      "conflicts": [],
+      "runtime_requirements": ["python>=3.11"],
+      "build_requirements": [],
+      "install_strategy": "python-source-venv",
+      "automation": "assisted",
+      "source": {"kind": "git", "default_ref": "main", "ref_policy": "explicit-or-default-branch"},
+      "package": {"ecosystem": "python", "name": "mncs-commons", "extras": "mcp", "published": false},
+      "binaries": [
+        {"name": "mncs-commons", "entry": "mncs_commons.cli:main"},
+        {"name": "mncs-commons-mcp", "entry": "mncs_commons.mcp_server:main"},
+        {"name": "mncs-commons-service", "entry": "mncs_commons.service_cli:main"}
+      ],
+      "mcp": [
+        {
+          "id": "mncs-commons-mcp",
+          "transport": "stdio",
+          "command": "mncs-commons-mcp",
+          "config_hint": "Consumer access is typically through the Harness-owned MCP boundary, not by treating Commons as an installer database."
+        }
+      ],
+      "services": [
+        {
+          "id": "mncs-commons",
+          "kind": "systemd-user",
+          "unit": "mncs-commons.service",
+          "privilege": "user",
+          "installer": "deploy/systemd/"
+        }
+      ],
+      "config_locations": [
+        {"kind": "state", "path": "~/.local/state/mncs-commons/", "platform": "linux"},
+        {"kind": "socket", "path": "~/.local/state/mncs-commons/commons.sock", "platform": "linux"},
+        {"kind": "socket", "path": "~/.local/state/mncs-commons/commons-operator.sock", "platform": "linux"}
+      ],
+      "health_checks": [
+        {"id": "commons-cli", "kind": "binary", "binary": "mncs-commons"},
+        {"id": "commons-socket", "kind": "socket", "path": "~/.local/state/mncs-commons/commons.sock"}
+      ],
+      "update_strategy": "git-pull-and-reinstall",
+      "relationships": [
+        {"id": "mncs-harness", "kind": "exposes", "note": "Harness is a read-oriented Commons consumer."},
+        {"id": "mncs-fabric", "kind": "records", "note": "Commons records coordination state; Fabric owns execution."}
+      ],
+      "documentation": {
+        "readme": "https://github.com/epi13/MNCS-Commons/blob/main/README.md"
+      },
+      "install_notes": "Bootstrap does not publish mutable install state into Commons. Service sockets and trust configuration remain operator-owned.",
+      "maturity": "alpha"
+    },
+    {
+      "id": "mncs-harness",
+      "display_name": "MNCS Harness",
+      "repository": {
+        "owner": "epi13",
+        "name": "mncs-harness",
+        "url": "https://github.com/epi13/mncs-harness"
+      },
+      "purpose": "Policy-aware operator harness for model/tool routing, approvals, and deployment-level acceptance.",
+      "category": "operator-control",
+      "authority_class": "operator-harness",
+      "normative": false,
+      "role": "operator",
+      "optional": false,
+      "audiences": ["developer"],
+      "foundational": true,
+      "platforms": ["linux", "windows", "linux-arm"],
+      "architectures": ["x86_64", "amd64", "aarch64", "arm64"],
+      "unsupported_platforms": ["macos"],
+      "dependencies": [],
+      "conflicts": [],
+      "runtime_requirements": ["python>=3.11"],
+      "build_requirements": [],
+      "install_strategy": "python-source-venv",
+      "automation": "automated",
+      "source": {"kind": "git", "default_ref": "main", "ref_policy": "explicit-or-default-branch"},
+      "package": {"ecosystem": "python", "name": "mncs-harness", "extras": "distributed", "published": false},
+      "binaries": [
+        {"name": "mncs-harness", "entry": "epi13_local_harness.cli:main"},
+        {"name": "elh", "entry": "epi13_local_harness.cli:main"}
+      ],
+      "mcp": [],
+      "services": [],
+      "config_locations": [
+        {"kind": "config", "path": "~/.config/mncs-harness/config.toml", "platform": "linux"},
+        {"kind": "config", "path": "~/.config/epi13-local-harness/config.toml", "platform": "linux"},
+        {"kind": "state", "path": "~/.local/state/mncs-harness/", "platform": "linux"}
+      ],
+      "health_checks": [
+        {"id": "harness-cli", "kind": "binary", "binary": "mncs-harness"},
+        {"id": "harness-doctor", "kind": "cli-json", "binary": "mncs-harness", "argv": ["doctor", "--json"]},
+        {"id": "harness-config", "kind": "path-exists", "path": "~/.config/mncs-harness/config.toml"}
+      ],
+      "update_strategy": "git-pull-and-reinstall",
+      "relationships": [
+        {"id": "mncs-fabric", "kind": "consumes", "note": "Intended fabric.controller_mode=service against a running controller."},
+        {"id": "mncs-commons", "kind": "consumes", "note": "Optional structured memory; Commons has no execution authority."},
+        {"id": "mncs-control", "kind": "consumes", "note": "Control constrains where remote/operator actions may occur."}
+      ],
+      "documentation": {
+        "readme": "https://github.com/epi13/mncs-harness/blob/main/README.md"
+      },
+      "maturity": "alpha"
+    },
+    {
+      "id": "mncs-forge",
+      "display_name": "MNCS Forge",
+      "repository": {
+        "owner": "epi13",
+        "name": "mncs-forge-mcp",
+        "url": "https://github.com/epi13/mncs-forge-mcp"
+      },
+      "purpose": "Experimental development and evidence control plane. Not a package manager and not a source of independent evaluation.",
+      "category": "development-control",
+      "authority_class": "development-control-plane",
+      "normative": false,
+      "role": "development",
+      "optional": false,
+      "audiences": ["developer", "researcher"],
+      "foundational": true,
+      "platforms": ["linux", "windows", "linux-arm"],
+      "architectures": ["x86_64", "amd64", "aarch64", "arm64"],
+      "unsupported_platforms": ["macos"],
+      "dependencies": [],
+      "conflicts": [],
+      "runtime_requirements": ["python>=3.11"],
+      "build_requirements": [],
+      "install_strategy": "python-source-venv",
+      "automation": "automated",
+      "source": {"kind": "git", "default_ref": "main", "ref_policy": "explicit-or-default-branch"},
+      "package": {"ecosystem": "python", "name": "mncs-forge-mcp", "published": false},
+      "binaries": [
+        {"name": "mncs-forge", "entry": "mncs_forge.cli:main"},
+        {"name": "mncs-forge-mcp", "entry": "mncs_forge.server:main"}
+      ],
+      "mcp": [
+        {
+          "id": "mncs-forge-mcp",
+          "transport": "stdio",
+          "command": "mncs-forge-mcp",
+          "config_hint": "Local stdio MCP. Forge remains an experimental control plane and must not be used as a package manager."
+        }
+      ],
+      "services": [],
+      "config_locations": [
+        {"kind": "workspace", "path": ".mncs-forge/", "platform": "any"}
+      ],
+      "health_checks": [
+        {"id": "forge-cli", "kind": "binary", "binary": "mncs-forge"},
+        {"id": "forge-mcp", "kind": "binary", "binary": "mncs-forge-mcp"}
+      ],
+      "update_strategy": "git-pull-and-reinstall",
+      "relationships": [
+        {"id": "mncs", "kind": "evaluates", "note": "Delegates normative MNCS/MNCDS decisions to offline validators."}
+      ],
+      "documentation": {
+        "readme": "https://github.com/epi13/mncs-forge-mcp/blob/main/README.md"
+      },
+      "maturity": "experimental"
+    },
+    {
+      "id": "mncs-control",
+      "display_name": "MNCS Control MCP",
+      "repository": {
+        "owner": "epi13",
+        "name": "mncs-control-mcp",
+        "url": "https://github.com/epi13/mncs-control-mcp"
+      },
+      "purpose": "Protected Fedora developer workspace and MNCS orchestration over MCP. Does not own Fabric, Harness, Commons, or MNCS conformance.",
+      "category": "operator-control",
+      "authority_class": "operator-workspace",
+      "normative": false,
+      "role": "operator",
+      "optional": true,
+      "audiences": ["developer"],
+      "foundational": false,
+      "platforms": ["linux"],
+      "architectures": ["x86_64", "amd64"],
+      "unsupported_platforms": ["windows", "macos"],
+      "dependencies": [],
+      "conflicts": [],
+      "runtime_requirements": ["python>=3.11", "bwrap"],
+      "build_requirements": [],
+      "install_strategy": "user-service-script",
+      "automation": "assisted",
+      "source": {"kind": "git", "default_ref": "main", "ref_policy": "explicit-or-default-branch"},
+      "package": {"ecosystem": "python", "name": "mncs-control-mcp", "published": false},
+      "binaries": [{"name": "mncs-control-mcp", "entry": "mncs_control_mcp.server:main"}],
+      "mcp": [
+        {
+          "id": "mncs-control-mcp",
+          "transport": "stdio",
+          "command": "mncs-control-mcp",
+          "config_hint": "Typically exposed through a user systemd tunnel unit. Tunnel credentials are operator-supplied and never stored by bootstrap."
+        }
+      ],
+      "services": [
+        {
+          "id": "mncs-control-tunnel",
+          "kind": "systemd-user",
+          "unit": "mncs-control-tunnel.service",
+          "privilege": "user",
+          "installer": "scripts/install-user-service.sh"
+        }
+      ],
+      "config_locations": [
+        {"kind": "config", "path": "~/.config/mncs-control-mcp/", "platform": "linux"},
+        {"kind": "env-file", "path": "~/.config/mncs-control-mcp/tunnel.env", "platform": "linux"},
+        {"kind": "state", "path": "~/.local/state/mncs-control-mcp/", "platform": "linux"}
+      ],
+      "health_checks": [
+        {"id": "control-binary", "kind": "binary", "binary": "mncs-control-mcp"},
+        {"id": "control-config", "kind": "path-exists", "path": "~/.config/mncs-control-mcp/"},
+        {"id": "control-tunnel-unit", "kind": "user-unit", "unit": "mncs-control-tunnel.service"}
+      ],
+      "update_strategy": "git-pull-and-reinstall",
+      "relationships": [
+        {"id": "mncs-fabric", "kind": "consumes", "note": "May dispatch through Fabric; does not own fleet lifecycle."},
+        {"id": "mncs-forge", "kind": "consumes", "note": "May invoke Forge workflows; does not become Forge."},
+        {"id": "mncs-commons", "kind": "consumes", "note": "Read-only Commons consumer socket."}
+      ],
+      "documentation": {
+        "readme": "https://github.com/epi13/mncs-control-mcp/blob/main/README.md"
+      },
+      "install_notes": "Checkout and package install can be planned. Enabling the tunnel unit requires operator-supplied CONTROL_PLANE_API_KEY in a mode-0600 env file. Bootstrap never writes secrets.",
+      "maturity": "alpha"
+    },
+    {
+      "id": "mncs-atlas",
+      "display_name": "MNCS Atlas",
+      "repository": {
+        "owner": "epi13",
+        "name": "mncs-atlas",
+        "url": "https://github.com/epi13/mncs-atlas"
+      },
+      "purpose": "Non-normative family orientation guide and machine-readable atlas.json. Atlas orients; it does not install or certify.",
+      "category": "documentation",
+      "authority_class": "family-orientation",
+      "normative": false,
+      "role": "documentation",
+      "optional": true,
+      "audiences": ["user", "developer", "researcher"],
+      "foundational": false,
+      "platforms": ["linux", "windows", "linux-arm"],
+      "architectures": ["x86_64", "amd64", "aarch64", "arm64"],
+      "unsupported_platforms": ["macos"],
+      "dependencies": [],
+      "conflicts": [],
+      "runtime_requirements": [],
+      "build_requirements": [],
+      "install_strategy": "git-checkout",
+      "automation": "automated",
+      "source": {"kind": "git", "default_ref": "main", "ref_policy": "explicit-or-default-branch"},
+      "package": {"ecosystem": "none", "name": "mncs-atlas", "published": false},
+      "binaries": [],
+      "mcp": [],
+      "services": [],
+      "config_locations": [],
+      "health_checks": [
+        {"id": "atlas-json", "kind": "path-exists", "path": "site/atlas.json"}
+      ],
+      "update_strategy": "git-pull",
+      "relationships": [
+        {"id": "mncs", "kind": "orients", "note": "Points at MNCS as the normative standard."}
+      ],
+      "documentation": {
+        "readme": "https://github.com/epi13/mncs-atlas/blob/main/README.md",
+        "docs": "https://epi13.github.io/mncs-atlas/"
+      },
+      "maturity": "orientation"
+    },
+    {
+      "id": "mncs-reference-studies",
+      "display_name": "MNCS Reference Studies",
+      "repository": {
+        "owner": "epi13",
+        "name": "mncs-reference-studies",
+        "url": "https://github.com/epi13/mncs-reference-studies"
+      },
+      "purpose": "Empirical case studies and reference reimplementations. Authoritative for historical study evidence extracted from the standards repository.",
+      "category": "research",
+      "authority_class": "empirical-research",
+      "normative": false,
+      "role": "research",
+      "optional": true,
+      "audiences": ["researcher"],
+      "foundational": false,
+      "platforms": ["linux", "windows", "linux-arm"],
+      "architectures": ["x86_64", "amd64", "aarch64", "arm64"],
+      "unsupported_platforms": ["macos"],
+      "dependencies": [],
+      "conflicts": [],
+      "runtime_requirements": ["python>=3.11"],
+      "build_requirements": [],
+      "install_strategy": "git-checkout",
+      "automation": "automated",
+      "source": {"kind": "git", "default_ref": "main", "ref_policy": "explicit-or-default-branch"},
+      "package": {"ecosystem": "none", "name": "mncs-reference-studies", "published": false},
+      "binaries": [],
+      "mcp": [],
+      "services": [],
+      "config_locations": [],
+      "health_checks": [
+        {"id": "studies-readme", "kind": "path-exists", "path": "README.md"}
+      ],
+      "update_strategy": "git-pull",
+      "relationships": [
+        {"id": "mncs", "kind": "evaluates", "note": "Studies evaluate MNCS against architectures; they do not change the standard."},
+        {"id": "mncs-forge", "kind": "evaluates", "note": "Empirical Forge configuration lives here, not in the standards repository."}
+      ],
+      "documentation": {
+        "readme": "https://github.com/epi13/mncs-reference-studies/blob/main/README.md"
+      },
+      "maturity": "research"
+    },
+    {
+      "id": "mnel",
+      "display_name": "Machine-Native Experimental Learning",
+      "repository": {
+        "owner": "epi13",
+        "name": "Machine-Native-Experimental-Learning",
+        "url": "https://github.com/epi13/Machine-Native-Experimental-Learning"
+      },
+      "purpose": "Evidence-governed experimental learning: investigators, bounded experiments, and verified-experience distillation.",
+      "category": "research",
+      "authority_class": "experimental-research",
+      "normative": false,
+      "role": "research",
+      "optional": true,
+      "audiences": ["researcher"],
+      "foundational": false,
+      "platforms": ["linux", "windows", "linux-arm"],
+      "architectures": ["x86_64", "amd64", "aarch64", "arm64"],
+      "unsupported_platforms": ["macos"],
+      "dependencies": [],
+      "conflicts": [],
+      "runtime_requirements": ["python>=3.11"],
+      "build_requirements": [],
+      "install_strategy": "python-source-venv",
+      "automation": "automated",
+      "source": {"kind": "git", "default_ref": "main", "ref_policy": "explicit-or-default-branch"},
+      "package": {"ecosystem": "python", "name": "machine-native-experimental-learning", "published": false},
+      "binaries": [{"name": "mnel", "entry": "mnel.cli:main"}],
+      "mcp": [],
+      "services": [],
+      "config_locations": [],
+      "health_checks": [
+        {"id": "mnel-cli", "kind": "binary", "binary": "mnel"}
+      ],
+      "update_strategy": "git-pull-and-reinstall",
+      "relationships": [
+        {"id": "ravel", "kind": "records", "note": "MNEL may compile verified experience into RAVEL knowledge."},
+        {"id": "mncs-forge", "kind": "evaluates", "note": "Experiments run through Forge and Fabric remain bounded."},
+        {"id": "mncs-fabric", "kind": "consumes", "note": "Fabric owns detached execution."}
+      ],
+      "documentation": {
+        "readme": "https://github.com/epi13/Machine-Native-Experimental-Learning/blob/main/README.md"
+      },
+      "maturity": "research"
+    },
+    {
+      "id": "ravel",
+      "display_name": "RAVEL",
+      "repository": {
+        "owner": "epi13",
+        "name": "RAVEL",
+        "url": "https://github.com/epi13/RAVEL"
+      },
+      "purpose": "Adaptive learning, reasoning, and evidence orchestration beneath MNCS and MNCDS authority.",
+      "category": "research",
+      "authority_class": "experimental-research",
+      "normative": false,
+      "role": "research",
+      "optional": true,
+      "audiences": ["researcher"],
+      "foundational": false,
+      "platforms": ["linux", "windows", "linux-arm"],
+      "architectures": ["x86_64", "amd64", "aarch64", "arm64"],
+      "unsupported_platforms": ["macos"],
+      "dependencies": [],
+      "conflicts": [],
+      "runtime_requirements": ["python>=3.11"],
+      "build_requirements": [],
+      "install_strategy": "python-source-venv",
+      "automation": "automated",
+      "source": {"kind": "git", "default_ref": "main", "ref_policy": "explicit-or-default-branch"},
+      "package": {"ecosystem": "python", "name": "ravel-memory", "published": false},
+      "binaries": [{"name": "ravel-fabric-agent", "entry": "ravel.fabric_agent:main"}],
+      "mcp": [],
+      "services": [],
+      "config_locations": [],
+      "health_checks": [
+        {"id": "ravel-checkout", "kind": "path-exists", "path": "pyproject.toml"}
+      ],
+      "update_strategy": "git-pull-and-reinstall",
+      "relationships": [
+        {"id": "mncs", "kind": "consumes", "note": "Learning remains governed; RAVEL cannot promote MNCS results."},
+        {"id": "mnel", "kind": "consumes", "note": "MNEL is a producer of verified experience."}
+      ],
+      "documentation": {
+        "readme": "https://github.com/epi13/RAVEL/blob/main/README.md"
+      },
+      "maturity": "research"
+    },
+    {
+      "id": "mncs-lineage",
+      "display_name": "MNCS Lineage",
+      "repository": {
+        "owner": "epi13",
+        "name": "mncs-lineage",
+        "url": "https://github.com/epi13/mncs-lineage"
+      },
+      "purpose": "Experimental research into generational AI improvement, successor synthesis, and controlled model replacement.",
+      "category": "research",
+      "authority_class": "experimental-research",
+      "normative": false,
+      "role": "research",
+      "optional": true,
+      "audiences": ["researcher"],
+      "foundational": false,
+      "platforms": ["linux", "windows", "linux-arm"],
+      "architectures": ["x86_64", "amd64", "aarch64", "arm64"],
+      "unsupported_platforms": ["macos"],
+      "dependencies": [],
+      "conflicts": [],
+      "runtime_requirements": [],
+      "build_requirements": [],
+      "install_strategy": "git-checkout",
+      "automation": "automated",
+      "source": {"kind": "git", "default_ref": "main", "ref_policy": "explicit-or-default-branch"},
+      "package": {"ecosystem": "none", "name": "mncs-lineage", "published": false},
+      "binaries": [],
+      "mcp": [],
+      "services": [],
+      "config_locations": [],
+      "health_checks": [
+        {"id": "lineage-readme", "kind": "path-exists", "path": "README.md"}
+      ],
+      "update_strategy": "git-pull",
+      "relationships": [
+        {"id": "mncs", "kind": "consumes", "note": "Succession remains evidence-governed; lineage cannot self-promote."}
+      ],
+      "documentation": {
+        "readme": "https://github.com/epi13/mncs-lineage/blob/main/README.md"
+      },
+      "maturity": "research"
+    },
+    {
+      "id": "mncs-rights-provenance",
+      "display_name": "MNCS Rights and Provenance",
+      "repository": {
+        "owner": "epi13",
+        "name": "mncs-rights-provenance",
+        "url": "https://github.com/epi13/mncs-rights-provenance"
+      },
+      "purpose": "Research and draft specifications for machine-native software rights, contribution provenance, and artifact licensing. Not legal advice.",
+      "category": "governance",
+      "authority_class": "rights-provenance",
+      "normative": false,
+      "role": "research",
+      "optional": true,
+      "audiences": ["researcher", "developer"],
+      "foundational": false,
+      "platforms": ["linux", "windows", "linux-arm"],
+      "architectures": ["x86_64", "amd64", "aarch64", "arm64"],
+      "unsupported_platforms": ["macos"],
+      "dependencies": [],
+      "conflicts": [],
+      "runtime_requirements": [],
+      "build_requirements": [],
+      "install_strategy": "git-checkout",
+      "automation": "automated",
+      "source": {"kind": "git", "default_ref": "main", "ref_policy": "explicit-or-default-branch"},
+      "package": {"ecosystem": "none", "name": "mncs-rights-provenance", "published": false},
+      "binaries": [],
+      "mcp": [],
+      "services": [],
+      "config_locations": [],
+      "health_checks": [
+        {"id": "rights-readme", "kind": "path-exists", "path": "README.md"}
+      ],
+      "update_strategy": "git-pull",
+      "relationships": [
+        {"id": "mncs", "kind": "records", "note": "Provenance records what is known; uncertainty remains a valid state."}
+      ],
+      "documentation": {
+        "readme": "https://github.com/epi13/mncs-rights-provenance/blob/main/README.md"
+      },
+      "maturity": "research"
+    }
+  ]
+}

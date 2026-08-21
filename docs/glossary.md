@@ -2,6 +2,9 @@
 
 **Acceptance policy** — explicit three-valued gates deciding the candidate result.
 
+**Bootstrap receipt** — operational record of family installation or repair. It
+is not an MNCS conformance result, certification, or promotion authority.
+
 **Analyzer** — an evidence provider that derives bounded facts or invariant outcomes from
 an artifact, environment, or observation. Analyzer identity does not prove correctness.
 

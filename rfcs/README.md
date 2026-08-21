@@ -9,6 +9,7 @@ Draft RFCs:
 - [RFC 0006: Experimental language evidence profiles](0006-experimental-language-evidence-profiles.md)
 - [RFC 0007: Experimental composed machine-native systems](0007-composed-machine-native-systems.md)
 - [RFC 0008: Execution assurance for MNCS and MNCDS test evidence](0008-execution-assurance.md)
+- [RFC 0009: Machine-native bootstrap and deployment protocol](0009-machine-native-bootstrap-and-deployment.md)
 
 Accepted RFCs:
 

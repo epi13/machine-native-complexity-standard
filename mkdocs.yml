@@ -10,6 +10,20 @@ theme:
   name: mkdocs
 nav:
   - Home: index.md
+  - Getting started: getting-started.md
+  - Installation: installation.md
+  - Bootstrap: bootstrap.md
+  - RFC 0009 bootstrap design: machine-native-bootstrap-deployment.md
+  - MNCS family: family.md
+  - Components: components.md
+  - Profiles: profiles.md
+  - Configuration: configuration.md
+  - MCP: mcp.md
+  - Deployment: deployment.md
+  - Fabric deployment: fabric-deployment.md
+  - Platform support: platform-support.md
+  - Troubleshooting: troubleshooting.md
+  - AI agent bootstrap: ai-agent-bootstrap.md
   - Introduction: introduction.md
   - Foundation: foundational-model.md
   - Networked standard evolution: networked-standard-evolution.md

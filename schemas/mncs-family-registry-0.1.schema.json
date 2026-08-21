@@ -1,0 +1,370 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schema/bootstrap/0.1/mncs-family-registry-0.1.schema.json",
+  "title": "MNCS family component registry (operational, non-normative)",
+  "description": "Machine-readable map of MNCS-family components for discovery, planning, and bootstrap. This registry does not confer MNCS conformance, certification, independent evidence, protected custody, governance approval, PASS, or promotion authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "registry_id",
+    "name",
+    "description",
+    "authority",
+    "compatibility",
+    "profiles",
+    "components"
+  ],
+  "properties": {
+    "schema_version": {"const": "mncs-family-registry.v0.1"},
+    "registry_id": {"type": "string", "minLength": 1},
+    "name": {"type": "string", "minLength": 1},
+    "description": {"type": "string", "minLength": 1},
+    "authority": {"$ref": "#/$defs/authority"},
+    "compatibility": {"$ref": "#/$defs/compatibility"},
+    "profiles": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/profile"},
+      "propertyNames": {"pattern": "^(core|developer|worker|research|full|[a-z][a-z0-9-]*)$"}
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/component"}
+    }
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{0,63}$"},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "does_not_create", "note"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["discovery-and-bootstrap"]
+        },
+        "does_not_create": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "note": {"type": "string", "minLength": 1}
+      }
+    },
+    "compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "note"],
+      "properties": {
+        "state": {"type": "string", "enum": ["UNKNOWN", "constrained", "published"]},
+        "note": {"type": "string", "minLength": 1}
+      }
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["display_name", "description", "components"],
+      "properties": {
+        "display_name": {"type": "string", "minLength": 1},
+        "description": {"type": "string", "minLength": 1},
+        "components": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/id"}
+        },
+        "optional_components": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/id"}
+        }
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "display_name",
+        "repository",
+        "purpose",
+        "category",
+        "authority_class",
+        "normative",
+        "role",
+        "optional",
+        "audiences",
+        "foundational",
+        "platforms",
+        "architectures",
+        "dependencies",
+        "runtime_requirements",
+        "build_requirements",
+        "install_strategy",
+        "automation",
+        "binaries",
+        "health_checks",
+        "update_strategy",
+        "documentation"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "display_name": {"type": "string", "minLength": 1},
+        "repository": {"$ref": "#/$defs/repository"},
+        "purpose": {"type": "string", "minLength": 1},
+        "category": {
+          "type": "string",
+          "enum": [
+            "standard",
+            "specification",
+            "language",
+            "validator",
+            "runtime",
+            "development-control",
+            "operator-control",
+            "coordination",
+            "research",
+            "documentation",
+            "governance"
+          ]
+        },
+        "authority_class": {
+          "type": "string",
+          "enum": [
+            "normative-standard",
+            "development-specification",
+            "independent-validator",
+            "execution-substrate",
+            "development-control-plane",
+            "operator-workspace",
+            "operator-harness",
+            "shared-records",
+            "language-research",
+            "empirical-research",
+            "experimental-research",
+            "family-orientation",
+            "rights-provenance"
+          ]
+        },
+        "normative": {"type": "boolean"},
+        "role": {
+          "type": "string",
+          "enum": ["standard", "runtime", "development", "research", "documentation", "operator"]
+        },
+        "optional": {"type": "boolean"},
+        "audiences": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "enum": ["user", "developer", "researcher", "worker"]}
+        },
+        "foundational": {"type": "boolean"},
+        "platforms": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "enum": ["linux", "windows", "linux-arm", "macos"]}
+        },
+        "architectures": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "enum": ["x86_64", "amd64", "aarch64", "arm64"]}
+        },
+        "unsupported_platforms": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/id"}
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/id"}
+        },
+        "runtime_requirements": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "build_requirements": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "install_strategy": {
+          "type": "string",
+          "enum": [
+            "python-source-venv",
+            "cargo-source",
+            "git-checkout",
+            "user-service-script",
+            "manual",
+            "observe-only"
+          ]
+        },
+        "automation": {
+          "type": "string",
+          "enum": ["automated", "assisted", "manual", "observe"]
+        },
+        "source": {"$ref": "#/$defs/source"},
+        "package": {"$ref": "#/$defs/package"},
+        "binaries": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/binary"}
+        },
+        "mcp": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/mcp"}
+        },
+        "services": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/service"}
+        },
+        "config_locations": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/config_location"}
+        },
+        "health_checks": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/health_check"}
+        },
+        "update_strategy": {
+          "type": "string",
+          "enum": ["git-pull-and-reinstall", "git-pull", "manual", "none"]
+        },
+        "relationships": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/relationship"}
+        },
+        "documentation": {"$ref": "#/$defs/documentation"},
+        "install_notes": {"type": "string"},
+        "maturity": {
+          "type": "string",
+          "enum": ["experimental", "release-candidate", "alpha", "research", "orientation"]
+        }
+      }
+    },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "name", "url"],
+      "properties": {
+        "owner": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "url": {"type": "string", "format": "uri"}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "default_ref"],
+      "properties": {
+        "kind": {"type": "string", "enum": ["git"]},
+        "default_ref": {"type": "string", "minLength": 1},
+        "ref_policy": {
+          "type": "string",
+          "enum": ["explicit-or-default-branch", "release-tag", "pinned-commit"]
+        }
+      }
+    },
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ecosystem", "name"],
+      "properties": {
+        "ecosystem": {"type": "string", "enum": ["python", "cargo", "none"]},
+        "name": {"type": "string", "minLength": 1},
+        "extras": {"type": "string"},
+        "published": {"type": "boolean"}
+      }
+    },
+    "binary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "entry": {"type": "string"},
+        "conflict_note": {"type": "string"}
+      }
+    },
+    "mcp": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "transport", "command"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "transport": {"type": "string", "enum": ["stdio", "unix-socket"]},
+        "command": {"type": "string", "minLength": 1},
+        "config_hint": {"type": "string"}
+      }
+    },
+    "service": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "privilege"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "kind": {
+          "type": "string",
+          "enum": ["systemd-user", "windows-service", "unix-socket", "manual"]
+        },
+        "unit": {"type": "string"},
+        "privilege": {"type": "string", "enum": ["user", "administrator"]},
+        "installer": {"type": "string"}
+      }
+    },
+    "config_location": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "path"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["config", "state", "socket", "env-file", "workspace"]
+        },
+        "path": {"type": "string", "minLength": 1},
+        "platform": {"type": "string", "enum": ["linux", "windows", "any"]}
+      }
+    },
+    "health_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "kind": {
+          "type": "string",
+          "enum": ["binary", "cli-json", "path-exists", "user-unit", "socket", "mcp-config"]
+        },
+        "binary": {"type": "string"},
+        "argv": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "path": {"type": "string"},
+        "unit": {"type": "string"}
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "kind": {
+          "type": "string",
+          "enum": ["consumes", "exposes", "validates", "records", "orients", "evaluates"]
+        },
+        "note": {"type": "string"}
+      }
+    },
+    "documentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["readme"],
+      "properties": {
+        "readme": {"type": "string", "format": "uri"},
+        "docs": {"type": "string", "format": "uri"},
+        "agents": {"type": "string", "format": "uri"}
+      }
+    }
+  }
+}

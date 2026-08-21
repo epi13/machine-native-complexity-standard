@@ -5,6 +5,13 @@ validator and explicit version identifiers for the standard.
 
 ## 0.3.0rc1 — unreleased
 
+- Add an operational MNCS family registry, host discovery, planner, receipts,
+  and `mncs` bootstrap/doctor/describe commands as a working foundation for
+  RFC 0009. Installation does not create conformance, certification, PASS, or
+  promotion authority.
+- Refresh README, getting-started, and family documentation so this repository
+  remains the standard while also serving as the family entry point.
+
 - Relocate canonical MNCDS specification text to
   `machine-native-complexity-development-specification`. This repository keeps
   consumed schemas, examples, and an `mncds` consumer so existing validation

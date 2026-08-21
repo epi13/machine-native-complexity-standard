@@ -1,5 +1,8 @@
 # Quickstart
 
+This page validates MNCS evidence. To discover or install the wider family, see
+[Getting started](getting-started.md) and [Bootstrap](bootstrap.md).
+
 Create an isolated environment and install the validators:
 
 ```bash
