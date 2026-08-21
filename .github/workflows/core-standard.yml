@@ -23,6 +23,7 @@ jobs:
       - run: ruff check .
       - run: mypy src
       - run: python scripts/validate_release_gap_issue_map.py
+      - run: python scripts/validate-family-registry.py
       - run: git diff --check
 
   python:
@@ -39,6 +40,11 @@ jobs:
           cache: pip
       - run: python -m pip install -e '.[dev]'
       - run: pytest -m "not experimental"
+      - run: python scripts/validate-family-registry.py
+      - name: Exercise bootstrap CLI JSON
+        run: |
+          python -m mncs_validator family --json
+          python -m mncs_validator bootstrap --profile core --plan --json --no-network
       - name: Validate packaged schemas
         run: python -c "from mncs_validator.schemas import SCHEMA_NAMES, load_schema; [load_schema(n) for n in SCHEMA_NAMES]"
       - run: ./scripts/run-conformance-corpus

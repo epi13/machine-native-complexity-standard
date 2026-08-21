@@ -18,7 +18,10 @@ contract, reference behavior, limits, policy, evidence, provenance, development 
 regeneration, and rollback. Complexity is acceptable only for a predeclared measurable
 benefit.
 
-[Read the MNCS introduction](introduction.md), [review the broader foundation](foundational-model.md),
+[Read the MNCS introduction](introduction.md), [get started](getting-started.md),
+[install family software](installation.md),
+[review the broader foundation](foundational-model.md),
+[see the MNCS family](family.md),
 [see how the project family supports networked standard evolution](networked-standard-evolution.md),
 [review the MNCDS companion](https://github.com/epi13/machine-native-complexity-development-specification),
 or [validate an example](quickstart.md). MNCS and MNCDS are not
@@ -39,6 +42,11 @@ assurance-case profiles, and a focused compiler-backed Machine-Native Evidence A
 RFC 0006 proposes the non-normative multilingual language-evidence layer. Both remain Draft;
 neither changes MNCS 0.2 or promotes MNCDS.
 
+- [Getting started](getting-started.md)
+- [Installation](installation.md)
+- [Bootstrap](bootstrap.md)
+- [MNCS family](family.md)
+- [AI agent bootstrap](ai-agent-bootstrap.md)
 - [Networked standard evolution](networked-standard-evolution.md)
 - [Experimental language evidence profiles](language-evidence-profiles.md)
 - [Experimental execution-placement evidence](execution-placement-evidence.md)

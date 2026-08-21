@@ -1,4 +1,4 @@
-.PHONY: format lint type test build examples corpus mncds-corpus interoperability release-candidate-schema release-candidate-corpus release-candidate-independent release-candidate-check docs check
+.PHONY: format lint type test build examples corpus mncds-corpus interoperability release-candidate-schema release-candidate-corpus release-candidate-independent release-candidate-check docs family check
 
 format:
 	ruff format .
@@ -30,4 +30,7 @@ release-candidate-independent:
 release-candidate-check: release-candidate-schema release-candidate-corpus release-candidate-independent
 docs:
 	./scripts/build-docs
-check: lint type test build examples corpus mncds-corpus interoperability release-candidate-check docs
+family:
+	PYTHONPATH=src python scripts/validate-family-registry.py
+	PYTHONPATH=src python -c "from mncs_validator.cli import main; raise SystemExit(main(['family','--json']))"
+check: lint type test build examples corpus mncds-corpus interoperability release-candidate-check family docs

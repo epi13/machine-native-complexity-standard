@@ -1,6 +1,13 @@
 # Machine-Native Complexity Standard
 
-MNCS is an open experimental standard for accepting generated or machine-optimized implementations through bounded evidence. It is not accredited certification.
+MNCS is an open experimental standard for accepting generated or machine-optimized
+implementations through bounded evidence. It is not accredited certification, and
+installing MNCS-family software does not make a system conformant.
+
+**MNCS defines the standard and evidence model.**  
+The wider MNCS family supplies the language, execution fabric, development
+controls, experimental infrastructure, shared records, research systems, and
+supporting tools that explore and implement machine-native computing.
 
 Development-process guidance is maintained separately by the
 [Machine-Native Complexity Development Specification (MNCDS)](https://github.com/epi13/machine-native-complexity-development-specification).
@@ -8,6 +15,86 @@ MNCS can consume an MNCDS result as a companion object; it does not embed or
 own the development specification.
 
 > **Human readability is relocated, not eliminated.**
+
+Conventional source conventions assume a human is the final abstraction boundary.
+MNCS exists because software is increasingly generated, transformed, evaluated,
+and maintained by machines. Readable control moves to contracts, evidence,
+provenance, and regeneration — not because humans stop mattering, but because
+unbounded generated internals are a poor place to hide acceptance.
+
+## Getting started
+
+```bash
+python -m venv .venv
+. .venv/bin/activate
+python -m pip install .
+mncs version --json
+mncs family --json
+mncs bootstrap --profile core --plan --json
+```
+
+If Python is not installed yet, use [`bootstrap/mncs-bootstrap.sh`](bootstrap/mncs-bootstrap.sh)
+or [`bootstrap/mncs-bootstrap.ps1`](bootstrap/mncs-bootstrap.ps1). Those shims
+report missing tools; they do not pipe remote scripts to a privileged shell.
+
+- Humans: [Getting started](docs/getting-started.md), [Installation](docs/installation.md)
+- Agents: [AI agent bootstrap](docs/ai-agent-bootstrap.md) and `mncs describe --json`
+- Family map: [docs/family.md](docs/family.md), registry `family/mncs-family.v0.1.json`
+
+## The MNCS family
+
+```text
+                         MNCS
+                  Standard / Evidence
+                         │
+          ┌──────────────┼──────────────┐
+          │              │              │
+        MNCDS        MNCS Language    Commons
+     Development       Language /     Shared
+       process          compiler       records
+          │              │              │
+          └──────────┬───┴──────┬───────┘
+                     │          │
+                   Forge      Fabric
+                verification  execution
+                     │          │
+                     └────Harness
+                            │
+                  operator routing /
+                    experimentation
+```
+
+Also in the family: [Atlas](https://github.com/epi13/mncs-atlas) (orientation),
+[reference studies](https://github.com/epi13/mncs-reference-studies),
+[independent Rust validator](https://github.com/epi13/mncs-validator-rs),
+[Control MCP](https://github.com/epi13/mncs-control-mcp),
+[MNEL](https://github.com/epi13/Machine-Native-Experimental-Learning),
+[RAVEL](https://github.com/epi13/RAVEL),
+[lineage](https://github.com/epi13/mncs-lineage), and
+[rights/provenance](https://github.com/epi13/mncs-rights-provenance).
+
+This repository is the standard and the **entry point**. It is not a monorepo
+and does not own those projects' contracts.
+
+## For researchers, developers, and implementers
+
+- **Researchers** — start with [philosophy](docs/philosophy.md),
+  [foundation](docs/foundational-model.md), and
+  [reference studies](https://github.com/epi13/mncs-reference-studies).
+- **Developers** — [validator](docs/validator.md), [bootstrap](docs/bootstrap.md),
+  [MNCDS](https://github.com/epi13/machine-native-complexity-development-specification).
+- **Implementers / operators** — [deployment](docs/deployment.md),
+  [Fabric](docs/fabric-deployment.md), [MCP](docs/mcp.md).
+
+## Current maturity
+
+MNCS 0.3-rc.1 and MNCDS 0.1-rc.1 are implemented release-candidate proposals.
+RFCs 0004 and 0005 remain Draft. Independent operation, organizational
+independence, externally protected custody, security/privacy acceptance,
+governance approval, and final release authorization remain OPEN or UNKNOWN.
+Family version compatibility is `UNKNOWN` until a compatible-set matrix exists.
+
+A bootstrap receipt is an operational record of installation. It is not PASS.
 
 ## Release-candidate foundation
 
@@ -169,7 +256,9 @@ mncs challenge validate challenge.json --json
 ## Repository map
 
 - `spec/` — frozen MNCS 0.2 and the 0.3 release candidate. MNCDS spec text now lives in the MNCDS repository.
-- `schemas/` — normative and experimental MNCS schemas, plus consumed copies of MNCDS record schemas used by the local consumer.
+- `family/` — machine-readable MNCS family registry used by bootstrap (operational, non-normative).
+- `bootstrap/` — dependency-light shims that detect a missing Python interpreter.
+- `schemas/` — normative and experimental MNCS schemas, plus consumed copies of MNCDS record schemas used by the local consumer, plus operational bootstrap schemas.
 - `conformance/release-candidate/` — shared MNCS golden vectors, including interoperability cases that mention MNCDS companion objects.
 - `independent/rc-consumer/` — independent Rust release-candidate consumer.
 - `references/` — links and provenance pointers to empirical work.

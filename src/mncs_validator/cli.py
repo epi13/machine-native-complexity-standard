@@ -69,7 +69,10 @@ def _json_option(parser: argparse.ArgumentParser) -> None:
 def build_parser() -> argparse.ArgumentParser:
     """Build the public argument parser."""
 
-    parser = argparse.ArgumentParser(prog="mncs", description="MNCS offline validator")
+    parser = argparse.ArgumentParser(
+        prog="mncs",
+        description="MNCS offline validator and family bootstrap",
+    )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     init = subparsers.add_parser("init", help="initialize an evidence bundle")
@@ -347,6 +350,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     version = subparsers.add_parser("version", help="print validator version")
     _json_option(version)
+
+    from .bootstrap.cli import register_bootstrap_commands
+
+    register_bootstrap_commands(subparsers)
     return parser
 
 
@@ -446,6 +453,10 @@ def run(args: argparse.Namespace) -> int:
     command = args.command
     result: Any
     report: Any
+    from .bootstrap.cli import bootstrap_commands, run_bootstrap
+
+    if command in bootstrap_commands():
+        return run_bootstrap(args)
     if command == "init":
         init_result = _initialize(args.path)
         _write_json(init_result) if args.json else print(f"Initialized {args.path}")

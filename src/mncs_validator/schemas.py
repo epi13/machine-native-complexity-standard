@@ -88,6 +88,10 @@ SCHEMA_NAMES = {
     "performance-result-0.1": "mncs-performance-result-0.1.schema.json",
     "provenance-0.1": "mncs-provenance-0.1.schema.json",
     "tool-provider-0.1": "mncs-tool-provider-0.1.schema.json",
+    "family-registry-0.1": "mncs-family-registry-0.1.schema.json",
+    "host-observation-0.1": "mncs-host-observation-0.1.schema.json",
+    "bootstrap-plan-0.1": "mncs-bootstrap-plan-0.1.schema.json",
+    "bootstrap-receipt-0.1": "mncs-bootstrap-receipt-0.1.schema.json",
 }
 
 

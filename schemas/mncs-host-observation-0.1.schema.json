@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schema/bootstrap/0.1/mncs-host-observation-0.1.schema.json",
+  "title": "MNCS bootstrap host observation (operational, non-normative)",
+  "description": "Observed facts about a host for MNCS family bootstrap planning. This is not execution assurance, conformance, or certification evidence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "captured_at",
+    "os",
+    "architecture",
+    "support",
+    "tools",
+    "resources",
+    "mncs"
+  ],
+  "properties": {
+    "schema_version": {"const": "mncs-host-observation.v0.1"},
+    "captured_at": {"type": "string", "minLength": 1},
+    "os": {"type": "string", "enum": ["linux", "windows", "macos", "unknown"]},
+    "os_name": {"type": "string"},
+    "os_version": {"type": "string"},
+    "distro": {"type": "string"},
+    "architecture": {"type": "string"},
+    "support": {
+      "type": "string",
+      "enum": ["supported", "experimental", "deferred", "unsupported", "unknown"]
+    },
+    "support_note": {"type": "string"},
+    "hostname_present": {"type": "boolean"},
+    "tools": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/tool"}
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cpu_count": {"type": ["integer", "null"], "minimum": 1},
+        "ram_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "disk_total_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "disk_free_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "gpu": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name"],
+            "properties": {
+              "name": {"type": "string"},
+              "vendor": {"type": "string"},
+              "driver": {"type": "string"},
+              "memory_bytes": {"type": ["integer", "null"]}
+            }
+          }
+        }
+      }
+    },
+    "services": {
+      "type": "object",
+      "additionalProperties": {"type": "string"}
+    },
+    "mncs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workspace", "components", "mcp", "binaries"],
+      "properties": {
+        "workspace": {"type": ["string", "null"]},
+        "components": {
+          "type": "object",
+          "additionalProperties": {"$ref": "#/$defs/component_state"}
+        },
+        "mcp": {
+          "type": "object",
+          "additionalProperties": {"$ref": "#/$defs/mcp_state"}
+        },
+        "binaries": {
+          "type": "object",
+          "additionalProperties": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  },
+  "$defs": {
+    "tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "available"],
+      "properties": {
+        "name": {"type": "string"},
+        "available": {"type": "boolean"},
+        "path": {"type": ["string", "null"]},
+        "version": {"type": ["string", "null"]},
+        "status": {
+          "type": "string",
+          "enum": ["healthy", "absent", "unknown", "error"]
+        }
+      }
+    },
+    "component_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "state"],
+      "properties": {
+        "id": {"type": "string"},
+        "state": {
+          "type": "string",
+          "enum": [
+            "not_installed",
+            "checkout_present",
+            "installed",
+            "configured",
+            "healthy",
+            "degraded",
+            "blocked",
+            "unsupported",
+            "unknown"
+          ]
+        },
+        "path": {"type": ["string", "null"]},
+        "version": {"type": ["string", "null"]},
+        "ref": {"type": ["string", "null"]},
+        "detail": {"type": "string"}
+      }
+    },
+    "mcp_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "state"],
+      "properties": {
+        "id": {"type": "string"},
+        "state": {
+          "type": "string",
+          "enum": [
+            "not_installed",
+            "installed",
+            "configured",
+            "reachable",
+            "healthy",
+            "degraded",
+            "incompatible",
+            "blocked",
+            "unknown"
+          ]
+        },
+        "detail": {"type": "string"}
+      }
+    }
+  }
+}

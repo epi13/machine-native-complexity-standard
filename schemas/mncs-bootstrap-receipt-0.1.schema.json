@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schema/bootstrap/0.1/mncs-bootstrap-receipt-0.1.schema.json",
+  "title": "MNCS bootstrap installation receipt (operational, non-normative)",
+  "description": "Operational record of what the MNCS family bootstrapper observed and did. This receipt is not an MNCS conformance result, certification, independent evidence, protected custody, governance approval, PASS, or promotion authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "receipt_kind",
+    "disclaimer",
+    "bootstrap_version",
+    "requested",
+    "host",
+    "started_at",
+    "completed_at",
+    "actions",
+    "outcome"
+  ],
+  "properties": {
+    "schema_version": {"const": "mncs-bootstrap-receipt.v0.1"},
+    "receipt_kind": {"const": "installation-deployment"},
+    "disclaimer": {"type": "string", "minLength": 1},
+    "bootstrap_version": {"type": "string", "minLength": 1},
+    "requested": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile", "components"],
+      "properties": {
+        "profile": {"type": ["string", "null"]},
+        "components": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "workspace": {"type": ["string", "null"]},
+        "ref": {"type": ["string", "null"]},
+        "dry_run": {"type": "boolean"}
+      }
+    },
+    "host": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["os", "architecture"],
+      "properties": {
+        "os": {"type": "string"},
+        "os_name": {"type": "string"},
+        "architecture": {"type": "string"},
+        "fingerprint": {"type": "string"}
+      }
+    },
+    "started_at": {"type": "string", "minLength": 1},
+    "completed_at": {"type": "string", "minLength": 1},
+    "resolved_components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "state"],
+        "properties": {
+          "id": {"type": "string"},
+          "state": {"type": "string"},
+          "path": {"type": ["string", "null"]},
+          "ref": {"type": ["string", "null"]},
+          "version": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "component", "kind", "result"],
+        "properties": {
+          "id": {"type": "string"},
+          "component": {"type": "string"},
+          "kind": {"type": "string"},
+          "result": {
+            "type": "string",
+            "enum": ["completed", "skipped", "failed", "blocked", "planned"]
+          },
+          "detail": {"type": "string"}
+        }
+      }
+    },
+    "health": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "state"],
+        "properties": {
+          "id": {"type": "string"},
+          "state": {"type": "string"},
+          "detail": {"type": "string"}
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "failures": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "configuration_paths": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "outcome": {
+      "type": "string",
+      "enum": ["completed", "unchanged", "partial", "failed", "planned", "unsupported"]
+    }
+  }
+}

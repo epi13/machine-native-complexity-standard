@@ -1,5 +1,27 @@
 # MNCS repository agent guidance
 
+## Entry point
+
+This repository is the Machine-Native Complexity Standard. It is also the
+machine-readable entry point into the MNCS family. Prefer:
+
+```bash
+mncs describe --json
+mncs family --json
+mncs doctor --json
+mncs bootstrap --profile developer --plan --json
+```
+
+over scraping README text. See [docs/ai-agent-bootstrap.md](docs/ai-agent-bootstrap.md).
+
+- MNCS owns the standard and evidence model.
+- Family components keep independent authority.
+- Installation does not create conformance, certification, independent evidence,
+  protected custody, governance approval, PASS, or promotion.
+- Missing evidence remains `UNKNOWN`. `FAIL` dominates `UNKNOWN`, which dominates `PASS`.
+- Do not assume `/home/epi13/Documents/Projects` as a workspace.
+- If Control/Forge/Fabric/Harness/Commons tools are available, inspect them live.
+
 ## MNCS Forge
 
 - The empirical Forge project configuration and study providers live in the dedicated

@@ -19,6 +19,10 @@ such a comparison is claimed. Joern is optional. Source reading, grep, and line 
 not replace unavailable structural evidence; missing capability remains `UNKNOWN` or a
 review blocker.
 
+Family-registry and bootstrap changes must keep `family/mncs-family.v0.1.json`
+in sync with the packaged copy, pass `python scripts/validate-family-registry.py`,
+and must not treat installation as conformance.
+
 Use a local virtual environment:
 
 ```bash
