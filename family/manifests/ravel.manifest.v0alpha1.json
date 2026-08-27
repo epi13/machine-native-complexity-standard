@@ -1,0 +1,138 @@
+{
+  "schema_version": "mncs-family.repository-manifest/v0alpha1",
+  "repository": "ravel",
+  "revision": 1,
+  "contracts": {
+    "provides": [
+      {
+        "contract": "ravel-core-binding",
+        "version": "0.6",
+        "kind": "module-surface",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "mncs/workspace/ravel_core.mncs"
+        ],
+        "consumers_declared": [
+          "mncs-language"
+        ]
+      },
+      {
+        "contract": "development-record-schema",
+        "version": "0.6-preregistration",
+        "kind": "record-schema",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "ravel_versions/0.6/"
+        ],
+        "consumers_declared": [
+          "mnel",
+          "mncs-commons"
+        ]
+      }
+    ],
+    "consumes": [
+      {
+        "contract": "mncs-language.source-profile",
+        "envelope": {
+          "op": "compatible-minor",
+          "version": "0.5"
+        },
+        "required": true,
+        "evidence_refs": [
+          "tools/ravel_mncs_check.py",
+          "ravel_versions/0.6/ravel-0.6-family-compatibility-lock.json"
+        ]
+      },
+      {
+        "contract": "mncs-language.core-standard-library",
+        "envelope": {
+          "op": "any"
+        },
+        "required": true,
+        "evidence_refs": [
+          "mncs/docs/mncs-native-evidence.md"
+        ]
+      },
+      {
+        "contract": "mncs-language.cli-toolchain",
+        "envelope": {
+          "op": "at-least",
+          "version": "0.5"
+        },
+        "required": true,
+        "evidence_refs": [
+          "tools/ravel_mncs_check.py"
+        ]
+      },
+      {
+        "contract": "mncs-fabric.public-controller-contract",
+        "envelope": {
+          "op": "any"
+        },
+        "required": false,
+        "evidence_refs": [
+          "ravel_versions/0.6/ravel-0.6-family-compatibility-lock.json"
+        ]
+      },
+      {
+        "contract": "mncs-forge.development-workflow-control",
+        "envelope": {
+          "op": "at-least",
+          "version": "0.3"
+        },
+        "required": true,
+        "evidence_refs": [
+          "mncs-forge.toml"
+        ]
+      },
+      {
+        "contract": "mncs-commons.record-store-api",
+        "envelope": {
+          "op": "any"
+        },
+        "required": false,
+        "evidence_refs": [
+          "ravel_versions/0.6/ravel-0.6-family-compatibility-lock.json"
+        ]
+      }
+    ],
+    "tests": [
+      {
+        "test": "unittest",
+        "covers": [
+          "ravel-core-binding",
+          "development-record-schema"
+        ],
+        "obligation": "self",
+        "command": {
+          "argv": [
+            "python",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-v"
+          ],
+          "timeout_seconds": 2400
+        }
+      },
+      {
+        "test": "mncs-experiments-check",
+        "covers": [
+          "ravel-core-binding"
+        ],
+        "obligation": "consumer-compatibility",
+        "command": {
+          "argv": [
+            "python3",
+            "tools/ravel_mncs_check.py",
+            "mncs-experiments"
+          ],
+          "timeout_seconds": 2400
+        }
+      }
+    ]
+  },
+  "manifest_location": "central"
+}

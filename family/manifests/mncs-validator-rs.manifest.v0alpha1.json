@@ -1,0 +1,48 @@
+{
+  "schema_version": "mncs-family.repository-manifest/v0alpha1",
+  "repository": "mncs-validator-rs",
+  "revision": 1,
+  "contracts": {
+    "provides": [
+      {
+        "contract": "independent-corpus-validator",
+        "version": "0.1",
+        "kind": "validator-surface",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "src/"
+        ]
+      }
+    ],
+    "consumes": [
+      {
+        "contract": "mncs.normative-specification",
+        "envelope": {
+          "op": "exact",
+          "version": "0.3-rc.1"
+        },
+        "required": true,
+        "evidence_refs": [
+          "README.md"
+        ]
+      }
+    ],
+    "tests": [
+      {
+        "test": "cargo-test",
+        "covers": [
+          "independent-corpus-validator"
+        ],
+        "obligation": "self",
+        "command": {
+          "argv": [
+            "cargo",
+            "test"
+          ],
+          "timeout_seconds": 1800
+        }
+      }
+    ]
+  },
+  "manifest_location": "central"
+}

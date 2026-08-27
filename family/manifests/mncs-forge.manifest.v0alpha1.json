@@ -1,0 +1,127 @@
+{
+  "schema_version": "mncs-family.repository-manifest/v0alpha1",
+  "repository": "mncs-forge",
+  "revision": 1,
+  "contracts": {
+    "provides": [
+      {
+        "contract": "forge-provider-protocol",
+        "version": "0.1",
+        "kind": "protocol",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "docs/provider-protocol.md"
+        ],
+        "consumers_declared": [
+          "mncs-language",
+          "mncs-lineage",
+          "ravel",
+          "mncs-reference-studies",
+          "mncs-fabric",
+          "mncs"
+        ]
+      },
+      {
+        "contract": "concept-evaluation-record",
+        "version": "0.1",
+        "kind": "record-schema",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "src/mncs_forge/concept_experiments.py"
+        ],
+        "consumers_declared": [
+          "mncs-control",
+          "mncs-commons"
+        ]
+      },
+      {
+        "contract": "development-workflow-control",
+        "version": "0.3",
+        "kind": "config-surface",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "schemas/mncs-forge-config.schema.json"
+        ],
+        "consumers_declared": [
+          "mncs-language",
+          "ravel",
+          "mnel",
+          "mncs-lineage",
+          "mncs-fabric",
+          "mncs-reference-studies",
+          "mncs-commons",
+          "mncs"
+        ]
+      }
+    ],
+    "consumes": [
+      {
+        "contract": "mncs-language.compiler-record",
+        "envelope": {
+          "op": "any"
+        },
+        "required": true,
+        "evidence_refs": [
+          "src/mncs_forge/compiler_evolution.py"
+        ]
+      },
+      {
+        "contract": "mncs-language.experiment-record",
+        "envelope": {
+          "op": "any"
+        },
+        "required": true,
+        "evidence_refs": [
+          "src/mncs_forge/compiler_evolution.py"
+        ]
+      },
+      {
+        "contract": "mncs-fabric.execution-plane",
+        "envelope": {
+          "op": "compatible-minor",
+          "version": "0.2.0a0"
+        },
+        "required": true,
+        "evidence_refs": [
+          "src/mncs_forge/fabric_execution.py"
+        ]
+      }
+    ],
+    "tests": [
+      {
+        "test": "check-script",
+        "covers": [
+          "concept-evaluation-record",
+          "forge-provider-protocol",
+          "development-workflow-control"
+        ],
+        "obligation": "self",
+        "command": {
+          "argv": [
+            ".venv/bin/ruff",
+            "check",
+            "."
+          ],
+          "timeout_seconds": 600
+        }
+      },
+      {
+        "test": "pytest",
+        "covers": [
+          "concept-evaluation-record",
+          "forge-provider-protocol",
+          "development-workflow-control"
+        ],
+        "obligation": "self",
+        "command": {
+          "argv": [
+            ".venv/bin/pytest",
+            "-q"
+          ],
+          "timeout_seconds": 2400
+        }
+      }
+    ]
+  },
+  "manifest_location": "central"
+}

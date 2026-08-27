@@ -1,0 +1,96 @@
+{
+  "schema_version": "mncs-family.repository-manifest/v0alpha1",
+  "repository": "mncs-fabric",
+  "revision": 1,
+  "contracts": {
+    "provides": [
+      {
+        "contract": "execution-plane",
+        "version": "0.2.0a31",
+        "kind": "protocol",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "src/mncs_fabric/models.py",
+          "src/mncs_fabric/receipts.py",
+          "schemas/"
+        ],
+        "consumers_declared": [
+          "mncs-harness",
+          "mnel",
+          "mncs-control",
+          "mncs-forge"
+        ],
+        "notes": "job-plan/artifact-manifest/execution-record/cohort-result v0.1 schema family under PROTOCOL_VERSION mncs-fabric.protocol.v0.1."
+      },
+      {
+        "contract": "family-execution-reference",
+        "version": "0.1",
+        "kind": "record-schema",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "src/mncs_fabric/receipts.py"
+        ],
+        "consumers_declared": [
+          "mncs-control",
+          "mncs-commons",
+          "mncs-forge"
+        ]
+      },
+      {
+        "contract": "public-controller-contract",
+        "version": "0.1",
+        "kind": "protocol",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "src/mncs_fabric/contracts.py"
+        ]
+      }
+    ],
+    "consumes": [
+      {
+        "contract": "mncs-language.cli-toolchain",
+        "envelope": {
+          "op": "any"
+        },
+        "required": false,
+        "notes": "Frozen-experiment packaging examples only."
+      },
+      {
+        "contract": "mncs-forge.forge-provider-protocol",
+        "envelope": {
+          "op": "exact",
+          "version": "0.1"
+        },
+        "required": false,
+        "evidence_refs": [
+          "mncs-forge.toml",
+          "scripts/forge_provider.py"
+        ]
+      }
+    ],
+    "tests": [
+      {
+        "test": "unittest",
+        "covers": [
+          "execution-plane",
+          "family-execution-reference",
+          "public-controller-contract"
+        ],
+        "obligation": "self",
+        "command": {
+          "argv": [
+            "python",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-v"
+          ],
+          "timeout_seconds": 2400
+        }
+      }
+    ]
+  },
+  "manifest_location": "central"
+}

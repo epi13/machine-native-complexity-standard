@@ -58,11 +58,13 @@
         "mncs-forge",
         "mncs-control",
         "mncs-language",
+        "mncs-language-service",
         "mncs-reference-studies",
         "mnel",
         "ravel",
         "mncs-atlas",
         "mncs-lineage",
+        "mncs-tui",
         "mncs-rights-provenance"
       ],
       "optional_components": ["mncs-validator-rs"]
@@ -80,11 +82,13 @@
         "mncs-forge",
         "mncs-control",
         "mncs-language",
+        "mncs-language-service",
         "mncs-reference-studies",
         "mnel",
         "ravel",
         "mncs-atlas",
         "mncs-lineage",
+        "mncs-tui",
         "mncs-rights-provenance"
       ]
     }
@@ -271,6 +275,37 @@
       },
       "install_notes": "Do not cargo-install the language CLI onto PATH; its binary name collides with mncs-validator.",
       "maturity": "research"
+    },
+    {
+      "id": "mncs-language-service",
+      "display_name": "MNCS Language Service",
+      "repository": {
+        "owner": "epi13",
+        "name": "mncs-language-service",
+        "url": "https://github.com/epi13/mncs-language-service"
+      },
+      "purpose": "Language-server and MCP tooling for MNCS Language consumers.",
+      "category": "language",
+      "authority_class": "language-research",
+      "normative": false,
+      "role": "research",
+      "optional": true,
+      "audiences": ["developer", "researcher"],
+      "foundational": false,
+      "platforms": ["linux", "windows", "linux-arm"],
+      "architectures": ["x86_64", "amd64", "aarch64", "arm64"],
+      "dependencies": ["mncs-language"],
+      "runtime_requirements": [],
+      "build_requirements": ["rustc", "cargo"],
+      "install_strategy": "cargo-source",
+      "automation": "automated",
+      "binaries": [],
+      "health_checks": [{"id": "language-service-checkout", "kind": "path-exists", "path": "Cargo.toml"}],
+      "update_strategy": "git-pull",
+      "documentation": {
+        "readme": "https://github.com/epi13/mncs-language-service/blob/main/README.md"
+      },
+      "maturity": "experimental"
     },
     {
       "id": "mncs-fabric",
@@ -846,6 +881,37 @@
         "readme": "https://github.com/epi13/mncs-rights-provenance/blob/main/README.md"
       },
       "maturity": "research"
+    },
+    {
+      "id": "mncs-tui",
+      "display_name": "MNCS TUI",
+      "repository": {
+        "owner": "epi13",
+        "name": "mncs-tui",
+        "url": "https://github.com/epi13/mncs-tui"
+      },
+      "purpose": "Terminal UI pressure-test consumer for MNCS-native layouts and bounded interaction surfaces.",
+      "category": "research",
+      "authority_class": "experimental-research",
+      "normative": false,
+      "role": "research",
+      "optional": true,
+      "audiences": ["developer", "researcher"],
+      "foundational": false,
+      "platforms": ["linux", "windows", "linux-arm"],
+      "architectures": ["x86_64", "amd64", "aarch64", "arm64"],
+      "dependencies": ["mncs-language"],
+      "runtime_requirements": [],
+      "build_requirements": [],
+      "install_strategy": "git-checkout",
+      "automation": "automated",
+      "binaries": [],
+      "health_checks": [{"id": "tui-readme", "kind": "path-exists", "path": "README.md"}],
+      "update_strategy": "git-pull",
+      "documentation": {
+        "readme": "https://github.com/epi13/mncs-tui/blob/main/README.md"
+      },
+      "maturity": "experimental"
     }
   ]
 }

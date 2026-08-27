@@ -1,0 +1,102 @@
+{
+  "schema_version": "mncs-family.repository-manifest/v0alpha1",
+  "repository": "mncs-commons",
+  "revision": 1,
+  "contracts": {
+    "provides": [
+      {
+        "contract": "record-store-api",
+        "version": "0.5.0.dev1",
+        "kind": "protocol",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "src/mncs_commons/store.py",
+          "src/mncs_commons/models.py",
+          "schemas/mncs-commons-v0alpha1.schema.json"
+        ],
+        "consumers_declared": [
+          "mncs-harness",
+          "mncs-control",
+          "mnel",
+          "ravel"
+        ]
+      },
+      {
+        "contract": "family-record-spine",
+        "version": "0.1",
+        "kind": "record-schema",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "src/mncs_commons/family.py",
+          "compat/family-record-producers.json",
+          "docs/FAMILY_RECORD_SPINE.md"
+        ],
+        "consumers_declared": [
+          "mncs-control",
+          "mncs-harness",
+          "mncs"
+        ]
+      },
+      {
+        "contract": "exchange-protocol",
+        "version": "0alpha1",
+        "kind": "protocol",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "schemas/mncs-commons-exchange-v0alpha1.schema.json"
+        ]
+      }
+    ],
+    "consumes": [
+      {
+        "contract": "mncs-language.compiler-record",
+        "envelope": {
+          "op": "any"
+        },
+        "required": false
+      },
+      {
+        "contract": "mncs-fabric.family-execution-reference",
+        "envelope": {
+          "op": "any"
+        },
+        "required": false
+      },
+      {
+        "contract": "mncs-forge.concept-evaluation-record",
+        "envelope": {
+          "op": "any"
+        },
+        "required": false
+      },
+      {
+        "contract": "mncs-harness.actor-provenance",
+        "envelope": {
+          "op": "any"
+        },
+        "required": false
+      }
+    ],
+    "tests": [
+      {
+        "test": "pytest",
+        "covers": [
+          "record-store-api",
+          "family-record-spine",
+          "exchange-protocol"
+        ],
+        "obligation": "self",
+        "command": {
+          "argv": [
+            "python",
+            "-m",
+            "pytest",
+            "-q"
+          ],
+          "timeout_seconds": 1800
+        }
+      }
+    ]
+  },
+  "manifest_location": "central"
+}

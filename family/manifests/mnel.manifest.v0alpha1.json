@@ -1,0 +1,127 @@
+{
+  "schema_version": "mncs-family.repository-manifest/v0alpha1",
+  "repository": "mnel",
+  "revision": 1,
+  "contracts": {
+    "provides": [
+      {
+        "contract": "ledger-record",
+        "version": "0.1",
+        "kind": "record-schema",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "schemas/mnel-records.schema.json"
+        ]
+      },
+      {
+        "contract": "provider-study-suite",
+        "version": "0.4",
+        "kind": "record-schema",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "schemas/mnel-provider-study.schema.json",
+          "schemas/mnel-calibration.schema.json"
+        ]
+      },
+      {
+        "contract": "distributed-workload",
+        "version": "0.5",
+        "kind": "record-schema",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "schemas/"
+        ]
+      },
+      {
+        "contract": "family-integration-report",
+        "version": "0.1",
+        "kind": "record-schema",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "schemas/mnel-family-integration.schema.json",
+          "src/mnel/family_integration.py"
+        ]
+      }
+    ],
+    "consumes": [
+      {
+        "contract": "mncs-language.semantic-identity",
+        "envelope": {
+          "op": "any"
+        },
+        "required": false,
+        "evidence_refs": [
+          "compat/mncs-family-compatibility-0.1.json"
+        ]
+      },
+      {
+        "contract": "mncs-forge.forge-provider-protocol",
+        "envelope": {
+          "op": "exact",
+          "version": "0.1"
+        },
+        "required": true,
+        "evidence_refs": [
+          "src/mnel/family_integration.py"
+        ]
+      },
+      {
+        "contract": "mncs-fabric.public-controller-contract",
+        "envelope": {
+          "op": "compatible-minor",
+          "version": "0.2.0a0"
+        },
+        "required": true,
+        "evidence_refs": [
+          "src/mnel/family_integration.py",
+          "compat/mncs-family-compatibility-0.1.json"
+        ]
+      },
+      {
+        "contract": "mncs-commons.record-store-api",
+        "envelope": {
+          "op": "any"
+        },
+        "required": false,
+        "evidence_refs": [
+          "src/mnel/family_integration.py"
+        ]
+      },
+      {
+        "contract": "ravel.development-record-schema",
+        "envelope": {
+          "op": "any"
+        },
+        "required": false,
+        "evidence_refs": [
+          "src/mnel/family_integration.py"
+        ]
+      }
+    ],
+    "tests": [
+      {
+        "test": "unittest",
+        "covers": [
+          "ledger-record",
+          "provider-study-suite",
+          "distributed-workload",
+          "family-integration-report"
+        ],
+        "obligation": "self",
+        "command": {
+          "argv": [
+            "python",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-v"
+          ],
+          "timeout_seconds": 2400
+        }
+      }
+    ]
+  },
+  "manifest_location": "central"
+}

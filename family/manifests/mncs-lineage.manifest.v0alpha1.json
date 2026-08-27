@@ -1,0 +1,98 @@
+{
+  "schema_version": "mncs-family.repository-manifest/v0alpha1",
+  "repository": "mncs-lineage",
+  "revision": 1,
+  "contracts": {
+    "provides": [
+      {
+        "contract": "succession-core-module",
+        "version": "0.1",
+        "kind": "module-surface",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "language/lineage-core.mncs"
+        ],
+        "consumers_declared": [
+          "mncs-language-service"
+        ]
+      },
+      {
+        "contract": "synthetic-lineage-g0",
+        "version": "0.1",
+        "kind": "fixture-surface",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "language/synthetic-lineage-g0.mncs",
+          "language/negative/g0-proposer-self-certification.mncs"
+        ],
+        "consumers_declared": [
+          "mncs-language-service"
+        ]
+      },
+      {
+        "contract": "lineage-forge-provider",
+        "version": "0.1",
+        "kind": "provider-surface",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "tools/mncs_lineage_forge_provider.py",
+          "mncs-forge.toml"
+        ]
+      }
+    ],
+    "consumes": [
+      {
+        "contract": "mncs-language.source-profile",
+        "envelope": {
+          "op": "compatible-minor",
+          "version": "0.5"
+        },
+        "required": true
+      },
+      {
+        "contract": "mncs-language.cli-toolchain",
+        "envelope": {
+          "op": "at-least",
+          "version": "0.5"
+        },
+        "required": true,
+        "evidence_refs": [
+          "docs/LANGUAGE_IMPLEMENTATION.md",
+          "tools/build_lineage_artifacts.py"
+        ]
+      },
+      {
+        "contract": "mncs-forge.forge-provider-protocol",
+        "envelope": {
+          "op": "exact",
+          "version": "0.1"
+        },
+        "required": true,
+        "evidence_refs": [
+          "mncs-forge.toml"
+        ]
+      }
+    ],
+    "tests": [
+      {
+        "test": "pytest",
+        "covers": [
+          "succession-core-module",
+          "synthetic-lineage-g0"
+        ],
+        "obligation": "self",
+        "command": {
+          "argv": [
+            "python3",
+            "-m",
+            "pytest",
+            "tests/",
+            "-q"
+          ],
+          "timeout_seconds": 1800
+        }
+      }
+    ]
+  },
+  "manifest_location": "central"
+}
