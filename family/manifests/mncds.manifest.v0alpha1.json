@@ -1,0 +1,61 @@
+{
+  "schema_version": "mncs-family.repository-manifest/v0alpha1",
+  "repository": "mncds",
+  "revision": 1,
+  "contracts": {
+    "provides": [
+      {
+        "contract": "development-record-schema",
+        "version": "0.1-rc.1",
+        "kind": "specification",
+        "stability": "stable",
+        "fingerprint_sources": [
+          "schemas/mncds-development-record-0.1.schema.json",
+          "conformance/"
+        ],
+        "consumers_declared": [
+          "mncs",
+          "mncs-validator-rs",
+          "mncs-commons"
+        ]
+      },
+      {
+        "contract": "concept-experiment-bindings",
+        "version": "0.2-alpha",
+        "kind": "binding-doc",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "docs/concept-experiment-bindings.md"
+        ]
+      }
+    ],
+    "consumes": [
+      {
+        "contract": "mncs.normative-specification",
+        "envelope": {
+          "op": "any"
+        },
+        "required": false
+      }
+    ],
+    "tests": [
+      {
+        "test": "pytest",
+        "covers": [
+          "development-record-schema"
+        ],
+        "obligation": "self",
+        "command": {
+          "argv": [
+            "python",
+            "-m",
+            "pytest",
+            "-q"
+          ],
+          "timeout_seconds": 1200
+        }
+      }
+    ]
+  },
+  "manifest_location": "central"
+}

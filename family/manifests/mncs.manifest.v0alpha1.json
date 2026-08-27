@@ -1,0 +1,132 @@
+{
+  "schema_version": "mncs-family.repository-manifest/v0alpha1",
+  "repository": "mncs",
+  "revision": 1,
+  "contracts": {
+    "provides": [
+      {
+        "contract": "family-registry",
+        "version": "0.1",
+        "kind": "registry-surface",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "family/mncs-family.v0.1.json",
+          "schemas/mncs-family-registry-0.1.schema.json"
+        ],
+        "consumers_declared": [
+          "mncs-atlas",
+          "mncs"
+        ],
+        "notes": "Discovery/bootstrap map; compatibility state UNKNOWN by design until family coherence evidence exists."
+      },
+      {
+        "contract": "repository-manifest-format",
+        "version": "0alpha1",
+        "kind": "schema-surface",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "schemas/mncs-family-repository-manifest-v0alpha1.schema.json"
+        ],
+        "consumers_declared": [
+          "mncs-language",
+          "mncs-language-service",
+          "mncs-commons",
+          "mncs-fabric",
+          "mncs-forge",
+          "mncs-harness",
+          "mncs-control",
+          "ravel",
+          "mnel",
+          "mncs-lineage",
+          "mncds",
+          "mncs-rights-provenance",
+          "mncs-atlas",
+          "mncs-reference-studies",
+          "mncs-validator-rs"
+        ]
+      },
+      {
+        "contract": "normative-specification",
+        "version": "0.3-rc.1",
+        "kind": "specification",
+        "stability": "stable",
+        "fingerprint_sources": [
+          "spec/",
+          "conformance-corpus/"
+        ]
+      },
+      {
+        "contract": "coherence-cli",
+        "version": "0.1",
+        "kind": "tool-surface",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "src/mncs_validator/family/"
+        ],
+        "consumers_declared": [
+          "mncs-language",
+          "ravel",
+          "mnel"
+        ]
+      }
+    ],
+    "consumes": [
+      {
+        "contract": "mncs-language.core-standard-library",
+        "envelope": {
+          "op": "any"
+        },
+        "required": true,
+        "evidence_refs": [
+          "src/mncs_validator/family/"
+        ],
+        "notes": "Coherence verdicts execute mncs.core.version + mncs.family.coherence; host code must not reimplement them."
+      },
+      {
+        "contract": "mncs-language.cli-toolchain",
+        "envelope": {
+          "op": "at-least",
+          "version": "0.6"
+        },
+        "required": true,
+        "evidence_refs": [
+          "src/mncs_validator/family/"
+        ]
+      },
+      {
+        "contract": "mncds.development-record-schema",
+        "envelope": {
+          "op": "at-least",
+          "version": "0.1"
+        },
+        "required": false,
+        "evidence_refs": [
+          "schemas/mncds-development-record-0.1.schema.json"
+        ]
+      }
+    ],
+    "tests": [
+      {
+        "test": "make-check",
+        "covers": [
+          "normative-specification",
+          "family-registry",
+          "repository-manifest-format",
+          "coherence-cli"
+        ],
+        "obligation": "self",
+        "command": {
+          "argv": [
+            "make",
+            "check"
+          ],
+          "timeout_seconds": 3600
+        }
+      }
+    ]
+  },
+  "manifest_location": "central",
+  "authority": {
+    "note": "Normative authority for MNCS acceptance semantics only; family coherence metadata remains descriptive of relationships, not conformance."
+  }
+}

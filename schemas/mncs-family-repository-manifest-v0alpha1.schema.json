@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schemas/family/repository-manifest-v0alpha1.schema.json",
+  "title": "MNCS Family Repository Manifest v0alpha1",
+  "description": "Declares what one family repository provides, consumes, and validates, as machine-readable contract-graph inputs. Declaring compatibility is not compatibility evidence; owning repositories remain the semantic authorities for their contracts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "repository",
+    "revision",
+    "contracts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "mncs-family.repository-manifest/v0alpha1"
+    },
+    "repository": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Stable component id; must match the family registry component id."
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Incremented whenever the declared surface changes meaning."
+    },
+    "manifest_location": {
+      "enum": [
+        "in-repository",
+        "central"
+      ],
+      "default": "in-repository"
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "contracts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provides",
+        "consumes",
+        "tests"
+      ],
+      "properties": {
+        "provides": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/providedContract"
+          }
+        },
+        "consumes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/consumedContract"
+          }
+        },
+        "tests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/testObligation"
+          }
+        }
+      }
+    },
+    "rights_provenance_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/producerReference"
+      },
+      "description": "Carried-through references into the rights/provenance framework; this manifest does not absorb their semantics."
+    }
+  },
+  "$defs": {
+    "version": {
+      "type": "string",
+      "pattern": "^v?[0-9A-Za-z][0-9A-Za-z.+_-]*$"
+    },
+    "providedContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract",
+        "version",
+        "kind",
+        "stability"
+      ],
+      "properties": {
+        "contract": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9._-]*$",
+          "description": "Contract name within this repository; full identity is '<repository>.<contract>/<version>'."
+        },
+        "version": {
+          "$ref": "#/$defs/version"
+        },
+        "kind": {
+          "type": "string",
+          "description": "Free-form bounded classifier, e.g. language-profile, record-schema, protocol, module-surface."
+        },
+        "stability": {
+          "enum": [
+            "experimental",
+            "stable",
+            "deprecated",
+            "retired"
+          ]
+        },
+        "successor_of": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Full contract identity this contract supersedes."
+        },
+        "superseded_by": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "fingerprint_sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Repository-relative paths whose canonical content defines the contract surface for drift detection."
+        },
+        "consumers_declared": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Advisory consumer list maintained by the provider; the graph is still computed from consumer manifests."
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "consumedContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract",
+        "envelope",
+        "required"
+      ],
+      "properties": {
+        "contract": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*\\.[a-z][a-z0-9._-]*$",
+          "description": "Full provider-namespaced contract name '<provider>.<contract>'; version resolved through the declared envelope against current provider state."
+        },
+        "envelope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "op"
+          ],
+          "properties": {
+            "op": {
+              "enum": [
+                "any",
+                "exact",
+                "at-least",
+                "compatible-minor"
+              ]
+            },
+            "version": {
+              "$ref": "#/$defs/version"
+            }
+          }
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Paths or record identities holding compatibility evidence for this consumption."
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "testObligation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "test",
+        "covers",
+        "obligation"
+      ],
+      "properties": {
+        "test": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9._-]*$"
+        },
+        "covers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "description": "Provided contract name covered by this test."
+          }
+        },
+        "obligation": {
+          "enum": [
+            "self",
+            "consumer-compatibility",
+            "family-integration"
+          ],
+          "description": "self: always run for this repo's changes; consumer-compatibility: run when a consumed contract changes; family-integration: run during family verification."
+        },
+        "command": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "argv"
+          ],
+          "properties": {
+            "argv": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "cwd": {
+              "type": "string"
+            },
+            "timeout_seconds": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 900
+            }
+          },
+          "description": "Bounded executable validation; absent command means the obligation is satisfied by external evidence references."
+        }
+      }
+    },
+    "producerReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "producer",
+        "recordKind",
+        "schemaVersion",
+        "stableId"
+      ],
+      "properties": {
+        "producer": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "recordKind": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "schemaVersion": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "stableId": {
+          "type": "string",
+          "maxLength": 2048
+        },
+        "contentDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    }
+  }
+}

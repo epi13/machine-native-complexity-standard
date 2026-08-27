@@ -1,0 +1,59 @@
+{
+  "schema_version": "mncs-family.repository-manifest/v0alpha1",
+  "repository": "mncs-reference-studies",
+  "revision": 1,
+  "contracts": {
+    "provides": [
+      {
+        "contract": "study-methodology",
+        "version": "0.1",
+        "kind": "methodology-surface",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "methodology/"
+        ]
+      }
+    ],
+    "consumes": [
+      {
+        "contract": "mncs.normative-specification",
+        "envelope": {
+          "op": "any"
+        },
+        "required": true,
+        "evidence_refs": [
+          "methodology/standards-dependency.md",
+          "mncs-forge.toml"
+        ]
+      },
+      {
+        "contract": "mncs-forge.development-workflow-control",
+        "envelope": {
+          "op": "at-least",
+          "version": "0.3"
+        },
+        "required": true,
+        "evidence_refs": [
+          "mncs-forge.toml"
+        ]
+      }
+    ],
+    "tests": [
+      {
+        "test": "repository-validate",
+        "covers": [
+          "study-methodology"
+        ],
+        "obligation": "self",
+        "command": {
+          "argv": [
+            "python",
+            "tools/validate_repository.py"
+          ],
+          "timeout_seconds": 1200
+        }
+      }
+    ]
+  },
+  "manifest_location": "central"
+}

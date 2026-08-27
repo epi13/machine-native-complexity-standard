@@ -1,0 +1,92 @@
+{
+  "schema_version": "mncs-family.repository-manifest/v0alpha1",
+  "repository": "mncs-language-service",
+  "revision": 1,
+  "contracts": {
+    "provides": [
+      {
+        "contract": "lsp-protocol",
+        "version": "0.1",
+        "kind": "protocol",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "crates/lsp/src/lib.rs"
+        ]
+      },
+      {
+        "contract": "mcp-tools",
+        "version": "0.1",
+        "kind": "protocol",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "crates/mcp/src/lib.rs"
+        ]
+      },
+      {
+        "contract": "static-syntax-grammar",
+        "version": "0.1",
+        "kind": "grammar-surface",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "integration/static-syntax/mncs.tmLanguage.json",
+          "crates/static-syntax/src/grammar.rs"
+        ],
+        "consumers_declared": [
+          "mncs-atlas"
+        ]
+      }
+    ],
+    "consumes": [
+      {
+        "contract": "mncs-language.source-profile",
+        "envelope": {
+          "op": "at-least",
+          "version": "0.5"
+        },
+        "required": true,
+        "evidence_refs": [
+          "Cargo.lock"
+        ]
+      },
+      {
+        "contract": "mncs-language.core-standard-library",
+        "envelope": {
+          "op": "any"
+        },
+        "required": false,
+        "notes": "Cross-repo family-workspace symbol resolution target."
+      },
+      {
+        "contract": "mncs-lineage.succession-fixtures",
+        "envelope": {
+          "op": "exact",
+          "version": "0.1"
+        },
+        "required": true,
+        "evidence_refs": [
+          "tests/fixtures/lineage"
+        ]
+      }
+    ],
+    "tests": [
+      {
+        "test": "cargo-test-workspace",
+        "covers": [
+          "lsp-protocol",
+          "mcp-tools",
+          "static-syntax-grammar"
+        ],
+        "obligation": "self",
+        "command": {
+          "argv": [
+            "cargo",
+            "test",
+            "--workspace"
+          ],
+          "timeout_seconds": 2400
+        }
+      }
+    ]
+  },
+  "manifest_location": "central"
+}

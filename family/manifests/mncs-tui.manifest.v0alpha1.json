@@ -1,0 +1,39 @@
+{
+  "schema_version": "mncs-family.repository-manifest/v0alpha1",
+  "repository": "mncs-tui",
+  "revision": 1,
+  "contracts": {
+    "provides": [
+      {
+        "contract": "terminal-ui-consumer",
+        "version": "0.1",
+        "kind": "consumer-surface",
+        "stability": "experimental",
+        "fingerprint_sources": ["README.md"]
+      }
+    ],
+    "consumes": [
+      {
+        "contract": "mncs-language.source-profile",
+        "envelope": {"op": "any"},
+        "required": false,
+        "evidence_refs": ["README.md"]
+      },
+      {
+        "contract": "mncs-language-service.lsp-protocol",
+        "envelope": {"op": "any"},
+        "required": false,
+        "evidence_refs": ["README.md"]
+      }
+    ],
+    "tests": [
+      {
+        "test": "repository-readme",
+        "covers": ["terminal-ui-consumer"],
+        "obligation": "self",
+        "command": {"argv": ["git", "diff", "--check"], "timeout_seconds": 60}
+      }
+    ]
+  },
+  "manifest_location": "central"
+}

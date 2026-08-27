@@ -1,0 +1,173 @@
+{
+  "schema_version": "mncs-family.repository-manifest/v0alpha1",
+  "repository": "mncs-language",
+  "revision": 1,
+  "contracts": {
+    "provides": [
+      {
+        "contract": "source-profile",
+        "version": "0.6",
+        "kind": "language-profile",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "docs/source-profile-0.6.md",
+          "crates/mncs-syntax/src/source.rs"
+        ],
+        "consumers_declared": [
+          "mncs-language-service",
+          "ravel",
+          "mnel",
+          "mncs-lineage",
+          "mncs-rights-provenance"
+        ],
+        "notes": "Additive profile envelopes 0.1..0.6; each minor is an independent provided contract."
+      },
+      {
+        "contract": "core-standard-library",
+        "version": "0.1",
+        "kind": "module-surface",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "library/core/status.mncs",
+          "library/core/logic.mncs",
+          "library/core/ordering.mncs",
+          "library/core/result.mncs",
+          "library/core/version.mncs",
+          "library/family/coherence.mncs"
+        ],
+        "consumers_declared": [
+          "mncs-language-service",
+          "ravel",
+          "mncs",
+          "mncs-rights-provenance"
+        ],
+        "notes": "mncs.core.* plus mncs.family.coherence decision core; consumers bind by identity-bound differential agreement until RFC 0014 linking."
+      },
+      {
+        "contract": "compiler-record",
+        "version": "0.1",
+        "kind": "record-schema",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "crates/mncs-model/src/compiler.rs"
+        ],
+        "consumers_declared": [
+          "mncs-forge",
+          "mncs-control",
+          "mncs-commons"
+        ],
+        "notes": "Schema identity mncs-language.family-compiler-reference.v0.1 over CompilationStudyResult."
+      },
+      {
+        "contract": "experiment-record",
+        "version": "0.1",
+        "kind": "record-schema",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "crates/mncs-model/src/experiment.rs"
+        ],
+        "consumers_declared": [
+          "mncs-forge",
+          "mncs-control",
+          "mncs-commons"
+        ]
+      },
+      {
+        "contract": "semantic-identity",
+        "version": "0.1",
+        "kind": "identity-surface",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "crates/mncs-model/src/identity.rs",
+          "crates/mncs-model/src/canonical.rs"
+        ],
+        "consumers_declared": [
+          "mncs-language-service",
+          "ravel",
+          "mnel",
+          "mncs-commons"
+        ]
+      },
+      {
+        "contract": "backend-interface",
+        "version": "0.1",
+        "kind": "capability-surface",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "crates/mncs-codegen/src/lib.rs",
+          "crates/mncs-codegen/src/matrix.rs"
+        ],
+        "consumers_declared": [
+          "mncs-forge",
+          "mncs-lineage",
+          "ravel"
+        ],
+        "notes": "Registered adapters: portable-wasm-mvp, research-bytecode, llvm, c11, cranelift; capability envelope from registered adapters only."
+      },
+      {
+        "contract": "cli-toolchain",
+        "version": "0.6",
+        "kind": "tool-surface",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "crates/mncs-cli/src/main.rs"
+        ],
+        "consumers_declared": [
+          "ravel",
+          "mncs-lineage",
+          "mncs-control",
+          "mncs"
+        ],
+        "notes": "Bounded CLI verbs consumed cross-repo: source-study, experiment run/execute, canonicalize, compile."
+      }
+    ],
+    "consumes": [],
+    "tests": [
+      {
+        "test": "cargo-test-workspace",
+        "covers": [
+          "source-profile",
+          "core-standard-library",
+          "compiler-record",
+          "experiment-record",
+          "semantic-identity",
+          "backend-interface",
+          "cli-toolchain"
+        ],
+        "obligation": "self",
+        "command": {
+          "argv": [
+            "cargo",
+            "test",
+            "--workspace"
+          ],
+          "timeout_seconds": 3600
+        }
+      },
+      {
+        "test": "coherence-corpus-bytecode",
+        "covers": [
+          "core-standard-library"
+        ],
+        "obligation": "family-integration",
+        "command": {
+          "argv": [
+            "target/release/mncs",
+            "experiment",
+            "run",
+            "library/family/coherence.mncs",
+            "--backend",
+            "mncs-research-bytecode",
+            "--corpus",
+            "examples/execution/family-coherence-aggregate-corpus.json"
+          ],
+          "timeout_seconds": 900
+        }
+      }
+    ]
+  },
+  "manifest_location": "central",
+  "authority": {
+    "note": "Semantic authority for all provided contracts."
+  }
+}

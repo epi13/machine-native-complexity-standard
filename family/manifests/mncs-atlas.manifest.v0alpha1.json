@@ -1,0 +1,63 @@
+{
+  "schema_version": "mncs-family.repository-manifest/v0alpha1",
+  "repository": "mncs-atlas",
+  "revision": 1,
+  "contracts": {
+    "provides": [
+      {
+        "contract": "family-map",
+        "version": "0.3",
+        "kind": "orientation-surface",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "site/atlas.json",
+          "docs/PROJECTS.md"
+        ]
+      },
+      {
+        "contract": "terminology-index",
+        "version": "0.1",
+        "kind": "orientation-surface",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "docs/TERMINOLOGY.md"
+        ]
+      }
+    ],
+    "consumes": [
+      {
+        "contract": "mncs.family-registry",
+        "envelope": {
+          "op": "any"
+        },
+        "required": false,
+        "notes": "Descriptive alignment; Atlas stays non-normative."
+      },
+      {
+        "contract": "mncs-control.journal-context",
+        "envelope": {
+          "op": "any"
+        },
+        "required": false
+      }
+    ],
+    "tests": [
+      {
+        "test": "ci-checks",
+        "covers": [
+          "family-map",
+          "terminology-index"
+        ],
+        "obligation": "self",
+        "command": {
+          "argv": [
+            "python",
+            "scripts/check_site.py"
+          ],
+          "timeout_seconds": 600
+        }
+      }
+    ]
+  },
+  "manifest_location": "central"
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": "mncs-family.repository-manifest/v0alpha1",
+  "repository": "mncs-rights-provenance",
+  "revision": 1,
+  "contracts": {
+    "provides": [
+      {
+        "contract": "rights-manifest-schema",
+        "version": "0.1",
+        "kind": "schema-surface",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "specs/",
+          "schemas/mncs-rights-manifest.schema.json"
+        ],
+        "notes": "Incubating; v0.2 subsystem work proceeds on feat/rights-provenance-subsystem and must not be declared here before it lands."
+      }
+    ],
+    "consumes": [
+      {
+        "contract": "mncs-language.source-profile",
+        "envelope": {
+          "op": "at-least",
+          "version": "0.5"
+        },
+        "required": false,
+        "notes": "Planned language-native policy module; undeclared while unmerged."
+      }
+    ],
+    "tests": [
+      {
+        "test": "validate-examples",
+        "covers": [
+          "rights-manifest-schema"
+        ],
+        "obligation": "self",
+        "command": {
+          "argv": [
+            "python",
+            "scripts/validate_examples.py"
+          ],
+          "timeout_seconds": 600
+        }
+      }
+    ]
+  },
+  "manifest_location": "central"
+}
