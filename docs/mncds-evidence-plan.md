@@ -61,7 +61,7 @@ organizational independence; those remain external evidence gates.
 
 The checked-in bounded study freezes two analyzer identities, converts epoch-one blind
 spots into regression fixtures, and uses a fresh developer-withheld final partition.
-Joern is not a normative dependency.
+No specific analyzer is a normative dependency.
 
 The study does:
 

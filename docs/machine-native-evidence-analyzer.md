@@ -9,7 +9,8 @@ analyzer can prove arbitrary program correctness.
 MNEA evaluates declared structural, behavioral, safety, resource, and implementation
 invariants and emits reproducible PASS, FAIL, or UNKNOWN evidence.
 
-The architecture is deliberately narrower than Joern or a universal Code Property Graph:
+The architecture is deliberately focused on declared bounded claims rather than universal
+whole-program analysis:
 
 ```text
 source or artifact

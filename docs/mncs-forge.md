@@ -15,7 +15,7 @@ fixtures, and their project-specific Forge configuration are maintained in the
 [`mncs-reference-studies` repository](https://github.com/epi13/mncs-reference-studies).
 Use that repository's configuration and workflow documentation for empirical work.
 
-Forge is not Joern or a universal Code Property Graph implementation. Compilers,
+Forge is not an analyzer or a universal Code Property Graph implementation. Compilers,
 analyzers, mutation tools, sanitizers, benchmarks, and runtime harnesses remain
 replaceable providers. Missing or unsupported capability remains `UNKNOWN`; source
 reading, grep, and line counts do not establish independent structural evidence.

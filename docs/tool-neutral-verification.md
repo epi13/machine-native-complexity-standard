@@ -8,7 +8,7 @@ understand the claim.
 Suitable methods include compiler or LLVM CFG passes, abstract interpretation, model
 checking, symbolic execution, proof assistants, custom static analyzers, runtime
 instrumentation, language-specific verification, and independent combinations.
-Joern is an optional provider, not a dependency.
+No specific analyzer is a dependency.
 
 Use Forge to discover declared providers and capability blockers. Forge orchestrates
 bounded commands and records their identities and limitations; it does not perform graph

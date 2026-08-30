@@ -44,8 +44,8 @@ over scraping README text. See [docs/ai-agent-bootstrap.md](docs/ai-agent-bootst
 
 - Use Forge to inspect declared providers, capabilities, availability, limitations, and
   capability blockers before claiming structural, control-flow, or data-flow evidence.
-- Use an appropriate declared provider when a change requires that evidence. Joern is
-  one optional legacy provider and is not the standard or default.
+- Use an appropriate declared provider when a change requires that evidence. No specific
+  analyzer is the standard or default.
 - Source reading is review, not independent structural verification. Do not substitute
   grep, line counts, or manual inspection for a missing analyzer capability.
 - If no suitable provider is available, preserve the limitation and report `UNKNOWN` or
@@ -53,5 +53,5 @@ over scraping README text. See [docs/ai-agent-bootstrap.md](docs/ai-agent-bootst
 - When comparative structural evidence is claimed, run the same declared provider and
   method before and after the graph-sensitive change and report failures, unsupported
   constructs, limitations, and uncertainty.
-- Never rewrite historical Joern outputs or frozen baselines merely because the default
-  development interface changed.
+- Never rewrite historical structural-analysis outputs or frozen baselines merely because
+  the default development interface changed.

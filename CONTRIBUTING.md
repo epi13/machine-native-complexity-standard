@@ -15,9 +15,8 @@ schemas, conformance gates, or governance require an RFC. A pull request should:
 Use the repository's ordinary offline checks for standards contributions. Empirical
 study Forge workflows are maintained in `mncs-reference-studies`. A graph-sensitive contribution must identify an appropriate declared structural,
 control-flow, or data-flow provider and preserve comparable before/after evidence when
-such a comparison is claimed. Joern is optional. Source reading, grep, and line counts do
-not replace unavailable structural evidence; missing capability remains `UNKNOWN` or a
-review blocker.
+such a comparison is claimed. Source reading, grep, and line counts do not replace unavailable
+structural evidence; missing capability remains `UNKNOWN` or a review blocker.
 
 Family-registry and bootstrap changes must keep `family/mncs-family.v0.1.json`
 in sync with the packaged copy, pass `python scripts/validate-family-registry.py`,
