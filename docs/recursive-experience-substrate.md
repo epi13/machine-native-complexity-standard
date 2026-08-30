@@ -218,8 +218,8 @@ reports. Examples for RAVEL include:
 - whether the apparent benefit disappears under shuffled episode-to-hypothesis mapping.
 
 Forge micro-verifiers are a natural provider-neutral mechanism for such probes. The stable object is
-the bounded question and witness, not Clang, LLVM, Joern, a sanitizer, or a RAVEL-specific analyzer
-brand.
+the bounded question and witness, not a particular compiler, graph analyzer, sanitizer, or
+RAVEL-specific analyzer brand.
 
 ## Learning from success and non-action
 

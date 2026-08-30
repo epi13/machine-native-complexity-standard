@@ -9,12 +9,11 @@ No. It is a cost that must be justified by a predeclared benefit.
 No. It applies to machine-generated or machine-optimized artifacts regardless of the
 generator technique.
 
-## Does MNCS require Joern?
+## Does MNCS require a specific analyzer?
 
-No. Joern is one optional structural provider.
-
-Forge can discover and probe an explicitly configured Joern Provider Protocol adapter,
-but neither Forge nor source reading supplies Joern-equivalent graph analysis.
+No. MNCS describes evidence capabilities and boundaries without privileging a specific
+structural provider. Forge can discover explicitly configured providers, but neither
+Forge nor source reading substitutes for an unavailable capability.
 
 ## Is L5 proof that software is safe?
 
