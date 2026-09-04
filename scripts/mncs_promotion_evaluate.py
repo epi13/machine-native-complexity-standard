@@ -61,7 +61,7 @@ from typing import Any
 BOUNDARY_SCHEMA_VERSION = "mncs-promotion-boundary/0.1"
 AUTHORITY_MAP_SCHEMA_VERSION = "mncs-authority-map/0.1"
 CHECK_RESULT_SCHEMA_VERSION = "mncs.check-result/1"
-OBLIGATION_SCHEMA_VERSION = "mncds-obligation-record/0.1"
+OBLIGATION_SCHEMA_VERSION = "mncds-obligation-record/0.2"
 
 VERDICTS = ("PASS", "FAIL", "UNKNOWN")
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
@@ -178,8 +178,17 @@ def _obligation(doc: Any, path: str) -> dict[str, Any]:
         raise BoundaryError(
             f"obligation {path}: subject must bind an exact repository and 40-hex commit"
         )
-    if doc["status"] in ("resolved", "rejected") and not isinstance(doc.get("resolution"), dict):
-        raise BoundaryError(f"obligation {path}: resolved/rejected requires a resolution block")
+    if doc["status"] in ("resolved", "rejected"):
+        resolution = doc.get("resolution")
+        if not isinstance(resolution, dict):
+            raise BoundaryError(f"obligation {path}: resolved/rejected requires a resolution block")
+        if not isinstance(resolution.get("resolved_by"), str) or not resolution["resolved_by"]:
+            raise BoundaryError(f"obligation {path}: resolution must name its resolver")
+        expected_kind = "fixed" if doc["status"] == "resolved" else "rejected"
+        if resolution.get("resolution") != expected_kind:
+            raise BoundaryError(
+                f"obligation {path}: {doc['status']} requires resolution {expected_kind}"
+            )
     if doc["status"] == "open" and "resolution" in doc:
         raise BoundaryError(f"obligation {path}: open obligations carry no resolution")
     return doc

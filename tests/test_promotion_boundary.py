@@ -79,7 +79,7 @@ def _obligation(
     resolution: str | None = None,
 ) -> dict[str, Any]:
     doc: dict[str, Any] = {
-        "schema_version": "mncds-obligation-record/0.1",
+        "schema_version": "mncds-obligation-record/0.2",
         "obligation_key": key,
         "status": status,
         "required": required,
@@ -93,6 +93,8 @@ def _obligation(
         doc["resolution"] = {
             "resolution": resolution or ("fixed" if status == "resolved" else "rejected"),
             "evidence_refs": ["sha256:" + "c" * 64],
+            "resolved_by": "epi13/mncs-actions",
+            "resolved_at": "2026-09-04T00:00:00Z",
         }
     return doc
 
@@ -416,6 +418,21 @@ def test_obligation_evidence_is_digest_bound(tmp_path: Path) -> None:
     assert result2 is not None
     ref2 = next(item for item in result2["references"] if item["kind"] == "mncds-obligation-record")
     assert ref2["digest"] != ref["digest"]
+
+
+def test_anonymous_resolution_establishes_no_claim(tmp_path: Path) -> None:
+    record = _obligation("pressure.gap-1", "resolved")
+    del record["resolution"]["resolved_by"]
+    code, result, _ = _run(tmp_path, _boundary_doc(), _required_pass_set(), [record])
+    assert code == 2
+    assert result is None
+
+
+def test_incoherent_resolution_kind_establishes_no_claim(tmp_path: Path) -> None:
+    record = _obligation("pressure.gap-1", "resolved", resolution="rejected")
+    code, result, _ = _run(tmp_path, _boundary_doc(), _required_pass_set(), [record])
+    assert code == 2
+    assert result is None
 
 
 def test_conflicting_check_revisions_are_unknown(tmp_path: Path) -> None:
