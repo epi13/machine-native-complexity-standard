@@ -1,0 +1,33 @@
+{
+  "schema_version": "mncds-obligation-record/0.2",
+  "obligation_key": "pressure.mncs.promotion-self-reference.required",
+  "status": "resolved",
+  "required": true,
+  "subject": {
+    "repository": "epi13/machine-native-complexity-standard",
+    "commit": "688445783971db9027dc7fc44224bd63acd7a08a"
+  },
+  "origin": {
+    "kind": "development-pressure",
+    "authority": "mncs-family-promotion",
+    "pressure_id": "pressure-mncs-self-reference"
+  },
+  "resolution": {
+    "resolution": "fixed",
+    "evidence_refs": [
+      "sha256:74bc90c988bc0842e30f4f4ee3d973c00ea4760f09953dbe2acf79d5f8828fd8",
+      "sha256:eac0f520415e7aa6f88ef67508ab990c9ecca2d0821b722f01e3c997c5d5181d"
+    ],
+    "resolved_by": "epi13/machine-native-complexity-standard",
+    "resolved_at": "2026-09-04T00:00:00Z"
+  },
+  "evidence": [
+    "sha256:74bc90c988bc0842e30f4f4ee3d973c00ea4760f09953dbe2acf79d5f8828fd8"
+  ],
+  "supersedes": null,
+  "extensions": {
+    "io.github.epi13:mncs": {
+      "summary": "Dogfooding a repository-owned boundary found the self-reference loop: a boundary requiring its own promotion output made the evaluator consume its own result. Fixed by noting and skipping the self entry (excluded from required totals) while aggregation enforces the claim's presence. Evidence refs are the digests of docs/promotion-boundary.md (self-reference section) and scripts/mncs_promotion_evaluate.py at the candidate revision."
+    }
+  }
+}

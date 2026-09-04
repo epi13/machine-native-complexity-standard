@@ -1,0 +1,20 @@
+{
+  "schema_version": "mncs-authority-map/0.1",
+  "authorities": {
+    "mncs-validation": {
+      "provider": "mncs-validator-rs",
+      "authority": "machine-native-complexity-standard",
+      "repository": "epi13/machine-native-complexity-standard"
+    },
+    "mncds-obligations": {
+      "provider": "mncds",
+      "authority": "machine-native-complexity-development-specification",
+      "repository": "epi13/machine-native-complexity-development-specification"
+    },
+    "promotion-boundary": {
+      "provider": "mncs-promotion-boundary",
+      "authority": "machine-native-complexity-standard",
+      "repository": "epi13/machine-native-complexity-standard"
+    }
+  }
+}

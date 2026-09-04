@@ -1,0 +1,11 @@
+{
+  "schema_version": "mncds-promotion-candidate/0.1",
+  "repository": "epi13/machine-native-complexity-standard",
+  "commit": "688445783971db9027dc7fc44224bd63acd7a08a",
+  "record": null,
+  "obligations": [
+    "promotion/obligations/promotion-self-reference.obligation.json",
+    "promotion/obligations/promotion-adoption.obligation.json"
+  ],
+  "notes": "MNCS promotion speaks about the recorded candidate revision, not HEAD. The candidate carries no MNCDS development record of its own process here (record is null by explicit design): MNCS development evidence is the owner-native validation gate, and MNCDS contributes the obligation lifecycle. Advancing the candidate is a reviewed change that rebinds the obligation set."
+}
