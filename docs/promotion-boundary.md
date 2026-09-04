@@ -44,6 +44,36 @@ A boundary names `required_evidence` (each a `check_id` plus its owning
 keep the core schema free of hard-coded family membership: any authority
 can be required by naming its check.
 
+## Authority binding
+
+A boundary's `authority` declaration is enforced, not decorative. The
+evaluator consumes a pinned authority map (`mncs-authority-map/0.1`,
+derived from pinned family producer descriptors) binding each check id
+to its exact provider string and semantic authority:
+
+- a structurally valid check with the right id from the wrong producer
+  is untrusted substitution: no claim is established (`INVALID`), exactly
+  like a wrong-subject stamp;
+- a check whose authority is not established through the map is
+  incomplete (`UNKNOWN`), never `PASS`;
+- conflicting authority metadata (top-level or reference authorities
+  disagreeing with the requirement) is contradictory: no claim;
+- optional evidence with unestablished authority stays visible in
+  `unresolved` and never decides.
+
+The map file's own digest is preserved in the promotion result, so the
+verdict is bound to the exact trust binding consumed. Boundary authors
+requiring non-family checks extend the map; transport never invents it.
+
+## Contract-revision enforcement
+
+When a requirement pins `contract_revision`, the evidence must carry
+that exact string. A missing revision is incomplete (`UNKNOWN`); a
+different revision is incomplete (`UNKNOWN`); a malformed revision
+carrier is no claim. An omitted expectation imposes no constraint, but
+an explicit expectation is never satisfied by omission. Optional
+evidence follows the same rules without deciding the boundary.
+
 - Every required check must `PASS`.
 - A required `FAIL` is a valid negative finding -> promotion `FAIL`.
 - Required `UNKNOWN`, missing, unstamped, or contract-mismatched evidence

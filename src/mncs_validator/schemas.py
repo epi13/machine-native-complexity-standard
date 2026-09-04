@@ -45,6 +45,8 @@ SCHEMA_NAMES = {
     "language-evidence-profile": "mncs-language-evidence-profile.schema.json",
     "cross-language-comparison": "mncs-cross-language-comparison.schema.json",
     "boundary-contract": "mncs-boundary-contract.schema.json",
+    "authority-map": "mncs-authority-map-0.1.schema.json",
+    "authority-map-0.1": "mncs-authority-map-0.1.schema.json",
     "promotion-boundary": "mncs-promotion-boundary-0.1.schema.json",
     "promotion-boundary-0.1": "mncs-promotion-boundary-0.1.schema.json",
     "composed-assurance-case": "mncs-composed-assurance-case.schema.json",
