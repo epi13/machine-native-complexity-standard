@@ -5,7 +5,7 @@
   "required": false,
   "subject": {
     "repository": "epi13/machine-native-complexity-standard",
-    "commit": "bc45a4d72371d721591d080978a3f242ef319a84"
+    "commit": "882ac4a82fb340087c52792e88e51ca2a8d8b3e0"
   },
   "origin": {
     "kind": "development-pressure",
