@@ -73,6 +73,24 @@ never blocking, excluded from required totals): a result cannot be its
 own input. Presence of the promotion claim is enforced downstream by
 aggregation, not by self-satisfaction.
 
+## Graph subjects
+
+A boundary may decide about an exact family graph instead of a single
+repository revision. Such a boundary declares `graph` (digest plus the
+exact member repository/commit set) and belongs to
+`mncs-family/graph`; it is evaluated with `--subject-graph` instead of a
+repository subject. Every check stamp and every obligation subject must
+equal one of the graph's member pairs exactly -- anything else is
+contradictory (no claim), exactly like a wrong-subject stamp. The
+resulting claim is bound to subject `mncs-family/graph` at commit
+`graph:<digest>` and carries the digest plus members in its `promotion`
+extension.
+
+Digest recomputation (graph identity) is proven by mncs-actions graph
+tooling, which owns the graph representation; this evaluator enforces
+digest consistency plus exact member binding and never re-derives
+identity. Repository-mode evaluation is unchanged.
+
 ## Contract-revision enforcement
 
 When a requirement pins `contract_revision`, the evidence must carry
