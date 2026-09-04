@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schema/0.1/mncs-promotion-boundary.schema.json",
+  "title": "MNCS promotion boundary declaration",
+  "description": "Versioned declarative contract owned by MNCS. A promotion boundary names the authoritative evidence a candidate revision must carry before it may cross a declared boundary (release, promotion, adoption). The owner-native evaluator (scripts/mncs_promotion_evaluate.py) applies this declaration to check-result evidence; transport layers carry the verdict without reinterpreting it. This contract never hard-codes family membership: any evidence-requirement mechanism extension follows the same required/optional shape.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "boundary_id",
+    "subject_repository",
+    "required_evidence",
+    "require_subject_binding"
+  ],
+  "properties": {
+    "schema_version": {"const": "mncs-promotion-boundary/0.1"},
+    "boundary_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable identity of this boundary, echoed in every promotion result."
+    },
+    "subject_repository": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Repository this boundary declaration belongs to. Evidence stamped for another repository never satisfies it."
+    },
+    "required_evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/evidenceRequirement"},
+      "description": "Evidence that must PASS for promotion. A required FAIL blocks (FAIL); required UNKNOWN or missing evidence blocks without a negative finding (UNKNOWN); never PASS."
+    },
+    "optional_evidence": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/evidenceRequirement"},
+      "description": "Evidence that stays visible in unresolved but never decides the boundary. Missing optional evidence has no effect."
+    },
+    "require_subject_binding": {
+      "type": "boolean",
+      "description": "When true, every required check must carry a subject stamp binding it to the candidate revision. Unstamped required evidence is incomplete (UNKNOWN), never PASS; mismatched stamps are contradictory (no claim)."
+    },
+    "obligation_check_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Check id carrying MNCDS obligation evaluation (default mncds-obligations). Its unresolved entries identify blocking obligations."
+    },
+    "tolerated_obligations": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "description": "Obligation keys explicitly tolerated by this boundary policy. Open obligations with these keys do not block. Everything else required-and-open blocks as UNKNOWN."
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {"pattern": "^[a-z][a-z0-9.-]*:[A-Za-z0-9][A-Za-z0-9._-]*$"},
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "evidenceRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["check_id", "authority"],
+      "properties": {
+        "check_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Expected check-result id. Duplicate check ids in one evaluation are contradictory."
+        },
+        "authority": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Semantic authority that owns this requirement (e.g. machine-native-complexity-development-specification). Recorded for attribution; transport does not verify it beyond echo."
+        },
+        "contract_revision": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Expected contract_revision of the evidence. When present and mismatched, the evidence is incomplete (UNKNOWN), not a negative finding."
+        }
+      }
+    }
+  }
+}
