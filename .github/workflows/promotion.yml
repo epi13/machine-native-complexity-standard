@@ -1,0 +1,68 @@
+name: MNCS promotion
+
+# MNCS dogfoods its own promotion semantics through the pinned mncs-actions
+# reusable family verification and a repository-owned boundary
+# (promotion/mncs-promotion.boundary.json).
+#
+# What promotion decides here: the recorded candidate revision
+# (promotion/candidate.json) moves through owner-native MNCS validation,
+# the MNCDS obligation lifecycle at the pinned MNCDS revision, and this
+# repository's own promotion evaluator to a deterministic verdict.
+# UNKNOWN stays red; FAIL is always red.
+#
+# Self-dogfood note: the promotion command runs the working-tree evaluator
+# (scripts/mncs_promotion_evaluate.py), because the evaluator under test is
+# this repository itself -- pinning an older evaluator would test old code
+# instead of the change. Exact revision binding is preserved mechanically:
+# --producer-revision names the exact commit whose evaluator ran. The
+# reusable workflow itself is pinned (never @main), as is transport and
+# the MNCDS revision.
+#
+# The boundary requires its own promotion output (promotion-boundary): the
+# evaluator notes and skips the self entry while aggregation enforces the
+# claim's presence. No self-approval is fabricated.
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  MNC_ACTIONS_PIN: 4b132651d50b31ae12f5f00c749ee1f32adb6322
+
+jobs:
+  promotion:
+    uses: epi13/mncs-actions/.github/workflows/mncs-family-verify.yml@4b132651d50b31ae12f5f00c749ee1f32adb6322
+    with:
+      required-checks: mncs-validation,mncds-obligations,promotion-boundary
+      boundary: mncs-promotion
+      fail-on-unknown: true
+      mncs-command: bash scripts/mncs-check.sh && bash scripts/mncds-obligations-check.sh
+      mncs-result-file: .mncs/mncs-check.json
+      additional-checks: .mncs/mncds-obligations-check.json
+      promotion-command: >-
+        CANDIDATE_REPO="$(python3 -c "import json; print(json.load(open('promotion/candidate.json'))['repository'])")";
+        CANDIDATE_COMMIT="$(python3 -c "import json; print(json.load(open('promotion/candidate.json'))['commit'])")";
+        python3 scripts/mncs_promotion_evaluate.py --boundary promotion/mncs-promotion.boundary.json --authority-map promotion/authority-map.json --checks .mncs/mncs-check.json .mncs/mncds-obligations-check.json --obligations promotion/obligations/*.json --subject-repository "$CANDIDATE_REPO" --subject-commit "$CANDIDATE_COMMIT" --check-id promotion-boundary --provider mncs-promotion-boundary --contract-revision 0.1 --producer-revision "$GITHUB_SHA" --output .mncs/promotion-check.json
+      promotion-boundary: mncs-promotion
+      promotion-check-id: promotion-boundary
+      promotion-provider: mncs-promotion-boundary
+
+  vectors:
+    # Adversarial vectors over the real boundary and real evidence through
+    # the working-tree evaluator and pinned transport. A green run means
+    # the boundary holds; see scripts/assert-promotion-vectors.sh.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Assert promotion vectors
+        run: bash scripts/assert-promotion-vectors.sh

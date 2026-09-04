@@ -1,0 +1,32 @@
+{
+  "schema_version": "mncs-promotion-boundary/0.1",
+  "boundary_id": "mncs-promotion",
+  "subject_repository": "epi13/machine-native-complexity-standard",
+  "required_evidence": [
+    {
+      "check_id": "mncs-validation",
+      "authority": "machine-native-complexity-standard",
+      "contract_revision": "0.2"
+    },
+    {
+      "check_id": "mncds-obligations",
+      "authority": "machine-native-complexity-development-specification",
+      "contract_revision": "mncds-obligation-record/0.2"
+    },
+    {
+      "check_id": "promotion-boundary",
+      "authority": "machine-native-complexity-standard",
+      "contract_revision": "0.1"
+    }
+  ],
+  "optional_evidence": [],
+  "require_subject_binding": true,
+  "obligation_check_id": "mncds-obligations",
+  "tolerated_obligations": [],
+  "extensions": {
+    "io.github.epi13:mncs": {
+      "candidate": "promotion/candidate.json",
+      "policy": "The promotion-boundary requirement names this evaluation's own output: the evaluator notes and skips it (a result cannot be its own input) while aggregation enforces the claim's presence. See docs/promotion-boundary.md (self-reference). No self-approval is fabricated: the verdict is decided solely by mncs-validation and mncds-obligations."
+    }
+  }
+}
