@@ -1,0 +1,35 @@
+{
+  "schema_version": "mncs-authority-map/0.1",
+  "authorities": {
+    "mncs-validation": {
+      "provider": "mncs-validator-rs",
+      "authority": "machine-native-complexity-standard",
+      "repository": "epi13/machine-native-complexity-standard"
+    },
+    "mncds-development-record": {
+      "provider": "mncds",
+      "authority": "machine-native-complexity-development-specification",
+      "repository": "epi13/machine-native-complexity-development-specification"
+    },
+    "mncds-obligations": {
+      "provider": "mncds",
+      "authority": "machine-native-complexity-development-specification",
+      "repository": "epi13/machine-native-complexity-development-specification"
+    },
+    "rights-provenance": {
+      "provider": "mncs-rights-provenance",
+      "authority": "mncs-rights-provenance",
+      "repository": "epi13/mncs-rights-provenance"
+    },
+    "commons-family-compatibility": {
+      "provider": "MNCS-Commons",
+      "authority": "MNCS-Commons",
+      "repository": "epi13/MNCS-Commons"
+    },
+    "forge-cell-contract": {
+      "provider": "mncs-forge-mcp",
+      "authority": "mncs-forge-mcp",
+      "repository": "epi13/mncs-forge-mcp"
+    }
+  }
+}

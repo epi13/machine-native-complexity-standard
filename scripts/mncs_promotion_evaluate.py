@@ -33,10 +33,19 @@ Usage:
   mncs_promotion_evaluate.py --boundary boundary.json
       --checks mncs-check.json rights-check.json [...]
       --subject-repository epi13/example --subject-commit <40-hex>
+      [--authority-map authority-map.json]
       [--obligations obligation-*.json]
       [--check-id promotion-boundary] [--provider mncs-promotion-boundary]
       [--contract-revision 0.1] [--producer-revision REV]
       --output promotion-check.json
+
+Authority: every boundary requirement names a semantic authority. The
+pinned authority map (mncs-authority-map/0.1, derived from pinned family
+producer descriptors) binds each check id to its exact provider string
+and authority. A structurally valid check with the right id from the
+wrong producer is untrusted substitution (no claim); a check whose
+authority is not established through the map is incomplete (UNKNOWN),
+never PASS.
 """
 
 from __future__ import annotations
@@ -50,8 +59,9 @@ from pathlib import Path
 from typing import Any
 
 BOUNDARY_SCHEMA_VERSION = "mncs-promotion-boundary/0.1"
+AUTHORITY_MAP_SCHEMA_VERSION = "mncs-authority-map/0.1"
 CHECK_RESULT_SCHEMA_VERSION = "mncs.check-result/1"
-OBLIGATION_SCHEMA_VERSION = "mncds-obligation-record/0.1"
+OBLIGATION_SCHEMA_VERSION = "mncds-obligation-record/0.2"
 
 VERDICTS = ("PASS", "FAIL", "UNKNOWN")
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
@@ -106,6 +116,24 @@ def _check_boundary(doc: Any) -> dict[str, Any]:
     return doc
 
 
+def _check_authority_map(doc: Any) -> dict[str, dict[str, Any]]:
+    if not isinstance(doc, dict):
+        raise BoundaryError("authority map must be a JSON object")
+    if doc.get("schema_version") != AUTHORITY_MAP_SCHEMA_VERSION:
+        raise BoundaryError(f"authority map schema_version must be {AUTHORITY_MAP_SCHEMA_VERSION}")
+    authorities = doc.get("authorities")
+    if not isinstance(authorities, dict) or not authorities:
+        raise BoundaryError("authority map authorities must be a non-empty object")
+    for check_id, binding in authorities.items():
+        if not isinstance(binding, dict):
+            raise BoundaryError(f"authority map {check_id} must be an object")
+        for field in ("provider", "authority"):
+            value = binding.get(field)
+            if not isinstance(value, str) or not value:
+                raise BoundaryError(f"authority map {check_id} needs a non-empty {field}")
+    return authorities
+
+
 def _check_result(doc: Any, path: str) -> dict[str, Any]:
     if not isinstance(doc, dict):
         raise BoundaryError(f"check {path}: must be a JSON object")
@@ -134,6 +162,11 @@ def _obligation(doc: Any, path: str) -> dict[str, Any]:
         raise BoundaryError(f"obligation {path}: status must be open, resolved, or rejected")
     if not isinstance(doc.get("required"), bool):
         raise BoundaryError(f"obligation {path}: required must be a boolean")
+    origin = doc.get("origin")
+    if not isinstance(origin, dict):
+        raise BoundaryError(f"obligation {path}: origin must be an object")
+    if not isinstance(origin.get("authority"), str) or not origin["authority"]:
+        raise BoundaryError(f"obligation {path}: origin.authority must be non-empty")
     subject = doc.get("subject")
     if (
         not isinstance(subject, dict)
@@ -145,40 +178,136 @@ def _obligation(doc: Any, path: str) -> dict[str, Any]:
         raise BoundaryError(
             f"obligation {path}: subject must bind an exact repository and 40-hex commit"
         )
-    if doc["status"] in ("resolved", "rejected") and not isinstance(doc.get("resolution"), dict):
-        raise BoundaryError(f"obligation {path}: resolved/rejected requires a resolution block")
+    if doc["status"] in ("resolved", "rejected"):
+        resolution = doc.get("resolution")
+        if not isinstance(resolution, dict):
+            raise BoundaryError(f"obligation {path}: resolved/rejected requires a resolution block")
+        if not isinstance(resolution.get("resolved_by"), str) or not resolution["resolved_by"]:
+            raise BoundaryError(f"obligation {path}: resolution must name its resolver")
+        expected_kind = "fixed" if doc["status"] == "resolved" else "rejected"
+        if resolution.get("resolution") != expected_kind:
+            raise BoundaryError(
+                f"obligation {path}: {doc['status']} requires resolution {expected_kind}"
+            )
     if doc["status"] == "open" and "resolution" in doc:
         raise BoundaryError(f"obligation {path}: open obligations carry no resolution")
     return doc
 
 
+def _reference_authorities(check: dict[str, Any]) -> list[str]:
+    authorities: list[str] = []
+    for ref in check.get("references") or []:
+        if isinstance(ref, dict) and isinstance(ref.get("authority"), str):
+            authorities.append(ref["authority"])
+    return authorities
+
+
+def _bind_authority(
+    check_id: str,
+    entry: dict[str, Any],
+    check: dict[str, Any],
+    authority_map: dict[str, dict[str, Any]],
+    *,
+    required: bool,
+) -> tuple[bool, str | None]:
+    """Verify the check satisfies the entry's required semantic authority.
+
+    Returns (eligible, blocker_or_note). A structurally valid check with
+    the right id from the wrong producer is untrusted substitution: that
+    raises BoundaryError (no claim), exactly like a wrong-subject stamp.
+    A check whose authority cannot be established through the pinned map
+    is incomplete (blocker/note), never PASS.
+    """
+    expected = entry["authority"]
+    scope = "required" if required else "optional"
+    binding = authority_map.get(check_id)
+    if binding is None:
+        return False, (
+            f"{scope} check {check_id} has no authority binding for authority {expected}"
+        )
+    if binding["authority"] != expected:
+        raise BoundaryError(
+            f"authority map binds {check_id} to {binding['authority']}, not the required {expected}"
+        )
+    if check["provider"] != binding["provider"]:
+        raise BoundaryError(
+            f"{scope} check {check_id} comes from provider "
+            f"{check['provider']!r}, not the bound {binding['provider']!r}"
+        )
+    declared = check.get("authority")
+    if declared is not None and declared != expected:
+        raise BoundaryError(
+            f"{scope} check {check_id} declares authority {declared!r}, not the required {expected}"
+        )
+    for authority in _reference_authorities(check):
+        if authority != expected:
+            raise BoundaryError(
+                f"{scope} check {check_id} carries conflicting reference authority {authority!r}"
+            )
+    return True, None
+
+
+def _bind_contract_revision(
+    check_id: str,
+    entry: dict[str, Any],
+    check: dict[str, Any],
+    *,
+    required: bool,
+) -> str | None:
+    """Verify the check explicitly establishes the required contract revision.
+
+    Returns a blocker/note, or None when eligible. An omitted revision can
+    never satisfy an explicit requirement; a malformed carrier is no claim.
+    """
+    expected = entry.get("contract_revision")
+    if not expected:
+        return None
+    scope = "required" if required else "optional"
+    carried = check.get("contract_revision")
+    if carried is None:
+        return f"{scope} check {check_id} does not establish contract revision {expected}"
+    if not isinstance(carried, str) or not carried:
+        raise BoundaryError(f"{scope} check {check_id} carries a malformed contract revision")
+    if carried != expected:
+        return f"{scope} check {check_id} contract mismatch (expected {expected}, got {carried})"
+    return None
+
+
 def evaluate(
     boundary: dict[str, Any],
     checks: dict[str, tuple[dict[str, Any], bytes]],
-    obligations: list[dict[str, Any]],
+    obligations: list[tuple[dict[str, Any], bytes]],
     subject_repository: str,
     subject_commit: str,
+    authority_map: dict[str, dict[str, Any]] | None = None,
 ) -> tuple[str, list[str], list[str], list[dict[str, Any]]]:
     """Return (verdict, blockers, unresolved_notes, evidence_refs)."""
     blockers: list[str] = []
     fail_blockers: list[str] = []
     notes: list[str] = []
     refs: list[dict[str, Any]] = []
+    bindings = authority_map or {}
     require_binding = boundary["require_subject_binding"]
     tolerated = set(boundary.get("tolerated_obligations") or [])
     required = {entry["check_id"]: entry for entry in boundary["required_evidence"]}
     optional = {entry["check_id"]: entry for entry in (boundary.get("optional_evidence") or [])}
 
     for check_id, (check, raw) in checks.items():
-        refs.append(
-            {
-                "kind": "check-result",
-                "check_id": check_id,
-                "producer": check["provider"],
-                "verdict": check["verdict"],
-                "digest": "sha256:" + hashlib.sha256(raw).hexdigest(),
-            }
-        )
+        ref: dict[str, Any] = {
+            "kind": "check-result",
+            "check_id": check_id,
+            "producer": check["provider"],
+            "verdict": check["verdict"],
+            "digest": "sha256:" + hashlib.sha256(raw).hexdigest(),
+        }
+        binding = bindings.get(check_id)
+        if binding is not None:
+            ref["authority"] = binding["authority"]
+        if isinstance(check.get("contract_revision"), str):
+            ref["contract_revision"] = check["contract_revision"]
+        if isinstance(check.get("producer_revision"), str) and check["producer_revision"]:
+            ref["producer_revision"] = check["producer_revision"]
+        refs.append(ref)
 
     for check_id, entry in required.items():
         check_pair = checks.get(check_id)
@@ -186,6 +315,13 @@ def evaluate(
             blockers.append(f"required check {check_id} is missing")
             continue
         check = check_pair[0]
+        eligible, authority_blocker = _bind_authority(
+            check_id, entry, check, bindings, required=True
+        )
+        if not eligible:
+            assert authority_blocker is not None
+            blockers.append(authority_blocker)
+            continue
         stamp = check.get("subject")
         if isinstance(stamp, dict):
             if (
@@ -200,16 +336,9 @@ def evaluate(
         elif require_binding:
             blockers.append(f"required check {check_id} carries no subject binding")
             continue
-        expected_contract = entry.get("contract_revision")
-        if (
-            expected_contract
-            and isinstance(check.get("contract_revision"), str)
-            and check["contract_revision"] != expected_contract
-        ):
-            blockers.append(
-                f"required check {check_id} contract mismatch "
-                f"(expected {expected_contract}, got {check['contract_revision']})"
-            )
+        revision_blocker = _bind_contract_revision(check_id, entry, check, required=True)
+        if revision_blocker is not None:
+            blockers.append(revision_blocker)
             continue
         verdict = check["verdict"]
         if verdict == "FAIL":
@@ -221,21 +350,30 @@ def evaluate(
                 if isinstance(item, str) and item:
                     blockers.append(f"required check {check_id} unresolved: {item}")
 
-    for check_id in optional:
+    for check_id, entry in optional.items():
         check_pair = checks.get(check_id)
         if check_pair is None:
             continue
         check = check_pair[0]
+        eligible, authority_note = _bind_authority(check_id, entry, check, bindings, required=False)
+        if not eligible:
+            assert authority_note is not None
+            notes.append(f"{authority_note}: visible, not deciding")
+            continue
         stamp = check.get("subject")
         if isinstance(stamp, dict) and (
             stamp.get("repository") != subject_repository or stamp.get("commit") != subject_commit
         ):
             raise BoundaryError(f"optional check {check_id} is stamped for another subject")
+        revision_note = _bind_contract_revision(check_id, entry, check, required=False)
+        if revision_note is not None:
+            notes.append(f"{revision_note}: visible, not deciding")
+            continue
         if check["verdict"] in ("FAIL", "UNKNOWN"):
             notes.append(f"optional check {check_id} {check['verdict']}: visible, not deciding")
 
     seen_obligations: set[str] = set()
-    for record in obligations:
+    for record, raw in obligations:
         key = record["obligation_key"]
         if key in seen_obligations:
             raise BoundaryError(f"duplicate obligation key: {key}")
@@ -247,6 +385,20 @@ def evaluate(
                 f"{subject['repository']}@{subject['commit']}, "
                 f"not {subject_repository}@{subject_commit}"
             )
+        refs.append(
+            {
+                "kind": "mncds-obligation-record",
+                "obligation_key": key,
+                "authority": record["origin"]["authority"],
+                "contract_revision": OBLIGATION_SCHEMA_VERSION,
+                "digest": "sha256:" + hashlib.sha256(raw).hexdigest(),
+                "subject": {
+                    "repository": subject["repository"],
+                    "commit": subject["commit"],
+                },
+                "status": record["status"],
+            }
+        )
         if record["status"] == "rejected":
             fail_blockers.append(f"obligation {key} rejected with authoritative evidence")
         elif record["status"] == "open" and record["required"] and key not in tolerated:
@@ -266,6 +418,7 @@ def main() -> int:
     parser.add_argument("--subject-repository", required=True)
     parser.add_argument("--subject-commit", required=True)
     parser.add_argument("--obligations", nargs="*", default=[])
+    parser.add_argument("--authority-map", default="")
     parser.add_argument("--check-id", default="promotion-boundary")
     parser.add_argument("--provider", default="mncs-promotion-boundary")
     parser.add_argument("--contract-revision", default="0.1")
@@ -292,10 +445,20 @@ def main() -> int:
             checks[check["id"]] = (check, raw)
         records = []
         for path in args.obligations:
-            doc, _raw = _load_json(path, "obligation")
-            records.append(_obligation(doc, path))
+            doc, raw = _load_json(path, "obligation")
+            records.append((_obligation(doc, path), raw))
+        authority_map: dict[str, dict[str, Any]] = {}
+        authority_map_raw: bytes | None = None
+        if args.authority_map:
+            map_doc, authority_map_raw = _load_json(args.authority_map, "authority map")
+            authority_map = _check_authority_map(map_doc)
         verdict, blockers, notes, refs = evaluate(
-            boundary, checks, records, args.subject_repository, args.subject_commit
+            boundary,
+            checks,
+            records,
+            args.subject_repository,
+            args.subject_commit,
+            authority_map,
         )
         refs.append(
             {
@@ -305,6 +468,14 @@ def main() -> int:
                 "digest": "sha256:" + hashlib.sha256(boundary_raw).hexdigest(),
             }
         )
+        if authority_map_raw is not None:
+            refs.append(
+                {
+                    "kind": "authority-map",
+                    "contract_revision": AUTHORITY_MAP_SCHEMA_VERSION,
+                    "digest": "sha256:" + hashlib.sha256(authority_map_raw).hexdigest(),
+                }
+            )
         required_ids = [entry["check_id"] for entry in boundary["required_evidence"]]
         passed = sum(
             1
