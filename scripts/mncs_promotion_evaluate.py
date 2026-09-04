@@ -280,6 +280,7 @@ def evaluate(
     subject_repository: str,
     subject_commit: str,
     authority_map: dict[str, dict[str, Any]] | None = None,
+    own_check_id: str = "",
 ) -> tuple[str, list[str], list[str], list[dict[str, Any]]]:
     """Return (verdict, blockers, unresolved_notes, evidence_refs)."""
     blockers: list[str] = []
@@ -310,6 +311,15 @@ def evaluate(
         refs.append(ref)
 
     for check_id, entry in required.items():
+        if own_check_id and check_id == own_check_id:
+            # The promotion result cannot be its own input. A boundary may
+            # name its own output so aggregation enforces its presence; the
+            # evaluator skips the self-reference (noted, never blocking).
+            notes.append(
+                f"required check {check_id} is this evaluation's own output: "
+                "aggregation enforces its presence"
+            )
+            continue
         check_pair = checks.get(check_id)
         if check_pair is None:
             blockers.append(f"required check {check_id} is missing")
@@ -459,6 +469,7 @@ def main() -> int:
             args.subject_repository,
             args.subject_commit,
             authority_map,
+            args.check_id,
         )
         refs.append(
             {
@@ -476,7 +487,11 @@ def main() -> int:
                     "digest": "sha256:" + hashlib.sha256(authority_map_raw).hexdigest(),
                 }
             )
-        required_ids = [entry["check_id"] for entry in boundary["required_evidence"]]
+        required_ids = [
+            entry["check_id"]
+            for entry in boundary["required_evidence"]
+            if entry["check_id"] != args.check_id
+        ]
         passed = sum(
             1
             for check_id in required_ids

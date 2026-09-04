@@ -65,6 +65,14 @@ The map file's own digest is preserved in the promotion result, so the
 verdict is bound to the exact trust binding consumed. Boundary authors
 requiring non-family checks extend the map; transport never invents it.
 
+## Self-reference
+
+A boundary may name its own promotion output as required so that
+aggregation enforces its presence. The evaluator skips that entry (noted,
+never blocking, excluded from required totals): a result cannot be its
+own input. Presence of the promotion claim is enforced downstream by
+aggregation, not by self-satisfaction.
+
 ## Contract-revision enforcement
 
 When a requirement pins `contract_revision`, the evidence must carry

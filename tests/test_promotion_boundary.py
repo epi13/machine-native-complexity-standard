@@ -435,6 +435,20 @@ def test_incoherent_resolution_kind_establishes_no_claim(tmp_path: Path) -> None
     assert result is None
 
 
+def test_self_referential_output_is_noted_not_blocking(tmp_path: Path) -> None:
+    boundary = _boundary_doc()
+    boundary["required_evidence"] = [
+        *boundary["required_evidence"],
+        {"check_id": "promotion-boundary", "authority": "machine-native-complexity-standard"},
+    ]
+    code, result, _ = _run(tmp_path, boundary, _required_pass_set(), [])
+    assert code == 0
+    assert result is not None and result["verdict"] == "PASS"
+    assert result["promotion"]["required_total"] == 3
+    assert result["promotion"]["required_passed"] == 3
+    assert any("own output" in item for item in result.get("unresolved", []))
+
+
 def test_conflicting_check_revisions_are_unknown(tmp_path: Path) -> None:
     checks = _required_pass_set()
     checks[1] = _check("mncds-development-record", "PASS", contract_revision="0.1-rc.1")
