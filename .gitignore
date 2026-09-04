@@ -21,3 +21,5 @@ site/
 # implementations now live in mncs-reference-studies.
 case-studies/**
 !case-studies/README.md
+
+.mncs/
