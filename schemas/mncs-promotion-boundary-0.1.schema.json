@@ -49,6 +49,33 @@
       "items": {"type": "string", "minLength": 1},
       "description": "Obligation keys explicitly tolerated by this boundary policy. Open obligations with these keys do not block. Everything else required-and-open blocks as UNKNOWN."
     },
+    "graph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["digest", "members"],
+      "properties": {
+        "digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "Graph identity the boundary decides about. Must equal the subject graph digest exactly."
+        },
+        "members": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["repository", "commit"],
+            "properties": {
+              "repository": {"type": "string", "minLength": 1},
+              "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+            }
+          },
+          "description": "Exact member repository/commit pairs. Every check stamp and obligation subject must equal one member; anything else is contradictory (no claim)."
+        }
+      },
+      "description": "Family-graph subject declaration. Present only on graph boundaries evaluated with --subject-graph; subject_repository must then be mncs-family/graph."
+    },
     "extensions": {
       "type": "object",
       "propertyNames": {"pattern": "^[a-z][a-z0-9.-]*:[A-Za-z0-9][A-Za-z0-9._-]*$"},

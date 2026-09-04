@@ -39,6 +39,16 @@ Usage:
       [--contract-revision 0.1] [--producer-revision REV]
       --output promotion-check.json
 
+Graph subjects (family-level boundaries): pass --subject-graph graph.json
+instead of --subject-repository/--subject-commit. The boundary must then
+declare the same graph (``graph.digest`` plus the exact member set); every
+check and obligation must be stamped for one of the graph's member
+repository/commit pairs, never for anything else. The resulting claim is
+bound to subject ``mncs-family/graph`` at commit ``graph:<digest>``.
+Graph identity (digest recomputation) is proven by mncs-actions graph
+tooling; this evaluator enforces digest consistency plus exact member
+binding. Only the Python standard library is used.
+
 Authority: every boundary requirement names a semantic authority. The
 pinned authority map (mncs-authority-map/0.1, derived from pinned family
 producer descriptors) binds each check id to its exact provider string
@@ -65,6 +75,8 @@ OBLIGATION_SCHEMA_VERSION = "mncds-obligation-record/0.2"
 
 VERDICTS = ("PASS", "FAIL", "UNKNOWN")
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
+HEX64 = re.compile(r"^[0-9a-f]{64}$")
+GRAPH_SUBJECT_REPOSITORY = "mncs-family/graph"
 DEFAULT_OBLIGATION_CHECK_ID = "mncds-obligations"
 
 
@@ -132,6 +144,51 @@ def _check_authority_map(doc: Any) -> dict[str, dict[str, Any]]:
             if not isinstance(value, str) or not value:
                 raise BoundaryError(f"authority map {check_id} needs a non-empty {field}")
     return authorities
+
+
+def _graph_members(doc: Any, label: str) -> list[tuple[str, str]]:
+    """Validate a graph member list; return (repository, commit) pairs."""
+    if not isinstance(doc, list) or not doc:
+        raise BoundaryError(f"{label} must be a non-empty member array")
+    members: list[tuple[str, str]] = []
+    for index, member in enumerate(doc):
+        if not isinstance(member, dict):
+            raise BoundaryError(f"{label}[{index}] must be an object")
+        repository = member.get("repository")
+        commit = member.get("commit")
+        if not isinstance(repository, str) or not repository:
+            raise BoundaryError(f"{label}[{index}].repository must be non-empty")
+        if not isinstance(commit, str) or not HEX40.match(commit):
+            raise BoundaryError(f"{label}[{index}].commit must be an exact 40-hex revision")
+        if (repository, commit) in members:
+            raise BoundaryError(f"{label} contains a duplicate member: {repository}")
+        members.append((repository, commit))
+    return members
+
+
+def _check_subject_graph(doc: Any, path: str) -> tuple[str, list[tuple[str, str]]]:
+    """Validate a --subject-graph document; return (digest, members)."""
+    if not isinstance(doc, dict):
+        raise BoundaryError(f"graph {path}: must be a JSON object")
+    digest = doc.get("digest")
+    if not isinstance(digest, str) or not HEX64.match(digest):
+        raise BoundaryError(f"graph {path}: digest must be a 64-hex graph identity")
+    members = _graph_members(doc.get("members"), f"graph {path} members")
+    return digest, members
+
+
+def _check_boundary_graph(doc: Any) -> tuple[str, list[tuple[str, str]]] | None:
+    """Validate the boundary's declared graph, if any."""
+    if doc.get("graph") is None:
+        return None
+    graph = doc["graph"]
+    if not isinstance(graph, dict):
+        raise BoundaryError("boundary.graph must be an object when present")
+    digest = graph.get("digest")
+    if not isinstance(digest, str) or not HEX64.match(digest):
+        raise BoundaryError("boundary.graph.digest must be a 64-hex graph identity")
+    members = _graph_members(graph.get("members"), "boundary.graph.members")
+    return digest, members
 
 
 def _check_result(doc: Any, path: str) -> dict[str, Any]:
@@ -281,8 +338,15 @@ def evaluate(
     subject_commit: str,
     authority_map: dict[str, dict[str, Any]] | None = None,
     own_check_id: str = "",
+    member_subjects: list[tuple[str, str]] | None = None,
 ) -> tuple[str, list[str], list[str], list[dict[str, Any]]]:
-    """Return (verdict, blockers, unresolved_notes, evidence_refs)."""
+    """Return (verdict, blockers, unresolved_notes, evidence_refs).
+
+    In graph mode (``member_subjects`` given), every check stamp and every
+    obligation subject must equal one of the graph's member pairs exactly;
+    anything else is contradictory (no claim), exactly like a wrong-subject
+    stamp in repository mode.
+    """
     blockers: list[str] = []
     fail_blockers: list[str] = []
     notes: list[str] = []
@@ -334,7 +398,15 @@ def evaluate(
             continue
         stamp = check.get("subject")
         if isinstance(stamp, dict):
-            if (
+            pair = (stamp.get("repository"), stamp.get("commit"))
+            if member_subjects is not None:
+                if pair not in member_subjects:
+                    raise BoundaryError(
+                        f"required check {check_id} is stamped for "
+                        f"{stamp.get('repository')}@{stamp.get('commit')}, "
+                        "which is not a member of the candidate graph"
+                    )
+            elif (
                 stamp.get("repository") != subject_repository
                 or stamp.get("commit") != subject_commit
             ):
@@ -371,10 +443,19 @@ def evaluate(
             notes.append(f"{authority_note}: visible, not deciding")
             continue
         stamp = check.get("subject")
-        if isinstance(stamp, dict) and (
-            stamp.get("repository") != subject_repository or stamp.get("commit") != subject_commit
-        ):
-            raise BoundaryError(f"optional check {check_id} is stamped for another subject")
+        if isinstance(stamp, dict):
+            pair = (stamp.get("repository"), stamp.get("commit"))
+            bound = (
+                pair in member_subjects
+                if member_subjects is not None
+                else pair
+                == (
+                    subject_repository,
+                    subject_commit,
+                )
+            )
+            if not bound:
+                raise BoundaryError(f"optional check {check_id} is stamped for another subject")
         revision_note = _bind_contract_revision(check_id, entry, check, required=False)
         if revision_note is not None:
             notes.append(f"{revision_note}: visible, not deciding")
@@ -389,7 +470,15 @@ def evaluate(
             raise BoundaryError(f"duplicate obligation key: {key}")
         seen_obligations.add(key)
         subject = record["subject"]
-        if subject["repository"] != subject_repository or subject["commit"] != subject_commit:
+        pair = (subject["repository"], subject["commit"])
+        if member_subjects is not None:
+            if pair not in member_subjects:
+                raise BoundaryError(
+                    f"obligation {key} is bound to "
+                    f"{subject['repository']}@{subject['commit']}, "
+                    "which is not a member of the candidate graph"
+                )
+        elif subject["repository"] != subject_repository or subject["commit"] != subject_commit:
             raise BoundaryError(
                 f"obligation {key} is bound to "
                 f"{subject['repository']}@{subject['commit']}, "
@@ -425,8 +514,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Evaluate an MNCS promotion boundary.")
     parser.add_argument("--boundary", required=True)
     parser.add_argument("--checks", nargs="*", default=[])
-    parser.add_argument("--subject-repository", required=True)
-    parser.add_argument("--subject-commit", required=True)
+    parser.add_argument("--subject-repository", default="")
+    parser.add_argument("--subject-commit", default="")
+    parser.add_argument("--subject-graph", default="")
     parser.add_argument("--obligations", nargs="*", default=[])
     parser.add_argument("--authority-map", default="")
     parser.add_argument("--check-id", default="promotion-boundary")
@@ -437,11 +527,26 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
-        if not args.subject_repository or not HEX40.match(args.subject_commit):
+        graph_mode = bool(args.subject_graph)
+        if graph_mode and (args.subject_repository or args.subject_commit):
+            raise BoundaryError("--subject-graph excludes --subject-repository/--subject-commit")
+        if not graph_mode and (not args.subject_repository or not HEX40.match(args.subject_commit)):
             raise BoundaryError("subject must be a repository plus an exact 40-hex commit")
         boundary_doc, boundary_raw = _load_json(args.boundary, "boundary")
         boundary = _check_boundary(boundary_doc)
-        if boundary["subject_repository"] != args.subject_repository:
+        graph_digest = ""
+        member_subjects: list[tuple[str, str]] | None = None
+        if graph_mode:
+            graph_doc, _ = _load_json(args.subject_graph, "subject graph")
+            graph_digest, member_subjects = _check_subject_graph(graph_doc, args.subject_graph)
+            declared = _check_boundary_graph(boundary)
+            if declared is None:
+                raise BoundaryError("graph subjects require a boundary that declares graph")
+            if declared[0] != graph_digest or set(declared[1]) != set(member_subjects):
+                raise BoundaryError("boundary declares a different graph than the subject graph")
+            if boundary["subject_repository"] != GRAPH_SUBJECT_REPOSITORY:
+                raise BoundaryError(f"graph boundary must belong to {GRAPH_SUBJECT_REPOSITORY}")
+        elif boundary["subject_repository"] != args.subject_repository:
             raise BoundaryError(
                 f"boundary belongs to {boundary['subject_repository']}, "
                 f"not {args.subject_repository}"
@@ -462,14 +567,22 @@ def main() -> int:
         if args.authority_map:
             map_doc, authority_map_raw = _load_json(args.authority_map, "authority map")
             authority_map = _check_authority_map(map_doc)
+        if graph_mode:
+            assert member_subjects is not None
+            subject_repository = GRAPH_SUBJECT_REPOSITORY
+            subject_commit = f"graph:{graph_digest}"
+        else:
+            subject_repository = args.subject_repository
+            subject_commit = args.subject_commit
         verdict, blockers, notes, refs = evaluate(
             boundary,
             checks,
             records,
-            args.subject_repository,
-            args.subject_commit,
+            subject_repository,
+            subject_commit,
             authority_map,
             args.check_id,
+            member_subjects,
         )
         refs.append(
             {
@@ -514,15 +627,15 @@ def main() -> int:
             ),
             "contract_revision": BOUNDARY_SCHEMA_VERSION,
             "subject": {
-                "repository": args.subject_repository,
-                "commit": args.subject_commit,
+                "repository": subject_repository,
+                "commit": subject_commit,
             },
             "promotion": {
                 "boundary_id": boundary["boundary_id"],
                 "boundary_revision": BOUNDARY_SCHEMA_VERSION,
                 "subject": {
-                    "repository": args.subject_repository,
-                    "commit": args.subject_commit,
+                    "repository": subject_repository,
+                    "commit": subject_commit,
                 },
                 "required_total": len(required_ids),
                 "required_passed": passed,
@@ -532,6 +645,13 @@ def main() -> int:
         }
         if blockers or notes:
             result["unresolved"] = blockers + notes
+        if graph_mode:
+            assert member_subjects is not None
+            result["promotion"]["graph_digest"] = graph_digest
+            result["promotion"]["graph_members"] = [
+                {"repository": repository, "commit": commit}
+                for repository, commit in member_subjects
+            ]
         if args.producer_revision:
             result["producer_revision"] = args.producer_revision
         output = Path(args.output)
