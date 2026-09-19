@@ -41,6 +41,10 @@
         }
       }
     },
+    "organization": {
+      "$ref": "#/$defs/organization",
+      "description": "Optional repository-owned classification of non-derived surfaces. It records only paths whose role is not reliably derivable from the manifest, source layout, and authoritative family projections."
+    },
     "contracts": {
       "type": "object",
       "additionalProperties": false,
@@ -279,6 +283,92 @@
         "contentDigest": {
           "type": "string",
           "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "organization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "layout"
+      ],
+      "properties": {
+        "layout": {
+          "const": "mncs.repository-layout/1"
+        },
+        "surfaces": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/organizationSurface"
+          },
+          "description": "Explicit exceptions and semantic boundaries; ordinary src/tests/docs layout need not be repeated."
+        },
+        "generated_regions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/generatedRegion"
+          },
+          "description": "Deterministic human-facing regions projected from authoritative state."
+        }
+      }
+    },
+    "organizationSurface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "class"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "class": {
+          "enum": [
+            "canonical",
+            "host-boundary",
+            "compatibility",
+            "differential-oracle",
+            "reference",
+            "migration-shadow",
+            "generated",
+            "historical"
+          ]
+        },
+        "authority": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "generatedRegion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "begin",
+        "end",
+        "source"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "begin": {
+          "type": "string",
+          "minLength": 1
+        },
+        "end": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
         }
       }
     }
