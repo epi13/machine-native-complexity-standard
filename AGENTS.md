@@ -21,6 +21,13 @@ over scraping README text. See [docs/ai-agent-bootstrap.md](docs/ai-agent-bootst
 - Missing evidence remains `UNKNOWN`. `FAIL` dominates `UNKNOWN`, which dominates `PASS`.
 - Do not assume `/home/epi13/Documents/Projects` as a workspace.
 - If Control/Forge/Fabric/Harness/Commons tools are available, inspect them live.
+- When entering a family repository, prefer the bounded Language Service
+  `family_agent_context` query to establish the current language capability
+  identity, Commons architecture identity, repository manifest, and relevant
+  pressures before broad search. Atlas remains orientation-only.
+- This repository owns the `mncs-family.repository-manifest/v0alpha1` schema;
+  MNCDS may define development obligations around it but does not duplicate or
+  absorb its semantics.
 
 ## MNCS Forge
 

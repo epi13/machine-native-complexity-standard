@@ -2,6 +2,11 @@
 
 ## MNCS
 
+Repository layout and artifact classification are defined in
+[`repository-organization.md`](repository-organization.md). This extends the
+existing family repository-manifest contract and does not create another
+manifest or registry.
+
 - [`MNCS-v0.2.md`](MNCS-v0.2.md) — current experimental implementation-conformance standard.
 - [`MNCS-v0.3-rc.1.md`](MNCS-v0.3-rc.1.md) — controlled-system-assurance
   release-candidate proposal under Draft RFC 0005.

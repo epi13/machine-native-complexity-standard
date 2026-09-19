@@ -1,0 +1,33 @@
+{
+  "schema_version": "mncs-family.repository-manifest/v0alpha1",
+  "repository": "mncs",
+  "revision": 2,
+  "manifest_location": "in-repository",
+  "authority": {
+    "note": "MNCS Standard owns implementation-evidence acceptance, schemas, RFC lifecycle records, and family-manifest schema; it does not own sibling implementation semantics or MNCDS process semantics."
+  },
+  "organization": {
+    "layout": "mncs.repository-layout/1",
+    "surfaces": [
+      {"path": "spec/", "class": "canonical", "authority": "mncs"},
+      {"path": "schemas/", "class": "canonical", "authority": "mncs"},
+      {"path": "rfcs/", "class": "reference", "note": "Durable human-readable design artifacts; lifecycle facts may be projected."},
+      {"path": "family/manifests/", "class": "generated", "note": "Central bootstrap/reproducibility snapshots; local manifests supersede them when present."},
+      {"path": "src/mncs_validator/", "class": "canonical", "authority": "mncs"}
+    ]
+  },
+  "contracts": {
+    "provides": [
+      {"contract": "repository-manifest-format", "version": "0alpha1", "kind": "schema-surface", "stability": "experimental", "fingerprint_sources": ["schemas/mncs-family-repository-manifest-v0alpha1.schema.json", "spec/repository-organization.md"]},
+      {"contract": "normative-specification", "version": "0.3-rc.1", "kind": "specification", "stability": "stable", "fingerprint_sources": ["spec/", "conformance-corpus/"]},
+      {"contract": "family-registry", "version": "0.1", "kind": "registry-surface", "stability": "experimental", "fingerprint_sources": ["family/", "schemas/"]}
+    ],
+    "consumes": [
+      {"contract": "mncs-language.core-standard-library", "envelope": {"op": "any"}, "required": true},
+      {"contract": "mncds.development-record-schema", "envelope": {"op": "at-least", "version": "0.1"}, "required": false}
+    ],
+    "tests": [
+      {"test": "standard-tests", "covers": ["repository-manifest-format", "normative-specification", "family-registry"], "obligation": "self", "command": {"argv": ["python3", "-m", "pytest", "-q"]}}
+    ]
+  }
+}
