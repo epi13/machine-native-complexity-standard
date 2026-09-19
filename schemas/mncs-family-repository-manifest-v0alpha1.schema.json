@@ -341,8 +341,56 @@
         },
         "note": {
           "type": "string"
+        },
+        "classification": {
+          "$ref": "#/$defs/surfaceClassification"
         }
       }
+    },
+    "surfaceClassification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority",
+        "lifecycle",
+        "boundary_kind",
+        "semantic_role"
+      ],
+      "properties": {
+        "authority": {
+          "enum": ["canonical", "compatibility", "reference", "none"]
+        },
+        "lifecycle": {
+          "enum": ["active", "temporary", "retired", "generated", "historical"]
+        },
+        "boundary_kind": {
+          "enum": [
+            "none",
+            "platform",
+            "filesystem",
+            "process",
+            "protocol",
+            "compiler-bootstrap",
+            "external-provider"
+          ]
+        },
+        "semantic_role": {
+          "enum": [
+            "canonical-semantic",
+            "canonical-host-semantic",
+            "host-bootstrap",
+            "platform-adapter",
+            "temporary-host-semantic",
+            "migration-shadow",
+            "differential-oracle",
+            "compatibility-adapter",
+            "reference",
+            "generated",
+            "historical"
+          ]
+        }
+      },
+      "description": "Orthogonal surface dimensions. `class` remains the v0alpha1 compatibility classifier; this object distinguishes authority, lifecycle, boundary kind, and semantic role for machine consumers."
     },
     "generatedRegion": {
       "type": "object",

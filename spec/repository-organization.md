@@ -34,6 +34,24 @@ Repositories may use an established language-specific layout such as
 `native/mncs/`, `library/`, `crates/`, or `mncs/`. The classification is about
 authority and lifecycle, not the spelling of the directory.
 
+## Orthogonal machine dimensions
+
+The legacy `class` field remains accepted for v0alpha1 compatibility, but it
+is intentionally not the whole classification. New or audited surfaces may
+add `classification` with four independent dimensions:
+
+- `authority`: `canonical`, `compatibility`, `reference`, or `none`;
+- `lifecycle`: `active`, `temporary`, `retired`, `generated`, or `historical`;
+- `boundary_kind`: `none`, `platform`, `filesystem`, `process`, `protocol`,
+  `compiler-bootstrap`, or `external-provider`;
+- `semantic_role`: `canonical-semantic`, `canonical-host-semantic`, `host-bootstrap`, `platform-adapter`,
+  `temporary-host-semantic`, `migration-shadow`, `differential-oracle`,
+  `compatibility-adapter`, `reference`, `generated`, or `historical`.
+
+This lets an agent distinguish a Rust compiler bootstrap from a Python
+semantic workaround, even when both are host-language source. A source path
+is not a host boundary merely because of the language in which it is written.
+
 ## Artifact classes
 
 Every significant non-obvious surface should be classifiable as one of:

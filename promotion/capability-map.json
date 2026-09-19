@@ -5,7 +5,7 @@
   "capabilities": {
     "epi13/machine-native-complexity-standard": [
       {"paths": ["src/", "scripts/mncs_promotion_evaluate.py", "bootstrap/"], "impact": "executable"},
-      {"paths": ["spec/", "schemas/", "family/"], "impact": "contract"},
+      {"paths": ["spec/", "schemas/", "family/", ".mncs/"], "impact": "contract"},
       {"paths": ["scripts/", "promotion/", ".github/", "conformance/", "conformance-corpus/", "mncds-conformance-corpus/", "interoperability/", "case-studies/", "research/", "experimental/", "independent/", "Makefile", "GNUmakefile", "pyproject.toml", "mkdocs.yml", ".pre-commit-config.yaml"], "impact": "evidence"},
       {"paths": ["docs/", "rfcs/", "README.md", "CHANGELOG.md", "ROADMAP.md", "GOVERNANCE.md", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md", "AGENTS.md", "SECURITY.md"], "impact": "docs"},
       {"paths": ["tests/", "examples/", "LICENSE", "NOTICE", "CITATION.cff", ".gitignore", ".editorconfig", ".gitattributes"], "impact": "none"}

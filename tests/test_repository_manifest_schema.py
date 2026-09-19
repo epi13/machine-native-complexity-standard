@@ -58,3 +58,48 @@ def test_unknown_artifact_class_is_rejected() -> None:
     }
     errors = list(Draft202012Validator(SCHEMA).iter_errors(manifest))
     assert errors
+
+
+def test_orthogonal_surface_classification_distinguishes_bootstrap_and_semantics() -> None:
+    manifest = {
+        "schema_version": "mncs-family.repository-manifest/v0alpha1",
+        "repository": "fixture-repository",
+        "revision": 1,
+        "contracts": {"provides": [], "consumes": [], "tests": []},
+        "organization": {
+            "layout": "mncs.repository-layout/1",
+            "surfaces": [
+                {
+                    "path": "crates/",
+                    "class": "canonical",
+                    "classification": {
+                        "authority": "canonical",
+                        "lifecycle": "active",
+                        "boundary_kind": "compiler-bootstrap",
+                        "semantic_role": "canonical-semantic",
+                    },
+                },
+                {
+                    "path": "tools/legacy.py",
+                    "class": "migration-shadow",
+                    "classification": {
+                        "authority": "none",
+                        "lifecycle": "temporary",
+                        "boundary_kind": "filesystem",
+                        "semantic_role": "temporary-host-semantic",
+                    },
+                },
+                {
+                    "path": "src/semantic.py",
+                    "class": "canonical",
+                    "classification": {
+                        "authority": "canonical",
+                        "lifecycle": "temporary",
+                        "boundary_kind": "process",
+                        "semantic_role": "canonical-host-semantic",
+                    },
+                },
+            ],
+        },
+    }
+    assert list(Draft202012Validator(SCHEMA).iter_errors(manifest)) == []
