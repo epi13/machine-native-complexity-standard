@@ -22,4 +22,6 @@ site/
 case-studies/**
 !case-studies/README.md
 
-.mncs/
+.mncs/*
+!.mncs/
+!.mncs/project.json
