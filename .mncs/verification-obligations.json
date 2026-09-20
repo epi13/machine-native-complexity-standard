@@ -1,0 +1,47 @@
+{
+  "schema_version": "mncs-family.verification-obligation-inventory/v1",
+  "repository": "mncs",
+  "revision": 1,
+  "obligations": [
+    {
+      "identity": "mncs.standard.repository-manifest.conformance",
+      "title": "Repository manifest conforms to the Standard-owned schema",
+      "guarantee_domain": "family_contract",
+      "evidence_role": "conformance",
+      "lifecycle": "permanent",
+      "scope": "local",
+      "subjects": ["repository-manifest-format"],
+      "invalidation_dependencies": ["schemas/mncs-family-repository-manifest-v0alpha1.schema.json"],
+      "executor": {
+        "provider": "mncs",
+        "kind": "external_integration",
+        "entrypoint": "scripts/validate-family-manifest.py"
+      },
+      "evidence_identity": {
+        "subject_fields": ["manifest_identity"],
+        "definition_fields": ["schema_identity"],
+        "execution_fields": ["validation_identity"]
+      }
+    },
+    {
+      "identity": "mncs.standard.verification-obligation-inventory-schema",
+      "title": "Verification obligation inventories remain bounded and typed",
+      "guarantee_domain": "family_contract",
+      "evidence_role": "conformance",
+      "lifecycle": "permanent",
+      "scope": "local",
+      "subjects": ["verification-obligation-inventory"],
+      "invalidation_dependencies": ["schemas/mncs-family-verification-obligation-inventory-v1.schema.json"],
+      "executor": {
+        "provider": "mncs",
+        "kind": "compile_experiment",
+        "entrypoint": "tests/test_repository_manifest_schema.py"
+      },
+      "evidence_identity": {
+        "subject_fields": ["inventory_identity"],
+        "definition_fields": ["schema_identity"],
+        "execution_fields": ["validation_identity"]
+      }
+    }
+  ]
+}

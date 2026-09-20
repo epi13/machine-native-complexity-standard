@@ -103,3 +103,51 @@ def test_orthogonal_surface_classification_distinguishes_bootstrap_and_semantics
         },
     }
     assert list(Draft202012Validator(SCHEMA).iter_errors(manifest)) == []
+
+
+def test_manifest_points_to_a_bounded_verification_inventory() -> None:
+    manifest = {
+        "schema_version": "mncs-family.repository-manifest/v0alpha1",
+        "repository": "fixture-repository",
+        "revision": 2,
+        "contracts": {"provides": [], "consumes": [], "tests": []},
+        "verification": {
+            "schema_version": "mncs-family.verification-obligation-inventory/v1",
+            "obligation_inventory": ".mncs/verification-obligations.json",
+        },
+    }
+    assert list(Draft202012Validator(SCHEMA).iter_errors(manifest)) == []
+
+
+def test_verification_inventory_uses_orthogonal_dimensions() -> None:
+    inventory_schema = json.loads(
+        (ROOT / "schemas/mncs-family-verification-obligation-inventory-v1.schema.json").read_text()
+    )
+    inventory = {
+        "schema_version": "mncs-family.verification-obligation-inventory/v1",
+        "repository": "fixture-repository",
+        "revision": 1,
+        "obligations": [
+            {
+                "identity": "fixture.obligation.native-regression",
+                "guarantee_domain": "semantic",
+                "evidence_role": "canonical_regression",
+                "lifecycle": "permanent",
+                "scope": "local",
+                "subjects": ["fixture:subject"],
+                "invalidation_dependencies": ["fixture.contract/1"],
+                "executor": {
+                    "provider": "fixture-repository",
+                    "kind": "native_first_class_test",
+                    "entrypoint": "mncs-test",
+                    "declaration_identities": ["fixture:test-declaration"],
+                },
+                "evidence_identity": {
+                    "subject_fields": ["subject_fingerprint"],
+                    "definition_fields": ["obligation_identity"],
+                    "execution_fields": ["test_case_identity", "verifier_identity"],
+                },
+            }
+        ],
+    }
+    assert list(Draft202012Validator(inventory_schema).iter_errors(inventory)) == []

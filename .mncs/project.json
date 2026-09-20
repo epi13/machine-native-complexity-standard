@@ -6,6 +6,10 @@
   "authority": {
     "note": "MNCS Standard owns implementation-evidence acceptance, schemas, RFC lifecycle records, and family-manifest schema; it does not own sibling implementation semantics or MNCDS process semantics."
   },
+  "verification": {
+    "schema_version": "mncs-family.verification-obligation-inventory/v1",
+    "obligation_inventory": ".mncs/verification-obligations.json"
+  },
   "organization": {
     "layout": "mncs.repository-layout/1",
     "surfaces": [
