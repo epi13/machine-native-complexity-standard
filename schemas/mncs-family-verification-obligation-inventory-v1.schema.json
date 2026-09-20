@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mncs.dev/schemas/family/verification-obligation-inventory-v1.schema.json",
+  "title": "MNCS Family Verification Obligation Inventory v1",
+  "description": "A bounded repository-owned declaration of guarantees and evidence obligations. It describes decision surfaces without becoming a test database or granting permission to execute arbitrary commands.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "repository", "revision", "obligations"],
+  "properties": {
+    "schema_version": {"const": "mncs-family.verification-obligation-inventory/v1"},
+    "repository": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+    "revision": {"type": "integer", "minimum": 1},
+    "obligations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/obligation"}
+    }
+  },
+  "$defs": {
+    "strings": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "obligation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity",
+        "guarantee_domain",
+        "evidence_role",
+        "lifecycle",
+        "scope",
+        "subjects",
+        "invalidation_dependencies",
+        "executor",
+        "evidence_identity"
+      ],
+      "properties": {
+        "identity": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:/-]*$"
+        },
+        "title": {"type": "string", "minLength": 1},
+        "guarantee_domain": {
+          "enum": [
+            "semantic",
+            "parser_front_end",
+            "type_system",
+            "compiler",
+            "runtime",
+            "backend_portability",
+            "integration",
+            "family_contract"
+          ]
+        },
+        "evidence_role": {
+          "enum": [
+            "canonical_regression",
+            "conformance",
+            "differential_oracle",
+            "migration_parity",
+            "pressure_reproducer",
+            "historical_reference"
+          ]
+        },
+        "lifecycle": {
+          "enum": ["permanent", "transitional", "scheduled", "reference_only", "retired"]
+        },
+        "scope": {"enum": ["local", "consumer", "family"]},
+        "subjects": {"$ref": "#/$defs/strings"},
+        "invalidation_dependencies": {"$ref": "#/$defs/strings"},
+        "executor": {"$ref": "#/$defs/executor"},
+        "backend_requirements": {"$ref": "#/$defs/backendRequirements"},
+        "evidence_identity": {"$ref": "#/$defs/evidenceIdentity"},
+        "retirement": {"$ref": "#/$defs/retirement"},
+        "notes": {"type": "string"}
+      }
+    },
+    "executor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "kind", "entrypoint"],
+      "properties": {
+        "provider": {"type": "string", "minLength": 1},
+        "kind": {
+          "enum": [
+            "native_first_class_test",
+            "compile_experiment",
+            "diagnostic_test",
+            "backend_check",
+            "differential_oracle",
+            "migration_parity",
+            "external_integration"
+          ]
+        },
+        "entrypoint": {"type": "string", "minLength": 1},
+        "declaration_identities": {"$ref": "#/$defs/strings"},
+        "test_case_identities": {"$ref": "#/$defs/strings"}
+      }
+    },
+    "backendRequirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "profiles": {"$ref": "#/$defs/strings"},
+        "runtimes": {"$ref": "#/$defs/strings"},
+        "backends": {"$ref": "#/$defs/strings"}
+      }
+    },
+    "evidenceIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subject_fields", "definition_fields", "execution_fields"],
+      "properties": {
+        "subject_fields": {"$ref": "#/$defs/strings"},
+        "definition_fields": {"$ref": "#/$defs/strings"},
+        "execution_fields": {"$ref": "#/$defs/strings"}
+      }
+    },
+    "retirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["trigger", "retain_as"],
+      "properties": {
+        "trigger": {"type": "string", "minLength": 1},
+        "replacement": {"type": "string", "minLength": 1},
+        "retain_as": {"enum": ["delete", "reference_only", "scheduled"]}
+      }
+    }
+  }
+}

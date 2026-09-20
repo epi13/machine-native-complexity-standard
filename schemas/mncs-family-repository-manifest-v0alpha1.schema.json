@@ -45,6 +45,10 @@
       "$ref": "#/$defs/organization",
       "description": "Optional repository-owned classification of non-derived surfaces. It records only paths whose role is not reliably derivable from the manifest, source layout, and authoritative family projections."
     },
+    "verification": {
+      "$ref": "#/$defs/verificationDeclaration",
+      "description": "Optional pointer to a repository-owned, bounded verification-obligation inventory. The inventory is a declaration surface, not an executable test database."
+    },
     "contracts": {
       "type": "object",
       "additionalProperties": false,
@@ -251,6 +255,21 @@
             }
           },
           "description": "Bounded executable validation; absent command means the obligation is satisfied by external evidence references."
+        }
+      }
+    },
+    "verificationDeclaration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "obligation_inventory"],
+      "properties": {
+        "obligation_inventory": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*(^|/)\\.\\.(/|$)).+\\.json$",
+          "description": "Repository-relative path to the repository-owned obligation inventory."
+        },
+        "schema_version": {
+          "const": "mncs-family.verification-obligation-inventory/v1"
         }
       }
     },
