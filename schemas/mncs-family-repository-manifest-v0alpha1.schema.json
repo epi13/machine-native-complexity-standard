@@ -231,6 +231,11 @@
           ],
           "description": "self: always run for this repo's changes; consumer-compatibility: run when a consumed contract changes; family-integration: run during family verification."
         },
+        "invalidation_dependencies": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Repository-relative files or directories that affect this declared test obligation."
+        },
         "command": {
           "type": "object",
           "additionalProperties": false,
@@ -252,6 +257,10 @@
               "type": "integer",
               "minimum": 1,
               "default": 900
+            },
+            "target_mode": {
+              "enum": ["cargo_test_targets"],
+              "description": "Expand a Cargo package test declaration into bounded obligations for each Cargo target enabled for tests."
             }
           },
           "description": "Bounded executable validation; absent command means the obligation is satisfied by external evidence references."

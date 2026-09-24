@@ -5,7 +5,6 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator
 
-
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = json.loads(
     (ROOT / "schemas/mncs-family-repository-manifest-v0alpha1.schema.json").read_text()
@@ -117,6 +116,60 @@ def test_manifest_points_to_a_bounded_verification_inventory() -> None:
         },
     }
     assert list(Draft202012Validator(SCHEMA).iter_errors(manifest)) == []
+
+
+def test_cargo_target_expansion_is_an_explicit_bounded_command_mode() -> None:
+    base = {
+        "schema_version": "mncs-family.repository-manifest/v0alpha1",
+        "repository": "fixture-repository",
+        "revision": 2,
+        "contracts": {
+            "provides": [{
+                "contract": "compiler",
+                "version": "1",
+                "kind": "compiler",
+                "stability": "stable",
+            }],
+            "consumes": [],
+            "tests": [],
+        },
+        "verification": {
+            "schema_version": "mncs-family.verification-obligation-inventory/v1",
+            "obligation_inventory": ".mncs/verification-obligations.json",
+        },
+    }
+    valid = {
+        **base,
+        "contracts": {
+            **base["contracts"],
+            "tests": [{
+                "test": "bounded-cargo-tests",
+                "covers": ["compiler"],
+                "invalidation_dependencies": ["examples/"],
+                "obligation": "self",
+                "command": {
+                    "argv": ["cargo", "test", "--package", "fixture"],
+                    "timeout_seconds": 600,
+                    "target_mode": "cargo_test_targets",
+                },
+            }],
+        },
+    }
+    invalid = {
+        **valid,
+        "contracts": {
+            **valid["contracts"],
+            "tests": [{
+                **valid["contracts"]["tests"][0],
+                "command": {
+                    **valid["contracts"]["tests"][0]["command"],
+                    "target_mode": "all_tests",
+                },
+            }],
+        },
+    }
+    assert list(Draft202012Validator(SCHEMA).iter_errors(valid)) == []
+    assert list(Draft202012Validator(SCHEMA).iter_errors(invalid))
 
 
 def test_verification_inventory_uses_orthogonal_dimensions() -> None:
