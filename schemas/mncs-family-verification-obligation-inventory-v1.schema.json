@@ -66,7 +66,7 @@
         "lifecycle": {
           "enum": ["permanent", "transitional", "scheduled", "reference_only", "retired"]
         },
-        "scope": {"enum": ["local", "consumer", "family"]},
+        "scope": {"enum": ["local", "consumer", "family", "repository_canonical"]},
         "subjects": {"$ref": "#/$defs/strings"},
         "invalidation_dependencies": {"$ref": "#/$defs/strings"},
         "executor": {"$ref": "#/$defs/executor"},
@@ -95,7 +95,14 @@
         },
         "entrypoint": {"type": "string", "minLength": 1},
         "declaration_identities": {"$ref": "#/$defs/strings"},
-        "test_case_identities": {"$ref": "#/$defs/strings"}
+        "test_case_identities": {"$ref": "#/$defs/strings"},
+        "source_paths": {"$ref": "#/$defs/strings"},
+        "library_paths": {"$ref": "#/$defs/strings"},
+        "verifier_identity": {"type": "string", "minLength": 1},
+        "target_identity": {"type": "string", "minLength": 1},
+        "argv": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1, "maxItems": 16},
+        "working_directory": {"type": "string", "minLength": 1},
+        "timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 3600}
       }
     },
     "backendRequirements": {
