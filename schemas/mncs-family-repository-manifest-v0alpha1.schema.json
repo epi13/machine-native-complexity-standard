@@ -243,6 +243,14 @@
             },
             "version": {
               "$ref": "#/$defs/version"
+            },
+            "minimum_required": {
+              "$ref": "#/$defs/version",
+              "description": "Explicit floor restating the lowest acceptable provider version; redundant with version under at-least/compatible-minor, kept for consumers that pin floors independently of the match version."
+            },
+            "compatibility_ceiling": {
+              "$ref": "#/$defs/version",
+              "description": "Highest provider version the consumer has evaluated; above this the edge needs re-certification, not automatic rejection."
             }
           }
         },
@@ -332,6 +340,13 @@
             },
             "toolchain_env": {
               "type": "string"
+            },
+            "environment": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "description": "Fixed environment variables for the validation command; values are literal strings, never expanded."
             }
           },
           "description": "Bounded executable validation; absent command means the obligation is satisfied by external evidence references."

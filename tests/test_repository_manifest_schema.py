@@ -204,3 +204,53 @@ def test_verification_inventory_uses_orthogonal_dimensions() -> None:
         ],
     }
     assert list(Draft202012Validator(inventory_schema).iter_errors(inventory)) == []
+
+
+def _base_manifest() -> dict:
+    return {
+        "schema_version": "mncs-family.repository-manifest/v0alpha1",
+        "repository": "fixture-repository",
+        "revision": 3,
+        "contracts": {"provides": [], "consumes": [], "tests": []},
+    }
+
+
+def test_command_environment_is_a_bounded_string_map() -> None:
+    manifest = _base_manifest()
+    manifest["contracts"]["provides"] = [{
+        "contract": "fixture-contract",
+        "version": "1",
+        "kind": "test-fixture",
+        "stability": "experimental",
+    }]
+    manifest["contracts"]["tests"] = [{
+        "test": "fixture-tests",
+        "covers": ["fixture-contract"],
+        "obligation": "self",
+        "command": {
+            "argv": ["python", "-m", "unittest"],
+            "environment": {"PYTHONPATH": "python", "MNCS_STORE_PYTHON": "python"},
+        },
+    }]
+    assert list(Draft202012Validator(SCHEMA).iter_errors(manifest)) == []
+
+    manifest["contracts"]["tests"][0]["command"]["environment"] = {"PORT": 8080}
+    assert list(Draft202012Validator(SCHEMA).iter_errors(manifest))
+
+
+def test_compatibility_envelope_fields_are_version_bounded() -> None:
+    manifest = _base_manifest()
+    manifest["contracts"]["consumes"] = [{
+        "contract": "mncs-store.native-substrate",
+        "envelope": {
+            "op": "at-least",
+            "version": "1",
+            "minimum_required": "1",
+            "compatibility_ceiling": "2",
+        },
+        "required": True,
+    }]
+    assert list(Draft202012Validator(SCHEMA).iter_errors(manifest)) == []
+
+    manifest["contracts"]["consumes"][0]["envelope"]["compatibility_ceiling"] = "!!bad"
+    assert list(Draft202012Validator(SCHEMA).iter_errors(manifest))
