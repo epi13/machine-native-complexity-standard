@@ -52,7 +52,7 @@
   "purpose": "MNCS Standard owns implementation-evidence acceptance, schemas, RFC lifecycle records, and family-manifest schema; it does not own sibling implementation semantics or MNCDS process semantics.",
   "repository": "mncs",
   "schema_version": "mncs.project-view/1",
-  "source_identity": "sha256:2c54f10bbd0783c688ea76c2fb9fbff8ef1abab7f148354dfc85eab53203fdd8",
+  "source_identity": "sha256:77f95658612ea52c0aa14dc0539fd6441753e3aee6ce3ba7335abb6cef3927a1",
   "structure": {
     "layout": "mncs.repository-layout/1",
     "surfaces": [
