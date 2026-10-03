@@ -1,0 +1,15 @@
+{
+  "schema_version": "mncs.project-intent/1",
+  "purpose": "MNCS Standard owns implementation-evidence acceptance, schemas, RFC lifecycle records, and family-manifest schema; it does not own sibling implementation semantics or MNCDS process semantics.",
+  "entry": [],
+  "milestones": [
+    {
+      "id": "mncs:projection-conformance",
+      "title": "Declared ambient projection surfaces satisfy their contract",
+      "subject_slot": "declarations",
+      "evidence": "projection-conformance",
+      "dependencies": [],
+      "blockers": []
+    }
+  ]
+}

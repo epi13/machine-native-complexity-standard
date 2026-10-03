@@ -1,5 +1,11 @@
 # Roadmap
 
+<!-- MNCS:generated:begin -->
+## Evidence-bound roadmap
+
+- **complete** — Declared ambient projection surfaces satisfy their contract (`mncs:projection-conformance`)
+<!-- MNCS:generated:end -->
+
 Validator/schema 0.1.1 completed evidence-derived conformance, certification
 commands, content-addressed identities, performance derivation, cumulative level
 schemas, the conformance corpus, packaged schemas, and clean-wheel verification.

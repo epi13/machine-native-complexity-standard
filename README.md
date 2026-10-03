@@ -1,5 +1,19 @@
 # Machine-Native Complexity Standard
 
+<!-- MNCS:generated:begin -->
+## Project entry
+
+MNCS Standard owns implementation-evidence acceptance, schemas, RFC lifecycle records, and family-manifest schema; it does not own sibling implementation semantics or MNCDS process semantics.
+
+Declared capabilities (declarations do not establish execution health):
+
+- `family-registry/0.1` — registry-surface (experimental)
+- `normative-specification/0.3-rc.1` — specification (stable)
+- `repository-manifest-format/0alpha1` — schema-surface (experimental)
+
+Semantic sources and ownership: `.mncs/projections.json`.
+<!-- MNCS:generated:end -->
+
 MNCS is an open experimental standard for accepting generated or machine-optimized
 implementations through bounded evidence. It is not accredited certification, and
 installing MNCS-family software does not make a system conformant.

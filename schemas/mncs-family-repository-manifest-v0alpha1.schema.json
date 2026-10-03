@@ -84,6 +84,41 @@
         "$ref": "#/$defs/producerReference"
       },
       "description": "Carried-through references into the rights/provenance framework; this manifest does not absorb their semantics."
+    },
+    "projection_inventory": {
+      "type": "string",
+      "minLength": 1
+    },
+    "structure_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "path",
+        "identity"
+      ],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "projections": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "type": "object"
+      },
+      "description": "Legacy declaration boundary; projection semantics remain Commons/Automation/Doc owned."
     }
   },
   "$defs": {
@@ -150,6 +185,30 @@
         },
         "notes": {
           "type": "string"
+        },
+        "invocation": {
+          "type": "object"
+        },
+        "native_policy": {
+          "type": "object"
+        },
+        "resident_adapter": {
+          "type": "object"
+        },
+        "output_scope": {
+          "type": [
+            "object",
+            "string"
+          ]
+        },
+        "artifact_declaration": {
+          "type": "string"
+        },
+        "effects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -164,7 +223,7 @@
       "properties": {
         "contract": {
           "type": "string",
-          "pattern": "^[a-z][a-z0-9-]*\\.[a-z][a-z0-9._-]*$",
+          "pattern": "^[a-z][a-z0-9._-]*\\.[a-z][a-z0-9._-]*(/[a-zA-Z0-9._-]+)?$",
           "description": "Full provider-namespaced contract name '<provider>.<contract>'; version resolved through the declared envelope against current provider state."
         },
         "envelope": {
@@ -199,6 +258,12 @@
         },
         "notes": {
           "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "evidence": {
+          "type": "object"
         }
       }
     },
@@ -224,16 +289,14 @@
           }
         },
         "obligation": {
-          "enum": [
-            "self",
-            "consumer-compatibility",
-            "family-integration"
-          ],
-          "description": "self: always run for this repo's changes; consumer-compatibility: run when a consumed contract changes; family-integration: run during family verification."
+          "type": "string",
+          "minLength": 1
         },
         "invalidation_dependencies": {
           "type": "array",
-          "items": {"type": "string"},
+          "items": {
+            "type": "string"
+          },
           "description": "Repository-relative files or directories that affect this declared test obligation."
         },
         "command": {
@@ -259,8 +322,16 @@
               "default": 900
             },
             "target_mode": {
-              "enum": ["cargo_test_targets"],
+              "enum": [
+                "cargo_test_targets"
+              ],
               "description": "Expand a Cargo package test declaration into bounded obligations for each Cargo target enabled for tests."
+            },
+            "toolchain": {
+              "type": "object"
+            },
+            "toolchain_env": {
+              "type": "string"
             }
           },
           "description": "Bounded executable validation; absent command means the obligation is satisfied by external evidence references."
@@ -270,7 +341,10 @@
     "verificationDeclaration": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["schema_version", "obligation_inventory"],
+      "required": [
+        "schema_version",
+        "obligation_inventory"
+      ],
       "properties": {
         "obligation_inventory": {
           "type": "string",
@@ -279,6 +353,9 @@
         },
         "schema_version": {
           "const": "mncs-family.verification-obligation-inventory/v1"
+        },
+        "test_runner_identity": {
+          "type": "string"
         }
       }
     },
@@ -355,13 +432,14 @@
         "class": {
           "enum": [
             "canonical",
-            "host-boundary",
             "compatibility",
             "differential-oracle",
-            "reference",
-            "migration-shadow",
             "generated",
-            "historical"
+            "historical",
+            "host-boundary",
+            "migration-only",
+            "migration-shadow",
+            "reference"
           ]
         },
         "authority": {
@@ -372,6 +450,14 @@
         },
         "classification": {
           "$ref": "#/$defs/surfaceClassification"
+        },
+        "artifact_class": {
+          "enum": [
+            "authoritative",
+            "derived",
+            "mixed",
+            "interpretation"
+          ]
         }
       }
     },
@@ -386,35 +472,50 @@
       ],
       "properties": {
         "authority": {
-          "enum": ["canonical", "compatibility", "reference", "none"]
+          "enum": [
+            "canonical",
+            "compatibility",
+            "reference",
+            "none"
+          ]
         },
         "lifecycle": {
-          "enum": ["active", "temporary", "retired", "generated", "historical"]
+          "enum": [
+            "active",
+            "temporary",
+            "retired",
+            "generated",
+            "historical"
+          ]
         },
         "boundary_kind": {
           "enum": [
+            "compiler-bootstrap",
+            "external-provider",
+            "filesystem",
+            "migration",
             "none",
             "platform",
-            "filesystem",
             "process",
             "protocol",
-            "compiler-bootstrap",
-            "external-provider"
+            "storage"
           ]
         },
         "semantic_role": {
           "enum": [
-            "canonical-semantic",
+            "architecture",
+            "canonical-adapter",
             "canonical-host-semantic",
-            "host-bootstrap",
-            "platform-adapter",
-            "temporary-host-semantic",
-            "migration-shadow",
-            "differential-oracle",
+            "canonical-semantic",
             "compatibility-adapter",
-            "reference",
+            "differential-oracle",
             "generated",
-            "historical"
+            "historical",
+            "host-bootstrap",
+            "migration-shadow",
+            "platform-adapter",
+            "reference",
+            "temporary-host-semantic"
           ]
         }
       },
